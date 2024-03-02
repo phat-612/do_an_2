@@ -1,6 +1,6 @@
 class SiteController {
   index(req, res) {
-    res.send("home");
+    res.render("user/sites/home");
   }
 }
 module.exports = new SiteController();

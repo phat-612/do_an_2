@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  --primary-color: #d70018;
+}
+
+img {
+  max-width: 100%;
+}
+a {
+  text-decoration: none;
+  color: #000;
+}
+ul {
+  list-style: none;
+}
+input,
+button {
+  border-radius: 6px;
+  padding: 8px 12px;
+}

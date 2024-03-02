@@ -1,0 +1,29 @@
+header {
+  background: var(--primary-color);
+  padding: 10px 0;
+}
+header a {
+  color: #fff;
+}
+header .content {
+  font-size: 20px;
+  max-width: 1200px;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header .content i {
+  margin-right: 12px;
+}
+
+header nav ul {
+  font-size: 18px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+header nav ul li ~ li {
+  margin-left: 20px;
+}

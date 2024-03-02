@@ -18,6 +18,8 @@ app.engine(
   engine({
     extname: ".hbs",
     helpers: require("./helpers/handlebars"),
+    defaultLayout: "main",
+    layoutsDir: path.join(__dirname, "resources/views/layouts"),
   })
 );
 app.set("view engine", ".hbs");

@@ -1,6 +1,6 @@
 class ApiController {
-  index(req, res) {
-    res.send("api");
+  storeColor(req, res, next) {
+    res.send("storeColor");
   }
 }
 module.exports = new ApiController();
