@@ -1,0 +1,23 @@
+{
+  "_id": "5f3f3e3e3e3e3e3e3e3e3e3e",
+  "name": "Iphone 15 promax siu cấp vip pro",
+  "description": "Iphone 15 promax siu cấp vip pro",
+  "image": ["anh1", "ANH2"],
+  "category": "Điện thoại",
+  "brand": "Apple",
+  "details": [
+    {
+      "color": "black",
+      "ram": "8GB",
+      "rom": "256GB",
+      "price": 100000,
+      "quantity": 10,
+      "sold": 20
+    }
+  ],
+  "discount": {
+    "percent": 10,
+    "start": "2020-08-20",
+    "end": "2020-08-30"
+  }
+}

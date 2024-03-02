@@ -2,12 +2,27 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Product = new Schema(
   {
-    ten: { type: String, maxLength: 255 },
-    mota: { type: String, maxLength: 600 },
-    gia: { type: Number, maxLength: 255 },
-    daban: { type: String, maxLength: 255 },
+    ten: { type: String },
+    mota: { type: String },
+    gia: { type: Number, default: 0 },
     hinhanh: [String],
-    idCategory: { type: Schema.Types.ObjectId, ref: "Category" },
+    thuonghieu: { type: String },
+    danhmuc: { type: String },
+    chitiet: [
+      {
+        ram: { type: String },
+        bonho: { type: String },
+        mausac: { type: String },
+        gia: { type: Number, default: 0 },
+        soluong: { type: Number, default: 0 },
+        daban: { type: String, default: 0 },
+      },
+    ],
+    giamgia: {
+      phantram: { type: Number, default: 0 },
+      ngaybatdau: { type: Date },
+      ngayketthuc: { type: Date },
+    },
   },
   { timestamps: true }
 );
