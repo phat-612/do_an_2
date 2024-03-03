@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F8 - Learn</title>
+    <title>CellPhoneS</title>
     <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/style.css">
 
     {{#if css}}
     <link rel="stylesheet" href="/css/{{css}}">
@@ -14,11 +15,9 @@
 </head>
 
 <body>
-    <div class="container">
-        {{> header-user}}
-        {{{body}}}
-        {{> footer-user}}
-    </div>
+    {{> header-user}}
+    {{{body}}}
+    {{> footer-user}}
     <script src="https://kit.fontawesome.com/3505ae4a94.js" crossorigin="anonymous"></script>
     <script src="/js/bootstrap.js"></script>
     {{#if js}}

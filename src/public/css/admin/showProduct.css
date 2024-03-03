@@ -27,8 +27,8 @@
   align-content: space-around;
   justify-content: space-around;
 }
-.body-admin-container .card {
-  margin-top: 10px;
+.body-admin-container table tbody td img {
+  height: 40px;
 }
 
 /* ============================================ pagination */
