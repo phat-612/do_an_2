@@ -1,0 +1,12 @@
+{
+  "hoten": "Nguyễn Văn A",
+  "email": "q@df.com",
+  "sdt": "0123456789",
+  "diachi": "Hà Nội",
+  "iddonhang": "1",
+  "idsanpham": "1",
+  "mota": "Mô tả",
+  "hinhanh": ["ảnh 1", "ảnh 2", "ảnh 3"],
+  "trangthai": "Chờ xử lý",
+  "ngaytao": "2021-01-01"
+}

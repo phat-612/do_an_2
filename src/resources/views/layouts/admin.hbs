@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>F8 - Learn</title>
     <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/nouislider.css">
+
     {{#if css}}
-      <link rel="stylesheet" href="/css/{{css}}" />
+      <link rel="stylesheet" href="/css/{{css}}.css" />
     {{/if}}
     <script
       src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
@@ -26,11 +29,12 @@
       src="https://kit.fontawesome.com/3505ae4a94.js"
       crossorigin="anonymous"
     ></script>
+    {{!-- <script src="/js/bootstrap.bundle.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="/js/bootstrap.js"></script>
+    <script src="/js/nouislider.js"></script>
     {{#if js}}
-      <script src="/js/{{js}}"></script>
+      <script src="/js/{{js}}.js"></script>
     {{/if}}
-    
   </body>
-
 </html>

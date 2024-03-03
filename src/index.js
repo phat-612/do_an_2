@@ -43,10 +43,25 @@ app.use(
   )
 );
 app.use(
+  "/css",
+  express.static(
+    path.join(__dirname, "../node_modules", "bootstrap-icons", "font")
+  )
+);
+app.use(
+  "/css",
+  express.static(path.join(__dirname, "../node_modules", "nouislider", "dist"))
+);
+app.use(
   "/js",
   express.static(
     path.join(__dirname, "../node_modules", "bootstrap", "dist", "js")
   )
+);
+
+app.use(
+  "/js",
+  express.static(path.join(__dirname, "../node_modules", "nouislider", "dist"))
 );
 
 app.use(express.urlencoded({ extended: true }));

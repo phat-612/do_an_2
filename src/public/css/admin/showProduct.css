@@ -1,0 +1,16 @@
+.header-admin-container .price-slider {
+  width: 200px;
+}
+.header-admin-container li:nth-child(2) {
+  margin-left: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  width: 200px;
+  height: 60px;
+}
+.header-admin-container li:nth-child(2) .start-price,
+.header-admin-container li:nth-child(2) .end-price {
+  color: white;
+}
