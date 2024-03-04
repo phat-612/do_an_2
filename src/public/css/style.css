@@ -6,6 +6,15 @@
 :root {
   --primary-color: #d70018;
 }
+ul {
+  list-style-type: none;
+}
+a {
+  text-decoration: none;
+}
 .custom-bg-red {
   background-color: var(--primary-color);
+}
+.custom-bg-gray {
+  background-color: #f3f4f6;
 }

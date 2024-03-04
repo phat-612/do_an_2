@@ -1,5 +1,5 @@
 const Specification = require("../models/Specification");
-const { storeSpecification } = require("../../util/function");
+const {} = require("../../util/function");
 class ApiController {
   // storeRam(req, res, next) {
   //   const ram = req.params.ram;
@@ -24,9 +24,25 @@ class ApiController {
   //       }
   //     });
   // }
-  storeColor(req, res, next) {
-    const color = req.body.color;
-    storeSpecification(Specification, "mausac", color, res);
+  storeSpecification(req, res, next) {
+    // name: tên, value: giá trị ---- của thuộc tính trong db
+    const name = req.body.name;
+    const value = req.body.value;
+    Specification.findOne({}).then((specification) => {
+      if (specification) {
+        specification[name].push(value);
+        specification.save().then(() => {
+          res.status(200).json({ message: "Thêm thành công" });
+        });
+      } else {
+        const specification = new Specification({
+          [name]: value,
+        });
+        specification.save().then(() => {
+          res.status(200).json({ message: "Thêm thành công" });
+        });
+      }
+    });
   }
 }
 module.exports = new ApiController();

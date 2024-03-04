@@ -1,7 +1,8 @@
-POST http://localhost:3000/api/storeColor
+POST http://localhost:3000/api/storeSpecification
 Content-Type: application/json
 
 {
-    "color": "blue"
+    "name": "danhmuc",
+    "value": "điện thoại"
 }
 

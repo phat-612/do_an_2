@@ -3,5 +3,5 @@ const router = express.Router();
 
 const apiController = require("../app/controllers/ApiController");
 
-router.post("/storeColor", apiController.storeColor);
+router.post("/storeSpecification", apiController.storeSpecification);
 module.exports = router;

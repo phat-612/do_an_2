@@ -1,17 +1,37 @@
-<header class="custom-bg-red text-white p-2">
+<header class="p-3 custom-bg-red text-white">
   <div class="container">
-    <div class="row fs-4">
-      <div class="col-3">CellPhoneS</div>
-      <div class="col-4">
-        <input class="w-100" type="text" />
-      </div>
-      <div class="col">
-        <div>
-          <a href="tel:0123456789">Chăm sóc khách hàng</a>
-          <a href="/cart">Giỏ hàng</a>
-          <a href="/login">Đăng nhập</a>
-        </div>
+    <div
+      class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
+    >
+      <a
+        href="/"
+        class="d-flex align-items-center fs-3 mb-2 mb-lg-0 text-white text-decoration-none"
+      >
+        CellPhoneZ
+      </a>
+      <button type="button" class="btn btn-warning ms-lg-3 text-white">Danh mục</button>
+      <form class="col-12 col-lg-5 mb-3 mb-lg-0 ms-lg-auto">
+        <input
+          type="search"
+          class="form-control form-control-dark"
+          placeholder="Search..."
+          aria-label="Search"
+        />
+      </form>
+
+      <ul
+        class="nav col-12 col-lg-auto ms-lg-auto me-lg-2 mb-2 justify-content-center mb-md-0"
+      >
+        <li><a href="tel:0123456789" class="nav-link px-2 fs-5 text-white">Trung
+            tâm tư vấn</a></li>
+        <li><a href="/cart" class="nav-link px-2 fs-5 text-white">Giỏ hàng</a></li>
+      </ul>
+
+      <div class="text-end">
+        <a href="/login" class="btn btn-outline-light me-2">Login</a>
+        <a href="/signup" class="btn btn-warning">Sign-up</a>
       </div>
     </div>
+
   </div>
 </header>
