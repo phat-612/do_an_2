@@ -44,5 +44,9 @@ class ApiController {
       }
     });
   }
+  createWarranty(req, res, next) {
+    res.send("Warranty");
+  }
+  storeWarranty(req, res, next) {}
 }
 module.exports = new ApiController();
