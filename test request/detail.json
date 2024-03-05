@@ -1,5 +1,13 @@
 {
-  "ram": ["4GB", "8GB", "16GB", "32GB"],
-  "storage": ["64GB", "128GB", "256GB", "512GB"],
-  "color": ["black", "white", "gold", "silver"]
+  "color": ["black", "white", "gold", "silver"],
+  "category": {
+    "điện thoại": {
+      "thương hiệu": ["xiaomi"],
+      "ram": ["8GB"]
+    },
+    "màn hình": {
+      "kích thước": ["6.5inch"],
+      "độ phân giải": ["1080x2400"]
+    }
+  }
 }

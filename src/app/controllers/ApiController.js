@@ -24,29 +24,25 @@ class ApiController {
   //       }
   //     });
   // }
-  storeSpecification(req, res, next) {
-    // name: tên, value: giá trị ---- của thuộc tính trong db
-    const name = req.body.name;
-    const value = req.body.value;
-    Specification.findOne({}).then((specification) => {
-      if (specification) {
-        specification[name].push(value);
-        specification.save().then(() => {
-          res.status(200).json({ message: "Thêm thành công" });
-        });
-      } else {
-        const specification = new Specification({
-          [name]: value,
-        });
-        specification.save().then(() => {
-          res.status(200).json({ message: "Thêm thành công" });
-        });
-      }
-    });
-  }
-  createWarranty(req, res, next) {
-    res.send("Warranty");
-  }
-  storeWarranty(req, res, next) {}
+  // storeSpecification(req, res, next) {
+  //   // name: tên, value: giá trị ---- của thuộc tính trong db
+  //   const name = req.body.name;
+  //   const value = req.body.value;
+  //   Specification.findOne({}).then((specification) => {
+  //     if (specification) {
+  //       specification[name].push(value);
+  //       specification.save().then(() => {
+  //         res.status(200).json({ message: "Thêm thành công" });
+  //       });
+  //     } else {
+  //       const specification = new Specification({
+  //         [name]: value,
+  //       });
+  //       specification.save().then(() => {
+  //         res.status(200).json({ message: "Thêm thành công" });
+  //       });
+  //     }
+  //   });
+  // }
 }
 module.exports = new ApiController();

@@ -1,3 +1,5 @@
+const warranty = require("../models/Warranty");
+const { multipleMongooseToObject } = require("../../util/mongoose");
 class AdminController {
   // get /
   index(req, res, next) {
@@ -38,6 +40,12 @@ class AdminController {
       js: "admin/addProduct",
       css: "admin/addProduct",
     });
+  }
+  crateWarranty(req, res, next) {
+    res.render("admin/warrantys/create-warranty", { layout: "admin" });
+  }
+  storeWarranty(req, res, next) {
+    res.render("admin/warrantys/store-warranty");
   }
 }
 module.exports = new AdminController();

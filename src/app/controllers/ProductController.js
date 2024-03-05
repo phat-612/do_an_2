@@ -2,11 +2,7 @@ const Product = require("../models/Product");
 const { multipleMongooseToObject } = require("../../util/mongoose");
 class ProductController {
   show(req, res, next) {
-    Product.findOne({ slug: req.params.slug })
-      .then((Product) => {
-        res.json(Product);
-      })
-      .catch(next);
+    res.render("user/products/show", {});
   }
 }
 module.exports = new ProductController();
