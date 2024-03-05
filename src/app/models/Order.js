@@ -3,22 +3,22 @@ const Schema = mongoose.Schema;
 const Order = new Schema(
   {
     idUser: { type: Schema.Types.ObjectId, ref: "User" },
-    ghichu: { type: String },
-    tongtien: { type: Number },
-    trangthai: { type: String },
-    trangthaithanhtoan: { type: Bool },
-    phuongthucthanhtoan: { type: String },
-    chitiet: [
+    note: { type: String },
+    total: { type: Number },
+    status: { type: String },
+    paymentStatus: { type: Bool },
+    paymentMethod: { type: String },
+    details: [
       {
-        gia: { type: Number },
-        soluong: { type: Number },
-        idchitietsanpham: { type: Schema.Types.ObjectId, ref: "Product" },
+        price: { type: Number },
+        quantity: { type: Number },
+        idProductDetail: { type: Schema.Types.ObjectId, ref: "Product" },
       },
     ],
-    thongtingiaohang: {
-      hoten: { type: String },
-      sodienthoai: { type: String },
-      diachi: { type: String },
+    shipmentDetail: {
+      name: { type: String },
+      phone: { type: String },
+      address: { type: String },
     },
   },
   { timestamps: true }

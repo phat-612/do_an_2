@@ -2,26 +2,28 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Product = new Schema(
   {
-    ten: { type: String },
-    mota: { type: String },
-    gia: { type: Number, default: 0 },
-    hinhanh: [String],
-    thuonghieu: { type: String },
-    danhmuc: { type: String },
-    chitiet: [
+    name: { type: String },
+    description: { type: String },
+    price: { type: Number, default: 0 },
+    images: [String],
+    category: { type: Schema.Types.ObjectId, ref: "Category" },
+    details: [
       {
-        ram: { type: String },
-        bonho: { type: String },
-        mausac: { type: String },
-        gia: { type: Number, default: 0 },
-        soluong: { type: Number, default: 0 },
-        daban: { type: String, default: 0 },
+        price: { type: Number, default: 0 },
+        quantity: { type: Number, default: 0 },
+        sold: { type: String, default: 0 },
+        properties: [
+          {
+            name: { type: String },
+            value: { type: String },
+          },
+        ],
       },
     ],
-    giamgia: {
-      phantram: { type: Number, default: 0 },
-      ngaybatdau: { type: Date },
-      ngayketthuc: { type: Date },
+    discount: {
+      percent: { type: Number, default: 0 },
+      startDay: { type: Date },
+      endDay: { type: Date },
     },
   },
   { timestamps: true }

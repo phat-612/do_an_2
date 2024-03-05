@@ -3,17 +3,17 @@ const Schema = mongoose.Schema;
 const Warranty = new Schema(
   {
     email: { type: String },
-    hoten: { type: String },
-    sodienthoai: { type: String },
-    diachi: { type: String },
-    hinhanh: [String],
-    ghichu: { type: String },
-    trangthai: { type: String },
-    tongtien: { type: Number },
-    chitiet: [
+    name: { type: String },
+    phone: { type: String },
+    address: { type: String },
+    images: [String],
+    note: { type: String },
+    status: { type: String },
+    total: { type: Number },
+    details: [
       {
-        gia: { type: Number },
-        lydo: { type: String },
+        reason: { type: String },
+        price: { type: Number },
       },
     ],
     idProduct: [{ type: Schema.Types.ObjectId, ref: "Product" }],

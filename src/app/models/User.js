@@ -2,16 +2,16 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const User = new Schema({
   email: { type: String },
-  hoten: { type: String },
-  sodienthoai: { type: String },
-  gioitinh: { type: Bool },
-  diachi: { type: String },
-  diachigiaohang: [
+  name: { type: String },
+  phone: { type: String },
+  gender: { type: Bool },
+  address: { type: String },
+  shipmentDetail: [
     {
-      hoten: { type: String },
-      sodienthoai: { type: Number },
-      diachi: { type: String },
-      macdinh: { type: Boolean, default: false },
+      name: { type: String },
+      phone: { type: Number },
+      address: { type: String },
+      default: { type: Boolean, default: false },
     },
   ],
 });

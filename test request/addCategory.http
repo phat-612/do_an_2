@@ -1,0 +1,20 @@
+POST http://localhost:3000/api/storeCategory
+Content-Type: application/json
+
+{
+    "name": "Màn hình",
+    "properties":[
+        {
+            "name": "Màu sắc",
+            "values": ["Đen"]
+        },
+        {
+            "name": "Thương hiệu",
+            "values": ["Xiaomi"]
+        },
+        {
+            "name": "Kích thước",
+            "values": ["27 inch"]
+        }
+    ]
+}

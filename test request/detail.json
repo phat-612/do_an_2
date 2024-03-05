@@ -1,13 +1,40 @@
-{
-  "color": ["black", "white", "gold", "silver"],
-  "category": {
-    "điện thoại": {
-      "thương hiệu": ["xiaomi"],
-      "ram": ["8GB"]
-    },
-    "màn hình": {
-      "kích thước": ["6.5inch"],
-      "độ phân giải": ["1080x2400"]
-    }
+[
+  {
+    "name": "điện thoại",
+    "property": [
+      {
+        "name": "ram",
+        "value": ["4gb", "8gb"]
+      },
+      {
+        "name": "màu",
+        "value": ["đen", "trắng"]
+      },
+      {
+        "name": "pin",
+        "value": ["2000mah", "3000mah"]
+      },
+      {
+        "name": "camera",
+        "value": ["10mp", "20mp"]
+      }
+    ]
+  },
+  {
+    "name": "tai nghe",
+    "property": [
+      {
+        "name": "loại",
+        "value": ["in-ear", "on-ear"]
+      },
+      {
+        "name": "màu",
+        "value": ["đen", "trắng"]
+      },
+      {
+        "name": "dây",
+        "value": ["dài", "ngắn"]
+      }
+    ]
   }
-}
+]
