@@ -7,6 +7,7 @@ const Product = new Schema(
     price: { type: Number, default: 0 },
     images: [String],
     category: { type: Schema.Types.ObjectId, ref: "Category" },
+    brand: { type: Schema.Types.ObjectId },
     details: [
       {
         price: { type: Number, default: 0 },

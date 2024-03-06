@@ -41,11 +41,13 @@ class AdminController {
       css: "admin/addProduct",
     });
   }
-  crateWarranty(req, res, next) {
+  createWarranty(req, res, next) {
     res.render("admin/warrantys/create-warranty", { layout: "admin" });
   }
-  storeWarranty(req, res, next) {
-    res.render("admin/warrantys/store-warranty");
+  showWarranty(req, res, next) {
+    const formData = req.body;
+    const warranty = new warranty(formData);
+    warranty.save().then().cacth(next);
   }
 }
 module.exports = new AdminController();

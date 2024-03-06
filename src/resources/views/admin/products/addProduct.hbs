@@ -2,27 +2,39 @@
  <div class="row g-2">
     <div class="col-md">
     <label for="name-Product" class="form-label"><h4>Tên Sản phẩm</h4></label>
-    <input type="text" class="form-control" id="name-Product" />
+    <input type="text" class="form-control" id="name-Product" placeholder="Nhập tên Sản Phẩm" />
   </div>
   <div class="col-md">
-    <label for="exampleDataList" class="form-label"><h4>Thương Hiệu</h4></label>
-<input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
-<datalist id="datalistOptions">
-  <option value="NOKIA">
-  <option value="SAMSUNG">
+    <label for="categoryDataList" class="form-label"><h4>Danh Mục</h4></label>
+<input class="form-control" list="categoryOptions" id="categoryDataList" placeholder="Nhập Danh Mục">
+<datalist id="categoryOptions">
+  <option value="Điện thoại">
+  <option value="Laptop">
 </datalist>
   </div>
  </div>
   
-
-  <div class="mb-3">
+  <div class="row g-2">
+    <div class="col-md description-Product">
     <label for="description-Product" class="col-form-label"><h4>Mô Tả Sản Phẩm</h4></label>
-    <textarea class="form-control" id="description-Product"></textarea>
+    <textarea class="form-control" id="description-Product" placeholder="Nhập Mô Tả Sản Phẩm"></textarea>
   </div>
+  <div class="col-md brand">
+    <label for="brandDataList" class="form-label"><h4>Thương Hiệu</h4></label>
+<input class="form-control" list="BrandOptions" id="brandDataList" placeholder="Nhập Thương Hiệu">
+<datalist id="BrandOptions">
+  <option value="SamSung">
+  <option value="Apple">
+  <option value="Xiaomi">
+</datalist>
+  </div>
+ </div>
+
+  
   {{! ===================================================================== }}
-  <div>
+  <div class="uploadImg-Product">
     <div class="mb-3">
-      <label for="multiImageUpload" class="form-label">Upload Multiple Images</label>
+      <label for="multiImageUpload" class="form-label"><h4>Tải Ảnh Lên</h4></label>
       <input
         type="file"
         class="form-control"
@@ -32,7 +44,7 @@
       />
     </div>
     <div class="mb-3">
-      <p>Image Previews:</p>
+      <p>Danh sách Ảnh :</p>
       <div id="multiImagePreview" class="row"></div>
     </div>
   </div>

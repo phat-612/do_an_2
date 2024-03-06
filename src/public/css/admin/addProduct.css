@@ -2,6 +2,12 @@
   margin: 3% 3% 0 3%;
 }
 /* ============================================== */
-.admin-container #multiImagePreview img {
+.admin-container .addPro-body #multiImagePreview img {
   width: 20%;
+}
+.admin-container .addPro-body .uploadImg-Product {
+  width: 50%;
+}
+.admin-container .addPro-body .brand {
+  margin-top: 1%;
 }
