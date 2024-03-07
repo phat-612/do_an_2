@@ -32,7 +32,8 @@
 
   
   {{! ===================================================================== }}
-  <div class="uploadImg-Product">
+  <div class="row g-2">
+    <div class="col-md uploadImg-Product">
     <div class="mb-3">
       <label for="multiImageUpload" class="form-label"><h4>Tải Ảnh Lên</h4></label>
       <input
@@ -48,41 +49,38 @@
       <div id="multiImagePreview" class="row"></div>
     </div>
   </div>
-
-  <!-- Modal -->
-  <div
-    class="modal fade"
-    id="staticBackdrop"
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    tabindex="-1"
-    aria-labelledby="staticBackdropLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+  <div class="col-md">
+    <div class="addDetail-btn-div">
+      <button type="button" class="btn btn-success">Thêm Chi Tiết</button>
+    </div>
+    <div class="detail-div">
+      <div class="detail-box-div">
+        <div class="btn-div position-relative">
+          {{!-- btn thêm thuoc tính --}}
+          <button type="button" class="btn btn-success position-absolute addAttribute-btn"><i class="bi bi-plus-circle-fill"></i></button>
+          {{!-- btn xóa thuoc tính --}}
+          <button type="button" class="btn btn-danger position-absolute removeAttribute-btn"><i class="bi bi-trash"></i></button>
         </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary close"
-            data-bs-dismiss="modal"
-          >Close</button>
-          <button type="button" class="btn btn-danger delete">xóa</button>
+        <div class="attribute-div row g-2">
+          <div class="col-md">
+            <input class="form-control" list="asd" id="" placeholder="">
+            <datalist id="asd">
+              <option value="123">
+            </datalist>
+          </div>
+          <div class="col-md">
+            <input class="form-control" list="asdc" id="" placeholder="">
+            <datalist id="asdc">
+              <option value="12345">
+            </datalist>
+          </div>
         </div>
       </div>
     </div>
   </div>
+ </div>
+  
+
+  
 
 </form>

@@ -35,3 +35,6 @@ document
     });
   });
 //   ================================
+
+var detailDiv = document.querySelector(".detail-div");
+var detailBoxDiv = document.querySelector(".detail-box-div");

@@ -2,40 +2,48 @@
   <form method="post" action="/api/storeWarranty">
     <div class="form-row mt-4">
       <div class="form-group col-md-6 p-4">
-        <label for="inputEmail4">Email</label>
+        <label for="email">Email</label>
         <input
           type="email"
           class="form-control"
           id="inputEmail4"
           placeholder="Email"
+          name="email"
         />
       </div>
       <div class="form-group col-md-6 p-4">
-        <label for="inputPassword4">HoVaTen</label>
-        <input type="" class="form-control" placeholder="HoVaTen" />
+        <label for="name">HoVaTen</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="HoVaTen"
+          name="name"
+        />
       </div>
     </div>
     <div class="form-group p-4">
-      <label for="inputAddress">Số Điện Thoại</label>
+      <label for="phone">Số Điện Thoại</label>
       <input
         type="text"
         class="form-control"
         placeholder="Nhập số điện thoại"
+        name="phone"
       />
     </div>
     <div class="form-group p-4">
-      <label for="inputAddress2">Địa Chỉ</label>
-      <input type="text" class="form-control" placeholder="Địa Chỉ" />
-    </div>
-    <div class="form-group p-4">
-      <label for="exampleFormControlFile1">Chọn Ảnh</label>
+      <label for="address">Địa Chỉ</label>
       <input
-        type="file"
-        class="form-control-file"
-        id="exampleFormControlFile1"
+        type="text"
+        class="form-control"
+        placeholder="Địa Chỉ"
+        name="address"
       />
     </div>
-    <div class="form-group col-md-2 p-4">
+    <div class="form-group p-4">
+      <label for="images">Chọn Ảnh</label>
+      <input type="file" class="form-control-file" name="images" />
+    </div>
+    {{! <div class="form-group col-md-2 p-4">
       <label for="exampleFormControlFile1">Chọn Sản Phẩm</label>
       <input
         type="text"
@@ -49,7 +57,7 @@
         <option value="Orange"></option>
         <option value="Mango"></option>
       </datalist>
-    </div>
+    </div> }}
     <button type="submit" class="btn btn-primary">Tạo</button>
   </form>
 </div>

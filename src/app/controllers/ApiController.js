@@ -1,4 +1,5 @@
 const Category = require("../models/Category");
+const Warranty = require("../models/Warranty");
 const {} = require("../../util/function");
 class ApiController {
   // api user,admin
@@ -44,7 +45,12 @@ class ApiController {
     });
   }
   storeWarranty(req, res, next) {
-    res.json(req.body);
+    const formData = req.body;
+    const warranty = new Warranty(formData);
+    warranty
+      .save()
+      .then()
+      .catch((error) => {});
   }
 }
 module.exports = new ApiController();

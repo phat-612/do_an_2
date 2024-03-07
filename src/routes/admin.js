@@ -5,7 +5,7 @@ const adminController = require("../app/controllers/AdminController");
 
 router.get("/order", adminController.order);
 router.get("/warranty/create", adminController.createWarranty);
-router.post("/showWarranty", adminController.showWarranty);
+router.post("/wanrranty/show", adminController.showWarranty);
 router.get("/product/detail", adminController.detail);
 router.get("/product/addProduct", adminController.addPro);
 router.get("/product", adminController.product);
