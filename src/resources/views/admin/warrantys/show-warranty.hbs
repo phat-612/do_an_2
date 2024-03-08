@@ -13,16 +13,18 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>{{this.HinhAnh}}</td>
-      <td>{{this.HovaTen}}</td>
-      <td>{{this.Sodienthoai}}</td>
-      <td>{{this.Diachi}}</td>
-      <td>{{this.Ghichu}}</td>
-      <td>{{this.Trangthai}}</td>
-      <td>{{this.TongTien}}</td>
-      <td>{{this.ChiTiet}}</td>
-    </tr>
+    {{#each warranty}}
+      <tr>
+        <th scope="row">1</th>
+        <td>{{this.images}}</td>
+        <td>{{this.name}}</td>
+        <td>{{this.phone}}</td>
+        <td>{{this.address}}</td>
+        <td>{{this.note}}</td>
+        <td>{{this.status}}</td>
+        <td>{{this.total}}</td>
+        <td>{{this.details}}</td>
+      </tr>
+    {{/each}}
   </tbody>
 </table>

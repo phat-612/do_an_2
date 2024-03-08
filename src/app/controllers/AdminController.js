@@ -1,4 +1,4 @@
-const warranty = require("../models/Warranty");
+const Warranty = require("../models/Warranty");
 const { multipleMongooseToObject } = require("../../util/mongoose");
 class AdminController {
   // get /
@@ -45,9 +45,10 @@ class AdminController {
     res.render("admin/warrantys/create-warranty", { layout: "admin" });
   }
   showWarranty(req, res, next) {
-    const formData = req.body;
-    const warranty = new warranty(formData);
-    warranty.save().then().cacth(next);
+    // res.render("admin/warrantys/show-warranty", { layout: "admin" });
+    Warranty.findOne({}).then(() =>
+      res.render("admin/warrantys/show-warranty", { layout: "admin" })
+    );
   }
 }
 module.exports = new AdminController();

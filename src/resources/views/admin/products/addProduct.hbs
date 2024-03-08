@@ -50,16 +50,16 @@
     </div>
   </div>
   <div class="col-md">
-    <div class="addDetail-btn-div">
-      <button type="button" class="btn btn-success">Thêm Chi Tiết</button>
+    <div class="addDetail-btn-div position-relative h-50">
+      <button type="button" class="btn btn-success position-absolute top-0 end-0">Thêm Chi Tiết</button>
     </div>
     <div class="detail-div">
       <div class="detail-box-div">
-        <div class="btn-div position-relative">
+        <div class="btn-div position-relative w-100 h-25">
           {{!-- btn thêm thuoc tính --}}
           <button type="button" class="btn btn-success position-absolute addAttribute-btn"><i class="bi bi-plus-circle-fill"></i></button>
           {{!-- btn xóa thuoc tính --}}
-          <button type="button" class="btn btn-danger position-absolute removeAttribute-btn"><i class="bi bi-trash"></i></button>
+          <button type="button" class="btn-close position-absolute top-0 end-0 removeAttribute-btn"></button>
         </div>
         <div class="attribute-div row g-2">
           <div class="col-md">
@@ -73,6 +73,9 @@
             <datalist id="asdc">
               <option value="12345">
             </datalist>
+          </div>
+          <div class="col-md-1">
+            <button type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button>
           </div>
         </div>
       </div>
