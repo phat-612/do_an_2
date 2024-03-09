@@ -3,6 +3,7 @@ const router = express.Router();
 
 const adminController = require("../app/controllers/AdminController");
 
+router.get("/category", adminController.category);
 router.get("/order", adminController.order);
 router.get("/warranty/create", adminController.createWarranty);
 router.get("/warranty/show", adminController.showWarranty);

@@ -1,30 +1,33 @@
-<table class="table mt-4">
-  <thead>
-    <tr>
-      <th scope="col">id</th>
-      <th scope="col">HinhAnh</th>
-      <th scope="col">HovaTen</th>
-      <th scope="col">Sodienthoai</th>
-      <th scope="col">Diachi</th>
-      <th scope="col">Ghichu</th>
-      <th scope="col">Trangthai</th>
-      <th scope="col">TongTien</th>
-      <th scope="col">ChiTiet</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each warranty}}
+<div class="mt-4">
+  <table class="table mt-4">
+    <thead>
       <tr>
-        <th scope="row">1</th>
-        <td>{{this.images}}</td>
-        <td>{{this.name}}</td>
-        <td>{{this.phone}}</td>
-        <td>{{this.address}}</td>
-        <td>{{this.note}}</td>
-        <td>{{this.status}}</td>
-        <td>{{this.total}}</td>
-        <td>{{this.details}}</td>
+        <th scope="col">id</th>
+        <th scope="col">HinhAnh</th>
+        <th scope="col">HovaTen</th>
+        <th scope="col">Sodienthoai</th>
+        <th scope="col">Diachi</th>
+        <th scope="col">Ghichu</th>
+        <th scope="col">Trangthai</th>
+        <th scope="col">TongTien</th>
+        <th scope="col">ChiTiet</th>
       </tr>
-    {{/each}}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {{#each warrantys}}
+        <tr>
+          <th scope="row">1</th>
+          <td>{{this.email}}</td>
+          <td>{{this.name}}</td>
+          <td>{{this.images}}</td>
+          <td>{{this.address}}</td>
+          <td>{{this.phone}}</td>
+          <td>{{this.note}}</td>
+          <td>{{this.status}}</td>
+          <td>{{this.total}}</td>
+          <td>{{this.details}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

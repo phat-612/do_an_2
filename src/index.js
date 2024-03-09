@@ -1,6 +1,8 @@
 // import node
 const express = require("express");
 const session = require("express-session");
+const multer = require("multer");
+const sharp = require("sharp");
 const { engine } = require("express-handlebars");
 const methodOverride = require("method-override");
 const path = require("path");
@@ -22,6 +24,13 @@ app.engine(
     layoutsDir: path.join(__dirname, "resources/views/layouts"),
   })
 );
+// Cấu hình multer
+const storage = multer.diskStorage({
+  destination: ".public/img/product",
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
 app.set("view engine", ".hbs");
 app.set("views", "./views");
 app.set("views", path.join(__dirname, "resources", "views"));

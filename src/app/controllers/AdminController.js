@@ -1,5 +1,9 @@
 const Warranty = require("../models/Warranty");
-const { multipleMongooseToObject } = require("../../util/mongoose");
+const {
+  multipleMongooseToObject,
+  mongooseToObject,
+} = require("../../util/mongoose");
+
 class AdminController {
   // get /
   index(req, res, next) {
@@ -41,14 +45,24 @@ class AdminController {
       css: "admin/addProduct",
     });
   }
+  //get /category
+  category(req, res, next) {
+    res.render("admin/sites/category", {
+      layout: "admin",
+      js: "admin/category",
+      css: "admin/category",
+    });
+  }
+  //minh luan
   createWarranty(req, res, next) {
     res.render("admin/warrantys/create-warranty", { layout: "admin" });
   }
-  showWarranty(req, res, next) {
-    // res.render("admin/warrantys/show-warranty", { layout: "admin" });
-    Warranty.findOne({}).then(() =>
-      res.render("admin/warrantys/show-warranty", { layout: "admin" })
-    );
+  async showWarranty(req, res, next) {
+    const warrantys = await Warranty.find({});
+    res.render("admin/warrantys/show-warranty", {
+      layout: "admin",
+      warrantys: multipleMongooseToObject(warrantys),
+    });
   }
 }
 module.exports = new AdminController();
