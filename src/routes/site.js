@@ -3,6 +3,10 @@ const router = express.Router();
 
 const siteController = require("../app/controllers/SiteController");
 
+router.get("/login", siteController.login);
+router.get("/signUp", siteController.signUp);
+router.get("/forgotPassword", siteController.forgotPassword);
+router.get("/cart", siteController.cart);
 router.get("/", siteController.index);
 
 module.exports = router;

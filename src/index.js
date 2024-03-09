@@ -53,6 +53,12 @@ app.use(
   express.static(path.join(__dirname, "../node_modules", "nouislider", "dist"))
 );
 app.use(
+  "/css",
+  express.static(
+    path.join(__dirname, "../node_modules", "datatables.net-dt", "css")
+  )
+);
+app.use(
   "/js",
   express.static(
     path.join(__dirname, "../node_modules", "bootstrap", "dist", "js")
@@ -62,6 +68,12 @@ app.use(
 app.use(
   "/js",
   express.static(path.join(__dirname, "../node_modules", "nouislider", "dist"))
+);
+app.use(
+  "/js",
+  express.static(
+    path.join(__dirname, "../node_modules", "datatables.net-dt", "js")
+  )
 );
 
 app.use(express.urlencoded({ extended: true }));
