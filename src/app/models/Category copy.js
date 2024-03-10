@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Category = new Schema({
   name: String,
-  idParent: { type: Schema.Types.ObjectId, ref: "Category", default: null },
+  properties: [
+    {
+      name: String,
+      values: [String],
+    },
+  ],
 });
 module.exports = mongoose.model("Category", Category);

@@ -1,20 +1,50 @@
-POST http://localhost:3000/api/storeCategory
+POST http://localhost:3000/api/test
 Content-Type: application/json
 
 {
-    "name": "Màn hình",
-    "properties":[
-        {
-            "name": "Màu sắc",
-            "values": ["Đen"]
-        },
-        {
-            "name": "Thương hiệu",
-            "values": ["Xiaomi"]
-        },
-        {
-            "name": "Kích thước",
-            "values": ["27 inch"]
-        }
-    ]
+    "name": "Iphone 12",
+    "description": "Iphone 12 64GB",
+    "images": ["snh 1", "snh 2"],
+    "idCategory": "65ed65c5c3155828e37b0aa3",
+    "variations": [
+      {
+        "price": 12300000,
+        "quantity":12 ,
+        "attributes":
+            {
+                "color": "red",
+                "ram": "4GB"
+            }
+      },
+      {
+        "price": 12500000,
+        "quantity": 10,
+        "attributes":
+            {
+                "color": "black",
+                "ram": "8GB"
+            }
+      }
+    ],
+    "discount": {
+        "percent": 0,
+        "start": "2021-10-01",
+        "end": "2021-10-30"
+    }
+}
+###
+POST http://localhost:3000/api/testAddCategory
+Content-Type: application/json
+
+{
+    "name": "Điện thoại"
+}
+
+###
+POST http://localhost:3000/api/testUpdateQuantity
+Content-Type: application/json
+
+{
+    "id": "65ed65e2c3155828e37b0aa6",
+    "quantity": 614
 }

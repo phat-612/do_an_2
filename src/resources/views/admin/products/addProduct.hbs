@@ -1,69 +1,57 @@
-<form action="" method="" class="addPro-body">
- 
-  <div class="row ">
-    <div class="col-6">
-      <label for="name-Product" class="form-label"><h4>Tên Sản phẩm</h4></label>
-      <input type="text" class="form-control" id="name-Product" placeholder="Nhập tên Sản Phẩm" />
-      <label for="description-Product" class="col-form-label"><h4>Mô Tả Sản Phẩm</h4></label>
-      <textarea class="form-control" id="description-Product" placeholder="Nhập Mô Tả Sản Phẩm"></textarea>
-      <div class="mb-3">
-        <label for="multiImageUpload" class="form-label"><h4>Tải Ảnh Lên</h4></label>
-        <input
-          type="file"
-          class="form-control"
-          id="multiImageUpload"
-          accept="image/*"
-          multiple
-        />
-      </div>
-      <div class="mb-3">
-        <p>Danh sách Ảnh :</p>
-        <div id="multiImagePreview" class="row"></div>
-      </div>
-    </div>
-    {{!-- ===================================================================== --}}
-    <div class="col-6">
-      <label for="categoryDataList" class="form-label"><h4>Danh Mục</h4></label>
-      <input class="form-control" list="categoryOptions" id="categoryDataList" placeholder="Nhập Danh Mục">
-      <datalist id="categoryOptions">
-        <option value="Điện thoại">
-        <option value="Laptop">
-      </datalist>
-      <label for="brandDataList" class="form-label"><h4>Thương Hiệu</h4></label>
-      <input class="form-control" list="BrandOptions" id="brandDataList" placeholder="Nhập Thương Hiệu">
-      <div class="addDetail-btn-div d-flex flex-row-reverse my-3 ">
-        <button type="button" class="btn btn-success">Thêm Chi Tiết</button>
-      </div>
-      <div class="detail-div">
-        <div class="d-flex justify-content-around">
-          {{!-- btn thêm thuoc tính --}}
-          <button type="button" class="btn btn-success addAttribute-btn">THÊM THUỘC TÍNH</button>
-        </div>
-        <div class="border container mt-3 ">
-          <div class="d-flex flex-row-reverse">
-            <button type="button" class="btn-close removeAttribute-btn"></button>
-          </div>
+<form action="" method="" class="container">
+   
+   <label for="name-Product" class="form-label fs-3">Tên Sản phẩm</label>
+   <input type="text" class="form-control" id="name-Product" placeholder="Nhập tên Sản Phẩm" />
+   <label for="description-Product" class="col-form-label fs-3">Mô Tả Sản Phẩm</label>
+   <textarea class="form-control" id="description-Product" placeholder="Nhập Mô Tả Sản Phẩm"></textarea>
+   <label for="categoryDataList" class="form-label fs-3">Danh Mục</label>
+   <input class="form-control" list="categoryOptions" id="categoryDataList" placeholder="Nhập Danh Mục">
+   <datalist id="categoryOptions">
+      <option value="Điện thoại">
+      <option value="Laptop">
+   </datalist>
+   <label for="brandDataList" class="form-label fs-3">Thương Hiệu</label>
+   <input class="form-control" list="BrandOptions" id="brandDataList" placeholder="Nhập Thương Hiệu">
+   <datalist id="BrandOptions">
+    <option value="SamSung">
+    <option value="Apple">
+  </datalist>
 
-          <div class="row mt-3">
-            <div class="col">
-              <input class="form-control" list="asd" id="" placeholder="">
-              <datalist id="asd">
-                <option value="123">
-              </datalist>
-            </div>
-            <div class="col">
-              <input class="form-control" list="asdc" id="" placeholder="">
-                <datalist id="asdc">
-                  <option value="12345">
-                </datalist>
-            </div>
-            <div class="col-1">
-              <button type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button>
-            </div>
-          </div>
-        
-        </div>
+  <div>
+   <div class="row">
+      <div class="col-md-6">
+         <label for="">nhap ten chi tiet</label>
       </div>
-    </div>
+      <div class="col-md-6">
+         <input type="text">
+      </div>
+      <div class="col-md-6">
+         <label for="">nhap chi tiet</label>
+      </div>
+      <div class="col-md-6">
+         <button class="btn btn-success"></button>
+      </div>
+   </div>
   </div>
+  
+  </div>
+
+
+
+
+   <div class="mb-3">
+   <label for="multiImageUpload" class="form-label fs-3">Tải Ảnh Lên (TỐI ĐA 8 ẢNH)</label>
+   <input
+      type="file"
+      class="form-control"
+      id="multiImageUpload"
+      accept="image/*"
+      multiple
+      />
+   </div>
+   <div class="mb-3">
+   <p>Danh sách Ảnh :</p>
+   <div id="multiImagePreview" class="row"></div>
+   </div>
+
 </form>

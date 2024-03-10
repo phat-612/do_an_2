@@ -6,19 +6,12 @@ const Product = new Schema(
     description: { type: String },
     price: { type: Number, default: 0 },
     images: [String],
-    category: { type: Schema.Types.ObjectId, ref: "Category" },
-    brand: { type: Schema.Types.ObjectId },
-    details: [
+    idCategory: { type: Schema.Types.ObjectId, ref: "Category" },
+    variations: [
       {
         price: { type: Number, default: 0 },
         quantity: { type: Number, default: 0 },
-        sold: { type: String, default: 0 },
-        properties: [
-          {
-            name: { type: String },
-            value: { type: String },
-          },
-        ],
+        attributes: { type: Object },
       },
     ],
     discount: {

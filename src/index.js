@@ -26,11 +26,12 @@ app.engine(
 );
 // Cấu hình multer
 const storage = multer.diskStorage({
-  destination: ".public/img/product",
+  destination: "./public/img/product",
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
+
 app.set("view engine", ".hbs");
 app.set("views", "./views");
 app.set("views", path.join(__dirname, "resources", "views"));

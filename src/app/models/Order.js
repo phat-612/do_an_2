@@ -12,7 +12,10 @@ const Order = new Schema(
       {
         price: { type: Number },
         quantity: { type: Number },
-        idProductDetail: { type: Schema.Types.ObjectId, ref: "Product" },
+        idVariation: {
+          type: Schema.Types.ObjectId,
+          ref: "Product.variations",
+        },
       },
     ],
     shipmentDetail: {
