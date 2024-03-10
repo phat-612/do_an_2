@@ -6,7 +6,7 @@ const apiController = require("../app/controllers/ApiController");
 router.post("/storeCategory", apiController.storeCategory);
 router.post(
   "/storeWarranty",
-  upload.single("image"),
+  upload.array("images"),
   apiController.storeWarranty
 );
 // dành cho test

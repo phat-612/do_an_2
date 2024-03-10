@@ -8,9 +8,6 @@ class SiteController {
   signUp(req, res, next) {
     res.render("user/sites/signUp");
   }
-  forgotPassword(req, res, next) {
-    res.render("user/sites/forgotPassword");
-  }
   cart(req, res, next) {
     res.render("user/sites/cart");
   }

@@ -1,9 +1,9 @@
 // uploadMiddleware.js
 const multer = require("multer");
-
+const path = require("path");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./public/img/product");
+    cb(null, path.join(__dirname, "../../public/img/uploads"));
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);

@@ -46,7 +46,13 @@
                 Remember me
               </label>
             </div>
-            <a href="/forgotPassword" class="text-body">Forgot password?</a>
+            <button
+              id="btnResetPassword"
+              type="button"
+              class="btn btn-link"
+              data-bs-toggle="modal"
+              data-bs-target="#resetPasswordModal"
+            >Quên mật khẩu?</button>
           </div>
 
           <div class="text-center text-lg-start mt-4 pt-2">
@@ -55,8 +61,8 @@
               class="btn btn-primary btn-lg"
               style="padding-left: 2.5rem; padding-right: 2.5rem;"
             >Login</button>
-            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account?
-              <a href="/signUp" class="link-danger">Register</a></p>
+            <p class="small fw-bold mt-2 pt-1 mb-0">Bạn đã có tài khoản
+              <a href="/signUp" class="link-danger">Đăng kí</a></p>
           </div>
 
         </form>
@@ -64,3 +70,54 @@
     </div>
   </div>
 </section>
+{{! modal quên mật khẩu }}
+<div
+  class="modal fade"
+  id="resetPasswordModal"
+  tabindex="-1"
+  aria-labelledby="resetPasswordLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Gửi lại mật khẩu mới
+          !!!</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label
+              for="inpEmailResetPassword"
+              class="col-form-label"
+            >Email</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inpEmailResetPassword"
+              name="email"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >Close</button>
+        <button
+          id="btnSendNewPassword"
+          type="button"
+          class="btn btn-primary"
+        >Gửi mật khẩu mới</button>
+      </div>
+    </div>
+  </div>
+</div>
