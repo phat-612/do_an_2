@@ -4,7 +4,6 @@ const Product = new Schema(
   {
     name: { type: String },
     description: { type: String },
-    price: { type: Number, default: 0 },
     images: [String],
     idCategory: { type: Schema.Types.ObjectId, ref: "Category" },
     variations: [

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CellPhoneS</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    {{#if css}}
+    <link rel="stylesheet" href="/css/{{css}}">
+    {{/if}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+    {{> header-user}}
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                {{> userSidebar}}
+            </div>
+            <div class="col-8">
+                {{{body}}}
+        </div>
+    </div>
+    
+    {{> footer-user}}
+    <script src="https://kit.fontawesome.com/3505ae4a94.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    {{#if js}}
+    <script src="/js/{{js}}"></script>
+    {{/if}}
+</body>
+
+</html>
