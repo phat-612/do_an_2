@@ -13,6 +13,6 @@ router.post(
 router.post("/test", apiController.test);
 router.post("/testAddCategory", apiController.testAddCategory);
 router.post("/testUpdateQuantity", apiController.testUpdateQuantity);
-router.get("/testGetProduct", apiController.testGetProduct);
+// router.get("/testGetProduct", apiController.testGetProduct);
 
 module.exports = router;
