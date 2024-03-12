@@ -45,3 +45,27 @@ document
     });
   });
 //   ================================
+
+// nút them SP
+var addDetailBtn = document.querySelector(".addDetail-btn");
+var detailHTML = `<input type="text" id="" placeholder="Nhập Chi Tiết" class="form-control my-2">`;
+
+addDetailBtn.addEventListener("click", () => {
+  var inputDetailDiv = document.getElementById("inputDetailDiv");
+  var secondChild = inputDetailDiv.children[0]; // Lấy phần tử con thứ hai trong inputdiv
+  secondChild.insertAdjacentHTML("afterend", detailHTML);
+});
+
+// nút them thuoc tinh
+var addAttributeBtn = document.querySelector(".addAttribute-btn");
+var attributeHTML = `<input type="text" class="inpAttribute" id="" placeholder="Nhập Thuộc Tính" class="form-control my-2">`;
+
+addAttributeBtn.addEventListener("click", () => {
+  var inputAttributeDiv = document.getElementById("inputAttributeDiv");
+  var secondChild = inputAttributeDiv.children[0]; // Lấy phần tử con thứ hai trong inputdiv
+  secondChild.insertAdjacentHTML("afterend", attributeHTML);
+});
+
+$$(".inpAttribute").onKeyPress(() => {
+  console.log("clicked");
+});

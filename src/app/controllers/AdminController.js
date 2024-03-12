@@ -55,7 +55,10 @@ class AdminController {
   }
   //minh luan
   createWarranty(req, res, next) {
-    res.render("admin/warrantys/create-warranty", { layout: "admin" });
+    res.render("admin/warrantys/create-warranty", {
+      layout: "admin",
+      js: "admin/createWarranty",
+    });
   }
   async showWarranty(req, res, next) {
     const warrantys = await Warranty.find({});
