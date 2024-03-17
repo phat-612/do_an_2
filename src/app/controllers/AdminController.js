@@ -70,6 +70,13 @@ class AdminController {
       warrantys: multipleMongooseToObject(warrantys),
     });
   }
-  detailWarranty(req, res, next) {}
+  detailWarranty(req, res, next) {
+    res.send("thanh cong");
+    // const warrantys = Warranty.findbyID(req.params.id);
+    // res.render("admin/warrantys/detail-warranty", {
+    //   layout: "admin",
+    //   warrantys: multipleMongooseToObject(warrantys),
+    // });
+  }
 }
 module.exports = new AdminController();
