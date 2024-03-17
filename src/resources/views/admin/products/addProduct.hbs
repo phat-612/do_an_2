@@ -36,20 +36,32 @@
             <button type="button" class="btn btn-success form-control addAttribute1-btn">Thêm Thuộc Tính</button>
             <div class="row">
                <input type="text" id="" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
-               <button type="button" class="btn btn-danger col-2 my-2">Xóa</button>
+               <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
             </div>
             
          </div>
       </div>
      </div>
-
-     {{!-- =============================== --}}
-     <div class="w-75 container-sm py-4 my-4">
-      <button type="button" class="btn btn-success w-100 addAttributebtn">Thêm</button>
-     </div>
      {{!-- =============================== --}}
      <div class="w-75 container-sm py-4 my-4 border rounded Attribute2div">
-      
+      <div class="row">
+         <div class="col-md-6">
+            <label for="ipNameAttributePro2" class="form-label fs-5">Nhập Tên Thuộc Tính</label>
+         </div>
+         <div class="col-md-6">
+            <input type="text" id="ipNameAttributePro2" class="form-control" placeholder=" Nhập Tên Thuộc Tính">
+         </div>
+         <div class="col-md-6 my-3">
+            <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
+         </div>
+         <div class="col-md-6 my-3" id="inputAttribute2Div">
+            <button type="button" class="btn btn-success form-control addAttribute2-btn">Thêm Thuộc Tính</button>
+            <div class="row">
+               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
+               <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
+            </div>
+         </div>
+      </div>
      </div>
      {{!-- ------------------------- --}}
       <table id="custom-varriant" class="table-based table ">

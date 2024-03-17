@@ -30,7 +30,7 @@ class ApiController {
     warranty
       .save()
       .then(() => {
-        res.send("Tạo thành công");
+        res.redirect("/admin/warranty/show");
       })
       .catch((error) => {});
   }

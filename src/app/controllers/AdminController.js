@@ -74,7 +74,7 @@ class AdminController {
     Warranty.findById(req.params.id).then((warrantys) =>
       res.render("admin/warrantys/detail-warranty", {
         layout: "admin",
-        warrantys: multipleMongooseToObject(warrantys),
+        warrantys: mongooseToObject(warrantys),
       })
     );
   }

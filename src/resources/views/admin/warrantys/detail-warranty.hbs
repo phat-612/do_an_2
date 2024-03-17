@@ -1,28 +1,96 @@
-<div class="mt-4">
-  <table class="table mt-4">
-    <thead>
-      <tr>
-        <th scope="col">STT</th>
-        <th scope="col">Khachhang</th>
-        <th scope="col">Sanpham</th>
-        <th scope="col">Gia</th>
-        <th scope="col">Trangthai</th>
-        <th scope="col">Ghichu</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th scope="row">{{sum @index 1}}</th>
-        <td>{{this.email}}</td>
-        <td>{{this.name}}</td>
-        <td>{{this.images}}</td>
-        <td>{{this.address}}</td>
-        <td>{{this.phone}}</td>
-        <td>{{this.note}}</td>
-        <td>{{this.status}}</td>
-        <td>{{this.total}}</td>
-        <td>{{this.details}}</td>
-      </tr>
-    </tbody>
-  </table>
+<div class="container">
+  <form method="post" action="/api/storeWarranty" enctype="multipart/form-data">
+    <div class="mt-4 row">
+      <div class="form-group col-md-6 my-4">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          id="inputEmail4"
+          placeholder="Email"
+          name="email"
+          value="{{warrantys.email}}"
+          disabled
+        />
+      </div>
+      <div class="form-group col-md-6 my-4">
+        <label for="name">HoVaTen</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="HoVaTen"
+          id="name"
+          name="name"
+          value="{{warrantys.name}}"
+          disabled
+        />
+      </div>
+      <div class="form-group col-md-6 my-4">
+        <label for="phone">Số Điện Thoại</label>
+        <input
+          type="text"
+          class="form-control"
+          id="phone"
+          placeholder="Nhập số điện thoại"
+          name="phone"
+          value="{{warrantys.phone}}"
+          disabled
+        />
+      </div>
+      <div class="form-group col-md-6 my-4">
+        <label for="address">Địa Chỉ</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Địa Chỉ"
+          name="address"
+          id="address"
+          value="{{warrantys.address}}"
+          disabled
+        />
+      </div>
+      <div class="form-group col-md-6 my-4">
+        <label for="note">Ghi chú</label>
+        <input
+          type="text"
+          class="form-control"
+          id="note"
+          name="note"
+          value="{{warrantys.note}}"
+          disabled
+        />
+      </div>
+      <div class="form-group col-md-6 my-4">
+        <label for="status">Trạng thái</label>
+        <input
+          type="text"
+          class="form-control"
+          id="status"
+          name="status"
+          value="{{warrantys.status}}"
+          disabled
+        />
+      </div>
+      <div class="form-group col-md-6 my-4">
+        <label for="total">Gia</label>
+        <input
+          type="text"
+          class="form-control"
+          id="total"
+          name="total"
+          value="{{warrantys.total}}"
+          disabled
+        />
+      </div>
+      <div class="form-group col-md-6 my-4">
+        <label for="images">Hình ảnh</label>
+        <div id="images">
+          <img src="/img/uploads/{{warrantys.images}}" alt="" />
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-md-2 my-4">
+      <button type="submit" class="btn btn-primary">Sửa</button>
+    </div>
+  </form>
 </div>

@@ -1,3 +1,9 @@
+// =============================================
+function deleteAttribute(event) {
+  // console.log(event.target);
+  event.target.closest(".row").remove();
+}
+
 // =====================================
 document
   .getElementById("multiImageUpload")
@@ -51,7 +57,7 @@ document
 var addAttribute1Btn = document.querySelector(".addAttribute1-btn");
 var Attribute1HTML = `<div class="row">
                <input type="text" id="" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
-               <button type="button" class="btn btn-danger col-2 my-2">Xóa</button>
+               <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
             </div>`;
 
 addAttribute1Btn.addEventListener("click", () => {
@@ -59,37 +65,11 @@ addAttribute1Btn.addEventListener("click", () => {
   var secondChild = inputAttribute1Div.children[0]; // Lấy phần tử con thứ hai trong inputdiv
   secondChild.insertAdjacentHTML("afterend", Attribute1HTML);
 });
-
-// nut them bang thuoc tinh 2
-
-var addAttribute2HTML = `<div class="row">
-         <div class="col-md-6">
-            <label for="ipNameAttributePro2" class="form-label fs-5">Nhập Tên Thuộc Tính</label>
-         </div>
-         <div class="col-md-6">
-            <input type="text" id="ipNameAttributePro2" class="form-control" placeholder=" Nhập Tên Thuộc Tính">
-         </div>
-         <div class="col-md-6 my-3">
-            <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
-         </div>
-         <div class="col-md-6 my-3" id="inputAttribute2Div">
-            <button type="button" class="btn btn-success form-control addAttribute2-btn">Thêm Thuộc Tính</button>
-            <div class="row">
-               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
-               <button type="button" class="btn btn-danger col-2 my-2">Xóa</button>
-            </div>
-         </div>
-      </div>`;
-
-document.querySelector(".addAttributebtn").addEventListener("click", () => {
-  document.querySelector(".Attribute2div").innerHTML = addAttribute2HTML;
-});
-
 // nút them thuoc tinh 2
 var addAttribute2Btn = document.querySelector(".addAttribute2-btn");
 var Attribute2HTML = `<div class="row">
                <input type="text" id="" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
-               <button type="button" class="btn btn-danger col-2 my-2">Xóa</button>
+               <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
             </div>`;
 
 addAttribute2Btn.addEventListener("click", () => {
@@ -98,9 +78,6 @@ addAttribute2Btn.addEventListener("click", () => {
   secondChild.insertAdjacentHTML("afterend", Attribute2HTML);
 });
 
-$$(".inpAttribute").onKeyPress(() => {
-  console.log("clicked");
-});
 // ============================================
 // gợi ý cách làm cái bảng
 // Lấy tất cả các giá trị từ các ô input có class attr1 và attr2
@@ -147,4 +124,3 @@ for (let i = 0; i < attr1Values.length; i++) {
 }
 table.appendChild(tbody);
 document.body.appendChild(table);
-// =============================================

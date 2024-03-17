@@ -8,6 +8,7 @@
           class="form-control"
           id="inputEmail4"
           placeholder="Email"
+          value="{{warrantys}}"
           name="email"
         />
       </div>
@@ -18,6 +19,7 @@
           class="form-control"
           placeholder="HoVaTen"
           name="name"
+       
         />
       </div>
       <div class="form-group col-md-6 my-4">
@@ -27,6 +29,7 @@
           class="form-control"
           placeholder="Nhập số điện thoại"
           name="phone"
+      
         />
       </div>
       <div class="form-group col-md-6 my-4">
@@ -38,14 +41,44 @@
           name="address"
         />
       </div>
+      <div class="form-group col-md-6 my-4">
+        <label for="note">Ghi chú</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Nhập ghi chú"
+          id="note"
+          name="note"  
+        />
+      </div>
+      <div class="form-group col-md-6 my-4">
+        <label for="status">Trạng thái</label>
+        <input
+          type="text"
+          class="form-control"
+           placeholder="Chọn trạng thái"
+          id="status"
+          name="status"
+        />
+      </div>
+      <div class="form-group col-md-6 my-4">
+        <label for="total">Gia</label>
+        <input
+          type="text"
+          class="form-control"
+           placeholder="Nhập giá"
+          id="total"
+          name="total"
+        />
+      </div>
     </div>
-
     <div class="form-group col-md-6 my-4">
       <label for="images">Chọn Ảnh</label>
       <input type="file" class="form-control-file" name="images" multiple />
     </div>
     <div class="form-group col-md-2 my-4">
-      <label for="exampleFormControlFile1">Chọn Sản Phẩm</label>
+      <label for="exampleFormCon
+      trolFile1">Chọn Sản Phẩm</label>
       <input
         type="text"
         id="searchInput"

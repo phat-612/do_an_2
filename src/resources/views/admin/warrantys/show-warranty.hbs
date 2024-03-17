@@ -16,13 +16,11 @@
           <th scope="row">{{sum @index 1}}</th>
           <td>{{this.email}}</td>
           <td>{{this.name}}</td>
-          <td>{{this.images}}</td>
+          <td>
+            <img src="/img/uploads/{{this.images}}" alt="" />
+          </td>
           <td>{{this.address}}</td>
           <td>{{this.phone}}</td>
-          <td>{{this.note}}</td>
-          <td>{{this.status}}</td>
-          <td>{{this.total}}</td>
-          <td>{{this.details}}</td>
           <td>
             <a
               href="/admin/warranty/{{this._id}}/deltail"
