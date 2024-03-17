@@ -18,43 +18,38 @@
        <option value="Apple">
      </datalist>
    {{!-- -------------------------------- --}}
+      <label for="brandDataList" class="form-label fs-4 mt-3">Thuộc Tính</label>
+
+
      <div class="w-75 container-sm py-4 my-4 border rounded">
       <div class="row">
          <div class="col-md-6">
-            <label for="ipNameDetailPro" class="form-label fs-5">Nhập Tên Chi Tiết</label>
+            <label for="ipNameAttributePro1" class="form-label fs-5">Nhập Tên Thuộc tính</label>
          </div>
          <div class="col-md-6">
-            <input type="text" id="ipNameDetailPro" class="form-control" placeholder=" Nhập Tên Chi Tiết">
+            <input type="text" id="inpNameAttributePro1" class="form-control" placeholder=" Nhập Tên Thuộc tính">
          </div>
          <div class="col-md-6 my-3">
-            <label for="inpDetailPro" class="form-label fs-5">Nhập Chi Tiết</label>
+            <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
          </div>
-         <div class="col-md-6 my-3" id="inputDetailDiv">
-            <button type="button" class="btn btn-success form-control addDetail-btn">Thêm Chi Tiết</button>
-            <input type="text" id="inpDetailPro" placeholder="Nhập Chi Tiết" class="form-control my-2">
+         <div class="col-md-6 my-3" id="inputAttribute1Div">
+            <button type="button" class="btn btn-success form-control addAttribute1-btn">Thêm Thuộc Tính</button>
+            <div class="row">
+               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
+               <button type="button" class="btn btn-danger col-2 my-2">Xóa</button>
+            </div>
+            
          </div>
       </div>
      </div>
 
      {{!-- =============================== --}}
-
-
-     <div class="w-75 container-sm py-4 my-4 border rounded">
-      <div class="row">
-         <div class="col-md-6">
-            <label for="ipNameAttributePro" class="form-label fs-5">Nhập Tên Thuộc Tính</label>
-         </div>
-         <div class="col-md-6">
-            <input type="text" id="ipNameAttributePro" class="form-control" placeholder=" Nhập Tên Thuộc Tính">
-         </div>
-         <div class="col-md-6 my-3">
-            <label for="inpAttributePro" class="form-label fs-5">Nhập Thuộc Tính</label>
-         </div>
-         <div class="col-md-6 my-3" id="inputAttributeDiv">
-            <button type="button" class="btn btn-success form-control addAttribute-btn">Thêm Thuộc Tính</button>
-            <input type="text" id="inpAttributePro" placeholder="Nhập Thuộc Tính" class="form-control my-2">
-         </div>
-      </div>
+     <div class="w-75 container-sm py-4 my-4">
+      <button type="button" class="btn btn-success w-100 addAttributebtn">Thêm</button>
+     </div>
+     {{!-- =============================== --}}
+     <div class="w-75 container-sm py-4 my-4 border rounded Attribute2div">
+      
      </div>
      {{!-- ------------------------- --}}
       <table id="custom-varriant" class="table-based table ">

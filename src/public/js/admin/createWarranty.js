@@ -3,6 +3,3 @@ document
   .addEventListener("keypress", function (e) {
     let inpName = e.target.value;
   });
-
-if (inpName) {
-}

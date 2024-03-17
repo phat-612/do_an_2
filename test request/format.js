@@ -74,10 +74,7 @@ var addAttribute2HTML = `<div class="row">
          </div>
          <div class="col-md-6 my-3" id="inputAttribute2Div">
             <button type="button" class="btn btn-success form-control addAttribute2-btn">Thêm Thuộc Tính</button>
-            <div class="row">
-               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
-               <button type="button" class="btn btn-danger col-2 my-2">Xóa</button>
-            </div>
+            <input type="text" id="" placeholder="Nhập Thuộc Tính" class="form-control my-2">
          </div>
       </div>`;
 
@@ -87,10 +84,7 @@ document.querySelector(".addAttributebtn").addEventListener("click", () => {
 
 // nút them thuoc tinh 2
 var addAttribute2Btn = document.querySelector(".addAttribute2-btn");
-var Attribute2HTML = `<div class="row">
-               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
-               <button type="button" class="btn btn-danger col-2 my-2">Xóa</button>
-            </div>`;
+var Attribute2HTML = `<input type="text" id="" placeholder="Nhập Thuộc Tính" class="inpAttribute2 form-control my-2">`;
 
 addAttribute2Btn.addEventListener("click", () => {
   var inputAttribute2Div = document.getElementById("inputAttribute2Div");

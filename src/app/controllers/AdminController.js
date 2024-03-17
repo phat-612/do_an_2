@@ -1,4 +1,5 @@
 const Warranty = require("../models/Warranty");
+const Product = require("../models/Product");
 const {
   multipleMongooseToObject,
   mongooseToObject,
@@ -54,10 +55,12 @@ class AdminController {
     });
   }
   //minh luan
-  createWarranty(req, res, next) {
+  async createWarranty(req, res, next) {
+    const products = await Product.find({});
     res.render("admin/warrantys/create-warranty", {
       layout: "admin",
       js: "admin/createWarranty",
+      products: multipleMongooseToObject(products),
     });
   }
   async showWarranty(req, res, next) {
