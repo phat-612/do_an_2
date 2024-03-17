@@ -7,6 +7,7 @@ router.get("/category", adminController.category);
 router.get("/order", adminController.order);
 router.get("/warranty/create", adminController.createWarranty);
 router.get("/warranty/show", adminController.showWarranty);
+router.get("/warranty/:id/deltal", adminController.detailWarranty);
 router.get("/product/detail", adminController.detail);
 router.get("/product/addProduct", adminController.addPro);
 router.get("/product", adminController.product);

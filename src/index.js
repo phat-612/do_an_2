@@ -20,6 +20,7 @@ app.engine(
   engine({
     extname: ".hbs",
     helpers: require("./helpers/handlebars"),
+    sum: (a, b) => a + b,
     defaultLayout: "main",
     layoutsDir: path.join(__dirname, "resources/views/layouts"),
   })

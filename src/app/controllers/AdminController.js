@@ -70,5 +70,6 @@ class AdminController {
       warrantys: multipleMongooseToObject(warrantys),
     });
   }
+  detailWarranty(req, res, next) {}
 }
 module.exports = new AdminController();
