@@ -56,7 +56,7 @@ document
 
 var addAttribute1Btn = document.querySelector(".addAttribute1-btn");
 var Attribute1HTML = `<div class="row">
-               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
+               <input type="text" id="thuocTinh1" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
                <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
             </div>`;
 
@@ -68,7 +68,7 @@ addAttribute1Btn.addEventListener("click", () => {
 // nút them thuoc tinh 2
 var addAttribute2Btn = document.querySelector(".addAttribute2-btn");
 var Attribute2HTML = `<div class="row">
-               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
+               <input type="text" id="thuocTinh2" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
                <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
             </div>`;
 
@@ -77,50 +77,51 @@ addAttribute2Btn.addEventListener("click", () => {
   var secondChild = inputAttribute2Div.children[0]; // Lấy phần tử con thứ hai trong inputdiv
   secondChild.insertAdjacentHTML("afterend", Attribute2HTML);
 });
+// ====================================================
 
 // ============================================
-// gợi ý cách làm cái bảng
-// Lấy tất cả các giá trị từ các ô input có class attr1 và attr2
-var attr1Values = Array.from(document.querySelectorAll(".attr1")).map(
-  (input) => input.value
-);
-var attr2Values = Array.from(document.querySelectorAll(".attr2")).map(
-  (input) => input.value
-);
+// // gợi ý cách làm cái bảng
+// // Lấy tất cả các giá trị từ các ô input có class attr1 và attr2
+// var attr1Values = Array.from(document.querySelectorAll(".attr1")).map(
+//   (input) => input.value
+// );
+// var attr2Values = Array.from(document.querySelectorAll(".attr2")).map(
+//   (input) => input.value
+// );
 
-// Tạo ra một bảng mới
-var table = document.createElement("table");
+// // Tạo ra một bảng mới
+// var table = document.createElement("table");
 
-// Tạo ra hàng tiêu đề cho bảng
-var thead = document.createElement("thead");
-var headerRow = document.createElement("tr");
-["Attribute 1", "Attribute 2", "Quantity"].forEach((text) => {
-  var th = document.createElement("th");
-  th.textContent = text;
-  headerRow.appendChild(th);
-});
-thead.appendChild(headerRow);
-table.appendChild(thead);
+// // Tạo ra hàng tiêu đề cho bảng
+// var thead = document.createElement("thead");
+// var headerRow = document.createElement("tr");
+// ["Attribute 1", "Attribute 2", "Quantity"].forEach((text) => {
+//   var th = document.createElement("th");
+//   th.textContent = text;
+//   headerRow.appendChild(th);
+// });
+// thead.appendChild(headerRow);
+// table.appendChild(thead);
 
-// Tạo ra các hàng cho bảng từ các giá trị attr1 và attr2
-var tbody = document.createElement("tbody");
-for (let i = 0; i < attr1Values.length; i++) {
-  var row = document.createElement("tr");
-  [attr1Values[i], attr2Values[i]].forEach((value) => {
-    var td = document.createElement("td");
-    td.textContent = value;
-    row.appendChild(td);
-  });
+// // Tạo ra các hàng cho bảng từ các giá trị attr1 và attr2
+// var tbody = document.createElement("tbody");
+// for (let i = 0; i < attr1Values.length; i++) {
+//   var row = document.createElement("tr");
+//   [attr1Values[i], attr2Values[i]].forEach((value) => {
+//     var td = document.createElement("td");
+//     td.textContent = value;
+//     row.appendChild(td);
+//   });
 
-  // Thêm một ô input để nhập số lượng
-  var quantityInput = document.createElement("input");
-  quantityInput.type = "number";
-  quantityInput.min = "0";
-  var td = document.createElement("td");
-  td.appendChild(quantityInput);
-  row.appendChild(td);
+//   // Thêm một ô input để nhập số lượng
+//   var quantityInput = document.createElement("input");
+//   quantityInput.type = "number";
+//   quantityInput.min = "0";
+//   var td = document.createElement("td");
+//   td.appendChild(quantityInput);
+//   row.appendChild(td);
 
-  tbody.appendChild(row);
-}
-table.appendChild(tbody);
-document.body.appendChild(table);
+//   tbody.appendChild(row);
+// }
+// table.appendChild(tbody);
+// document.body.appendChild(table);

@@ -6,11 +6,10 @@
         <input
           type="email"
           class="form-control"
-          id="inputEmail4"
+          id="email"
           placeholder="Email"
-          name="email"
-          readonly
           value="{{warrantys.email}}"
+          name="email"
         />
       </div>
       <div class="form-group col-md-6 my-4">
@@ -19,9 +18,8 @@
           type="text"
           class="form-control"
           placeholder="HoVaTen"
-          id="name"
           name="name"
-          readonly
+          id="name"
           value="{{warrantys.name}}"
         />
       </div>
@@ -30,11 +28,10 @@
         <input
           type="text"
           class="form-control"
-          id="phone"
           placeholder="Nhập số điện thoại"
           name="phone"
-          readonly
-          value="{{warrantys.phone}}"
+          id="phone"
+          value="{{warrantys.phone}}"   
         />
       </div>
       <div class="form-group col-md-6 my-4">
@@ -46,7 +43,7 @@
           name="address"
           id="address"
           value="{{warrantys.address}}"
-          readonly
+
         />
       </div>
       <div class="form-group col-md-6 my-4">
@@ -54,10 +51,11 @@
         <input
           type="text"
           class="form-control"
+          placeholder="Nhập ghi chú"
           id="note"
-          name="note"
-          readonly
+          name="note"  
           value="{{warrantys.note}}"
+
         />
       </div>
       <div class="form-group col-md-6 my-4">
@@ -65,9 +63,9 @@
         <input
           type="text"
           class="form-control"
+           placeholder="Chọn trạng thái"
           id="status"
           name="status"
-          readonly
           value="{{warrantys.status}}"
         />
       </div>
@@ -76,35 +74,33 @@
         <input
           type="text"
           class="form-control"
+          placeholder="Nhập giá"
           id="total"
           name="total"
-          readonly
           value="{{warrantys.total}}"
         />
       </div>
-      <div class="form-group col-md-6 my-4">
-        <label for="idProduct">Sản phẩm</label>
-        <input
-          type="text"
-          class="form-control"
-          id="idProduct"
-          name="idProduct"
-          value="{{warrantys.idProduct.name}}"
-          readonly
-        />
-      </div>
-      <div class="form-group col-md-6 my-4">
-        <label for="images">Hình ảnh</label>
-        <div id="images">
-          <img src="/img/uploads/{{warrantys.images}}" alt="" />
-        </div>
-      </div>
+    </div>
+    <div class="form-group col-md-6 my-4">
+      <label for="images">Chọn Ảnh</label>
+      <input type="file" class="form-control-file" value="{{warranty.images}}" id="images" name="images" multiple />
     </div>
     <div class="form-group col-md-2 my-4">
-      <a
-        href="/admin/warranty/{{warrantys._id}}/edit"
-        class="btn btn-primary"
-      >Chỉnh Sửa</a>
+      <label for="exampleFormCon
+      trolFile1">Chọn Sản Phẩm</label>
+      <input
+        type="text"
+        id="searchInput"
+        list="suggestions"
+        placeholder="Tìm kiếm"
+      />
+    <datalist id="suggestions">
+      {{#each products}}
+      <option value="{{this.name}}"></option>
+      {{/each}}
+    </datalist>
+    <div class="form-group  my-4">
+      <button type="submit" class="btn btn-primary">Lưu chỉnh sửa</button>
     </div>
   </form>
 </div>

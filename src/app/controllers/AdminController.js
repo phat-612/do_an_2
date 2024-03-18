@@ -71,12 +71,15 @@ class AdminController {
     });
   }
   detailWarranty(req, res, next) {
-    Warranty.findById(req.params.id).then((warrantys) =>
-      res.render("admin/warrantys/detail-warranty", {
-        layout: "admin",
-        warrantys: mongooseToObject(warrantys),
-      })
-    );
+    Warranty.findById(req.params.id)
+      .populate("name")
+      .then((warrantys) => {
+        res.render("admin/warrantys/detail-warranty", {
+          layout: "admin",
+          warrantys: mongooseToObject(warrantys),
+        });
+      });
   }
+  editWarranty(req, res, next) {}
 }
 module.exports = new AdminController();

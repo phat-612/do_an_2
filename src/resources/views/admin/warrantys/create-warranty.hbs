@@ -1,97 +1,144 @@
 <div class="container">
-  <form method="post" action="/api/storeWarranty" enctype="multipart/form-data">
-    <div class="mt-4 row">
-      <div class="form-group col-md-6 my-4">
-        <label for="email">Email</label>
+  <div class="row">
+    <div class="col-6">
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
         <input
           type="email"
           class="form-control"
-          id="inputEmail4"
-          placeholder="Email"
-          value="{{warrantys}}"
-          name="email"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
         />
       </div>
-      <div class="form-group col-md-6 my-4">
-        <label for="name">HoVaTen</label>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
         <input
-          type="text"
+          type="password"
           class="form-control"
-          placeholder="HoVaTen"
-          name="name"
-       
+          id="exampleInputPassword1"
         />
       </div>
-      <div class="form-group col-md-6 my-4">
-        <label for="phone">Số Điện Thoại</label>
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
         <input
-          type="text"
+          type="email"
           class="form-control"
-          placeholder="Nhập số điện thoại"
-          name="phone"
-      
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
         />
       </div>
-      <div class="form-group col-md-6 my-4">
-        <label for="address">Địa Chỉ</label>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
         <input
-          type="text"
+          type="password"
           class="form-control"
-          placeholder="Địa Chỉ"
-          name="address"
-        />
-      </div>
-      <div class="form-group col-md-6 my-4">
-        <label for="note">Ghi chú</label>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Nhập ghi chú"
-          id="note"
-          name="note"  
-        />
-      </div>
-      <div class="form-group col-md-6 my-4">
-        <label for="status">Trạng thái</label>
-        <input
-          type="text"
-          class="form-control"
-           placeholder="Chọn trạng thái"
-          id="status"
-          name="status"
-        />
-      </div>
-      <div class="form-group col-md-6 my-4">
-        <label for="total">Gia</label>
-        <input
-          type="text"
-          class="form-control"
-           placeholder="Nhập giá"
-          id="total"
-          name="total"
+          id="exampleInputPassword1"
         />
       </div>
     </div>
-    <div class="form-group col-md-6 my-4">
-      <label for="images">Chọn Ảnh</label>
-      <input type="file" class="form-control-file" name="images" multiple />
+    <div class="col-6">
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <input
+          type="email"
+          class="form-control"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="exampleInputPassword1"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <input
+          type="email"
+          class="form-control"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="exampleInputPassword1"
+        />
+      </div>
     </div>
-    <div class="form-group col-md-2 my-4">
-      <label for="exampleFormCon
-      trolFile1">Chọn Sản Phẩm</label>
+    <div class="col">
+      <div class="input-group mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Recipient's username"
+          aria-label="Recipient's username"
+          aria-describedby="button-addon2"
+        />
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          id="button-addon2"
+        >Button</button>
+      </div>
+    </div>
+    <div class="input-group">
       <input
         type="text"
-        id="searchInput"
-        list="suggestions"
-        placeholder="Tìm kiếm"
+        class="form-control"
+        placeholder="Recipient's username"
+        aria-label="Recipient's username with two button addons"
       />
-    <datalist id="suggestions">
-      {{#each products}}
-      <option value="{{this.name}}"></option>
-      {{/each}}
-    </datalist>
-    <div class="form-group col-md-2 my-4">
-      <button type="submit" class="btn btn-primary">Tạo</button>
+      <button class="btn btn-outline-secondary" type="button">Button</button>
+      <button class="btn btn-outline-secondary" type="button">Button</button>
     </div>
-  </form>
+    <div class="input-group mb-3">
+      <button
+        class="btn btn-outline-secondary dropdown-toggle"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >Dropdown</button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#">Action</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li>
+        <li><hr class="dropdown-divider" /></li>
+        <li><a class="dropdown-item" href="#">Separated link</a></li>
+      </ul>
+      <input
+        type="text"
+        class="form-control"
+        aria-label="Text input with dropdown button"
+      />
+    </div>
+    <div class="col-6">
+      <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Email address</label>
+        <input
+          type="email"
+          class="form-control"
+          id="exampleFormControlInput1"
+          placeholder="name@example.com"
+        />
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Email address</label>
+        <input
+          type="email"
+          class="form-control"
+          id="exampleFormControlInput1"
+          placeholder="name@example.com"
+        />
+      </div>
+    </div>
+  </div>
 </div>

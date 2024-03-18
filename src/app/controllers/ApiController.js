@@ -27,12 +27,9 @@ class ApiController {
     });
     formData.images = images;
     const warranty = new Warranty(formData);
-    warranty
-      .save()
-      .then(() => {
-        res.redirect("/admin/warranty/show");
-      })
-      .catch((error) => {});
+    warranty.save().then(() => {
+      res.redirect("/admin/warranty/show");
+    });
   }
   // test api
   test(req, res, next) {
