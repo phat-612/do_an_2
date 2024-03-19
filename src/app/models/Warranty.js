@@ -12,11 +12,11 @@ const Warranty = new Schema(
     total: { type: Number },
     details: [
       {
+        idProduct: { type: Schema.Types.ObjectId, ref: "Product" },
         reason: { type: String },
         price: { type: Number },
       },
     ],
-    idProduct: [{ type: Schema.Types.ObjectId, ref: "Product" }],
   },
   { timestamps: true }
 );

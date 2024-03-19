@@ -1,144 +1,84 @@
 <div class="container">
-  <div class="row">
-    <div class="col-6">
-      <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input
-          type="email"
-          class="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
-        />
+  <form method="post" action="/api/storeWarranty" enctype="multipart/form-data">
+    <div class="row mt-4">
+      <div class="col-6">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" name="email" />
+        </div>
+        <div class="mb-3">
+          <label for="name" class="form-label">HoVaTen</label>
+          <input type="name" name="name" class="form-control" id="name" />
+        </div>
       </div>
-      <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          id="exampleInputPassword1"
-        />
+      <div class="col-6">
+        <div class="mb-3">
+          <label for="phone" class="form-label">Sodienthoai</label>
+          <input type="phone" name="phone" class="form-control" id="phone" />
+        </div>
+        <div class="mb-3">
+          <label for="address" class="form-label">Diachi</label>
+          <input
+            type="address"
+            name="address"
+            class="form-control"
+            id="address"
+          />
+        </div>
       </div>
-      <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input
-          type="email"
-          class="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
-        />
+      <div class="col">
+        <label for="idsanpham" class="form-label">Sản phẩm</label>
+        <input class="form-control" list="datalistOptions" id="idsanpham" />
+        <datalist id="datalistOptions">
+          {{#each products}}
+            <option value="{{this.name}}"></option>
+          {{/each}}
+        </datalist>
+        <div id="addInput"></div>
       </div>
-      <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          id="exampleInputPassword1"
-        />
-      </div>
-    </div>
-    <div class="col-6">
-      <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input
-          type="email"
-          class="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          id="exampleInputPassword1"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input
-          type="email"
-          class="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          id="exampleInputPassword1"
-        />
-      </div>
-    </div>
-    <div class="col">
-      <div class="input-group mb-3">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Recipient's username"
-          aria-label="Recipient's username"
-          aria-describedby="button-addon2"
-        />
+      {{! <div class="input-group mb-3">
         <button
           class="btn btn-outline-secondary"
           type="button"
-          id="button-addon2"
-        >Button</button>
-      </div>
-    </div>
-    <div class="input-group">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Recipient's username"
-        aria-label="Recipient's username with two button addons"
-      />
-      <button class="btn btn-outline-secondary" type="button">Button</button>
-      <button class="btn btn-outline-secondary" type="button">Button</button>
-    </div>
-    <div class="input-group mb-3">
-      <button
-        class="btn btn-outline-secondary dropdown-toggle"
-        type="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >Dropdown</button>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
-        <li><hr class="dropdown-divider" /></li>
-        <li><a class="dropdown-item" href="#">Separated link</a></li>
-      </ul>
-      <input
-        type="text"
-        class="form-control"
-        aria-label="Text input with dropdown button"
-      />
-    </div>
-    <div class="col-6">
-      <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Email address</label>
+          id="button-addon1"
+        >Xóa</button>
         <input
-          type="email"
+          type="text"
           class="form-control"
-          id="exampleFormControlInput1"
-          placeholder="name@example.com"
+          placeholder=""
+          aria-label="Example text with button addon"
+          aria-describedby="button-addon1"
+        />
+      </div> }}
+      <div class="col-6">
+        <div class="mb-3">
+          <label for="status" class="form-label">Trạng thái</label>
+          <input type="status" name="status" class="form-control" id="status" />
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="mb-3">
+          <label for="total" class="form-label">Giá</label>
+          <input type="total" name="total" class="form-control" id="total" />
+        </div>
+      </div>
+      <div class="input-group mb-3">
+        <label class="input-group-text" for="images">Tải ảnh</label>
+        <input
+          type="file"
+          name="images"
+          class="form-control"
+          id="images"
+          multiple
         />
       </div>
-    </div>
-    <div class="col-6">
       <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Email address</label>
-        <input
-          type="email"
-          class="form-control"
-          id="exampleFormControlInput1"
-          placeholder="name@example.com"
-        />
+        <label for="total" class="form-label">Lý do</label>
+        <input type="text" name="note" class="form-control" id="text" />
+      </div>
+      <div class="form-group my-4">
+        <button type="submit" class="btn btn-primary">Tạo</button>
       </div>
     </div>
-  </div>
+  </form>
 </div>
