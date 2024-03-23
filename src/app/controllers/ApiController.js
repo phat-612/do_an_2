@@ -1,7 +1,10 @@
 const Category = require("../models/Category");
 const Warranty = require("../models/Warranty");
 const Product = require("../models/Product");
+const UserLogin = require("../models/UserLogin");
+const User = require("../models/User");
 
+var validator = require("email-validator");
 const {} = require("../../util/function");
 const { default: mongoose } = require("mongoose");
 class ApiController {
@@ -29,6 +32,45 @@ class ApiController {
     const warranty = new Warranty(formData);
     warranty.save().then(() => {
       res.redirect("/admin/warranty/show");
+    });
+  }
+  signUp(req, res, next) {
+    const formData = req.body;
+    // kiểm tra mật khẩu trùng khớp
+    if (formData.password !== formData.confirmPassword) {
+      return res.status(422).json({ message: "Mật khẩu không trùng khớp" });
+    }
+    // kiểm tra email hợp lệ
+    if (!validator.validate(formData.email)) {
+      return res.status(422).json({ message: "Email không hợp lệ" });
+    }
+    User.findOne({ email: formData.email }).then((user) => {
+      if (user) {
+        // khi email đã tồn tại
+        return res.status(422).json({ message: "Email đã tồn tại" });
+      } else {
+        // khi email chưa tồn tại
+        const user = new User({
+          email: formData.email,
+          name: formData.name,
+        });
+        user
+          .save()
+          .then((saveUser) => {
+            // lưu thông tin đăng nhập
+            const userLogin = new UserLogin({
+              idUser: saveUser._id,
+              email: formData.email,
+              password: formData.password,
+            });
+            userLogin.save().then(() => {
+              return res.redirect("/login");
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     });
   }
   // test api

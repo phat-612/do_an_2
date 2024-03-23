@@ -9,37 +9,53 @@
         />
       </div>
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-        <form class="">
+        <form method="post" action="/api/signUp">
 
-          <!-- Email input -->
-          <div class="form-outline mb-4">
+          <div class="form-outline mb-2">
+            <input
+              type="text"
+              id="name"
+              class="form-control form-control-lg"
+              placeholder="Nhập họ và tên"
+              name="name"
+              required
+            />
+            <label class="form-label" for="name">Họ và tên</label>
+          </div>
+          <div class="form-outline mb-2">
             <input
               type="email"
               id="email"
               class="form-control form-control-lg"
-              placeholder="Enter a valid email address"
+              placeholder="Nhập địa chỉ email"
+              name="email"
+              required
             />
-            <label class="form-label" for="email">Email address</label>
+            <label class="form-label" for="email">Email</label>
           </div>
-
-          <!-- Password input -->
-          <div class="form-outline mb-3">
+          <div class="form-outline mb-2">
             <input
               type="password"
               id="password"
               class="form-control form-control-lg"
-              placeholder="Enter password"
+              placeholder="Nhập mật khẩu"
+              name="password"
+              required
             />
-            <label class="form-label" for="password">Password</label>
+            <label class="form-label" for="password">Mật khẩu</label>
           </div>
-          <div class="form-outline mb-3">
+          <div class="form-outline mb-2">
             <input
               type="password"
               id="confirmPassword"
               class="form-control form-control-lg"
-              placeholder="Enter password"
+              placeholder="Nhập lại mật khẩu"
+              name="confirmPassword"
+              required
             />
-            <label class="form-label" for="confirmPassword">Confirm Password</label>
+            <label class="form-label" for="confirmPassword">Nhập lại mật khẩu</label>
+            <p id="errorPassword" class="opacity-0 text-danger">*Mật khẩu không
+              khớp</p>
           </div>
 
           <div class="d-flex justify-content-between align-items-center">
@@ -50,6 +66,7 @@
                 type="checkbox"
                 value=""
                 id="form2Example3"
+                required
               />
               <label class="form-check-label" for="form2Example3">
                 Đồng ý với các điều khoản của chúng tôi
@@ -59,7 +76,7 @@
 
           <div class="text-center text-lg-start mt-4 pt-2">
             <button
-              type="button"
+              type="submit"
               class="btn btn-primary btn-lg"
               style="padding-left: 2.5rem; padding-right: 2.5rem;"
             >Register</button>

@@ -6,7 +6,9 @@ class SiteController {
     res.render("user/sites/login");
   }
   signUp(req, res, next) {
-    res.render("user/sites/signUp");
+    res.render("user/sites/signUp", {
+      js: "user/signUp",
+    });
   }
   cart(req, res, next) {
     res.render("user/sites/cart");

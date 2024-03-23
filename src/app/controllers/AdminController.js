@@ -32,7 +32,7 @@ class AdminController {
   }
   // get /orderproducts
   order(req, res, next) {
-    res.render("admin/products/orderProduct", {
+    res.render("admin/orders/orderProduct", {
       layout: "admin",
       js: "admin/orderProduct",
       css: "admin/orderProduct",

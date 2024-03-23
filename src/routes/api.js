@@ -4,6 +4,7 @@ const upload = require("../app/middlewares/uploadMiddleware");
 
 const apiController = require("../app/controllers/ApiController");
 router.post("/storeCategory", apiController.storeCategory);
+router.post("/signUp", apiController.signUp);
 router.post(
   "/storeWarranty",
   upload.array("images"),

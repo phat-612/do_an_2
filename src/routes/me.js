@@ -5,7 +5,10 @@ const meController = require("../app/controllers/MeController");
 
 router.get("/address", meController.address);
 router.get("/changePassword", meController.changePassword);
-router.get("/history", meController.history);
+router.get("/historyOrder", meController.historyOrder);
+router.get("/detailOrder", meController.detailOrder);
+router.get("/historyWaranty", meController.historyWaranty);
+router.get("/detailWaranty", meController.detailWaranty);
 router.get("/", meController.profile);
 
 module.exports = router;
