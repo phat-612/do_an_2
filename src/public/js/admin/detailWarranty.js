@@ -1,6 +1,9 @@
-var inputSanPham = document.getElementById("details");
+var inputSanPham = document.getElementById("detail");
 var addInput = document.getElementById("addInput");
 var addProductButton = document.getElementById("addProduct");
+
+var productCount = 1; // Đếm số lượng sản phẩm đã được thêm
+var productId = 1; // Đếm số lượng sản phẩm đã được thêm
 
 addProductButton.addEventListener("click", function () {
   var selectedProduct = inputSanPham.value;
@@ -14,7 +17,8 @@ addProductButton.addEventListener("click", function () {
     productNameInput.type = "text";
     productNameInput.value = selectedProduct;
     productNameInput.disabled = true;
-    productNameInput.name = "details[]";
+    productNameInput.name = "nameProduct_" + productCount;
+    productNameInput.id = "idProduct_" + productId;
 
     var deleteButton = document.createElement("button");
     deleteButton.className = "btn btn-outline-secondary delete-button";
@@ -37,13 +41,13 @@ addProductButton.addEventListener("click", function () {
       newReasonInput.className = "form-control";
       newReasonInput.type = "text";
       newReasonInput.placeholder = "Lý do";
-      newReasonInput.name = "reason[]";
+      newReasonInput.name = "reason_" + productCount;
 
       var newPriceInput = document.createElement("input");
       newPriceInput.className = "form-control";
       newPriceInput.type = "text";
       newPriceInput.placeholder = "Giá";
-      newPriceInput.name = "price[]";
+      newPriceInput.name = "price_" + productCount;
 
       var newDeleteButton = document.createElement("button");
       newDeleteButton.className = "btn btn-outline-secondary delete-button";
@@ -68,5 +72,8 @@ addProductButton.addEventListener("click", function () {
     addInput.appendChild(addInputGroup);
 
     inputSanPham.value = "";
+
+    productCount++;
+    productId++; // Tăng số lượng sản phẩm đã được thêm
   }
 });

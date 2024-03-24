@@ -3,10 +3,12 @@ const Warranty = require("../models/Warranty");
 const Product = require("../models/Product");
 const UserLogin = require("../models/UserLogin");
 const User = require("../models/User");
-
-var validator = require("email-validator");
+// ------------------------
+require("dotenv").config();
+const validator = require("email-validator");
+const bcrypt = require("bcrypt");
 const {} = require("../../util/function");
-const { default: mongoose } = require("mongoose");
+
 class ApiController {
   // api user,admin
   // api user
@@ -56,12 +58,16 @@ class ApiController {
         });
         user
           .save()
-          .then((saveUser) => {
+          .then(async (saveUser) => {
             // lưu thông tin đăng nhập
+            const hashPassword = await bcrypt.hashSync(
+              formData.password,
+              parseInt(process.env.SALT_OR_ROUNDS)
+            );
             const userLogin = new UserLogin({
               idUser: saveUser._id,
               email: formData.email,
-              password: formData.password,
+              password: hashPassword,
             });
             userLogin.save().then(() => {
               return res.redirect("/login");
@@ -71,6 +77,28 @@ class ApiController {
             console.log(error);
           });
       }
+    });
+  }
+  login(req, res, next) {
+    const formData = req.body;
+    UserLogin.findOne({ email: formData.email }).then(async (userLogin) => {
+      if (!userLogin) {
+        return res.status(422).json({ message: "Email không tồn tại" });
+      }
+      const checkPassword = await bcrypt.compare(
+        formData.password,
+        userLogin.password
+      );
+      if (!checkPassword) {
+        return res.status(422).json({ message: "Mật khẩu không chính xác" });
+      }
+      User.findOne({ email: formData.email }).then((user) => {
+        req.session.role = user.role;
+        req.session.name = user.name;
+        req.session.idUser = userLogin.idUser;
+        console.log(req.session);
+        return res.redirect("/me");
+      });
     });
   }
   // test api

@@ -1,22 +1,22 @@
-<form action="" method="" >
-   
-   <div class="container">
-      <label for="name-Product" class="form-label fs-4">Tên Sản phẩm</label>
-      <input type="text" class="form-control" id="name-Product" placeholder="Nhập tên Sản Phẩm" />
-      <label for="description-Product" class="col-form-label fs-4">Mô Tả Sản Phẩm</label>
-      <textarea class="form-control" id="description-Product" placeholder="Nhập Mô Tả Sản Phẩm"></textarea>
-      <label for="categoryDataList" class="form-label fs-4">Danh Mục</label>
-      <input class="form-control" list="categoryOptions" id="categoryDataList" placeholder="Nhập Danh Mục">
-      <datalist id="categoryOptions">
-         <option value="Điện thoại">
-         <option value="Laptop">
-      </datalist>
-      <label for="brandDataList" class="form-label fs-4">Thương Hiệu</label>
-      <input class="form-control" list="BrandOptions" id="brandDataList" placeholder="Nhập Thương Hiệu">
-      <datalist id="BrandOptions">
-       <option value="SamSung">
-       <option value="Apple">
-      </datalist>
+<form action="">
+
+  <div class="container">
+    <label for="name-Product" class="form-label fs-4">Tên Sản phẩm</label>
+    <input type="text" class="form-control" id="name-Product" value="Iphone 15 pro max" />
+    <label for="description-Product" class="col-form-label fs-4">Mô Tả Sản Phẩm</label>
+    <textarea class="form-control" id="description-Product">IPhone 15 Pro Max 256GB là sản phẩm cao nhất thuộc dòng iPhone 15 Series. Máy sở hữu thiết kế mỏng nhẹ, tinh tế nhưng không kém phần sang trọng đi kèm cấu hình mạnh mẽ nhất trên thị trường hiện nay. Màn hình LTPO Super Retina XDR OLED 6.7 inch giúp mang đến những thước phim sống động với trải nghiệm thú vị. Bên cạnh đó, khả năng nhiếp ảnh của máy cũng được đánh giá cao nhờ camera chính lên đến 48MP và là sản phẩm duy nhất được trang bị ống kính tiềm vọng mới, có khả năng zoom quang học lên đến 5-6x. Thời lượng pin của máy được nâng cấp đáng kẻ, bạn có thể sử dụng liên tục trong 29 giờ với các tác vụ tổng hợp.</textarea>
+    <label for="categoryDataList" class="form-label fs-4">Danh Mục</label>
+    <input class="form-control" list="categoryOptions" id="categoryDataList" value="Điện Thoại">
+    <datalist id="categoryOptions">
+        <option value="Điện thoại">
+        <option value="Laptop">
+    </datalist>
+    <label for="brandDataList" class="form-label fs-4">Thương Hiệu</label>
+    <input class="form-control" list="BrandOptions" id="brandDataList" value="Apple">
+    <datalist id="BrandOptions">
+        <option value="SamSung">
+        <option value="Apple">
+    </datalist>
    {{!-- -------------------------------- --}}
       <label for="brandDataList" class="form-label fs-4 mt-3">Thuộc Tính</label>
       <div class="w-75 container-sm py-4 my-4 border rounded">
@@ -25,7 +25,7 @@
                <label for="ipNameAttributePro1" class="form-label fs-5">Nhập Tên Thuộc tính</label>
             </div>
             <div class="col-md-6">
-               <input type="text" id="inpNameAttributePro1" class="form-control" placeholder=" Nhập Tên Thuộc tính">
+               <input type="text" id="inpNameAttributePro1" class="form-control" value="Ram">
             </div>
             <div class="col-md-6 my-3">
                <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
@@ -33,7 +33,11 @@
             <div class="col-md-6 my-3" id="inputAttribute1Div">
                <button type="button" class="btn btn-success form-control addAttribute1-btn">Thêm Thuộc Tính</button>
                <div class="row">
-                  <input type="text" id="thuocTinh1" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
+                  <input type="text" id="thuocTinh1" class="form-control my-2 col" value="8GB">
+                  <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
+               </div>
+               <div class="row">
+                  <input type="text" id="thuocTinh1" class="form-control my-2 col" value="16GB">
                   <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
                </div>
             </div>
@@ -46,7 +50,7 @@
             <label for="inpNameAttributePro2" class="form-label fs-5">Nhập Tên Thuộc Tính</label>
          </div>
          <div class="col-md-6">
-            <input type="text" id="inpNameAttributePro2" class="form-control" placeholder=" Nhập Tên Thuộc Tính">
+            <input type="text" id="inpNameAttributePro2" class="form-control" value="Màu Sắc">
          </div>
          <div class="col-md-6 my-3">
             <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
@@ -54,7 +58,11 @@
          <div class="col-md-6 my-3" id="inputAttribute2Div">
             <button type="button" class="btn btn-success form-control addAttribute2-btn">Thêm Thuộc Tính</button>
             <div class="row">
-               <input type="text" id="thuocTinh2" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
+               <input type="text" id="thuocTinh2" class="form-control my-2 col" value="Đỏ">
+               <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
+            </div>
+            <div class="row">
+               <input type="text" id="thuocTinh2" class="form-control my-2 col" value="Xanh">
                <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
             </div>
          </div>
@@ -112,6 +120,6 @@
          <p>Danh sách Ảnh :</p>
          <div id="multiImagePreview" class="row"></div>
       </div>
-   </div>
+  </div>
 
 </form>

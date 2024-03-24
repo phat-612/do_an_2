@@ -22,20 +22,21 @@ class AdminController {
       css: "admin/showProduct",
     });
   }
-  // get /detailproducts
-  detail(req, res, next) {
-    res.render("admin/products/detailProduct", {
-      layout: "admin",
-      js: "admin/detailProduct",
-      css: "admin/detailProduct",
-    });
-  }
+
   // get /orderproducts
   order(req, res, next) {
     res.render("admin/orders/orderProduct", {
       layout: "admin",
       js: "admin/orderProduct",
       css: "admin/orderProduct",
+    });
+  }
+  // get /order/detail
+  orderDetail(req, res, next) {
+    res.render("admin/orders/orderDetail", {
+      layout: "admin",
+      js: "admin/orderDetail",
+      css: "admin/orderDetail",
     });
   }
   //get /product/addproduct
@@ -46,6 +47,22 @@ class AdminController {
       css: "admin/addProduct",
     });
   }
+  // get /product/detail
+  detail(req, res, next) {
+    res.render("admin/products/detailProduct", {
+      layout: "admin",
+      js: "admin/detailProduct",
+      css: "admin/detailProduct",
+    });
+  }
+  //get /product/edit
+  editProduct(req, res, next) {
+    res.render("admin/products/editProduct", {
+      layout: "admin",
+      js: "admin/editProduct",
+      css: "admin/editProduct",
+    });
+  }
   //get /category
   category(req, res, next) {
     res.render("admin/sites/category", {
@@ -54,6 +71,7 @@ class AdminController {
       css: "admin/category",
     });
   }
+
   //minh luan
   async createWarranty(req, res, next) {
     const products = await Product.find({});
@@ -76,6 +94,7 @@ class AdminController {
       .then((warrantys) => {
         res.render("admin/warrantys/detail-warranty", {
           layout: "admin",
+          js: "admin/detailWarranty",
           warrantys: mongooseToObject(warrantys),
         });
       });

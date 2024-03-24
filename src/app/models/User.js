@@ -4,6 +4,7 @@ const User = new Schema({
   email: { type: String },
   name: { type: String },
   phone: { type: String },
+  role: { type: String, default: "user" },
   gender: { type: Boolean, default: false },
   address: { type: String },
   shipmentDetail: [

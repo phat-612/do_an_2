@@ -10,7 +10,7 @@
         CellPhoneZ
       </a>
       <button type="button" class="btn btn-warning ms-lg-3 text-white">Danh mục</button>
-      <form class="col-12 col-lg-5 mb-3 mb-lg-0 ms-lg-auto">
+      <form class="col-12 col-lg-4 mb-3 mb-lg-0 ms-lg-auto">
         <input
           type="search"
           class="form-control form-control-dark"
@@ -26,11 +26,24 @@
             tâm tư vấn</a></li>
         <li><a href="/cart" class="nav-link px-2 fs-5 text-white">Giỏ hàng</a></li>
       </ul>
+      {{#if name}}
+        <div class="navbar-brand fs-5" href="/me">
+          <span class="">{{name}}</span>
+          <img
+            src="https://www.w3schools.com/bootstrap5/img_avatar1.png"
+            alt="Avatar Logo"
+            style="width:40px;"
+            class="rounded-pill"
+          />
+        </div>
 
-      <div class="text-end">
-        <a href="/login" class="btn btn-outline-light me-2">Login</a>
-        <a href="/signUp" class="btn btn-warning">Sign-up</a>
-      </div>
+      {{else}}
+        <div class="text-end">
+          <a href="/login" class="btn btn-outline-light me-2">Login</a>
+          <a href="/signUp" class="btn btn-warning">Sign-up</a>
+        </div>
+      {{/if}}
+
     </div>
 
   </div>

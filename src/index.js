@@ -6,6 +6,7 @@ const sharp = require("sharp");
 const { engine } = require("express-handlebars");
 const methodOverride = require("method-override");
 const path = require("path");
+const MongoStore = require("connect-mongo");
 // import user
 const db = require("./config/db");
 const route = require("./routes");
@@ -41,10 +42,17 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }, // Note: In production, set secure: true and use HTTPS
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      secure: false,
+    },
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+    }),
   })
 );
+
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
@@ -75,7 +83,6 @@ app.use(
     path.join(__dirname, "../node_modules", "bootstrap", "dist", "js")
   )
 );
-
 app.use(
   "/js",
   express.static(path.join(__dirname, "../node_modules", "nouislider", "dist"))
@@ -89,6 +96,12 @@ app.use(
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use((req, res, next) => {
+  if (req.session.name) {
+    res.locals.name = req.session.name;
+  }
+  next();
+});
 // router
 route(app);
 

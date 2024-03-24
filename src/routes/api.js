@@ -3,8 +3,11 @@ const router = express.Router();
 const upload = require("../app/middlewares/uploadMiddleware");
 
 const apiController = require("../app/controllers/ApiController");
-router.post("/storeCategory", apiController.storeCategory);
+const passport = require("passport");
 router.post("/signUp", apiController.signUp);
+router.post("/login", apiController.login);
+router.post("/storeCategory", apiController.storeCategory);
+
 router.post(
   "/storeWarranty",
   upload.array("images"),
