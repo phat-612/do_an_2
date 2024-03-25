@@ -59,11 +59,9 @@
               id="detail"
             />
             <datalist id="datalistOptions">
-              <select name="" id="">
-                {{#each products}}
-                  <option value="{{this._id}}">{{this.name}}</option>
-                {{/each}}
-              </select>
+              {{#each products}}
+                <option value="{{this.id}}"></option>
+              {{/each}}
             </datalist>
           </div>
           <div class="col-1">
