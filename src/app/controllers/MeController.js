@@ -1,7 +1,22 @@
+const User = require("../models/User");
+
 const { multipleMongooseToObject } = require("../../util/mongoose");
 class MeController {
   profile(req, res, next) {
-    res.render("user/profiles/info", { layout: "userProfile" });
+    User.findOne({ _id: req.session.idUser }).then((user) => {
+      res.render("user/profiles/profile", {
+        layout: "userProfile",
+        js: "user/profile",
+        user: {
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          gender: user.gender,
+          birthday: user.birthday,
+          createdAt: user.createdAt,
+        },
+      });
+    });
   }
   historyOrder(req, res, next) {
     res.render("user/profiles/historyOrder", { layout: "userProfile" });

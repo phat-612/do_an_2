@@ -49,18 +49,18 @@
         <input type="text" name="note" class="form-control" id="note" />
       </div>
       <div class="col w-100">
-        <label for="details" class="form-label">Sản phẩm</label>
+        <label for="detail" class="form-label">Sản phẩm</label>
         <div class="row">
           <div class="col">
             <input
               class="form-control"
               list="datalistOptions"
-              name="details"
-              id="details"
+              name="detail"
+              id="detail"
             />
             <datalist id="datalistOptions">
               {{#each products}}
-                <option value="{{this.name}}"></option>
+                <option value="{{this.id}}"></option>
               {{/each}}
             </datalist>
           </div>

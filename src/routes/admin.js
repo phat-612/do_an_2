@@ -3,6 +3,9 @@ const router = express.Router();
 
 const adminController = require("../app/controllers/AdminController");
 
+//get aassess providers (quan ly quyen user, admin)
+router.get("/accessProviders", adminController.accessProviders);
+
 //get category
 router.get("/category", adminController.category);
 //get order

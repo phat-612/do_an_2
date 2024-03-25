@@ -38,65 +38,77 @@ class ApiController {
   }
   signUp(req, res, next) {
     const formData = req.body;
+    let messageError = "";
     // kiểm tra mật khẩu trùng khớp
     if (formData.password !== formData.confirmPassword) {
-      return res.status(422).json({ message: "Mật khẩu không trùng khớp" });
+      messageError = "Mật khẩu không trùng khớp";
     }
     // kiểm tra email hợp lệ
     if (!validator.validate(formData.email)) {
-      return res.status(422).json({ message: "Email không hợp lệ" });
+      messageError = "Email không hợp lệ";
     }
     User.findOne({ email: formData.email }).then((user) => {
       if (user) {
-        // khi email đã tồn tại
-        return res.status(422).json({ message: "Email đã tồn tại" });
-      } else {
-        // khi email chưa tồn tại
-        const user = new User({
-          email: formData.email,
-          name: formData.name,
-        });
-        user
-          .save()
-          .then(async (saveUser) => {
-            // lưu thông tin đăng nhập
-            const hashPassword = await bcrypt.hashSync(
-              formData.password,
-              parseInt(process.env.SALT_OR_ROUNDS)
-            );
-            const userLogin = new UserLogin({
-              idUser: saveUser._id,
-              email: formData.email,
-              password: hashPassword,
-            });
-            userLogin.save().then(() => {
-              return res.redirect("/login");
-            });
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        messageError = "Email đã tồn tại";
       }
+      if (messageError) {
+        return res.render("user/sites/signUp", {
+          messageError,
+          formData: {
+            email: formData.email,
+            name: formData.name,
+          },
+        });
+      }
+      // khi email chưa tồn tại
+      let newUser = new User({
+        email: formData.email,
+        name: formData.name,
+      });
+      newUser
+        .save()
+        .then(async (saveUser) => {
+          // lưu thông tin đăng nhập
+          const hashPassword = await bcrypt.hashSync(
+            formData.password,
+            parseInt(process.env.SALT_OR_ROUNDS)
+          );
+          const userLogin = new UserLogin({
+            idUser: saveUser._id,
+            email: formData.email,
+            password: hashPassword,
+          });
+          userLogin.save().then(() => {
+            return res.redirect("/login");
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     });
   }
   login(req, res, next) {
     const formData = req.body;
     UserLogin.findOne({ email: formData.email }).then(async (userLogin) => {
+      let checkUser = true;
       if (!userLogin) {
-        return res.status(422).json({ message: "Email không tồn tại" });
+        checkUser = false;
+      } else {
+        checkUser = await bcrypt.compare(formData.password, userLogin.password);
       }
-      const checkPassword = await bcrypt.compare(
-        formData.password,
-        userLogin.password
-      );
-      if (!checkPassword) {
-        return res.status(422).json({ message: "Mật khẩu không chính xác" });
+      console.log(checkUser);
+      if (!checkUser) {
+        return res.render("user/sites/login", {
+          messageError: "Thông tin đăng nhập không chính xác",
+          formData: {
+            email: formData.email,
+          },
+        });
       }
       User.findOne({ email: formData.email }).then((user) => {
         req.session.role = user.role;
         req.session.name = user.name;
         req.session.idUser = userLogin.idUser;
-        console.log(req.session);
         return res.redirect("/me");
       });
     });

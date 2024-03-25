@@ -1,0 +1,96 @@
+<div class="container">
+  <h1 class="fs-1 text-center">Thông tin cá nhân</h1>
+  <form action="/api/?profile_method=UPDATE" method="post">
+    <div class="row">
+      <div class="col-3">
+        <label for="inpName" class="form-label fs-4">Họ và tên</label>
+      </div>
+      <div class="col-6">
+        <input
+          id="inpName"
+          class="w-100 fs-4 border-top-0 border-start-0 border-end-0 border-bottom-1 border-2"
+          name="name"
+          type="text"
+          value="{{user.name}}"
+          disabled
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">
+        <label for="inpEmail" class="form-label fs-4">Email</label>
+      </div>
+      <div class="col-6">
+        <input
+          id="inpEmail"
+          class="w-100 fs-4 border-top-0 border-start-0 border-end-0 border-bottom-1 border-2"
+          type="email"
+          value="{{user.email}}"
+          disabled
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">
+        <label for="inpPhone" class="form-label fs-4">Số điện thoại</label>
+      </div>
+      <div class="col-6">
+        <input
+          id="inpPhone"
+          class="w-100 fs-4 border-top-0 border-start-0 border-end-0 border-bottom-1 border-2"
+          name="phone"
+          type="text"
+          value="{{#if (compare user.phone null)}}Chưa cung cấp {{else}} {{user.phone}}{{/if}}"
+          disabled
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">
+        <label for="inpGender" class="form-label fs-4">Giới tính</label>
+      </div>
+      <div class="col-6">
+        <select name="gender" id="inpGender" class="w-100 fs-4" disabled>
+          <option value="0" {{#if (compare user.gender 0)}}selected{{/if}}>Nam</option>
+          <option value="1" {{#if (compare user.gender 1)}}selected{{/if}}>Nữ</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">
+        <label for="inpDateBirth" class="form-label fs-4">Ngày sinh</label>
+      </div>
+      <div class="col-6">
+        <input
+          id="inpDateBirth"
+          class="w-100 fs-4 border-top-0 border-start-0 border-end-0 border-bottom-1 border-2"
+          name="dateBirth"
+          type="date"
+          value="{{showDate user.birthday}}"
+          disabled
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">
+        <label for="inpDateJoin" class="form-label fs-4">Ngày tham gia</label>
+      </div>
+      <div class="col-6">
+        <input
+          id="inpDateJoin"
+          class="w-100 fs-4 border-top-0 border-start-0 border-end-0 border-bottom-1 border-2"
+          name="dateJoin"
+          type="date"
+          value="{{showDate user.createdAt}}"
+          disabled
+        />
+      </div>
+    </div>
+    <div class="row  justify-content-center">
+      <button id="btnUpdate" class="btn btn-success col-3 mx-3" >Cập nhật thông tin</button>
+      <button type="reset" id="btnCancel"  class="btn btn-danger col-3 mx-3 d-none" >Hủy</button>
+      <button type="submit" id="btnSave" class="btn btn-primary col-3 mx-3 d-none" >Lưu</button>
+      
+    </div>
+  </form>
+</div>

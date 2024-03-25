@@ -3,7 +3,6 @@ class SiteController {
     res.render("user/sites/home");
   }
   login(req, res, next) {
-    console.log(req.session);
     res.render("user/sites/login");
   }
   signUp(req, res, next) {

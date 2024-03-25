@@ -10,7 +10,11 @@
       </div>
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
         <form action="/api/login" method="post">
-
+          {{#if messageError}}
+            <p
+              class="bg-danger text-white rounded px-3 py-1"
+            >{{messageError}}</p>
+          {{/if}}
           <!-- Email input -->
           <div class="form-outline mb-4">
             <input
@@ -18,6 +22,7 @@
               id="form3Example3"
               class="form-control form-control-lg"
               placeholder="Enter a valid email address"
+              value="{{formData.email}}"
               name="email"
             />
             <label class="form-label" for="form3Example3">Email address</label>

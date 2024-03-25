@@ -27,7 +27,7 @@
         <li><a href="/cart" class="nav-link px-2 fs-5 text-white">Giỏ hàng</a></li>
       </ul>
       {{#if name}}
-        <div class="navbar-brand fs-5" href="/me">
+        <a class="navbar-brand fs-5" href="/me">
           <span class="">{{name}}</span>
           <img
             src="https://www.w3schools.com/bootstrap5/img_avatar1.png"
@@ -35,7 +35,7 @@
             style="width:40px;"
             class="rounded-pill"
           />
-        </div>
+        </a>
 
       {{else}}
         <div class="text-end">

@@ -1,4 +1,4 @@
-var inputSanPham = document.getElementById("details");
+var inputSanPham = document.getElementById("detail");
 var addInput = document.getElementById("addInput");
 var addProductButton = document.getElementById("addProduct");
 
@@ -14,7 +14,7 @@ addProductButton.addEventListener("click", function () {
     productNameInput.type = "text";
     productNameInput.value = selectedProduct;
     productNameInput.disabled = true;
-    productNameInput.name = "details[]";
+    productNameInput.name = "detail[]";
 
     var deleteButton = document.createElement("button");
     deleteButton.className = "btn btn-outline-secondary delete-button";

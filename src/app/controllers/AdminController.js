@@ -71,7 +71,14 @@ class AdminController {
       css: "admin/category",
     });
   }
-
+  //get /assessProviders
+  accessProviders(req, res, next) {
+    res.render("admin/sites/accessProviders", {
+      layout: "admin",
+      js: "admin/accessProviders",
+      css: "admin/accessProviders",
+    });
+  }
   //minh luan
   async createWarranty(req, res, next) {
     const products = await Product.find({});
