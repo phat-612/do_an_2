@@ -2,27 +2,34 @@
   <h1 class="fs-1 text-center">Thông tin nhận hàng</h1>
   <div class="row my-3">
     <div class="col text-end">
-      <button class="btn btn-primary">Thêm địa chỉ mới</button>
+      <button
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#addressModal"
+      >Thêm địa chỉ mới</button>
     </div>
   </div>
-  <div class="row border align-items-center">
-    <div class="col">
-      <p class="fs-4 fw-medium m-0">Nhà trọ</p>
-      <p class="m-0 text-secondary">
-        <span>Nguyễn Văn Phát</span>
-        |
-        <span>0382909902</span>
-      </p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam nemo,
-        molestiae quaerat maiores quibusdam saepe unde pariatur?
-      </p>
+  {{#each addresses}}
+    <div class="row border align-items-center rounded py-2 my-2">
+      <div class="col">
+        <p class="fs-4 fw-medium m-0">{{this.alias}}</p>
+        <p class="m-0 text-secondary">
+          <span>{{this.name}}</span>
+          |
+          <span>{{this.phone}}</span>
+        </p>
+        <p>{{this.address}}</p>
+        {{#if this.default}}
+          <span class="border-danger p-1 rounded border d-inline-block">Mặc định</span>
+        {{/if}}
+      </div>
+      <div class="col-1"><button><i
+            class="bi bi-pencil-square fs-4"
+            data-bs-toggle="modal"
+            data-bs-target="#addressModal"
+          ></i></button></div>
     </div>
-    <div class="col-1"><button><i
-          class="bi bi-pencil-square fs-4"
-          data-bs-toggle="modal"
-          data-bs-target="#addressModal"
-        ></i></button></div>
-  </div>
+  {{/each}}
 </div>
 
 <div
@@ -33,9 +40,9 @@
   aria-hidden="true"
 >
   <div class="modal-dialog">
-    <div class="modal-content">
+    <form action="/api/address" method="post" class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Sửa thông tin nhận hàng</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Thêm thông tin nhận hàng</h5>
         <button
           type="button"
           class="btn-close"
@@ -44,28 +51,31 @@
         ></button>
       </div>
       <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="reminiscentName" class="col-form-label">Tên gợi nhớ
-            </label>
-            <input type="text" class="form-control" id="reminiscentName" />
-          </div>
-          <div class="mb-3">
-            <label for="name" class="col-form-label">Họ tên
-            </label>
-            <input type="text" class="form-control" id="name" />
-          </div>
-          <div class="mb-3">
-            <label for="phone" class="col-form-label">Số điện thoại
-            </label>
-            <input type="text" class="form-control" id="phone" />
-          </div>
-          <div class="mb-3">
-            <label for="address" class="col-form-label">Địa chỉ
-            </label>
-            <input type="text" class="form-control" id="address" />
-          </div>
-        </form>
+        <div class="mb-3">
+          <label for="reminiscentName" class="col-form-label">Tên gợi nhớ
+          </label>
+          <input
+            type="text"
+            name="alias"
+            class="form-control"
+            id="reminiscentName"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="name" class="col-form-label">Họ tên
+          </label>
+          <input type="text" name="name" class="form-control" id="name" />
+        </div>
+        <div class="mb-3">
+          <label for="phone" class="col-form-label">Số điện thoại
+          </label>
+          <input type="text" name="phone" class="form-control" id="phone" />
+        </div>
+        <div class="mb-3">
+          <label for="address" class="col-form-label">Địa chỉ
+          </label>
+          <input type="text" name="address" class="form-control" id="address" />
+        </div>
       </div>
       <div class="modal-footer">
         <button
@@ -73,8 +83,8 @@
           class="btn btn-secondary"
           data-bs-dismiss="modal"
         >Close</button>
-        <button type="button" class="btn btn-primary">Thêm địa chỉ nhận hàng</button>
+        <button type="submit" class="btn btn-primary">Thêm địa chỉ nhận hàng</button>
       </div>
-    </div>
+    </form>
   </div>
 </div>

@@ -4,10 +4,15 @@ const upload = require("../app/middlewares/uploadMiddleware");
 
 const apiController = require("../app/controllers/ApiController");
 const passport = require("passport");
+// account
 router.post("/signUp", apiController.signUp);
 router.post("/login", apiController.login);
-router.post("/storeCategory", apiController.storeCategory);
+router.post("/address", apiController.storeAddress);
+router.put("/profile", apiController.updateProfile);
 
+// product
+router.post("/storeCategory", apiController.storeCategory);
+// warranty
 router.post(
   "/storeWarranty",
   upload.array("images"),

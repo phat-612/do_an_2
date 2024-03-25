@@ -1,5 +1,7 @@
 const Warranty = require("../models/Warranty");
 const Product = require("../models/Product");
+const User = require("../models/User");
+
 const {
   multipleMongooseToObject,
   mongooseToObject,
@@ -73,12 +75,17 @@ class AdminController {
   }
   //get /assessProviders
   accessProviders(req, res, next) {
-    res.render("admin/sites/accessProviders", {
-      layout: "admin",
-      js: "admin/accessProviders",
-      css: "admin/accessProviders",
-    });
+    User.find({})
+      .then((users) => {
+        res.render("admin/sites/accessProviders", {
+          layout: "admin",
+          js: "admin/accessProviders",
+          users: multipleMongooseToObject(users),
+        });
+      })
+      .catch(next);
   }
+
   //minh luan
   async createWarranty(req, res, next) {
     const products = await Product.find({});

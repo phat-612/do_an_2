@@ -36,6 +36,7 @@ class ApiController {
       res.redirect("/admin/warranty/show");
     });
   }
+  // api account
   signUp(req, res, next) {
     const formData = req.body;
     let messageError = "";
@@ -111,6 +112,22 @@ class ApiController {
         req.session.idUser = userLogin.idUser;
         return res.redirect("/me");
       });
+    });
+  }
+  updateProfile(req, res, next) {
+    const formData = req.body;
+    User.updateOne({ _id: req.session.idUser }, formData).then(() => {
+      res.redirect("/me");
+    });
+  }
+  storeAddress(req, res, next) {
+    const formData = req.body;
+    const user = new User(formData);
+    User.updateOne(
+      { _id: req.session.idUser },
+      { $push: { shipmentDetail: formData } }
+    ).then(() => {
+      res.redirect("/me/address");
     });
   }
   // test api

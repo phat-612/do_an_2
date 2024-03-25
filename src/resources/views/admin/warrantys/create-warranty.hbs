@@ -26,14 +26,6 @@
           />
         </div>
       </div>
-
-      <div class="col">
-        <div class="mb-3">
-          <label for="status" class="form-label">Trạng thái</label>
-          <input type="status" name="status" class="form-control" id="status" />
-        </div>
-      </div>
-
       <div class="input-group mb-3">
         <label class="input-group-text" for="images">Tải ảnh</label>
         <input
@@ -52,18 +44,11 @@
         <label for="detail" class="form-label">Sản phẩm</label>
         <div class="row">
           <div class="col">
-            <input
-              class="form-control"
-              list="datalistOptions"
-              name="detail"
-              id="detail"
-            />
+            <input class="form-control" list="datalistOptions" id="detail" />
             <datalist id="datalistOptions">
-              <select name="" id="">
-                {{#each products}}
-                  <option value="{{this._id}}">{{this.name}}</option>
-                {{/each}}
-              </select>
+              {{#each products}}
+                <option id="{{this._id}}">{{this.name}}</option>
+              {{/each}}
             </datalist>
           </div>
           <div class="col-1">

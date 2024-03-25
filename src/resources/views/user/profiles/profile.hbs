@@ -1,6 +1,6 @@
 <div class="container">
   <h1 class="fs-1 text-center">Thông tin cá nhân</h1>
-  <form action="/api/?profile_method=UPDATE" method="post">
+  <form action="/api/profile?_method=PUT" method="post">
     <div class="row">
       <div class="col-3">
         <label for="inpName" class="form-label fs-4">Họ và tên</label>
@@ -40,7 +40,7 @@
           class="w-100 fs-4 border-top-0 border-start-0 border-end-0 border-bottom-1 border-2"
           name="phone"
           type="text"
-          value="{{#if (compare user.phone null)}}Chưa cung cấp {{else}} {{user.phone}}{{/if}}"
+          value="{{#if (compare user.phone null)}}Chưa cung cấp{{else}}{{user.phone}}{{/if}}"
           disabled
         />
       </div>
@@ -87,8 +87,9 @@
       </div>
     </div>
     <div class="row  justify-content-center">
-      <button id="btnUpdate" class="btn btn-success col-3 mx-3" >Cập nhật thông tin</button>
-      <button type="reset" id="btnCancel"  class="btn btn-danger col-3 mx-3 d-none" >Hủy</button>
+      <button type="button" id="btnUpdate" class="btn btn-success col-3 mx-3" >Cập nhật thông tin</button>
+      <input type="reset" hidden>
+      <button type="button" id="btnCancel" class="btn btn-danger col-3 mx-3 d-none">Hủy</button>
       <button type="submit" id="btnSave" class="btn btn-primary col-3 mx-3 d-none" >Lưu</button>
       
     </div>

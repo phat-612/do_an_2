@@ -1,11 +1,12 @@
 <div class="container">
   <div class="nav d-flex justify-content-end my-3">
-    <form class="d-flex">
+    <form class="d-flex" id="searchForm">
       <input
         class="form-control me-2"
         type="search"
         placeholder="Search"
         aria-label="Search"
+        id="searchInput"
       />
       <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
@@ -19,16 +20,20 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>email</td>
-        <td>ho va ten</td>
-        <td>
-          <select class="form-select" aria-label="Default select example">
-            <option value="user" selected>Khách Hàng</option>
-            <option value="admin">admin</option>
-          </select>
-        </td>
-      </tr>
+      {{#each users}}
+        <tr>
+          <td>{{this.email}}</td>
+          <td>{{this.name}}</td>
+          <td>
+            <select class="form-select" aria-label="Default select example">
+              
+              <option value="user" {{#if (compare this.role "user")}}selected{{/if}} >Khách Hàng</option>
+              <option value="admin" {{#if (compare this.role "admin")}}selected{{/if}} >Admin</option>
+              
+            </select>
+          </td>
+        </tr>
+      {{/each}}
     </tbody>
   </table>
 </div>

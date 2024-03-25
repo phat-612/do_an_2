@@ -3,18 +3,34 @@ var addInput = document.getElementById("addInput");
 var addProductButton = document.getElementById("addProduct");
 
 addProductButton.addEventListener("click", function () {
-  var selectedProduct = inputSanPham.value;
+  var selectedOption = inputSanPham.value;
+  var selectedProductId = "";
 
-  if (selectedProduct !== "") {
+  var options = document
+    .getElementById("datalistOptions")
+    .getElementsByTagName("option");
+  for (var i = 0; i < options.length; i++) {
+    if (options[i].innerText === selectedOption) {
+      selectedProductId = options[i].id; // Lấy ID từ thuộc tính id của option
+      break;
+    }
+  }
+
+  if (selectedOption !== "" && selectedProductId !== "") {
     var addInputGroup = document.createElement("div");
     addInputGroup.className = "input-group mb-3";
 
     var productNameInput = document.createElement("input");
     productNameInput.className = "form-control";
     productNameInput.type = "text";
-    productNameInput.value = selectedProduct;
+    productNameInput.value = selectedOption;
     productNameInput.disabled = true;
     productNameInput.name = "detail[]";
+
+    var productIdInput = document.createElement("input");
+    productIdInput.type = "hidden";
+    productIdInput.value = selectedProductId;
+    productIdInput.name = "product_id[]";
 
     var deleteButton = document.createElement("button");
     deleteButton.className = "btn btn-outline-secondary delete-button";
@@ -51,7 +67,7 @@ addProductButton.addEventListener("click", function () {
       newDeleteButton.innerText = "Xóa";
 
       newDeleteButton.addEventListener("click", function () {
-        newInputGroup.remove(); //xóa chi tiết
+        newInputGroup.remove(); // Xóa chi tiết khi nút xóa được nhấp vào
       });
 
       newInputGroup.appendChild(newReasonInput);
@@ -62,6 +78,7 @@ addProductButton.addEventListener("click", function () {
     });
 
     addInputGroup.appendChild(productNameInput);
+    addInputGroup.appendChild(productIdInput);
     addInputGroup.appendChild(deleteButton);
     addInputGroup.appendChild(addButton);
 

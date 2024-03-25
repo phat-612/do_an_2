@@ -1,6 +1,9 @@
 const User = require("../models/User");
 
-const { multipleMongooseToObject } = require("../../util/mongoose");
+const {
+  multipleMongooseToObject,
+  mongooseToObject,
+} = require("../../util/mongoose");
 class MeController {
   profile(req, res, next) {
     User.findOne({ _id: req.session.idUser }).then((user) => {
@@ -34,7 +37,12 @@ class MeController {
     res.render("user/profiles/changePassword", { layout: "userProfile" });
   }
   address(req, res, next) {
-    res.render("user/profiles/address", { layout: "userProfile" });
+    User.findOne({ _id: req.session.idUser }).then((user) => {
+      res.render("user/profiles/address", {
+        layout: "userProfile",
+        addresses: multipleMongooseToObject(user.shipmentDetail),
+      });
+    });
   }
 }
 module.exports = new MeController();

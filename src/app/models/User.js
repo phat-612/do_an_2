@@ -8,9 +8,9 @@ const User = new Schema(
     role: { type: String, default: "user" },
     birthday: { type: Date, default: Date.now },
     gender: { type: Boolean, default: false },
-    address: { type: String },
     shipmentDetail: [
       {
+        alias: { type: String },
         name: { type: String },
         phone: { type: Number },
         address: { type: String },

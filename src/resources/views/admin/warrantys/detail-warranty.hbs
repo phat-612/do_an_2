@@ -71,23 +71,17 @@
           value="{{warrantys.status}}"
         />
       </div>
-      <div class="col w-100">
-        <label for="detail" class="form-label">Sản phẩm</label>
-        <div class="row">
-          <div class="col">
-            <input
-              class="form-control"
-              list="datalistOptions"
-              name="detail"
-              id="detail"
-              readonly
-            />
-            <datalist id="datalistOptions">
-              {{#each products}}
-                <option value="{{this._id}}">{{this.name}}</option>
-              {{/each}}
-            </datalist>
-          </div>
+      <div class="form-group col-md-6 my-4">
+        <label for="detail">Sản phẩm</label>
+        <input
+          type="text"
+          class="form-control"
+          id="detail"
+          name="detail"
+          readonly
+          value="{{warrantys.detail}}"
+        />
+      </div>
       <div class="form-group col-md-6 my-4">
         <label for="images">Hình ảnh</label>
         <div id="images">
