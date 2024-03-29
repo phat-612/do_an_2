@@ -22,22 +22,18 @@ const Warranty = new Schema(
     //     price: { type: Number },
     //   },
     // ],
-    details: [
-      {
-        idProduct: {
-          type: Schema.Types.ObjectId,
-          ref: "Product",
-          unique: true,
-          index: true,
-        },
-        a: [
-          {
-            reason: { type: String },
-            price: { type: Number },
-          },
-        ],
+    details: {
+      idProduct: {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+        unique: true,
+        index: true,
       },
-    ],
+      [{
+        reason: { type: String },
+        price: { type: Number },
+      }],
+    },
   },
   { timestamps: true }
 );
