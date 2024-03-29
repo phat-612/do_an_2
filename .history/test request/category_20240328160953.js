@@ -14,11 +14,6 @@
         reason: "hư",
         price: "120000",
       },
-      {
-        idProduct: { type: Schema.Types.ObjectId, ref: "Product" },
-        reason: "hư",
-        price: "120000",
-      },
     ],
   },
 ];

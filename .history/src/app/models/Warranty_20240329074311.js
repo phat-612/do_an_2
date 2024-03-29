@@ -16,7 +16,6 @@ const Warranty = new Schema(
           type: Schema.Types.ObjectId,
           ref: "Product",
           unique: true,
-          index: true,
         },
         reason: { type: String },
         price: { type: Number },
