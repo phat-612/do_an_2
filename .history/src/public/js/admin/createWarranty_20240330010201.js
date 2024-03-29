@@ -40,7 +40,7 @@ addProductButton.addEventListener("click", function () {
     var productIdInput = document.createElement("input");
     productIdInput.type = "hidden";
     productIdInput.value = selectedProductId;
-    productIdInput.name = "detail[]";
+    productIdInput.name = "product_id[]";
 
     var deleteButton = document.createElement("button");
     deleteButton.className = "btn btn-outline-secondary delete-button";

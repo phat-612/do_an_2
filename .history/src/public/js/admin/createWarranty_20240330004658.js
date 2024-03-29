@@ -1,8 +1,3 @@
-var inputSanPham = document.getElementById("detail");
-var addInput = document.getElementById("addInput");
-var addProductButton = document.getElementById("addProduct");
-var productCounter = 0;
-
 var data = {
   details: [],
 };
@@ -27,8 +22,6 @@ addProductButton.addEventListener("click", function () {
     productContainer.className = "product-container";
     productContainer.id = "product-container[" + productCounter + "]";
     productContainer.setAttribute("data-reason-counter", "0");
-    var addInputGroup = document.createElement("div");
-    addInputGroup.className = "input-group mb-3";
 
     var productNameInput = document.createElement("input");
     productNameInput.className = "form-control";
@@ -40,7 +33,7 @@ addProductButton.addEventListener("click", function () {
     var productIdInput = document.createElement("input");
     productIdInput.type = "hidden";
     productIdInput.value = selectedProductId;
-    productIdInput.name = "detail[]";
+    productIdInput.name = "product_id[]";
 
     var deleteButton = document.createElement("button");
     deleteButton.className = "btn btn-outline-secondary delete-button";
@@ -111,7 +104,7 @@ addProductButton.addEventListener("click", function () {
       // Lưu dữ liệu vào biến data
       var productData = {
         reason: newReasonInput.value,
-        price: newPriceInput.value,
+        price: parseFloat(newPriceInput.value),
       };
 
       // Kiểm tra và thêm dữ liệu vào biến data
@@ -129,17 +122,14 @@ addProductButton.addEventListener("click", function () {
         });
       }
 
-      // Chuyển đổi thành JSON và hiển thị trong console
-      var jsonData = JSON.stringify(data);
-      console.log(jsonData);
+      console.log(JSON.stringify(data, null, 2)); // In dữ liệu dưới dạng cây JSON
     });
 
-    addInputGroup.appendChild(productNameInput);
-    addInputGroup.appendChild(productIdInput);
-    addInputGroup.appendChild(deleteButton);
-    addInputGroup.appendChild(addButton);
+    productContainer.appendChild(productNameInput);
+    productContainer.appendChild(productIdInput);
+    productContainer.appendChild(deleteButton);
+    productContainer.appendChild(addButton);
 
-    productContainer.appendChild(addInputGroup);
     addInput.appendChild(productContainer);
 
     inputSanPham.value = "";

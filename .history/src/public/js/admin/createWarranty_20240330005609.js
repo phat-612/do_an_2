@@ -40,7 +40,7 @@ addProductButton.addEventListener("click", function () {
     var productIdInput = document.createElement("input");
     productIdInput.type = "hidden";
     productIdInput.value = selectedProductId;
-    productIdInput.name = "detail[]";
+    productIdInput.name = "product_id[]";
 
     var deleteButton = document.createElement("button");
     deleteButton.className = "btn btn-outline-secondary delete-button";
@@ -75,7 +75,7 @@ addProductButton.addEventListener("click", function () {
         "][reasonAndPrice][" +
         reasonCounter +
         "][reason]";
-
+      newReasonInput.value = "reason:";
       var newPriceInput = document.createElement("input");
       newPriceInput.className = "form-control";
       newPriceInput.type = "text";
@@ -86,7 +86,7 @@ addProductButton.addEventListener("click", function () {
         "][reasonAndPrice][" +
         reasonCounter +
         "][price]";
-
+      newPriceInput.value = "price:";
       var newDeleteButton = document.createElement("button");
       newDeleteButton.className = "btn btn-outline-secondary delete-button";
       newDeleteButton.type = "button";
@@ -128,10 +128,6 @@ addProductButton.addEventListener("click", function () {
           reasonAndPrice: [productData],
         });
       }
-
-      // Chuyển đổi thành JSON và hiển thị trong console
-      var jsonData = JSON.stringify(data);
-      console.log(jsonData);
     });
 
     addInputGroup.appendChild(productNameInput);

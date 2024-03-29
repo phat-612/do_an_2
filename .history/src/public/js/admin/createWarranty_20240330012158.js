@@ -87,6 +87,18 @@ addProductButton.addEventListener("click", function () {
         reasonCounter +
         "][price]";
 
+      // Tạo mảng detail chứa lý do và giá
+      var detail = [];
+      var newPriceInput = {};
+      newPriceInput.reason = newReasonInput.value; // Lý do
+      newPriceInput.price = newPriceInput.value; // Giá
+      detail.push(newPriceInput);
+
+      // Chuyển đổi mảng detail thành chuỗi JSON
+      var jsonString = JSON.stringify(detail);
+
+      // Gán giá trị chuỗi JSON vào thuộc tính value của productIdInput
+      productIdInput.value = jsonString;
       var newDeleteButton = document.createElement("button");
       newDeleteButton.className = "btn btn-outline-secondary delete-button";
       newDeleteButton.type = "button";

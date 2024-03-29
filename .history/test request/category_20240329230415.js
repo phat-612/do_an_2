@@ -10,20 +10,7 @@
     total: 900000,
     details: [
       {
-        idProduct: "đfdfsdffdfsfsdsdfds",
-        reasonAndprice: [
-          {
-            reason: "hư",
-            price: "120000",
-          },
-          {
-            reason: "hư",
-            price: "120000",
-          },
-        ],
-      },
-      {
-        idProduct: "đfdfsdffdfsfsdsdfds",
+        idProduct: { type: Schema.Types.ObjectId, ref: "Product" },
         reasonAndprice: [
           {
             reason: "hư",

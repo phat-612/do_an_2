@@ -10,6 +10,18 @@ const Warranty = new Schema(
     note: { type: String },
     status: { type: String },
     total: { type: Number },
+    // details: [
+    //   {
+    //     idProduct: {
+    //       type: Schema.Types.ObjectId,
+    //       ref: "Product",
+    //       unique: true,
+    //       index: true,
+    //     },
+    //     reason: { type: String },
+    //     price: { type: Number },
+    //   },
+    // ],
     details: [
       {
         idProduct: {

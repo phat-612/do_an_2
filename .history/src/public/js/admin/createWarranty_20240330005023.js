@@ -40,7 +40,7 @@ addProductButton.addEventListener("click", function () {
     var productIdInput = document.createElement("input");
     productIdInput.type = "hidden";
     productIdInput.value = selectedProductId;
-    productIdInput.name = "detail[]";
+    productIdInput.name = "product_id[]";
 
     var deleteButton = document.createElement("button");
     deleteButton.className = "btn btn-outline-secondary delete-button";
@@ -109,40 +109,3 @@ addProductButton.addEventListener("click", function () {
       );
 
       // Lưu dữ liệu vào biến data
-      var productData = {
-        reason: newReasonInput.value,
-        price: newPriceInput.value,
-      };
-
-      // Kiểm tra và thêm dữ liệu vào biến data
-      var productIndex = data.details.findIndex(
-        (item) => item.productId === selectedProductId
-      );
-      if (productIndex !== -1) {
-        // Sản phẩm đã tồn tại trong biến data, chỉ cần thêm lý do và giá mới
-        data.details[productIndex].reasonAndPrice.push(productData);
-      } else {
-        // Sản phẩm chưa tồn tại trong biến data, thêm sản phẩm mới
-        data.details.push({
-          productId: selectedProductId,
-          reasonAndPrice: [productData],
-        });
-      }
-
-      // Chuyển đổi thành JSON và hiển thị trong console
-      var jsonData = JSON.stringify(data);
-      console.log(jsonData);
-    });
-
-    addInputGroup.appendChild(productNameInput);
-    addInputGroup.appendChild(productIdInput);
-    addInputGroup.appendChild(deleteButton);
-    addInputGroup.appendChild(addButton);
-
-    productContainer.appendChild(addInputGroup);
-    addInput.appendChild(productContainer);
-
-    inputSanPham.value = "";
-    productCounter++;
-  }
-});

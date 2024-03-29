@@ -1,49 +1,37 @@
-var inputSanPham = document.getElementById("detail");
-var addInput = document.getElementById("addInput");
-var addProductButton = document.getElementById("addProduct");
+var addProductButton = document.getElementById("addProductButton");
+var detailInput = document.getElementById("detail");
+var datalistOptions = document.getElementById("datalistOptions");
+var addInputGroup = document.getElementById("addInputGroup");
 var productCounter = 0;
-
 var data = {
   details: [],
 };
 
+// Gắn sự kiện "click" cho nút "Thêm sản phẩm"
 addProductButton.addEventListener("click", function () {
-  var selectedOption = inputSanPham.value;
-  var selectedProductId = "";
+  var detailValue = detailInput.value;
+  var selectedOption = datalistOptions.querySelector(
+    "option[value='" + detailValue + "']"
+  );
+  if (selectedOption) {
+    var selectedProductId = selectedOption.id;
 
-  var options = document
-    .getElementById("datalistOptions")
-    .getElementsByTagName("option");
-
-  for (var i = 0; i < options.length; i++) {
-    if (options[i].innerText === selectedOption) {
-      selectedProductId = options[i].id;
-      break;
-    }
-  }
-
-  if (selectedOption !== "" && selectedProductId !== "") {
     var productContainer = document.createElement("div");
-    productContainer.className = "product-container";
-    productContainer.id = "product-container[" + productCounter + "]";
-    productContainer.setAttribute("data-reason-counter", "0");
-    var addInputGroup = document.createElement("div");
-    addInputGroup.className = "input-group mb-3";
+    productContainer.id = "productContainer" + productCounter;
 
     var productNameInput = document.createElement("input");
     productNameInput.className = "form-control";
     productNameInput.type = "text";
-    productNameInput.value = selectedOption;
+    productNameInput.value = detailValue;
     productNameInput.disabled = true;
-    productNameInput.name = "detail[" + productCounter + "]";
 
     var productIdInput = document.createElement("input");
     productIdInput.type = "hidden";
+    productIdInput.name = "details[" + productCounter + "][idProduct]";
     productIdInput.value = selectedProductId;
-    productIdInput.name = "detail[]";
 
     var deleteButton = document.createElement("button");
-    deleteButton.className = "btn btn-outline-secondary delete-button";
+    deleteButton.className = "btn btn-outline-danger delete-button";
     deleteButton.type = "button";
     deleteButton.innerText = "Xóa";
 
@@ -52,12 +40,11 @@ addProductButton.addEventListener("click", function () {
     });
 
     var addButton = document.createElement("button");
-    addButton.className = "btn btn-outline-secondary";
+    addButton.className = "btn btn-outline-success add-button";
     addButton.type = "button";
     addButton.innerText = "Cộng";
 
     addButton.addEventListener("click", function () {
-      var currentProductCounter = productContainer.id;
       var reasonCounter = parseInt(
         productContainer.getAttribute("data-reason-counter")
       );
@@ -71,7 +58,7 @@ addProductButton.addEventListener("click", function () {
       newReasonInput.placeholder = "Lý do";
       newReasonInput.name =
         "details[" +
-        currentProductCounter +
+        productCounter +
         "][reasonAndPrice][" +
         reasonCounter +
         "][reason]";
@@ -82,7 +69,7 @@ addProductButton.addEventListener("click", function () {
       newPriceInput.placeholder = "Giá";
       newPriceInput.name =
         "details[" +
-        currentProductCounter +
+        productCounter +
         "][reasonAndPrice][" +
         reasonCounter +
         "][price]";
@@ -116,7 +103,7 @@ addProductButton.addEventListener("click", function () {
 
       // Kiểm tra và thêm dữ liệu vào biến data
       var productIndex = data.details.findIndex(
-        (item) => item.productId === selectedProductId
+        (item) => item.idProduct === selectedProductId
       );
       if (productIndex !== -1) {
         // Sản phẩm đã tồn tại trong biến data, chỉ cần thêm lý do và giá mới
@@ -124,25 +111,21 @@ addProductButton.addEventListener("click", function () {
       } else {
         // Sản phẩm chưa tồn tại trong biến data, thêm sản phẩm mới
         data.details.push({
-          productId: selectedProductId,
+          idProduct: selectedProductId,
           reasonAndPrice: [productData],
         });
       }
-
-      // Chuyển đổi thành JSON và hiển thị trong console
-      var jsonData = JSON.stringify(data);
-      console.log(jsonData);
     });
 
-    addInputGroup.appendChild(productNameInput);
-    addInputGroup.appendChild(productIdInput);
-    addInputGroup.appendChild(deleteButton);
-    addInputGroup.appendChild(addButton);
+    productContainer.appendChild(productNameInput);
+    productContainer.appendChild(productIdInput);
+    productContainer.appendChild(deleteButton);
+    productContainer.appendChild(addButton);
 
-    productContainer.appendChild(addInputGroup);
-    addInput.appendChild(productContainer);
+    addInputGroup.appendChild(productContainer);
 
-    inputSanPham.value = "";
     productCounter++;
   }
+
+  detailInput.value = "";
 });

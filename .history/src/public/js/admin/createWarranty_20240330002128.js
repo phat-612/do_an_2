@@ -1,12 +1,6 @@
-var inputSanPham = document.getElementById("detail");
-var addInput = document.getElementById("addInput");
+var details = [];
+
 var addProductButton = document.getElementById("addProduct");
-var productCounter = 0;
-
-var data = {
-  details: [],
-};
-
 addProductButton.addEventListener("click", function () {
   var selectedOption = inputSanPham.value;
   var selectedProductId = "";
@@ -23,10 +17,16 @@ addProductButton.addEventListener("click", function () {
   }
 
   if (selectedOption !== "" && selectedProductId !== "") {
+    var productData = {
+      idProduct: selectedProductId,
+      reasonAndPrice: [],
+    };
+
     var productContainer = document.createElement("div");
     productContainer.className = "product-container";
     productContainer.id = "product-container[" + productCounter + "]";
-    productContainer.setAttribute("data-reason-counter", "0");
+    productCounter++;
+
     var addInputGroup = document.createElement("div");
     addInputGroup.className = "input-group mb-3";
 
@@ -35,12 +35,6 @@ addProductButton.addEventListener("click", function () {
     productNameInput.type = "text";
     productNameInput.value = selectedOption;
     productNameInput.disabled = true;
-    productNameInput.name = "detail[" + productCounter + "]";
-
-    var productIdInput = document.createElement("input");
-    productIdInput.type = "hidden";
-    productIdInput.value = selectedProductId;
-    productIdInput.name = "detail[]";
 
     var deleteButton = document.createElement("button");
     deleteButton.className = "btn btn-outline-secondary delete-button";
@@ -57,35 +51,15 @@ addProductButton.addEventListener("click", function () {
     addButton.innerText = "Cộng";
 
     addButton.addEventListener("click", function () {
-      var currentProductCounter = productContainer.id;
-      var reasonCounter = parseInt(
-        productContainer.getAttribute("data-reason-counter")
-      );
-
-      var newInputGroup = document.createElement("div");
-      newInputGroup.className = "input-group mb-3";
-
       var newReasonInput = document.createElement("input");
       newReasonInput.className = "form-control";
       newReasonInput.type = "text";
       newReasonInput.placeholder = "Lý do";
-      newReasonInput.name =
-        "details[" +
-        currentProductCounter +
-        "][reasonAndPrice][" +
-        reasonCounter +
-        "][reason]";
 
       var newPriceInput = document.createElement("input");
       newPriceInput.className = "form-control";
       newPriceInput.type = "text";
       newPriceInput.placeholder = "Giá";
-      newPriceInput.name =
-        "details[" +
-        currentProductCounter +
-        "][reasonAndPrice][" +
-        reasonCounter +
-        "][price]";
 
       var newDeleteButton = document.createElement("button");
       newDeleteButton.className = "btn btn-outline-secondary delete-button";
@@ -93,56 +67,43 @@ addProductButton.addEventListener("click", function () {
       newDeleteButton.innerText = "Xóa";
 
       newDeleteButton.addEventListener("click", function () {
-        newInputGroup.remove();
+        var reasonAndPriceIndex = productData.reasonAndPrice.findIndex(
+          function (item) {
+            return (
+              item.reason === newReasonInput.value &&
+              item.price === newPriceInput.value
+            );
+          }
+        );
+
+        if (reasonAndPriceIndex !== -1) {
+          productData.reasonAndPrice.splice(reasonAndPriceIndex, 1);
+          newInputGroup.remove();
+        }
       });
+
+      var reasonAndPrice = {
+        reason: newReasonInput.value,
+        price: newPriceInput.value,
+      };
+      productData.reasonAndPrice.push(reasonAndPrice);
 
       newInputGroup.appendChild(newReasonInput);
       newInputGroup.appendChild(newPriceInput);
       newInputGroup.appendChild(newDeleteButton);
 
       addInputGroup.appendChild(newInputGroup);
-
-      reasonCounter++;
-      productContainer.setAttribute(
-        "data-reason-counter",
-        reasonCounter.toString()
-      );
-
-      // Lưu dữ liệu vào biến data
-      var productData = {
-        reason: newReasonInput.value,
-        price: newPriceInput.value,
-      };
-
-      // Kiểm tra và thêm dữ liệu vào biến data
-      var productIndex = data.details.findIndex(
-        (item) => item.productId === selectedProductId
-      );
-      if (productIndex !== -1) {
-        // Sản phẩm đã tồn tại trong biến data, chỉ cần thêm lý do và giá mới
-        data.details[productIndex].reasonAndPrice.push(productData);
-      } else {
-        // Sản phẩm chưa tồn tại trong biến data, thêm sản phẩm mới
-        data.details.push({
-          productId: selectedProductId,
-          reasonAndPrice: [productData],
-        });
-      }
-
-      // Chuyển đổi thành JSON và hiển thị trong console
-      var jsonData = JSON.stringify(data);
-      console.log(jsonData);
     });
 
     addInputGroup.appendChild(productNameInput);
-    addInputGroup.appendChild(productIdInput);
     addInputGroup.appendChild(deleteButton);
     addInputGroup.appendChild(addButton);
 
     productContainer.appendChild(addInputGroup);
     addInput.appendChild(productContainer);
 
+    details.push(productData);
+
     inputSanPham.value = "";
-    productCounter++;
   }
 });

@@ -2,8 +2,8 @@ POST http://localhost:3000/api/test
 Content-Type: application/json
 
 {
-    "name": "Iphone 18",
-    "description": "Iphone 18 64GB",
+    "name": "Iphone 12",
+    "description": "Iphone 12 64GB",
     "images": ["snh 1", "snh 2"],
     "idCategory": "65ed65c5c3155828e37b0aa3",
     "variations": [

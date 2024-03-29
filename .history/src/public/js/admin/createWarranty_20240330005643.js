@@ -40,7 +40,7 @@ addProductButton.addEventListener("click", function () {
     var productIdInput = document.createElement("input");
     productIdInput.type = "hidden";
     productIdInput.value = selectedProductId;
-    productIdInput.name = "detail[]";
+    productIdInput.name = "product_id[]";
 
     var deleteButton = document.createElement("button");
     deleteButton.className = "btn btn-outline-secondary delete-button";
@@ -80,8 +80,8 @@ addProductButton.addEventListener("click", function () {
       newPriceInput.className = "form-control";
       newPriceInput.type = "text";
       newPriceInput.placeholder = "Giá";
-      newPriceInput.name =
-        "details[" +
+      newPriceInput.name = {};
+      "details[" +
         currentProductCounter +
         "][reasonAndPrice][" +
         reasonCounter +
@@ -128,10 +128,6 @@ addProductButton.addEventListener("click", function () {
           reasonAndPrice: [productData],
         });
       }
-
-      // Chuyển đổi thành JSON và hiển thị trong console
-      var jsonData = JSON.stringify(data);
-      console.log(jsonData);
     });
 
     addInputGroup.appendChild(productNameInput);
