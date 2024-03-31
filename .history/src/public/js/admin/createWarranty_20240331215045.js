@@ -2,7 +2,7 @@ var inputSanPham = document.getElementById("detail");
 var addInput = document.getElementById("addInput");
 var addProductButton = document.getElementById("addProduct");
 var productCounter = 0;
-var priceCounter = 0;
+
 var data = {
   details: [],
 };
@@ -57,6 +57,7 @@ addProductButton.addEventListener("click", function () {
     addButton.innerText = "Cộng";
 
     addButton.addEventListener("click", function () {
+      var currentProductCounter = productContainer.id;
       var reasonCounter = parseInt(
         productContainer.getAttribute("data-reason-counter")
       );
@@ -68,13 +69,12 @@ addProductButton.addEventListener("click", function () {
       newReasonInput.className = "form-control";
       newReasonInput.type = "text";
       newReasonInput.placeholder = "Lý do";
-      newReasonInput.name = `details[${productCounter}][reasonAndPrice][${reasonCounter}][reason]`;
-
+      newReasonInput.name = `reasonAndPrice[${reasonCounter}][reason]`;
       var newPriceInput = document.createElement("input");
       newPriceInput.className = "form-control";
       newPriceInput.type = "text";
       newPriceInput.placeholder = "Giá";
-      newPriceInput.name = `[${reasonCounter}][price]`;
+      newPriceInput.name = `reasonAndPrice[${reasonCounter}][price]`;
 
       var newDeleteButton = document.createElement("button");
       newDeleteButton.className = "btn btn-outline-secondary delete-button";
@@ -90,7 +90,7 @@ addProductButton.addEventListener("click", function () {
       newInputGroup.appendChild(newDeleteButton);
 
       addInputGroup.appendChild(newInputGroup);
-      priceCounter++;
+
       reasonCounter++;
       productContainer.setAttribute(
         "data-reason-counter",

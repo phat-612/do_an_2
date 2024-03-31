@@ -2,7 +2,7 @@ var inputSanPham = document.getElementById("detail");
 var addInput = document.getElementById("addInput");
 var addProductButton = document.getElementById("addProduct");
 var productCounter = 0;
-var priceCounter = 0;
+
 var data = {
   details: [],
 };
@@ -30,12 +30,7 @@ addProductButton.addEventListener("click", function () {
     var addInputGroup = document.createElement("div");
     addInputGroup.className = "input-group mb-3";
 
-    var productNameInput = document.createElement("input");
-    productNameInput.className = "form-control";
-    productNameInput.type = "text";
-    productNameInput.value = selectedOption;
-    productNameInput.disabled = true;
-    productNameInput.name = "detail[" + productCounter + "]";
+    v;
 
     var productIdInput = document.createElement("input");
     productIdInput.type = "hidden";
@@ -68,7 +63,7 @@ addProductButton.addEventListener("click", function () {
       newReasonInput.className = "form-control";
       newReasonInput.type = "text";
       newReasonInput.placeholder = "Lý do";
-      newReasonInput.name = `details[${productCounter}][reasonAndPrice][${reasonCounter}][reason]`;
+      newReasonInput.name = `[${reasonCounter}][reason]`;
 
       var newPriceInput = document.createElement("input");
       newPriceInput.className = "form-control";
@@ -90,7 +85,7 @@ addProductButton.addEventListener("click", function () {
       newInputGroup.appendChild(newDeleteButton);
 
       addInputGroup.appendChild(newInputGroup);
-      priceCounter++;
+
       reasonCounter++;
       productContainer.setAttribute(
         "data-reason-counter",

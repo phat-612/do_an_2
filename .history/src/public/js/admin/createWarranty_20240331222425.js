@@ -2,7 +2,7 @@ var inputSanPham = document.getElementById("detail");
 var addInput = document.getElementById("addInput");
 var addProductButton = document.getElementById("addProduct");
 var productCounter = 0;
-var priceCounter = 0;
+
 var data = {
   details: [],
 };
@@ -35,12 +35,12 @@ addProductButton.addEventListener("click", function () {
     productNameInput.type = "text";
     productNameInput.value = selectedOption;
     productNameInput.disabled = true;
-    productNameInput.name = "detail[" + productCounter + "]";
+    productNameInput.name = "detail[" + productCounter + "][productName]";
 
     var productIdInput = document.createElement("input");
     productIdInput.type = "hidden";
     productIdInput.value = selectedProductId;
-    productIdInput.name = "detail[]";
+    productIdInput.name = "detail[" + productCounter + "][productId]";
 
     var deleteButton = document.createElement("button");
     deleteButton.className = "btn btn-outline-secondary delete-button";
@@ -68,13 +68,13 @@ addProductButton.addEventListener("click", function () {
       newReasonInput.className = "form-control";
       newReasonInput.type = "text";
       newReasonInput.placeholder = "Lý do";
-      newReasonInput.name = `details[${productCounter}][reasonAndPrice][${reasonCounter}][reason]`;
+      newReasonInput.name = `detail[${productCounter}][reason][${reasonCounter}]`;
 
       var newPriceInput = document.createElement("input");
       newPriceInput.className = "form-control";
       newPriceInput.type = "text";
       newPriceInput.placeholder = "Giá";
-      newPriceInput.name = `[${reasonCounter}][price]`;
+      newPriceInput.name = `detail[${productCounter}][price][${reasonCounter}]`;
 
       var newDeleteButton = document.createElement("button");
       newDeleteButton.className = "btn btn-outline-secondary delete-button";
@@ -90,7 +90,7 @@ addProductButton.addEventListener("click", function () {
       newInputGroup.appendChild(newDeleteButton);
 
       addInputGroup.appendChild(newInputGroup);
-      priceCounter++;
+
       reasonCounter++;
       productContainer.setAttribute(
         "data-reason-counter",
@@ -98,29 +98,34 @@ addProductButton.addEventListener("click", function () {
       );
 
       // Lưu dữ liệu vào biến data
-      var productData = {
+      var reasonAndPrice = {
         reason: newReasonInput.value,
         price: newPriceInput.value,
       };
 
-      // Kiểm tra và thêm dữ liệu vào biến data
-      var productIndex = data.details.findIndex(
-        (item) => item.productId === selectedProductId
-      );
+      var productIndex = data.details.findIndex(function (item) {
+        return item.productId === selectedProductId;
+      });
+
       if (productIndex !== -1) {
         // Sản phẩm đã tồn tại trong biến data, chỉ cần thêm lý do và giá mới
-        data.details[productIndex].reasonAndPrice.push(productData);
+        data.details[productIndex].detail.push(reasonAndPrice);
       } else {
         // Sản phẩm chưa tồn tại trong biến data, thêm sản phẩm mới
-        data.details.push({
+        var newProduct = {
           productId: selectedProductId,
-          reasonAndPrice: [productData],
-        });
+          detail: [reasonAndPrice],
+        };
+        data.details.push(newProduct);
       }
 
       // Chuyển đổi thành JSON và hiển thị trong console
       var jsonData = JSON.stringify(data);
       console.log(jsonData);
+
+      // Reset giá trị của input
+      newReasonInput.value = "";
+      newPriceInput.value = "";
     });
 
     addInputGroup.appendChild(productNameInput);
@@ -129,9 +134,12 @@ addProductButton.addEventListener("click", function () {
     addInputGroup.appendChild(addButton);
 
     productContainer.appendChild(addInputGroup);
-    addInput.appendChild(productContainer);
 
-    inputSanPham.value = "";
+    document.getElementById("productList").appendChild(productContainer);
+
     productCounter++;
+
+    // Reset giá trị của input
+    inputSanPham.value = "";
   }
 });

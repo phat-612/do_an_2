@@ -68,7 +68,7 @@ addProductButton.addEventListener("click", function () {
       newReasonInput.className = "form-control";
       newReasonInput.type = "text";
       newReasonInput.placeholder = "Lý do";
-      newReasonInput.name = `details[${productCounter}][reasonAndPrice][${reasonCounter}][reason]`;
+      newReasonInput.name = `details[${productCounter}][reasonAndPrice][]`;
 
       var newPriceInput = document.createElement("input");
       newPriceInput.className = "form-control";
