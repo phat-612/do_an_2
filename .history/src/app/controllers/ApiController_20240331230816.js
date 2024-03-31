@@ -26,12 +26,12 @@ class ApiController {
       });
   }
   storeWarranty(req, res, next) {
-    const formData = req.body;
-    res.send(formData);
+    // const formData = req.body;
     // const images = req.files.map((file) => {
     //   return file.filename;
     // });
     // formData.images = images;
+    // console.log(formData);
     // const warranty = new Warranty(formData);
     // warranty.save().then(() => {
     //   res.redirect("/admin/warranty/show");

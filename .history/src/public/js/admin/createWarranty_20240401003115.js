@@ -31,7 +31,6 @@ addProductButton.addEventListener("click", function () {
     productNameInput.type = "text";
     productNameInput.value = selectedOption;
     productNameInput.disabled = true;
-    // code thần kỳ
     let inputProduct = `<input class="form-control" type="text" value="${selectedOption}" disabled />`;
     var productIdInput = document.createElement("input");
     productIdInput.type = "hidden";

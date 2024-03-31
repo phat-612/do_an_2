@@ -29,14 +29,14 @@ addProductButton.addEventListener("click", function () {
     var productNameInput = document.createElement("input");
     productNameInput.className = "form-control";
     productNameInput.type = "text";
-    productNameInput.value = selectedOption;
+    productNameInput.value = "131231231231313";
     productNameInput.disabled = true;
-    // code thần kỳ
-    let inputProduct = `<input class="form-control" type="text" value="${selectedOption}" disabled />`;
+    productNameInput.name = `deltails[${productCounter}][idProduct]`;
+
     var productIdInput = document.createElement("input");
     productIdInput.type = "hidden";
     productIdInput.value = selectedProductId;
-    productIdInput.name = `details[${productCounter}][idProduct]`;
+    // productIdInput.name = "detail[]";
 
     var deleteButton = document.createElement("button");
     deleteButton.className = "btn btn-outline-secondary delete-button";
@@ -99,8 +99,7 @@ addProductButton.addEventListener("click", function () {
       );
     });
 
-    // addInputGroup.appendChild(productNameInput);
-    addInputGroup.innerHTML += inputProduct;
+    addInputGroup.appendChild(productNameInput);
     addInputGroup.appendChild(productIdInput);
     addInputGroup.appendChild(deleteButton);
     addInputGroup.appendChild(addButton);

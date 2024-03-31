@@ -31,12 +31,12 @@ addProductButton.addEventListener("click", function () {
     productNameInput.type = "text";
     productNameInput.value = selectedOption;
     productNameInput.disabled = true;
-    // code thần kỳ
-    let inputProduct = `<input class="form-control" type="text" value="${selectedOption}" disabled />`;
+    productNameInput.name = "detail[" + productCounter + "]";
+
     var productIdInput = document.createElement("input");
     productIdInput.type = "hidden";
     productIdInput.value = selectedProductId;
-    productIdInput.name = `details[${productCounter}][idProduct]`;
+    productIdInput.name = "detail[]";
 
     var deleteButton = document.createElement("button");
     deleteButton.className = "btn btn-outline-secondary delete-button";
@@ -65,17 +65,13 @@ addProductButton.addEventListener("click", function () {
       newReasonInput.className = "form-control";
       newReasonInput.type = "text";
       newReasonInput.placeholder = "Lý do";
-      newReasonInput.name = `details[${
-        productCounter - 1
-      }][reasonAndPrice][${reasonCounter}][reason]`;
+      newReasonInput.name = `details[${productCounter}][reasonAndPrice][${productCounter}][reason]`;
 
       var newPriceInput = document.createElement("input");
       newPriceInput.className = "form-control";
       newPriceInput.type = "text";
       newPriceInput.placeholder = "Giá";
-      newPriceInput.name = `details[${
-        productCounter - 1
-      }][reasonAndPrice][${reasonCounter}][price]`;
+      newPriceInput.name = ``;
 
       var newDeleteButton = document.createElement("button");
       newDeleteButton.className = "btn btn-outline-secondary delete-button";
@@ -99,8 +95,7 @@ addProductButton.addEventListener("click", function () {
       );
     });
 
-    // addInputGroup.appendChild(productNameInput);
-    addInputGroup.innerHTML += inputProduct;
+    addInputGroup.appendChild(productNameInput);
     addInputGroup.appendChild(productIdInput);
     addInputGroup.appendChild(deleteButton);
     addInputGroup.appendChild(addButton);

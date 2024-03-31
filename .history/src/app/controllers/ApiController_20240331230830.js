@@ -27,7 +27,7 @@ class ApiController {
   }
   storeWarranty(req, res, next) {
     const formData = req.body;
-    res.send(formData);
+    console.log(formData);
     // const images = req.files.map((file) => {
     //   return file.filename;
     // });
