@@ -40,6 +40,7 @@ class MeController {
     User.findOne({ _id: req.session.idUser }).then((user) => {
       res.render("user/profiles/address", {
         layout: "userProfile",
+        js: "user/address",
         addresses: multipleMongooseToObject(user.shipmentDetail),
       });
     });

@@ -9,7 +9,20 @@ module.exports = {
       parseInt(date.getMonth() + 1) < 10
         ? `0${date.getMonth() + 1}`
         : date.getMonth() + 1;
-    const day = date.getDate();
+    const day =
+      parseInt(date.getDate() + 1) < 10 ? `0${date.getDate()}` : date.getDate();
     return `${year}-${month}-${day}`;
+  },
+  statusToast: (type) => {
+    if (type == "success") {
+      return "bg-success";
+    }
+    return "bg-danger";
+  },
+  isDisabled: (isDisabled) => {
+    if (isDisabled) {
+      return "disabled";
+    }
+    return "";
   },
 };

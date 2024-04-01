@@ -1,12 +1,14 @@
 // import node
 const express = require("express");
 const session = require("express-session");
+const flash = require("express-flash");
 const multer = require("multer");
 const sharp = require("sharp");
 const { engine } = require("express-handlebars");
 const methodOverride = require("method-override");
 const path = require("path");
 const MongoStore = require("connect-mongo");
+
 // import user
 const db = require("./config/db");
 const route = require("./routes");
@@ -52,7 +54,7 @@ app.use(
     }),
   })
 );
-
+app.use(flash());
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
@@ -102,6 +104,11 @@ app.use((req, res, next) => {
   }
   next();
 });
+app.use(function (req, res, next) {
+  res.locals.message = req.flash("message")[0];
+  next();
+});
+
 // router
 route(app);
 

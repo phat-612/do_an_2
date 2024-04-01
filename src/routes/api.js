@@ -9,6 +9,9 @@ router.post("/signUp", apiController.signUp);
 router.post("/login", apiController.login);
 router.post("/address", apiController.storeAddress);
 router.put("/profile", apiController.updateProfile);
+router.put("/password", apiController.updatePassword);
+router.put("/address", apiController.updateAddress);
+router.delete("/address", apiController.deleteAddress);
 
 // product
 router.post("/storeCategory", apiController.storeCategory);

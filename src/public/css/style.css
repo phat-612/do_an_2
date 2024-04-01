@@ -12,6 +12,10 @@ ul {
 a {
   text-decoration: none;
 }
+.custom-w-fitcontent {
+  width: fit-content;
+}
+/* color */
 .custom-bg-red {
   background-color: var(--primary-color);
 }

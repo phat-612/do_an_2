@@ -60,17 +60,7 @@
           value="{{warrantys.note}}"
         />
       </div>
-      <div class="form-group col-md-6 my-4">
-        <label for="status">Trạng thái</label>
-        <input
-          type="text"
-          class="form-control"
-          id="status"
-          name="status"
-          readonly
-          value="{{warrantys.status}}"
-        />
-      </div>
+
       <div class="form-group col-md-6 my-4">
         <label for="detail">Sản phẩm</label>
         <input
@@ -79,13 +69,13 @@
           id="detail"
           name="detail"
           readonly
-          value="{{warrantys.detail}}"
+          value="{{#each productNames}}{{this}}{{/each}}"
         />
       </div>
       <div class="form-group col-md-6 my-4">
         <label for="images">Hình ảnh</label>
         <div id="images">
-          <img src="/img/uploads/{{warrantys.images}}" alt="" />
+          <img src="/img/uploads/{{warrantys.images}}" alt="" class="w-25" />
         </div>
       </div>
     </div>

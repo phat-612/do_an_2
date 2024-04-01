@@ -12,9 +12,9 @@ const User = new Schema(
       {
         alias: { type: String },
         name: { type: String },
-        phone: { type: Number },
+        phone: { type: String },
         address: { type: String },
-        default: { type: Boolean, default: false },
+        defaultAddress: { type: Boolean, default: false },
       },
     ],
   },

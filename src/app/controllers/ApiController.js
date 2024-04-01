@@ -26,16 +26,28 @@ class ApiController {
       });
   }
   storeWarranty(req, res, next) {
+    // res.send(formData);
     const formData = req.body;
-    res.send(formData);
-    // const images = req.files.map((file) => {
-    //   return file.filename;
-    // });
-    // formData.images = images;
-    // const warranty = new Warranty(formData);
-    // warranty.save().then(() => {
-    //   res.redirect("/admin/warranty/show");
-    // });
+    let images = [];
+
+    if (req.files && Array.isArray(req.files)) {
+      images = req.files.map((file) => {
+        return file.filename;
+      });
+    }
+
+    formData.images = images;
+
+    const warrantyDataArray = [{ details: formData }];
+
+    Warranty.insertMany(warrantyDataArray, { ordered: false })
+      .then(() => {
+        res.redirect("/admin/warranty/show");
+      })
+      .catch((error) => {
+        console.error("Lỗi chèn dữ liệu:", error);
+        // Xử lý lỗi tại đây
+      });
   }
   // api account
   signUp(req, res, next) {
@@ -98,7 +110,6 @@ class ApiController {
       } else {
         checkUser = await bcrypt.compare(formData.password, userLogin.password);
       }
-      console.log(checkUser);
       if (!checkUser) {
         return res.render("user/sites/login", {
           messageError: "Thông tin đăng nhập không chính xác",
@@ -117,13 +128,68 @@ class ApiController {
   }
   updateProfile(req, res, next) {
     const formData = req.body;
-    User.updateOne({ _id: req.session.idUser }, formData).then(() => {
+    console.log(formData);
+    User.updateOne(
+      { _id: req.session.idUser },
+      {
+        name: formData.name,
+        phone: formData.phone,
+        gender: formData.gender,
+        birthday: formData.birthday,
+      }
+    ).then(() => {
       res.redirect("/me");
+    });
+  }
+  updatePassword(req, res, next) {
+    const formData = req.body;
+    console.log(formData);
+    UserLogin.findOne({ idUser: req.session.idUser }).then((userLogin) => {
+      if (!userLogin) {
+        return res.redirect("/login");
+      }
+      const isMatch = bcrypt.compareSync(formData.oldPw, userLogin.password);
+      if (!isMatch) {
+        req.flash("message", {
+          type: "danger",
+          message: "Mật khẩu cũ không chính xác",
+        });
+        return res.redirect("/me/changePassword");
+      }
+      if (formData.newPw !== formData.reNewPw) {
+        req.flash("message", {
+          type: "danger",
+          message: "Mật khẩu mới không khớp",
+        });
+        return res.redirect("/me/changePassword");
+      }
+      const hashPassword = bcrypt.hashSync(
+        formData.newPw,
+        parseInt(process.env.SALT_OR_ROUNDS)
+      );
+      UserLogin.updateOne(
+        { idUser: req.session.idUser },
+        { password: hashPassword }
+      ).then(() => {
+        req.flash("message", {
+          type: "success",
+          message: "Đổi mật khẩu thành công",
+        });
+        res.redirect("/me/changePassword");
+      });
     });
   }
   storeAddress(req, res, next) {
     const formData = req.body;
-    const user = new User(formData);
+    if (formData.defaultAddress) {
+      User.updateOne(
+        { _id: req.session.idUser },
+        { $set: { "shipmentDetail.$[].defaultAddress": false } }
+      ).exec();
+      formData.defaultAddress = true;
+    } else {
+      formData.defaultAddress = false;
+    }
     User.updateOne(
       { _id: req.session.idUser },
       { $push: { shipmentDetail: formData } }
@@ -131,9 +197,48 @@ class ApiController {
       res.redirect("/me/address");
     });
   }
+  updateAddress(req, res, next) {
+    const formData = req.body;
+    if (formData.defaultAddress) {
+      User.updateOne(
+        { _id: req.session.idUser },
+        { $set: { "shipmentDetail.$[].defaultAddress": false } }
+      ).exec();
+      formData.defaultAddress = true;
+    } else {
+      formData.defaultAddress = false;
+    }
+    User.updateOne(
+      { _id: req.session.idUser, "shipmentDetail._id": formData.idAddress },
+      {
+        $set: {
+          "shipmentDetail.$.alias": formData.alias,
+          "shipmentDetail.$.name": formData.name,
+          "shipmentDetail.$.phone": formData.phone,
+          "shipmentDetail.$.address": formData.address,
+          "shipmentDetail.$.defaultAddress": formData.defaultAddress,
+        },
+      }
+    ).then(() => {
+      res.redirect("/me/address");
+    });
+  }
+  deleteAddress(req, res, next) {
+    const idAddress = req.body.idAddress;
+    User.updateOne(
+      { _id: req.session.idUser },
+      { $pull: { shipmentDetail: { _id: idAddress, defaultAddress: false } } }
+    ).then((response) => {
+      req.flash("message", {
+        type: "success",
+        message: "Xóa thành công",
+      });
+      res.redirect("/me/address");
+    });
+  }
+  // end api user
   // test api
   test(req, res, next) {
-    console.log(req.body);
     const product = new Product(req.body);
     product
       .save()
