@@ -1,0 +1,99 @@
+POST http://localhost:3000/api/test
+Content-Type: application/json
+
+{
+    "name": "Oppo Reno8",
+    "description": "Oppo Reno8 8GB",
+    "images": ["snh 1", "snh 2"],
+    "idCategory": "65ed65c5c3155828e37b0aa3",
+    "variations": [
+      {
+        "price": 5990000,
+        "quantity":12 ,
+        "attributes":
+            {
+                "color": "blue",
+                "ram": "8GB"
+            }
+      },
+      {
+        "price": 5990000,
+        "quantity": 10,
+        "attributes":
+            {
+                "color": "black",
+                "ram": "8GB"
+            }
+      }
+       {
+        "price": 5990000,
+        "quantity": 10,
+        "attributes":
+            {
+                "color": "black",
+                "ram": "8GB"
+            }
+      }
+    ],
+    "discount": {
+        "percent": 0,
+        "start": "2021-10-01",
+        "end": "2021-10-30"
+    }
+}
+###
+POST http://localhost:3000/api/testAddCategory
+Content-Type: application/json
+
+{
+    "name": "Điện thoại"
+}
+
+###
+POST http://localhost:3000/api/testUpdateQuantity
+Content-Type: application/json
+
+{
+    "id": "65ed65e2c3155828e37b0aa6",
+    "quantity": 614
+}
+
+# ###
+# POST http://localhost:3000/api/testUpdatePrice
+# Content-Type: application/json
+
+# {
+#     "details": [
+#         "65ed65e2c3155828e37b0aa6":[
+#             {
+#                 "reason": "thay màn hình",
+#                 "price": 12300000
+#             },
+#             {
+#                 "reason": "thay pin",
+#                 "price": 200000
+#             }
+#         ],
+#         {
+#             "id": "65ed65e2c3155828e37b0aa6",
+#             "reason": "thay màn hình",
+#             "price": 12300000
+#         },
+#         {
+#             "id": "65ed65e2c3155828e37b0aa6",
+#             "reason": "thay pin",
+#             "price": 200000
+#         },
+#         {
+#             "id": "65ed65e2c3155828e37b0aa7",
+#             "reason": "thay màn hình",
+#             "price": 12500000
+#         }
+#     ]
+# }
+# detail[0]["id"]: "65ed65e2c3155828e37b0aa6"
+# detail[0]["reason"]: "thay màn hình"
+# detail[0]["price"]: 12300000
+# detail[1]["id"]: "65ed65e2c3155828e37b0aa6"
+# detail[1]["reason"]: "thay pin"
+# detail[1]["price"]: 200000
