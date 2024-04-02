@@ -12,6 +12,7 @@ const MongoStore = require("connect-mongo");
 // import user
 const db = require("./config/db");
 const route = require("./routes");
+const globalVariable = require("./app/middlewares/globalVariable");
 // config
 require("dotenv").config();
 
@@ -98,12 +99,8 @@ app.use(
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use((req, res, next) => {
-  if (req.session.name) {
-    res.locals.name = req.session.name;
-  }
-  next();
-});
+
+app.use(globalVariable);
 app.use(function (req, res, next) {
   res.locals.message = req.flash("message")[0];
   next();

@@ -3,6 +3,7 @@ const Warranty = require("../models/Warranty");
 const Product = require("../models/Product");
 const UserLogin = require("../models/UserLogin");
 const User = require("../models/User");
+const Cart = require("../models/Cart");
 // ------------------------
 require("dotenv").config();
 const validator = require("email-validator");
@@ -36,8 +37,8 @@ class ApiController {
     }
     formData.images = images;
 
-    let uniqueDataArray = []; // Define and initialize the uniqueDataArray variable
-    uniqueDataArray.push(formData); // Example: Push formData to uniqueDataArray
+    let uniqueDataArray = [];
+    uniqueDataArray.push(formData);
 
     uniqueDataArray.forEach((data) => {
       const warranty = new Warranty(data);
@@ -242,6 +243,48 @@ class ApiController {
       });
       res.redirect("/me/address");
     });
+  }
+  addItemToCart(req, res, next) {
+    const formData = req.body;
+    const idUser = req.session.idUser;
+    Product.findOne({ "variations._id": formData.idVariation }).then(
+      (variation) => {
+        res.send(variation);
+      }
+    );
+    // Cart.findOne({ idUser }).then((cart) => {
+    //   if (!cart) {
+    //     let newCart = new Cart({
+    //       idUser: idUser,
+    //       items: [
+    //         {
+    //           idVariation: formData.idVariation,
+    //           quantity: formData.quantity,
+    //         },
+    //       ],
+    //     });
+    //     newCart.save().then(() => {
+    //       res.redirect("/cart");
+    //     });
+    //   } else {
+    //     let check = false;
+    //     cart.items.forEach((item) => {
+    //       if (item.idVariation == formData.idVariation) {
+    //         item.quantity += parseInt(formData.quantity);
+    //         check = true;
+    //       }
+    //     });
+    //     if (!check) {
+    //       cart.items.push({
+    //         idVariation: formData.idVariation,
+    //         quantity: formData.quantity,
+    //       });
+    //     }
+    //     cart.save().then(() => {
+    //       res.redirect("/cart");
+    //     });
+    //   }
+    // });
   }
   // end api user
   // test api

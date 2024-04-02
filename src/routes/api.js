@@ -8,6 +8,7 @@ const passport = require("passport");
 router.post("/signUp", apiController.signUp);
 router.post("/login", apiController.login);
 router.post("/address", apiController.storeAddress);
+router.post("/cart", apiController.addItemToCart);
 router.put("/profile", apiController.updateProfile);
 router.put("/password", apiController.updatePassword);
 router.put("/address", apiController.updateAddress);

@@ -9,7 +9,24 @@
       >
         CellPhoneZ
       </a>
-      <button type="button" class="btn btn-warning ms-lg-3 text-white">Danh mục</button>
+      <div class="dropdown">
+        <button
+          type="button"
+          class="btn btn-warning ms-lg-3 text-white"
+          id="dropdownMenuButton1"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >Danh mục</button>
+
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          {{#each categories}}
+            <li><a
+                class="dropdown-item"
+                href="/{{this.slug}}"
+              >{{this.name}}</a></li>
+          {{/each}}
+        </ul>
+      </div>
       <form class="col-12 col-lg-4 mb-3 mb-lg-0 ms-lg-auto">
         <input
           type="search"
@@ -60,3 +77,5 @@
     <li><a class="" href="">Redmi Note 12</a></li>
   </ul>
 </div>
+
+{{! overlay danh mục }}

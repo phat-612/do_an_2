@@ -32,9 +32,9 @@
             </div>
             <div class="col-md-6 my-3" id="inputAttribute1Div">
                <button type="button" class="btn btn-success form-control addAttribute1-btn">Thêm Thuộc Tính</button>
-               <div class="row">
-                  <input type="text" id="thuocTinh1" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
-                  <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
+               <div class="row my-2 attri1-box">
+                  <input type="text" id="thuocTinh1" placeholder="Nhập Thuộc Tính" class="form-control col">
+                  <button type="button" class="btn btn-danger col-2" onclick="deleteAttribute(event)">Xóa</button>
                </div>
             </div>
          </div>
@@ -53,9 +53,10 @@
          </div>
          <div class="col-md-6 my-3" id="inputAttribute2Div">
             <button type="button" class="btn btn-success form-control addAttribute2-btn">Thêm Thuộc Tính</button>
-            <div class="row">
-               <input type="text" id="thuocTinh2" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
-               <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
+            <div class="row my-2">
+               <input type="text" id="thuocTinh2" placeholder="Nhập Thuộc Tính" class="form-control col">
+               
+               <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
             </div>
          </div>
       </div>
@@ -64,15 +65,15 @@
       <table id="custom-varriant" class="table-based table ">
          <thead>
             <tr>
-               <th>Ram</th>
-               <th>Màu sắc</th>
+               <th class="th1">Ram</th>
+               <th class="th2">Màu sắc</th>
                <th>Giá</th>
                <th>Số lượng</th>
             </tr>
          </thead>
          <tbody>
             <tr>
-               <td rowspan="2">8GB</td>
+               <td class="td1" rowspan="2">8GB</td>
                <td>Đỏ</td>
                <td>1300</td>
                <td>1200</td>
@@ -83,7 +84,7 @@
                <td>1200</td>
             </tr>
             <tr>
-               <td rowspan="2">16GB</td>
+               <td class="td2" rowspan="2">16GB</td>
                <td>Đỏ</td>
                <td>1300</td>
                <td>1200</td>

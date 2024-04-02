@@ -10,7 +10,6 @@ addProductButton.addEventListener("click", function () {
   var options = document
     .getElementById("datalistOptions")
     .getElementsByTagName("option");
-
   for (var i = 0; i < options.length; i++) {
     if (options[i].innerText === selectedOption) {
       selectedProductId = options[i].id;
@@ -23,6 +22,7 @@ addProductButton.addEventListener("click", function () {
     productContainer.className = "product-container";
     productContainer.id = "product-container[" + productCounter + "]";
     productContainer.setAttribute("data-reason-counter", "0");
+
     var addInputGroup = document.createElement("div");
     addInputGroup.className = "input-group mb-3";
 
@@ -31,8 +31,7 @@ addProductButton.addEventListener("click", function () {
     productNameInput.type = "text";
     productNameInput.value = selectedOption;
     productNameInput.disabled = true;
-    // code thần kỳ
-    let inputProduct = `<input class="form-control" type="text" value="${selectedOption}" disabled />`;
+
     var productIdInput = document.createElement("input");
     productIdInput.type = "hidden";
     productIdInput.value = selectedProductId;
@@ -53,29 +52,26 @@ addProductButton.addEventListener("click", function () {
     addButton.innerText = "Cộng";
 
     addButton.addEventListener("click", function () {
-      // var currentProductCounter = productContainer.id;
       var reasonCounter = parseInt(
         productContainer.getAttribute("data-reason-counter")
       );
 
       var newInputGroup = document.createElement("div");
-      newInputGroup.className = "input-group mb-3";
+      newInputGroup.className = "input-group mb-3 newInputGroup";
 
       var newReasonInput = document.createElement("input");
       newReasonInput.className = "form-control";
       newReasonInput.type = "text";
       newReasonInput.placeholder = "Lý do";
-      newReasonInput.name = `details[${
-        productCounter - 1
-      }][reasonAndPrice][${reasonCounter}][reason]`;
+      newReasonInput.name = `details[${productCounter}][reasonAndPrice][${reasonCounter}][reason]`;
+      newReasonInput.required = true;
 
       var newPriceInput = document.createElement("input");
       newPriceInput.className = "form-control";
       newPriceInput.type = "text";
       newPriceInput.placeholder = "Giá";
-      newPriceInput.name = `details[${
-        productCounter - 1
-      }][reasonAndPrice][${reasonCounter}][price]`;
+      newPriceInput.name = `details[${productCounter}][reasonAndPrice][${reasonCounter}][price]`;
+      newPriceInput.required = true;
 
       var newDeleteButton = document.createElement("button");
       newDeleteButton.className = "btn btn-outline-secondary delete-button";
@@ -84,6 +80,12 @@ addProductButton.addEventListener("click", function () {
 
       newDeleteButton.addEventListener("click", function () {
         newInputGroup.remove();
+        var newInputGroups =
+          productContainer.getElementsByClassName("newInputGroup");
+        if (newInputGroups.length === 0) {
+          // Nếu không còn nhóm input nào, hãy cập nhật cờ "data-add-clicked"
+          productContainer.setAttribute("data-add-clicked", "false");
+        }
       });
 
       newInputGroup.appendChild(newReasonInput);
@@ -97,10 +99,12 @@ addProductButton.addEventListener("click", function () {
         "data-reason-counter",
         reasonCounter.toString()
       );
+
+      // Đánh dấu đã thêm mới INPUT cho sản phẩm này
+      productContainer.setAttribute("data-add-clicked", "true");
     });
 
-    // addInputGroup.appendChild(productNameInput);
-    addInputGroup.innerHTML += inputProduct;
+    addInputGroup.appendChild(productNameInput);
     addInputGroup.appendChild(productIdInput);
     addInputGroup.appendChild(deleteButton);
     addInputGroup.appendChild(addButton);
@@ -110,5 +114,22 @@ addProductButton.addEventListener("click", function () {
 
     inputSanPham.value = "";
     productCounter++;
+  } else {
+    alert("Vui lòng chọn một sản phẩm để tiếp tục!");
   }
+});
+
+var form = document.getElementById("form");
+
+form.addEventListener("submit", function (event) {
+  var productContainers = document.getElementsByClassName("product-container");
+  for (var i = 0; i < productContainers.length; i++) {
+    const isAddClicked = productContainers[i].getAttribute("data-add-clicked");
+    if (isAddClicked !== "true") {
+      alert("Your must add details");
+      event.preventDefault();
+      return;
+    }
+  }
+  form.submit();
 });

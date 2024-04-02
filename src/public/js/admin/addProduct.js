@@ -55,9 +55,9 @@ document
 // nút them thuoc tinh 1
 
 var addAttribute1Btn = document.querySelector(".addAttribute1-btn");
-var Attribute1HTML = `<div class="row">
-               <input type="text" id="thuocTinh1" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
-               <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
+var Attribute1HTML = `<div class="row my-2">
+               <input type="text" id="thuocTinh1" placeholder="Nhập Thuộc Tính" class="form-control col">
+               <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
             </div>`;
 
 addAttribute1Btn.addEventListener("click", () => {
@@ -67,9 +67,9 @@ addAttribute1Btn.addEventListener("click", () => {
 });
 // nút them thuoc tinh 2
 var addAttribute2Btn = document.querySelector(".addAttribute2-btn");
-var Attribute2HTML = `<div class="row">
-               <input type="text" id="thuocTinh2" placeholder="Nhập Thuộc Tính" class="form-control my-2 col">
-               <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
+var Attribute2HTML = `<div class="row my-2">
+               <input type="text" id="thuocTinh2" placeholder="Nhập Thuộc Tính" class="form-control col">
+               <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
             </div>`;
 
 addAttribute2Btn.addEventListener("click", () => {
@@ -78,6 +78,30 @@ addAttribute2Btn.addEventListener("click", () => {
   secondChild.insertAdjacentHTML("afterend", Attribute2HTML);
 });
 // ====================================================
+
+function createAttri1Row() {
+  var nameAttr1 = document.getElementById("inpNameAttributePro1").value;
+  var nameAttr2 = document.getElementById("inpNameAttributePro2").value;
+  var attr1Values = Array.from(document.querySelectorAll("#thuocTinh1")).map(
+    (input) => input.value
+  );
+  var attr2Values = Array.from(document.querySelectorAll("#thuocTinh2")).map(
+    (input) => input.value
+  );
+
+  var numberRow1 = attr1Values.length;
+  var numberRow2 = attr1Values.length;
+
+  document.querySelector(".th1").textContent = nameAttr1;
+  document.querySelector(".th2").textContent = nameAttr2;
+
+  document.querySelector(".td1").rowSpan = numberRow1;
+  document.querySelector(".td2").rowSpan = numberRow2;
+}
+
+document.querySelectorAll("input").forEach(function (input) {
+  input.addEventListener("keyup", createAttri1Row);
+});
 
 // ============================================
 // // gợi ý cách làm cái bảng
