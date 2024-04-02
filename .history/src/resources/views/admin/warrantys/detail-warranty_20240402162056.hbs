@@ -89,23 +89,23 @@
           <div class="col-md-12">
             <div class="form-group my-4">
               <label for="table">Chi Tiết Sản Phẩm</label>
-              <table class="table">
-                <thead>
-                  <tr>
-                    {{#each productNames}}
-                      <th scope="col">{{this}}</th>
-                    {{/each}}
-                  </tr>
-                </thead>
-                <tbody>
-                  {{#each reasonsAndPrices}}
-                    <tr>
-                      <td>Lý do : {{this.reason}}</td>
-                      <td>Giá : {{this.price}}</td>
-                    </tr>
-                  {{/each}}
-                </tbody>
-              </table>
+             <table class="table">
+  <thead>
+    <tr>
+      {{#each idProducts}}
+        <th scope="col">{{../productNames @index}}</th>
+      {{/each}}
+    </tr>
+  </thead>
+  <tbody>
+    {{#each reasonsAndPrices}}
+      <tr>
+        <td>{{this.reason}}</td>
+        <td>{{this.price}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
             </div>
           </div>
         </div>

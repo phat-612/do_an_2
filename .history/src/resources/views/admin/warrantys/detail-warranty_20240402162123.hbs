@@ -92,16 +92,16 @@
               <table class="table">
                 <thead>
                   <tr>
-                    {{#each productNames}}
-                      <th scope="col">{{this}}</th>
+                    {{#each idProducts}}
+                      <th scope="col">{{../productNames @index}}</th>
                     {{/each}}
                   </tr>
                 </thead>
                 <tbody>
                   {{#each reasonsAndPrices}}
                     <tr>
-                      <td>Lý do : {{this.reason}}</td>
-                      <td>Giá : {{this.price}}</td>
+                      <td>{{this.reason}}</td>
+                      <td>{{this.price}}</td>
                     </tr>
                   {{/each}}
                 </tbody>

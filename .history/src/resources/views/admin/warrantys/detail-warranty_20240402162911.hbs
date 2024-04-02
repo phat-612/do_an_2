@@ -98,12 +98,18 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {{#each reasonsAndPrices}}
-                    <tr>
-                      <td>Lý do : {{this.reason}}</td>
-                      <td>Giá : {{this.price}}</td>
-                    </tr>
-                  {{/each}}
+                 {{#each reasonsAndPrices}}
+      <tr>
+        <td>Lý do: {{this.reason}}</td>
+        {{#each productNames}}
+          {{#ifCond this ../@index}}
+            <td>Giá: {{../reasonsAndPrices ../@index.price}}</td>
+          {{else}}
+            <td></td>
+          {{/ifCond}}
+        {{/each}}
+      </tr>
+    {{/each}}
                 </tbody>
               </table>
             </div>

@@ -104,30 +104,21 @@ class AdminController {
     });
   }
   detailWarranty(req, res, next) {
-    Warranty.findById(req.params.id).then(async (warrantys) => {
-      const idProducts = warrantys.details.map((detail) => detail.idProduct);
-      const getProductNames = await Promise.all(
-        idProducts.map(async (id) => {
-          const product = await Product.findById(id);
-          return product ? product.name : null;
-        })
-      );
+    Warranty.findById(req.params.id).then(async (warranty) => {
+      const details = warranty.details;
 
-      const details = warrantys.details;
-      const reasonsAndPrices = details
-        .map((detail) => {
-          return detail.reasonAndPrice.map((reasonPrice) => {
-            return { reason: reasonPrice.reason, price: reasonPrice.price };
-          });
-        })
-        .flat();
+      // Lấy danh sách các reason và price từ details
+      const reasonsAndPrices = [];
+      details.forEach((detail) => {
+        detail.reasonAndPrice.forEach((reasonPrice) => {
+          const reason = reasonPrice.reason;
+          const price = reasonPrice.price;
+          reasonsAndPrices.push({ reason, price });
+        });
+      });
 
-      res.render("admin/warrantys/detail-warranty", {
-        layout: "admin",
-        js: "admin/detailWarranty",
-        warrantys: mongooseToObject(warrantys),
-        idProducts: idProducts,
-        productNames: getProductNames,
+      res.render("admin/warrantys/warranty-details", {
+        warranty: warranty,
         reasonsAndPrices: reasonsAndPrices,
       });
     });

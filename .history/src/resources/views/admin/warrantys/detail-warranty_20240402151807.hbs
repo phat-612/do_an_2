@@ -61,18 +61,6 @@
             value="{{#each productNames}}{{this}}{{/each}}"
           />
         </div> --}}
-        <div class="form-group my-4">
-          <label for="note">Ghi Chú</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Địa Chỉ"
-            name="note"
-            id="note"
-            value="{{warrantys.note}}"
-            readonly
-          />
-        </div>
       </div>
       <div class="col-md-6">
         <div class="row">
@@ -92,18 +80,22 @@
               <table class="table">
                 <thead>
                   <tr>
-                    {{#each productNames}}
-                      <th scope="col">{{this}}</th>
-                    {{/each}}
+                    <th scope="col">Cột 1</th>
+                    <th scope="col">Cột 2</th>
+                    <th scope="col">Cột 3</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {{#each reasonsAndPrices}}
-                    <tr>
-                      <td>Lý do : {{this.reason}}</td>
-                      <td>Giá : {{this.price}}</td>
-                    </tr>
-                  {{/each}}
+                  <tr>
+                    <td>Dữ liệu 1</td>
+                    <td>Dữ liệu 2</td>
+                    <td>Dữ liệu 3</td>
+                  </tr>
+                  <tr>
+                    <td>Dữ liệu 4</td>
+                    <td>Dữ liệu 5</td>
+                    <td>Dữ liệu 6</td>
+                  </tr>
                 </tbody>
               </table>
             </div>

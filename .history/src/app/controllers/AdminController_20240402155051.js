@@ -106,6 +106,7 @@ class AdminController {
   detailWarranty(req, res, next) {
     Warranty.findById(req.params.id).then(async (warrantys) => {
       const idProducts = warrantys.details.map((detail) => detail.idProduct);
+      // Lấy danh sách tên sản phẩm từ idProducts
       const getProductNames = await Promise.all(
         idProducts.map(async (id) => {
           const product = await Product.findById(id);
@@ -113,22 +114,12 @@ class AdminController {
         })
       );
 
-      const details = warrantys.details;
-      const reasonsAndPrices = details
-        .map((detail) => {
-          return detail.reasonAndPrice.map((reasonPrice) => {
-            return { reason: reasonPrice.reason, price: reasonPrice.price };
-          });
-        })
-        .flat();
-
       res.render("admin/warrantys/detail-warranty", {
         layout: "admin",
         js: "admin/detailWarranty",
         warrantys: mongooseToObject(warrantys),
         idProducts: idProducts,
         productNames: getProductNames,
-        reasonsAndPrices: reasonsAndPrices,
       });
     });
   }

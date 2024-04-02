@@ -105,14 +105,6 @@ class AdminController {
   }
   detailWarranty(req, res, next) {
     Warranty.findById(req.params.id).then(async (warrantys) => {
-      const idProducts = warrantys.details.map((detail) => detail.idProduct);
-      const getProductNames = await Promise.all(
-        idProducts.map(async (id) => {
-          const product = await Product.findById(id);
-          return product ? product.name : null;
-        })
-      );
-
       const details = warrantys.details;
       const reasonsAndPrices = details
         .map((detail) => {
@@ -126,8 +118,6 @@ class AdminController {
         layout: "admin",
         js: "admin/detailWarranty",
         warrantys: mongooseToObject(warrantys),
-        idProducts: idProducts,
-        productNames: getProductNames,
         reasonsAndPrices: reasonsAndPrices,
       });
     });

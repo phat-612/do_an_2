@@ -98,10 +98,11 @@
                   </tr>
                 </thead>
                 <tbody>
+                  console.log(reasonsAndPrices);
                   {{#each reasonsAndPrices}}
                     <tr>
-                      <td>Lý do : {{this.reason}}</td>
-                      <td>Giá : {{this.price}}</td>
+                      <td>{{this.reason}}</td>
+                      <td>{{this.price}}</td>
                     </tr>
                   {{/each}}
                 </tbody>
