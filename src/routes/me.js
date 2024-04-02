@@ -9,6 +9,7 @@ router.get("/historyOrder", meController.historyOrder);
 router.get("/detailOrder", meController.detailOrder);
 router.get("/historyWaranty", meController.historyWaranty);
 router.get("/detailWaranty", meController.detailWaranty);
+router.get("/cart", meController.cart);
 router.get("/", meController.profile);
 
 module.exports = router;

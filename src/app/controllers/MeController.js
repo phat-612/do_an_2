@@ -45,5 +45,8 @@ class MeController {
       });
     });
   }
+  cart(req, res, next) {
+    res.render("user/profiles/cart");
+  }
 }
 module.exports = new MeController();

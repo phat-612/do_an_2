@@ -15,8 +15,5 @@ class SiteController {
       res.redirect("/");
     });
   }
-  cart(req, res, next) {
-    res.render("user/sites/cart");
-  }
 }
 module.exports = new SiteController();
