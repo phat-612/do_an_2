@@ -1,0 +1,97 @@
+<form action="" method="" >
+   
+   <div class="container">
+      <label for="name-Product" class="form-label fs-4">Tên Sản phẩm</label>
+      <input type="text" class="form-control" id="name-Product" placeholder="Nhập tên Sản Phẩm" />
+      <label for="description-Product" class="col-form-label fs-4">Mô Tả Sản Phẩm</label>
+      <textarea class="form-control" id="description-Product" placeholder="Nhập Mô Tả Sản Phẩm"></textarea>
+      <label for="categoryDataList" class="form-label fs-4">Danh Mục</label>
+      <input class="form-control" list="categoryOptions" id="categoryDataList" placeholder="Nhập Danh Mục">
+      <datalist id="categoryOptions">
+         <option value="Điện thoại">
+         <option value="Laptop">
+      </datalist>
+      <label for="brandDataList" class="form-label fs-4">Thương Hiệu</label>
+      <input class="form-control" list="BrandOptions" id="brandDataList" placeholder="Nhập Thương Hiệu">
+      <datalist id="BrandOptions">
+       <option value="SamSung">
+       <option value="Apple">
+      </datalist>
+   {{!-- -------------------------------- --}}
+      <label for="brandDataList" class="form-label fs-4 mt-3">Thuộc Tính</label>
+      <div class="w-75 container-sm py-4 my-4 border rounded">
+         <div class="row">
+            <div class="col-md-6">
+               <label for="ipNameAttributePro1" class="form-label fs-5">Nhập Tên Thuộc tính</label>
+            </div>
+            <div class="col-md-6">
+               <input type="text" id="inpNameAttributePro1" class="form-control" placeholder=" Nhập Tên Thuộc tính">
+            </div>
+            <div class="col-md-6 my-3">
+               <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
+            </div>
+            <div class="col-md-6 my-3" id="inputAttribute1Div">
+               <button type="button" class="btn btn-success form-control addAttribute1-btn">Thêm Thuộc Tính</button>
+               <div class="row my-2 attri1-box">
+                  <input type="text" id="thuocTinh1" placeholder="Nhập Thuộc Tính" class="form-control col">
+                  <button type="button" class="btn btn-danger col-2" onclick="deleteAttribute(event)">Xóa</button>
+               </div>
+            </div>
+         </div>
+     </div>
+     {{!-- =============================== --}}
+     <div class="w-75 container-sm py-4 my-4 border rounded Attribute2div">
+      <div class="row">
+         <div class="col-md-6">
+            <label for="inpNameAttributePro2" class="form-label fs-5">Nhập Tên Thuộc Tính</label>
+         </div>
+         <div class="col-md-6">
+            <input type="text" id="inpNameAttributePro2" class="form-control" placeholder=" Nhập Tên Thuộc Tính">
+         </div>
+         <div class="col-md-6 my-3">
+            <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
+         </div>
+         <div class="col-md-6 my-3" id="inputAttribute2Div">
+            <button type="button" class="btn btn-success form-control addAttribute2-btn">Thêm Thuộc Tính</button>
+            <div class="row my-2">
+               <input type="text" id="thuocTinh2" placeholder="Nhập Thuộc Tính" class="form-control col">
+               
+               <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
+            </div>
+         </div>
+      </div>
+     </div>
+     {{!-- ------------------------- --}}
+      <table id="custom-varriant" class="table-based table ">
+         <thead>
+            <tr>
+               <th class="th1"></th>
+               <th class="th2"></th>
+               <th>Giá</th>
+               <th>Số lượng</th>
+            </tr>
+         </thead>
+         <tbody>
+            
+         </tbody>
+      </table>
+
+
+     {{!-- ------------------------- --}}
+      <div class="mb-3">
+         <label for="multiImageUpload" class="form-label fs-4">Tải Ảnh Lên (TỐI ĐA 8 ẢNH)</label>
+         <input
+            type="file"
+            class="form-control"
+            id="multiImageUpload"
+            accept="image/*"
+            multiple
+            />
+      </div>
+      <div class="mb-3">
+         <p>Danh sách Ảnh :</p>
+         <div id="multiImagePreview" class="row"></div>
+      </div>
+   </div>
+
+</form>
