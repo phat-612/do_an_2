@@ -12,26 +12,21 @@ addProductButton.addEventListener("click", function () {
   var selectedOption = inputSanPham.value;
   var selectedProductId = "";
 
+  var detailInput = document.getElementById("detail");
   var options = document
     .getElementById("datalistOptions")
     .getElementsByTagName("option");
 
-  if (options.length > 0) {
-    var isOptionSelected = false;
+  var isOptionSelected = false;
 
-    for (var i = 0; i < options.length; i++) {
-      if (options[i].innerText === selectedOption) {
-        selectedProductId = options[i].id;
-        isOptionSelected = true;
-        break;
-      }
+  for (var i = 0; i < options.length; i++) {
+    if (options[i].innerText === detailInput.value.trim()) {
+      isOptionSelected = true;
+      break;
     }
+  }
 
-    if (!isOptionSelected) {
-      alert("Hãy chọn ít nhất một lựa chọn!");
-      return;
-    }
-  } else {
+  if (!isOptionSelected) {
     alert("Hãy chọn ít nhất một lựa chọn!");
     return;
   }

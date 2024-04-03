@@ -5,8 +5,8 @@ var productCounter = 0;
 
 addProductButton.addEventListener("click", function () {
   // Kiểm tra xem người dùng có chọn sản phẩm không
-  if (!inputSanPham.value && inputSanPham.selectedIndex === -1) {
-    alert("Hãy chọn ít nhất một sản phẩm hoặc nhập giá trị vào ô input!");
+  if (!inputSanPham.selectedIndex === -1) {
+    alert("Hãy chọn ít nhất một sản phẩm!");
     return;
   }
   var selectedOption = inputSanPham.value;
@@ -15,25 +15,11 @@ addProductButton.addEventListener("click", function () {
   var options = document
     .getElementById("datalistOptions")
     .getElementsByTagName("option");
-
-  if (options.length > 0) {
-    var isOptionSelected = false;
-
-    for (var i = 0; i < options.length; i++) {
-      if (options[i].innerText === selectedOption) {
-        selectedProductId = options[i].id;
-        isOptionSelected = true;
-        break;
-      }
+  for (var i = 0; i < options.length; i++) {
+    if (options[i].innerText === selectedOption) {
+      selectedProductId = options[i].id;
+      break;
     }
-
-    if (!isOptionSelected) {
-      alert("Hãy chọn ít nhất một lựa chọn!");
-      return;
-    }
-  } else {
-    alert("Hãy chọn ít nhất một lựa chọn!");
-    return;
   }
 
   if (selectedOption !== "" && selectedProductId !== "") {

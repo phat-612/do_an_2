@@ -12,11 +12,15 @@ addProductButton.addEventListener("click", function () {
   var selectedOption = inputSanPham.value;
   var selectedProductId = "";
 
-  var options = document
-    .getElementById("datalistOptions")
-    .getElementsByTagName("option");
+  var form = document.getElementById("yourFormId");
 
-  if (options.length > 0) {
+  form.addEventListener("submit", function (event) {
+    event.preventDefault(); // Chặn việc gửi form
+
+    var options = document
+      .getElementById("datalistOptions")
+      .getElementsByTagName("option");
+
     var isOptionSelected = false;
 
     for (var i = 0; i < options.length; i++) {
@@ -31,10 +35,10 @@ addProductButton.addEventListener("click", function () {
       alert("Hãy chọn ít nhất một lựa chọn!");
       return;
     }
-  } else {
-    alert("Hãy chọn ít nhất một lựa chọn!");
-    return;
-  }
+
+    // Tiếp tục xử lý form nếu tất cả đều hợp lệ
+    form.submit();
+  });
 
   if (selectedOption !== "" && selectedProductId !== "") {
     inputSanPham.required = false;

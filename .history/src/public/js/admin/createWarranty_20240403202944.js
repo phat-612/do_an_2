@@ -17,23 +17,12 @@ addProductButton.addEventListener("click", function () {
     .getElementsByTagName("option");
 
   if (options.length > 0) {
-    var isOptionSelected = false;
-
     for (var i = 0; i < options.length; i++) {
       if (options[i].innerText === selectedOption) {
         selectedProductId = options[i].id;
-        isOptionSelected = true;
         break;
       }
     }
-
-    if (!isOptionSelected) {
-      alert("Hãy chọn ít nhất một lựa chọn!");
-      return;
-    }
-  } else {
-    alert("Hãy chọn ít nhất một lựa chọn!");
-    return;
   }
 
   if (selectedOption !== "" && selectedProductId !== "") {
