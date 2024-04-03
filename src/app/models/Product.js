@@ -5,6 +5,7 @@ const Product = new Schema(
     name: { type: String },
     description: { type: String },
     images: [String],
+    view: { type: Number, default: 0 },
     slug: { type: String },
     idCategory: { type: Schema.Types.ObjectId, ref: "Category" },
     variations: [

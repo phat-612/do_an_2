@@ -1,6 +1,7 @@
 const Warranty = require("../models/Warranty");
 const Product = require("../models/Product");
 const User = require("../models/User");
+const Order = require("../models/Order");
 
 const {
   multipleMongooseToObject,
@@ -12,7 +13,7 @@ class AdminController {
   index(req, res, next) {
     res.render("admin/sites/home", {
       layout: "admin",
-      js: "admin/header",
+      js: "admin/home",
       css: "admin/home",
     });
   }
@@ -32,11 +33,15 @@ class AdminController {
 
   // get /orderproducts
   order(req, res, next) {
-    res.render("admin/orders/orderProduct", {
-      layout: "admin",
-      js: "admin/orderProduct",
-      css: "admin/orderProduct",
-    });
+    Order.find({})
+      .then((orders) => {
+        res.render("admin/orders/orderProduct", {
+          layout: "admin",
+          js: "admin/orderProduct",
+          css: "admin/orderProduct",
+        });
+      })
+      .catch(next);
   }
   // get /order/detail
   orderDetail(req, res, next) {
@@ -126,7 +131,6 @@ class AdminController {
                 price: reasonPrice.price,
               }))
             : [];
-          console.log(reasonsAndPrices);
           if (productName && reasonsAndPrices.length > 0) {
             productsAndReasons.push({
               productName,

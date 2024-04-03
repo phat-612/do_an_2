@@ -3,12 +3,12 @@ var addInput = document.getElementById("addInput");
 var addProductButton = document.getElementById("addProduct");
 var productCounter = 0;
 
+// if (inputSanPham.value !== "") {
+//   alert("Vui lòng không nhập thông tin sản phẩm!");
+// }
 addProductButton.addEventListener("click", function () {
-  // Kiểm tra xem người dùng có chọn sản phẩm không
-  if (!inputSanPham.value && inputSanPham.selectedIndex === -1) {
-    alert("Hãy chọn ít nhất một sản phẩm hoặc nhập giá trị vào ô input!");
-    return;
-  }
+  var inputSanPham = document.getElementById("detail");
+
   var selectedOption = inputSanPham.value;
   var selectedProductId = "";
 
@@ -16,26 +16,25 @@ addProductButton.addEventListener("click", function () {
     .getElementById("datalistOptions")
     .getElementsByTagName("option");
 
-  if (options.length > 0) {
-    var isOptionSelected = false;
-
-    for (var i = 0; i < options.length; i++) {
-      if (options[i].innerText === selectedOption) {
-        selectedProductId = options[i].id;
-        isOptionSelected = true;
-        break;
-      }
-    }
-
-    if (!isOptionSelected) {
-      alert("Hãy chọn ít nhất một lựa chọn!");
-      return;
-    }
-  } else {
+  if (!options || options.length === 0) {
     alert("Hãy chọn ít nhất một lựa chọn!");
     return;
   }
 
+  var isOptionSelected = false;
+
+  for (var i = 0; i < options.length; i++) {
+    if (options[i].innerText === selectedOption) {
+      selectedProductId = options[i].id;
+      isOptionSelected = true;
+      break;
+    }
+  }
+
+  if (!isOptionSelected) {
+    alert("Hãy chọn ít nhất một lựa chọn!");
+    return;
+  }
   if (selectedOption !== "" && selectedProductId !== "") {
     inputSanPham.required = false;
     var productContainer = document.createElement("div");
@@ -160,13 +159,20 @@ addProductButton.addEventListener("click", function () {
 var form = document.getElementById("form");
 
 form.addEventListener("submit", function (event) {
-  var productContainers = document.getElementsByClassName("product-container");
-  for (var i = 0; i < productContainers.length; i++) {
-    const isAddClicked = productContainers[i].getAttribute("data-add-clicked");
-    if (isAddClicked !== "true") {
-      alert("Hãy thêm chi tiết cho tất cả các sản phẩm!");
-      event.preventDefault();
-      return;
+  if (inputSanPham.value !== "") {
+    alert("Vui lòng chọn thêm sản phẩm");
+    event.preventDefault();
+  } else {
+    var productContainers =
+      document.getElementsByClassName("product-container");
+    for (var i = 0; i < productContainers.length; i++) {
+      const isAddClicked =
+        productContainers[i].getAttribute("data-add-clicked");
+      if (isAddClicked !== "true") {
+        alert("Hãy thêm chi tiết cho tất cả các sản phẩm!");
+        event.preventDefault();
+        return;
+      }
     }
   }
 });

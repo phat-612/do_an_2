@@ -33,25 +33,25 @@
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">ID đơn hàng</th>
-          <th scope="col">Tổng</th>
           <th scope="col">Khách Hàng</th>
           <th scope="col">Trạng Thái</th>
+          <th scope="col">Tổng</th>
           <th scope="col">Ngày</th>
           <th scope="col">Hành Động</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">#1</th>
-          <td>89.000.000</td>
-          <td>Nguyễn Văn A</td>
-          <td>Chờ Xác Nhận</td>
-          <td>11/09/2009</td>
-          <td><a href="/admin/order/detail" class="btn btn-primary"><i
-                class="bi bi-eye"
-              ></i></a></td>
-        </tr>
+        {{#each orders}}
+          <tr>
+            <td>Nguyen Van A</td>
+            <td>{{this.status}}</td>
+            <td>{{this.total}}</td>
+            <td>{{this.createAt}}</td>
+            <td><a href="/admin/order/detail" class="btn btn-primary"><i
+                  class="bi bi-eye"
+                ></i></a></td>
+          </tr>
+        {{/each}}
       </tbody>
     </table>
   </div>

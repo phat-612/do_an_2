@@ -6,7 +6,7 @@ const Order = new Schema(
     note: { type: String },
     total: { type: Number },
     status: { type: String },
-    paymentStatus: { type: Bool },
+    paymentStatus: { type: Boolean },
     paymentMethod: { type: String },
     details: [
       {

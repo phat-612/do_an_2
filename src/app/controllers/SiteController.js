@@ -40,6 +40,11 @@ class SiteController {
       res.redirect("/");
     });
   }
+  category(req, res, next) {
+    const category = req.params.category;
+    console.log(category);
+    res.render("user/products/show");
+  }
   test(req, res, next) {
     Category.getAllProductsInCategory().then((categories) => {
       res.json(categories);
