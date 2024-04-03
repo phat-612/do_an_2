@@ -29,7 +29,6 @@ addProductButton.addEventListener("click", function () {
     productContainer.id = "product-container[" + productCounter + "]";
     productContainer.setAttribute("data-reason-counter", "0");
     productContainer.setAttribute("data-add-clicked", "false");
-    productContainer.setAttribute("data-product-counter", productCounter); // Thêm productCounter vào container
 
     var addInputGroup = document.createElement("div");
     addInputGroup.className = "input-group mb-3";
@@ -64,10 +63,10 @@ addProductButton.addEventListener("click", function () {
     addButton.className = "btn btn-outline-secondary";
     addButton.type = "button";
     addButton.innerText = "Cộng";
+
     addButton.addEventListener("click", function () {
-      var currentProductContainer = this.closest(".product-container");
       var reasonCounter = parseInt(
-        currentProductContainer.getAttribute("data-reason-counter")
+        productContainer.getAttribute("data-reason-counter")
       );
 
       var newInputGroup = document.createElement("div");
@@ -77,18 +76,14 @@ addProductButton.addEventListener("click", function () {
       newReasonInput.className = "form-control";
       newReasonInput.type = "text";
       newReasonInput.placeholder = "Lý do";
-      newReasonInput.name = `details[${currentProductContainer.getAttribute(
-        "data-product-counter"
-      )}][reasonAndPrice][${reasonCounter}][reason]`;
+      newReasonInput.name = `details[${productCounter}][reasonAndPrice][${reasonCounter}][reason]`;
       newReasonInput.required = true;
 
       var newPriceInput = document.createElement("input");
       newPriceInput.className = "form-control";
       newPriceInput.type = "text";
       newPriceInput.placeholder = "Giá";
-      newPriceInput.name = `details[${currentProductContainer.getAttribute(
-        "data-product-counter"
-      )}][reasonAndPrice][${reasonCounter}][price]`;
+      newPriceInput.name = `details[${productCounter}][reasonAndPrice][${reasonCounter}][price]`;
       newPriceInput.required = true;
 
       var newDeleteButton = document.createElement("button");
@@ -99,12 +94,12 @@ addProductButton.addEventListener("click", function () {
       newDeleteButton.addEventListener("click", function () {
         newInputGroup.remove();
         var newInputGroups =
-          currentProductContainer.getElementsByClassName("newInputGroup");
+          productContainer.getElementsByClassName("newInputGroup");
         if (newInputGroups.length === 0) {
           // Nếu không còn nhóm input nào, hãy cập nhật cờ "data-add-clicked"
-          currentProductContainer.setAttribute("data-add-clicked", "false");
+          productContainer.setAttribute("data-add-clicked", "false");
         }
-        currentProductContainer.setAttribute(
+        productContainer.setAttribute(
           "data-reason-counter",
           newInputGroups.length.toString()
         );
@@ -114,18 +109,16 @@ addProductButton.addEventListener("click", function () {
       newInputGroup.appendChild(newPriceInput);
       newInputGroup.appendChild(newDeleteButton);
 
-      var addInputGroup =
-        currentProductContainer.getElementsByClassName("input-group mb-3")[0];
       addInputGroup.appendChild(newInputGroup);
 
-      reasonCounter++; // Tăng giá trị của reasonCounter
-      currentProductContainer.setAttribute(
+      reasonCounter++; // Thay đổi vị trí tăng giá trị của reasonCounter
+      productContainer.setAttribute(
         "data-reason-counter",
         reasonCounter.toString()
       );
 
       // Đánh dấu đã thêm mới INPUT cho sản phẩm này
-      currentProductContainer.setAttribute("data-add-clicked", "true");
+      productContainer.setAttribute("data-add-clicked", "true");
       inputSanPham.required = false; // Xóa thuộc tính required của ô input
     });
 

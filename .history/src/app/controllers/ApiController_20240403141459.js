@@ -26,9 +26,9 @@ class ApiController {
         console.log(error);
       });
   }
-  storeWarranty(req, res, next) {
-    const formData = req.body;
+  async storeWarranty(req, res, next) {
     // res.send(formData);
+    const formData = req.body;
     let images = [];
     if (req.files && Array.isArray(req.files)) {
       images = req.files.map((file) => {
@@ -41,15 +41,15 @@ class ApiController {
     uniqueDataArray.push(formData);
 
     uniqueDataArray.forEach((data) => {
-      const warranty = new Warranty(data);
-      Warranty.findOne({ "details.idProduct": data.details[0].idProduct }).then(
-        (existingWarranty) => {
-          if (!existingWarranty) {
-            // Bản ghi không tồn tại, lưu vào CSDL
-            warranty.save().then(() => {});
-          }
+      for (const data of uniqueDataArray) {
+        const warranty = new Warranty(data);
+        const existingWarranty = await Warranty.findOne({ "details.idProduct": data.details[0].idProduct });
+      
+        if (!existingWarranty) {
+          // Bản ghi không tồn tại, lưu vào CSDL
+          await warranty.save();
         }
-      );
+      }
     });
 
     // Chèn dữ liệu đã được kiểm tra và loại bỏ vào collection

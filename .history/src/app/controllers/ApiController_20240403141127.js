@@ -27,8 +27,8 @@ class ApiController {
       });
   }
   storeWarranty(req, res, next) {
-    const formData = req.body;
     // res.send(formData);
+    const formData = req.body;
     let images = [];
     if (req.files && Array.isArray(req.files)) {
       images = req.files.map((file) => {

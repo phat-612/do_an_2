@@ -28,34 +28,34 @@ class ApiController {
   }
   storeWarranty(req, res, next) {
     const formData = req.body;
-    // res.send(formData);
-    let images = [];
-    if (req.files && Array.isArray(req.files)) {
-      images = req.files.map((file) => {
-        return file.filename;
-      });
-    }
-    formData.images = images;
+    res.send(formData);
+    // let images = [];
+    // if (req.files && Array.isArray(req.files)) {
+    //   images = req.files.map((file) => {
+    //     return file.filename;
+    //   });
+    // }
+    // formData.images = images;
 
-    let uniqueDataArray = [];
-    uniqueDataArray.push(formData);
+    // let uniqueDataArray = [];
+    // uniqueDataArray.push(formData);
 
-    uniqueDataArray.forEach((data) => {
-      const warranty = new Warranty(data);
-      Warranty.findOne({ "details.idProduct": data.details[0].idProduct }).then(
-        (existingWarranty) => {
-          if (!existingWarranty) {
-            // Bản ghi không tồn tại, lưu vào CSDL
-            warranty.save().then(() => {});
-          }
-        }
-      );
-    });
+    // uniqueDataArray.forEach((data) => {
+    //   const warranty = new Warranty(data);
+    //   Warranty.findOne({ "details.idProduct": data.details[0].idProduct }).then(
+    //     (existingWarranty) => {
+    //       if (!existingWarranty) {
+    //         // Bản ghi không tồn tại, lưu vào CSDL
+    //         warranty.save().then(() => {});
+    //       }
+    //     }
+    //   );
+    // });
 
-    // Chèn dữ liệu đã được kiểm tra và loại bỏ vào collection
-    Warranty.insertMany(uniqueDataArray, { ordered: false }).then(() => {
-      res.redirect("/admin/warranty/show");
-    });
+    // // Chèn dữ liệu đã được kiểm tra và loại bỏ vào collection
+    // Warranty.insertMany(uniqueDataArray, { ordered: false }).then(() => {
+    //   res.redirect("/admin/warranty/show");
+    // });
   }
   // api account
   signUp(req, res, next) {

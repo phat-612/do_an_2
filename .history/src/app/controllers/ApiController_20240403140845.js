@@ -27,8 +27,8 @@ class ApiController {
       });
   }
   storeWarranty(req, res, next) {
-    const formData = req.body;
     // res.send(formData);
+    const formData = req.body;
     let images = [];
     if (req.files && Array.isArray(req.files)) {
       images = req.files.map((file) => {
@@ -51,7 +51,7 @@ class ApiController {
         }
       );
     });
-
+    const warrantyList = await Promise.all(uniqueDataArray);
     // Chèn dữ liệu đã được kiểm tra và loại bỏ vào collection
     Warranty.insertMany(uniqueDataArray, { ordered: false }).then(() => {
       res.redirect("/admin/warranty/show");
