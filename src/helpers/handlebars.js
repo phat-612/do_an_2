@@ -13,6 +13,13 @@ module.exports = {
       parseInt(date.getDate() + 1) < 10 ? `0${date.getDate()}` : date.getDate();
     return `${year}-${month}-${day}`;
   },
+  showDiscount: (discount) => {
+    if (discount > 0) {
+      return `<p
+                class="position-absolute bg-danger p-1 text-white rounded-end-5"
+              >Giảm ${discount} %</p>`;
+    }
+  },
   statusToast: (type) => {
     if (type == "success") {
       return "bg-success";

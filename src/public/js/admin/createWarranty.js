@@ -98,6 +98,10 @@ addProductButton.addEventListener("click", function () {
           // Nếu không còn nhóm input nào, hãy cập nhật cờ "data-add-clicked"
           productContainer.setAttribute("data-add-clicked", "false");
         }
+        productContainer.setAttribute(
+          "data-reason-counter",
+          newInputGroups.length.toString()
+        );
       });
 
       newInputGroup.appendChild(newReasonInput);

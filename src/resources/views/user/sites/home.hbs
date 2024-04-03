@@ -9,126 +9,80 @@
     <div class="col-3 bg-dark rounded">sdfsd</div>
   </div>
   {{! sản phẩm nổi bậc cho từng danh mục, mỗi mục 10 sản phẩm được xem nhiều nhất }}
-  <div class="mt-3">
-    <div class="row d-flex align-items-center">
-      <div class="col-auto fs-4 text-uppercase">Điện thoại</div>
-      <div class="col"><ul class="nav">
-          <li
-            class="btn btn-outline-light px-2 ms-2 custom-bg-gray text-black"
-          >Apple</li>
-          <li
-            class="btn btn-outline-light px-2 ms-2 custom-bg-gray text-black"
-          >SamSung</li>
-          <li
-            class="btn btn-outline-light px-2 ms-2 custom-bg-gray text-black"
-          >Xiaomi</li>
-          <li
-            class="btn btn-outline-light px-2 ms-2 custom-bg-gray text-black"
-          >OPPO</li>
-          <li
-            class="btn btn-outline-light px-2 ms-2 custom-bg-gray text-black"
-          >Nokia</li>
-        </ul></div>
-    </div>
-    <div
-      class="align-items-stretch mt-3 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3"
-    >
+  {{#each categories}}
+    <div class="mt-3">
 
-      <div class="col">
-        <div class="card h-100 shadow-sm position-relative">
-          <a href="samsung-galaxy" class="">
-            <p
-              class="position-absolute bg-danger p-1 text-white rounded-end-5"
-            >-17%</p>
-
-            <img
-              src="https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/dreame-d9-max-sliding-1902.jpg"
-              class="card-img-top rounded"
-              alt="sd"
-            />
-            <div class="card-body">
-              <p class="card-text fw-bold fs-5">
-                Samsung Galaxy S24 Ultra 12GB
-              </p>
-              <ul class="nav">
-                <li
-                  class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
-                ><a href="">8GB-128GB</a></li>
-                <li
-                  class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
-                ><a href="">12GB-256GB</a></li>
-                <li
-                  class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
-                ><a href="">12GB-256GB</a></li>
-                <li
-                  class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
-                ><a href="">12GB-256GB</a></li>
-              </ul>
-              <p class="card-text text-decoration-line-through">
-                17.000.000đ
-              </p>
-              <p class="card-text text-danger fs-4 fw-medium">
-                13.001.000đ
-              </p>
-              <div class="ratings">
-                <i class="bi bi-star"></i>
-                <i class="bi bi-star"></i>
-                <i class="bi bi-star"></i>
-                <i class="bi bi-star"></i>
-                <i class="bi bi-star"></i>
-              </div>
-            </div>
-          </a>
+      <div class="row d-flex align-items-center">
+        <a
+          href="/{{this.slug}}"
+          class="col-auto fs-4 text-uppercase text-black"
+        >{{this.name}}</a>
+        <div class="col">
+          <ul class="nav">
+            {{#each this.children}}
+              <li><a
+                  href="/{{../this.slug}}/{{this.slug}}"
+                  class="btn btn-outline-light px-2 ms-2 custom-bg-gray text-black"
+                >{{this.name}}</a></li>
+            {{/each}}
+             <li><a
+                  href="/{{this.slug}}"
+                  class="btn btn-outline-light px-2 ms-2 custom-bg-gray text-black"
+                >Xem tất cả</a></li>
+          </ul>
         </div>
       </div>
-      <div class="col">
-        <div class="card h-100 shadow-sm position-relative">
-          <a href="samsung-galaxy" class="">
-            <p
-              class="position-absolute bg-danger p-1 text-white rounded-end-5"
-            >-17%</p>
+      <div
+        class="align-items-stretch mt-3 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3"
+      >
+        {{#each this.products}}
+          <div class="col">
+            <div class="card h-100 shadow-sm position-relative">
+              <a href="/{{this.slug}}" class="">
 
-            <img
-              src="https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/dreame-d9-max-sliding-1902.jpg"
-              class="card-img-top rounded"
-              alt="sd"
-            />
-            <div class="card-body d-flex flex-column">
-              <p class="card-text fw-bold fs-5">
-                Samsung Galaxy S24 Ultra 12GB
-              </p>
-              <ul class="nav">
-                <li
-                  class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
-                ><a href="">8GB-128GB</a></li>
-                <li
-                  class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
-                ><a href="">12GB-256GB</a></li>
-                {{! <li
-                  class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
-                ><a href="">12GB-256GB</a></li>
-                <li
-                  class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
-                ><a href="">12GB-256GB</a></li> }}
-              </ul>
-              {{! <p class="card-text text-decoration-line-through">
-                17.000.000đ
-              </p> }}
-              <p class="card-text text-danger fs-4 fw-medium">
-                13.001.000đ
-              </p>
-              <div class="ratings mt-auto">
-                <i class="bi bi-star"></i>
-                <i class="bi bi-star"></i>
-                <i class="bi bi-star"></i>
-                <i class="bi bi-star"></i>
-                <i class="bi bi-star"></i>
-              </div>
+                {{{showDiscount this.discount.percent}}}
+                <img
+                  src="https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/may-hut-bui-cam-tay-roidmi-m10..png"
+                  class="card-img-top rounded"
+                  alt="sd"
+                />
+                <div class="card-body">
+                  <p class="card-text fw-bold fs-5">
+                    {{this.name}}
+                  </p>
+                  <ul class="nav">
+                    <li
+                      class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
+                    ><a href="">8GB-128GB</a></li>
+                    <li
+                      class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
+                    ><a href="">12GB-256GB</a></li>
+                    <li
+                      class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
+                    ><a href="">12GB-256GB</a></li>
+                    <li
+                      class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
+                    ><a href="">12GB-256GB</a></li>
+                  </ul>
+                  <p class="card-text text-decoration-line-through">
+                    17.000.000đ
+                  </p>
+                  <p class="card-text text-danger fs-4 fw-medium">
+                    13.001.000đ
+                  </p>
+                  <div class="ratings">
+                    <i class="bi bi-star"></i>
+                    <i class="bi bi-star"></i>
+                    <i class="bi bi-star"></i>
+                    <i class="bi bi-star"></i>
+                    <i class="bi bi-star"></i>
+                  </div>
+                </div>
+              </a>
             </div>
-          </a>
-        </div>
+          </div>
+        {{/each}}
       </div>
     </div>
-  </div>
-
+  {{/each}}
 </div>

@@ -23,6 +23,9 @@ app.engine(
   ".hbs",
   engine({
     extname: ".hbs",
+    runtimeOptions: {
+      allowProtoPropertiesByDefault: true,
+    },
     helpers: require("./helpers/handlebars"),
     sum: (a, b) => a + b,
     defaultLayout: "main",
@@ -36,7 +39,6 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
-
 app.set("view engine", ".hbs");
 app.set("views", "./views");
 app.set("views", path.join(__dirname, "resources", "views"));

@@ -11,7 +11,7 @@ router.get("/category", adminController.category);
 //get order
 router.get("/order", adminController.order);
 router.get("/order/detail", adminController.orderDetail);
-//minh warranty
+//get warranty
 router.get("/warranty/create", adminController.createWarranty);
 router.get("/warranty/show", adminController.showWarranty);
 router.get("/warranty/:id/deltail", adminController.detailWarranty);

@@ -1,12 +1,39 @@
-{
-  "hoten": "Nguyễn Văn A",
-  "email": "q@df.com",
-  "sdt": "0123456789",
-  "diachi": "Hà Nội",
-  "iddonhang": "1",
-  "idsanpham": "1",
-  "mota": "Mô tả",
-  "hinhanh": ["ảnh 1", "ảnh 2", "ảnh 3"],
-  "trangthai": "Chờ xử lý",
-  "ngaytao": "2021-01-01"
-}
+[
+  {
+    "hoten": "Nguyễn Văn A",
+    "email": "q@df.com",
+    "sdt": "0123456789",
+    "diachi": "Hà Nội",
+    "iddonhang": "1",
+    "idsanpham": "1",
+    "mota": "Mô tả",
+    "hinhanh": ["ảnh 1", "ảnh 2", "ảnh 3"],
+    "trangthai": "Chờ xử lý",
+    "ngaytao": "2021-01-01"
+  },
+  {
+    "điện thoại": {
+      "hãng": ["Samsung", "Iphone", "Oppo"],
+      "sản phẩm": [
+        {
+          "tên": "Samsung Galaxy S21",
+          "giá": "20.000.000",
+          "mô tả": "Mô tả",
+          "hình ảnh": ["ảnh 1", "ảnh 2", "ảnh 3"]
+        },
+        {
+          "tên": "Iphone 12",
+          "giá": "25.000.000",
+          "mô tả": "Mô tả",
+          "hình ảnh": ["ảnh 1", "ảnh 2", "ảnh 3"]
+        },
+        {
+          "tên": "Oppo Reno 5",
+          "giá": "15.000.000",
+          "mô tả": "Mô tả",
+          "hình ảnh": ["ảnh 1", "ảnh 2", "ảnh 3"]
+        }
+      ]
+    }
+  }
+]

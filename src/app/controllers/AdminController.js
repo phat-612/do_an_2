@@ -18,11 +18,16 @@ class AdminController {
   }
   // get /product
   product(req, res, next) {
-    res.render("admin/products/showProduct", {
-      layout: "admin",
-      js: "admin/showProduct",
-      css: "admin/showProduct",
-    });
+    Product.find({})
+      .then((products) => {
+        res.render("admin/products/showProduct", {
+          layout: "admin",
+          js: "admin/showProduct",
+          css: "admin/showProduct",
+          products: multipleMongooseToObject(products),
+        });
+      })
+      .catch(next);
   }
 
   // get /orderproducts
@@ -108,6 +113,7 @@ class AdminController {
       .populate("details.idProduct")
       .exec()
       .then((warranty) => {
+        // console.log(warranty);
         const productsAndReasons = [];
         warranty.details.forEach((detail) => {
           const productName =
@@ -120,6 +126,7 @@ class AdminController {
                 price: reasonPrice.price,
               }))
             : [];
+          console.log(reasonsAndPrices);
           if (productName && reasonsAndPrices.length > 0) {
             productsAndReasons.push({
               productName,

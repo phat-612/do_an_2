@@ -37,8 +37,8 @@ POST http://localhost:3000/api/testAddCategory
 Content-Type: application/json
 
 {
-    "idParent": "660b8d5c99baa8b459c76890",
-    "name": "Samsung"
+    "idParent": "660b8dc499baa8b459c768cb",
+    "name": "Xiaomi 13 Series"
 }
 
 ###

@@ -1,3 +1,4 @@
+var tbody = document.querySelector("tbody");
 // =============================================
 function deleteAttribute(event) {
   // console.log(event.target);
@@ -56,7 +57,7 @@ document
 
 var addAttribute1Btn = document.querySelector(".addAttribute1-btn");
 var Attribute1HTML = `<div class="row my-2">
-               <input type="text" id="thuocTinh1" placeholder="Nhập Thuộc Tính" class="form-control col">
+               <input type="text" id="thuocTinh1" placeholder="Nhập Thuộc Tính" class="form-control col mx-2">
                <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
             </div>`;
 
@@ -71,7 +72,7 @@ addAttribute1Btn.addEventListener("click", () => {
 // nút them thuoc tinh 2
 var addAttribute2Btn = document.querySelector(".addAttribute2-btn");
 var Attribute2HTML = `<div class="row my-2">
-               <input type="text" id="thuocTinh2" placeholder="Nhập Thuộc Tính" class="form-control col">
+               <input type="text" id="thuocTinh2" placeholder="Nhập Thuộc Tính" class="form-control col mx-2">
                <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
             </div>`;
 
@@ -96,13 +97,38 @@ function createAttri1Row() {
   );
 
   var numberRow1 = attr1Values.length;
+  // console.log(attr1Values.reverse());
   var numberRow2 = attr2Values.length;
+  // console.log(numberRow2);
 
   document.querySelector(".th1").textContent = nameAttr1;
   document.querySelector(".th2").textContent = nameAttr2;
 
-  console.log("a");
+  console.log("--------------------------------");
+  let tbodyHTML = "";
+
+  attr1Values.forEach((val1) => {
+    attr2Values.forEach((val2, ind) => {
+      if (ind == 0) {
+        tbodyHTML += `<tr>
+               <td class="td1" rowspan="${numberRow2}">${val1}</td>
+               <td>${val2}</td>
+               <td><input type="number"></td>
+               <td><input type="number"></td>
+            </tr>`;
+      } else {
+        tbodyHTML += `<tr>
+               <td>${val2}</td>
+               <td><input type="number"></td>
+               <td><input type="number"></td>
+            </tr>`;
+      }
+    });
+  });
+  tbody.innerHTML = tbodyHTML;
 }
+
+console.log("--------------------------------");
 
 document.querySelectorAll("input").forEach(function (input) {
   input.addEventListener("input", createAttri1Row);

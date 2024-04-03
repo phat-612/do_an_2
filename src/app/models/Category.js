@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
 const diacritics = require("diacritics");
+
+//
+const Product = require("./Product");
+//
+
 const Schema = mongoose.Schema;
 const Category = new Schema({
   name: String,
@@ -18,21 +23,24 @@ Category.statics.getCategoryChildren = async function (parentId = null) {
     })
   );
 };
-Category.query.getCategory = function (name = null) {
-  function getNestedChildren(arr, parent) {
-    var children = [];
-    for (var i = 0; i < arr.length; ++i) {
-      if (arr[i].idParent && arr[i].idParent.toString() === parent.toString()) {
-        let childrenNodes = getNestedChildren(arr, arr[i]._id);
-        if (childrenNodes.length) {
-          arr[i].children = childrenNodes;
-        }
-        children.push(arr[i]);
-      }
+// lấy tất cả sản phẩm trong 1 danh mục
+Category.statics.getAllProductsInCategory = async function (categoryId = null) {
+  let categoryIds = [];
+  const findChildren = async (id) => {
+    categoryIds.push(id);
+    const categories = await this.find({ idParent: id });
+    for (let cat of categories) {
+      await findChildren(cat._id);
     }
-    return children;
-  }
-  return getNestedChildren(this, name);
+  };
+
+  await findChildren(categoryId);
+  categoryIds = categoryIds.filter((id) => id !== null);
+  return Product.find({
+    idCategory: {
+      $in: categoryIds,
+    },
+  });
 };
 // tạo slug
 Category.pre("validate", function (next) {
@@ -40,9 +48,7 @@ Category.pre("validate", function (next) {
     const nameWithoutAccent = diacritics.remove(this.name);
     let slug = nameWithoutAccent.toLowerCase().replace(/[^a-z0-9]+/g, "-");
     const slugRegEx = new RegExp(`^(${slug})((-[0-9]*$)?)$`, "i");
-    console.log("regex: ", slugRegEx);
     this.constructor.find({ slug: slugRegEx }).then((categoriesWithSlug) => {
-      console.log("categoriesWithSlug: ", categoriesWithSlug);
       if (categoriesWithSlug.length) {
         this.slug = `${slug}-${categoriesWithSlug.length + 1}`;
       } else {
