@@ -3,7 +3,6 @@ const router = express.Router();
 const upload = require("../app/middlewares/uploadMiddleware");
 
 const apiController = require("../app/controllers/ApiController");
-const passport = require("passport");
 // account
 router.post("/signUp", apiController.signUp);
 router.post("/login", apiController.login);

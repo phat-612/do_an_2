@@ -41,9 +41,14 @@ class SiteController {
     });
   }
   category(req, res, next) {
-    const category = req.params.category;
-    console.log(category);
+    const slugCategory = req.params.slugCategory;
+    console.log(slugCategory);
     res.render("user/products/show");
+  }
+  product(req, res, next) {
+    const slugProduct = req.params.slugProduct;
+    console.log(slugProduct);
+    res.render("user/products/detail");
   }
   test(req, res, next) {
     Category.getAllProductsInCategory().then((categories) => {

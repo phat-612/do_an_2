@@ -7,7 +7,7 @@ const meRouter = require("./me");
 const { userLogin } = require("../app/middlewares/authMiddleware");
 
 function route(app) {
-  app.use("/product", productRouter);
+  // app.use("/product", productRouter);
   app.use("/api", apiRouter);
   app.use("/admin", adminRouter);
   app.use("/me", userLogin, meRouter);
