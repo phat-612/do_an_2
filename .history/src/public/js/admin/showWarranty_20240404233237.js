@@ -3,8 +3,9 @@ $(document).ready(function () {
     event.preventDefault();
     var result = confirm("Bạn có chắc chắn muốn xóa không?");
     if (result) {
-      var id = $(this).data("id"); // Sửa đổi dòng này
-      console.log(id);
+      // console.log("Đã xóa sản phẩm.");
+        // Thực hiện các thao tác xóa sản phẩm tại đây
+      };
     } else {
       console.log("Đã hủy xóa sản phẩm.");
     }

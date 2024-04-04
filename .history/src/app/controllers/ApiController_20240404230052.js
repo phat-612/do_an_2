@@ -58,7 +58,10 @@ class ApiController {
     });
   }
   deleteWarranty(req, res, next) {
-    res.send("1233231");
+    const warranty = Warranty.deleteOne({ _id: req.params.id }).then(() => {
+      console.log(warranty);
+      res.redirect("back");
+    });
   }
   // api account
   signUp(req, res, next) {

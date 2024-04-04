@@ -21,7 +21,7 @@ router.post(
   upload.array("images"),
   apiController.storeWarranty
 );
-router.delete("/warranty/:id/", apiController.deleteWarranty);
+router.delete("/warranty/:id/delete", apiController.deleteWarranty);
 // dành cho test
 router.post("/test", apiController.test);
 router.post("/testAddCategory", apiController.testAddCategory);

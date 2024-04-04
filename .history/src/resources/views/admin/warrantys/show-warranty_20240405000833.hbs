@@ -1,4 +1,9 @@
 <div class="m-4">
+  <form
+    name="delete-warranty"
+    method="post"
+    action="/warranty/{{warranty._id}}?_method=PUT"
+  ></form>
   <a href="/admin/warranty/create" class="btn btn-secondary btn-sm">Tạo đơn bảo
     hành</a>
   <table class="table mt-4">
@@ -44,4 +49,3 @@
   </table>
 </div>
 {{! delete }}
-<form name="warrantyDelete" method="POST" action=""></form>

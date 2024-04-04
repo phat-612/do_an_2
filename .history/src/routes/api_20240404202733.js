@@ -12,6 +12,7 @@ router.put("/profile", apiController.updateProfile);
 router.put("/password", apiController.updatePassword);
 router.put("/address", apiController.updateAddress);
 router.delete("/address", apiController.deleteAddress);
+router.delete("/warranty", apiController.deleteWarranty);
 
 // product
 router.post("/storeCategory", apiController.storeCategory);
@@ -21,7 +22,6 @@ router.post(
   upload.array("images"),
   apiController.storeWarranty
 );
-router.delete("/warranty/:id/", apiController.deleteWarranty);
 // dành cho test
 router.post("/test", apiController.test);
 router.post("/testAddCategory", apiController.testAddCategory);

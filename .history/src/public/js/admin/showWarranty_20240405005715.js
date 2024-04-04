@@ -10,3 +10,10 @@ $(document).ready(function () {
     }
   });
 });
+document
+  .getElementById("warrantyDelete")
+  .addEventListener("submit", function (e) {
+    e.preventDefault();
+    console.log("Form đã được submit!");
+    // code để xử lý gửi yêu cầu xóa
+  });

@@ -33,9 +33,9 @@
               class="btn btn-link"
             >Chi tiết</a>
             <a
-              href="/amin/warranty/{{this._id}}/delete"
-              class="btn btn-link deleteWarranty"
-              data-id="{{this._id}}"
+              href="/amin/warranty/{{this.id}}/delete"
+              class="btn btn-link"
+              onclick="confirmDelete()"
             >Xóa</a>
           </td>
         </tr>
@@ -43,5 +43,3 @@
     </tbody>
   </table>
 </div>
-{{! delete }}
-<form name="warrantyDelete" method="POST" action=""></form>

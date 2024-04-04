@@ -57,8 +57,8 @@ class ApiController {
       res.redirect("/admin/warranty/show");
     });
   }
-  deleteWarranty(req, res, next) {
-    res.send("1233231");
+  deleteWarranty(req, res) {
+    res.send("123");
   }
   // api account
   signUp(req, res, next) {

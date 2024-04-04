@@ -58,7 +58,27 @@ class ApiController {
     });
   }
   deleteWarranty(req, res, next) {
-    res.send("1233231");
+    function deleteWarranty(req, res, next) {
+      const productId = req.params.productId; // Giả sử productId là một tham số trong URL
+
+      Warranty.findOneAndDelete({ _id: productId })
+        .then((deletedWarranty) => {
+          if (!deletedWarranty) {
+            return res
+              .status(404)
+              .json({ error: "Không tìm thấy sản phẩm warranty." });
+          }
+
+          // Sản phẩm đã được xóa thành công
+          res.json({ message: "Sản phẩm warranty đã được xóa thành công." });
+        })
+        .catch((error) => {
+          // Xử lý lỗi nếu có
+          res
+            .status(500)
+            .json({ error: "Đã xảy ra lỗi khi xóa sản phẩm warranty." });
+        });
+    }
   }
   // api account
   signUp(req, res, next) {

@@ -58,7 +58,15 @@ class ApiController {
     });
   }
   deleteWarranty(req, res, next) {
-    res.send("1233231");
+    const warrantyId = req.params.id; // Lấy id từ req.params
+    Warranty.findByIdAndDelete(warrantyId) // Sử dụng findByIdAndDelete để xóa bảo hành
+      .then(() => {
+        res.redirect("back");
+      })
+      .catch((error) => {
+        console.log(error);
+        // Xử lý lỗi nếu cần thiết
+      });
   }
   // api account
   signUp(req, res, next) {
