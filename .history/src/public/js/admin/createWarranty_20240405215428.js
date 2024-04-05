@@ -97,7 +97,7 @@ addProductButton.addEventListener("click", function () {
 
       var newPriceInput = document.createElement("input");
       newPriceInput.className = "form-control";
-      newPriceInput.type = "number";
+      newPriceInput.type = "numkber ";
       newPriceInput.placeholder = "Giá";
       newPriceInput.name = `details[${currentProductContainer.getAttribute(
         "data-product-counter"
