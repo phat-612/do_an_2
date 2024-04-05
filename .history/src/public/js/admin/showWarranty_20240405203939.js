@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     warrantyId = button.data("id");
   });
   btnDelete.onclick = function () {
-    deleteForm.action = "/api/warranty/" + warrantyId + "?_method=DELETE";
+    deleteForm.action = "/admin/warranty/" + warrantyId + "?_method=delete";
     deleteForm.submit();
   };
 });

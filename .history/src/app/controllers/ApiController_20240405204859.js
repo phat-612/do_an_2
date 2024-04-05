@@ -58,9 +58,8 @@ class ApiController {
     });
   }
   deleteWarranty(req, res, next) {
-    const warrantyId = req.params.slugWarranty;
-    // console.log(warrantyId);
-    Warranty.deleteOne({ _id: warrantyId }).then(() => {
+    const slugWarranty = req.params.slugWarranty;
+    Warranty.deleteOne({ _id: slugWarranty }).then(() => {
       res.redirect("back");
     });
   }

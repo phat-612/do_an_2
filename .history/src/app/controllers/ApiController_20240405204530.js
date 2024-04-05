@@ -58,8 +58,10 @@ class ApiController {
     });
   }
   deleteWarranty(req, res, next) {
-    const warrantyId = req.params.slugWarranty;
-    // console.log(warrantyId);
+    // Use the correct parameter from the url
+    const warrantyId = req.params.id;
+    console.log(warrantyId);
+    // Use the correct attribute for deleting in your database
     Warranty.deleteOne({ _id: warrantyId }).then(() => {
       res.redirect("back");
     });

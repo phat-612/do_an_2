@@ -59,10 +59,10 @@ class ApiController {
   }
   deleteWarranty(req, res, next) {
     const warrantyId = req.params.slugWarranty;
-    // console.log(warrantyId);
-    Warranty.deleteOne({ _id: warrantyId }).then(() => {
-      res.redirect("back");
-    });
+    console.log(warrantyId);
+    // Warranty.deleteOne({ _id: warrantyId }).then(() => {
+    //   res.redirect("back");
+    // });
   }
   // api account
   signUp(req, res, next) {

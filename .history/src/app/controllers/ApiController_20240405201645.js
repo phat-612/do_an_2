@@ -58,11 +58,18 @@ class ApiController {
     });
   }
   deleteWarranty(req, res, next) {
-    const warrantyId = req.params.slugWarranty;
-    // console.log(warrantyId);
-    Warranty.deleteOne({ _id: warrantyId }).then(() => {
-      res.redirect("back");
-    });
+    const slugWarranty = req.params.slugWarranty;
+    console.log(slugWarranty);
+    Warranty.deleteOne({ slug: slugWarranty })
+      .then(() => {
+        res.redirect("back");
+      })
+      .catch((err) => {
+        // Xử lý lỗi nếu có
+        console.error(err);
+        // Gửi phản hồi lỗi cho client hoặc chuyển hướng đến trang lỗi
+        res.status(500).send("Lỗi xóa bảo hành");
+      });
   }
   // api account
   signUp(req, res, next) {
