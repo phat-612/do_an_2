@@ -5,7 +5,6 @@ const UserLogin = require("../models/UserLogin");
 const User = require("../models/User");
 const Cart = require("../models/Cart");
 const Fs = require("fs");
-const path = require("path");
 // ------------------------
 require("dotenv").config();
 const validator = require("email-validator");
@@ -59,35 +58,20 @@ class ApiController {
       res.redirect("/admin/warranty/show");
     });
   }
-  deleteWarranty(req, res, next) {
+  var fs = require('fs');
+
+  function deleteWarranty(req, res, next) {
     const warrantyId = req.params.slugWarranty;
-    const filePath = path.join(
-      __dirname,
-      "..",
-      "..",
-      "public",
-      "img",
-      "uploads"
-    );
-
-    Warranty.findOne({ _id: warrantyId })
-      .then((warranty) => {
-        warranty.images.forEach((image) => {
-          const fullPath = path.join(filePath, image);
-          try {
-            Fs.unlinkSync(fullPath); // try to delete the file
-          } catch {}
+    Warranty.deleteOne({ _id: warrantyId })
+      .then(() => {
+        fs.unlink('đường dẫn đến file / tên file', function (err) {
+          if (err) throw err;
+          console.log('File deleted!');
         });
-
-        Warranty.deleteOne({ _id: warrantyId })
-          .then(() => {
-            res.redirect("back");
-          })
-          .catch((error) => {
-            res.redirect("back");
-          });
-      })
-      .catch(() => {
+        res.redirect("back");
+      }).catch(error => {
+        // Xử lí lỗi nếu không thể xóa Warranty  
+        console.log(error);
         res.redirect("back");
       });
   }

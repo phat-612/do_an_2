@@ -72,11 +72,11 @@ class ApiController {
 
     Warranty.findOne({ _id: warrantyId })
       .then((warranty) => {
-        warranty.images.forEach((image) => {
-          const fullPath = path.join(filePath, image);
-          try {
-            Fs.unlinkSync(fullPath); // try to delete the file
-          } catch {}
+        const fullPath = path.join(filePath, warranty.images);
+        console.log(warranty);
+        Fs.unlink(fullPath, function (err) {
+          if (err) throw err;
+          console.log("File deleted!");
         });
 
         Warranty.deleteOne({ _id: warrantyId })
@@ -84,10 +84,12 @@ class ApiController {
             res.redirect("back");
           })
           .catch((error) => {
+            console.log(error);
             res.redirect("back");
           });
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         res.redirect("back");
       });
   }

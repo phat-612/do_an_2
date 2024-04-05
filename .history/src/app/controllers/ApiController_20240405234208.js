@@ -76,7 +76,9 @@ class ApiController {
           const fullPath = path.join(filePath, image);
           try {
             Fs.unlinkSync(fullPath); // try to delete the file
-          } catch {}
+          } catch {
+            // if an error is thrown, you can choose to ignore it
+          }
         });
 
         Warranty.deleteOne({ _id: warrantyId })

@@ -5,7 +5,6 @@ const UserLogin = require("../models/UserLogin");
 const User = require("../models/User");
 const Cart = require("../models/Cart");
 const Fs = require("fs");
-const path = require("path");
 // ------------------------
 require("dotenv").config();
 const validator = require("email-validator");
@@ -61,35 +60,10 @@ class ApiController {
   }
   deleteWarranty(req, res, next) {
     const warrantyId = req.params.slugWarranty;
-    const filePath = path.join(
-      __dirname,
-      "..",
-      "..",
-      "public",
-      "img",
-      "uploads"
-    );
-
-    Warranty.findOne({ _id: warrantyId })
-      .then((warranty) => {
-        warranty.images.forEach((image) => {
-          const fullPath = path.join(filePath, image);
-          try {
-            Fs.unlinkSync(fullPath); // try to delete the file
-          } catch {}
-        });
-
-        Warranty.deleteOne({ _id: warrantyId })
-          .then(() => {
-            res.redirect("back");
-          })
-          .catch((error) => {
-            res.redirect("back");
-          });
-      })
-      .catch(() => {
-        res.redirect("back");
-      });
+    // console.log(warrantyId);
+    Warranty.deleteOne({ _id: warrantyId }).then(() => {
+      res.redirect("back");
+    });
   }
   // api account
   signUp(req, res, next) {
