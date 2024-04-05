@@ -33,10 +33,9 @@
               class="btn btn-link"
             >Chi tiết</a>
             <a
-              href=""
+              href="/amin/warranty/{{this._id}}/delete"
               class="btn btn-link"
               data-bs-toggle="modal"
-              data-id="{{this._id}}"
               data-bs-target="#delete-warranty-modal"
             >Xóa</a>
           </td>
@@ -59,11 +58,10 @@
         ></button>
       </div>
       <div class="modal-body">
-        <p>Bạn chắc chắn muốn xóa ?</p>
+        <p>Bạn chắc chắn muốn xóa</p>
       </div>
       <div class="modal-footer">
         <button
-          id="btn-delete"
           type="button"
           class="btn btn-secondary"
           data-bs-dismiss="modal"
@@ -73,5 +71,4 @@
     </div>
   </div>
 </div>
-{{! delete }}
 <form name="warrantyDelete" method="POST" action=""></form>
