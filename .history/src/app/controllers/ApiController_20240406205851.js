@@ -60,9 +60,64 @@ class ApiController {
     });
   }
   updateWarranty(req, res, next) {
-    Warranty.updateOne({ _id: req.params.id }, req.body).then(() =>
-      res.redirect("/admin/warranty/show")
-    );
+    const MAX_PRODUCTS = 100;
+    let promises = [];
+    let i = 0;
+
+    while (
+      req.body[`productName_${i}`] &&
+      req.body[`reason_${i}`] &&
+      req.body[`price_${i}`] &&
+      i < MAX_PRODUCTS
+    ) {
+      let productName = req.body[`productName_${i}`];
+      let reason = req.body[`reason_${i}`];
+      let price = req.body[`price_${i}`];
+
+      promises.push(
+        Product.findOne({ name: productName }).then((product) => {
+          if (product) {
+            return {
+              product_id: product._id,
+              reason: reason,
+              price: price,
+            };
+          } else {
+            throw new Error("Product not found");
+          }
+        })
+      );
+
+      i++;
+    }
+
+    Promise.all(promises)
+      .then((results) => {
+        const updates = results.map((result) => {
+          return Warranty.updateOne(
+            {
+              _id: req.params.id,
+              "details.idProduct": result.product_id,
+            },
+            {
+              $push: {
+                "details.$.reasonAndPrice": {
+                  reason: result.reason,
+                  price: result.price,
+                },
+              },
+            }
+          );
+        });
+
+        Promise.all(updates).then((_) => {
+          res.redirect("/admin/warranty/show");
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(404).send({ error: "Product not found" });
+      });
   }
   deleteWarranty(req, res, next) {
     const warrantyId = req.params.slugWarranty;

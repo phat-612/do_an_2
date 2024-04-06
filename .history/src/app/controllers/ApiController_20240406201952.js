@@ -61,7 +61,7 @@ class ApiController {
   }
   updateWarranty(req, res, next) {
     Warranty.updateOne({ _id: req.params.id }, req.body).then(() =>
-      res.redirect("/admin/warranty/show")
+      res.redirect()
     );
   }
   deleteWarranty(req, res, next) {

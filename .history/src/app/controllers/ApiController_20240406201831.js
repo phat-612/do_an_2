@@ -60,9 +60,7 @@ class ApiController {
     });
   }
   updateWarranty(req, res, next) {
-    Warranty.updateOne({ _id: req.params.id }, req.body).then(() =>
-      res.redirect("/admin/warranty/show")
-    );
+    Warranty.updateOne({ _id: req.params.id });
   }
   deleteWarranty(req, res, next) {
     const warrantyId = req.params.slugWarranty;

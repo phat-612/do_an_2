@@ -60,9 +60,21 @@ class ApiController {
     });
   }
   updateWarranty(req, res, next) {
-    Warranty.updateOne({ _id: req.params.id }, req.body).then(() =>
-      res.redirect("/admin/warranty/show")
+    Warranty.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        productName: req.body.productName,
+        reasonsAndPrices: req.body.reasonsAndPrices,
+      }
     );
+    console.log(productName);
+    // .then(() => {
+    //   res.redirect("/admin/warranty/show");
+    // })
+    // .catch((error) => {
+    //   console.log(error);
+    //   res.redirect("/admin/warranty/show");
+    // });
   }
   deleteWarranty(req, res, next) {
     const warrantyId = req.params.slugWarranty;

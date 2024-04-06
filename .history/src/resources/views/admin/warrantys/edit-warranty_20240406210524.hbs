@@ -1,6 +1,6 @@
 <div class="container">
   <form method="POST" action="/api/warranty/{{warranty._id}}?_method=PUT">
-    <div class="mt-4 row">
+    <div class="row mt-4">
       <div class="col-md-6">
         <div class="form-group my-4">
           <label for="email">Email</label>
@@ -38,6 +38,8 @@
             required
           />
         </div>
+      </div>
+      <div class="col-md-6">
         <div class="form-group my-4">
           <label for="address">Địa Chỉ</label>
           <input
@@ -61,57 +63,6 @@
             value="{{warranty.note}}"
             required
           />
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="row">
-
-          <div class="col-md-12">
-            <div class="form-group my-4">
-              {{!  }}
-              <div class="row">
-                {{#each productsAndReasons}}
-                  <div class="col-6">
-                    <div class="table-responsive">
-                      <div>
-                        <strong>Tên sản phẩm:</strong>
-                        <input
-                          type="text"
-                          name="productName_{{@index}}"
-                          id="productName_{{@index}}"
-                          value="{{this.productName}}"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <strong>Lý do bảo hành:</strong>
-                        <ul>
-                          {{#each this.reasonsAndPrices}}
-                            <li>
-                              <input
-                                type="text"
-                                name="reason_{{@index}}"
-                                id="reason_{{@index}}"
-                                value="{{this.reason}}"
-                                required
-                              />:
-                              <input
-                                type="number"
-                                name="price_{{@index}}"
-                                id="price_{{@index}}"
-                                value="{{this.price}}"
-                                required
-                              />
-                            </li>
-                          {{/each}}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                {{/each}}
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

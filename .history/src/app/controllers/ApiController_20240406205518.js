@@ -60,9 +60,49 @@ class ApiController {
     });
   }
   updateWarranty(req, res, next) {
-    Warranty.updateOne({ _id: req.params.id }, req.body).then(() =>
-      res.redirect("/admin/warranty/show")
-    );
+    const MAX_PRODUCTS = 100; // Đặt giới hạn số lượng sản phẩm
+    let promises = [];
+    let i = 0;
+
+    while (
+      req.body[`productName_${i}`] &&
+      req.body[`reason_${i}`] &&
+      req.body[`price_${i}`] &&
+      i < MAX_PRODUCTS
+    ) {
+      let productName = req.body[`productName_${i}`];
+      let reason = req.body[`reason_${i}`];
+      let price = req.body[`price_${i}`];
+
+      promises.push(
+        Product.findOne({ name: productName })
+          .then((product) => {
+            if (product) {
+              return Warranty.updateOne(
+                {
+                  _id: req.params.id,
+                  "details.idProduct": product._id,
+                },
+                {
+                  $push: {
+                    "details.$.reasonAndPrice": {
+                      reason: reason,
+                      price: price,
+                    },
+                  },
+                }
+              );
+            } else {
+              res.status(404).send({ error: "Product not found" });
+            }
+          })
+          .catch((err) => console.log(err))
+      );
+
+      i++;
+    }
+
+    Promise.all(promises).then((_) => res.redirect("/admin/warranty/show"));
   }
   deleteWarranty(req, res, next) {
     const warrantyId = req.params.slugWarranty;
