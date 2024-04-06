@@ -59,6 +59,12 @@ class ApiController {
       res.redirect("/admin/warranty/show");
     });
   }
+  updateWarranty(req, res, next) {
+    console.log("updateWarranty");
+    // console.log(req);
+    // console.log(req.params.id);
+    res.json(req.body);
+  }
   deleteWarranty(req, res, next) {
     const warrantyId = req.params.slugWarranty;
     const filePath = path.join(

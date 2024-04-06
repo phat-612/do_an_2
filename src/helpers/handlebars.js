@@ -20,6 +20,30 @@ module.exports = {
               >Giảm ${discount} %</p>`;
     }
   },
+  showDefaultPrice: (variations) => {
+    const defaultPrizes = variations.map((variation) => variation.price);
+    const minPrice = Math.min(...defaultPrizes);
+    const maxPrice = Math.max(...defaultPrizes);
+    if (minPrice == maxPrice) {
+      return minPrice.toLocaleString("vi-VN");
+    } else {
+      return `${minPrice.toLocaleString("vi-VN")} - ${maxPrice.toLocaleString(
+        "vi-VN"
+      )}`;
+    }
+  },
+  showDiscountPrice: (variations, discount) => {
+    const defaultPrizes = variations.map((variation) => variation.price);
+    const minPrice = Math.min(...defaultPrizes) * (1 - discount.percent / 100);
+    const maxPrice = Math.max(...defaultPrizes) * (1 - discount.percent / 100);
+    if (minPrice == maxPrice) {
+      return minPrice.toLocaleString("vi-VN");
+    } else {
+      return `${minPrice.toLocaleString("vi-VN")} - ${maxPrice.toLocaleString(
+        "vi-VN"
+      )}`;
+    }
+  },
   statusToast: (type) => {
     if (type == "success") {
       return "bg-success";

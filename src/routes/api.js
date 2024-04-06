@@ -22,6 +22,8 @@ router.post(
   apiController.storeWarranty
 );
 router.delete("/warranty/:slugWarranty", apiController.deleteWarranty);
+router.put("/warranty/:id", apiController.updateWarranty);
+
 // dành cho test
 router.post("/test", apiController.test);
 router.post("/testAddCategory", apiController.testAddCategory);

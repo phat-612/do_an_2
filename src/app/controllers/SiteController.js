@@ -41,13 +41,30 @@ class SiteController {
     });
   }
   category(req, res, next) {
-    const slugCategory = req.params.slugCategory;
-    console.log(slugCategory);
-    res.render("user/products/show");
+    let slugCategory;
+    if (req.params[0]) {
+      slugCategory = req.params[0]
+        .split("/")
+        .filter((slug) => slug != "")
+        .pop();
+    } else {
+      slugCategory = req.params.slugCategory;
+    }
+    Category.findOne({ slug: slugCategory }).then((category) => {
+      if (!category) {
+        next();
+      }
+      Category.getCategoryChildren(category._id).then((categories) => {
+        const subCategories = categories.map((category) => ({
+          name: category.name,
+          slug: category.slug,
+        }));
+        res.render("user/products/show");
+      });
+    });
   }
   product(req, res, next) {
     const slugProduct = req.params.slugProduct;
-    console.log(slugProduct);
     res.render("user/products/detail");
   }
   test(req, res, next) {

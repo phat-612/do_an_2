@@ -11,6 +11,7 @@ const Category = new Schema({
   slug: { type: String },
   idParent: { type: Schema.Types.ObjectId, ref: "Category", default: null },
 });
+
 // helper function
 Category.statics.getCategoryChildren = async function (parentId = null) {
   const categories = await this.find({ idParent: parentId });

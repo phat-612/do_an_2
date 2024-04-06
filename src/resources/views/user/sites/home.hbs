@@ -39,7 +39,7 @@
           {{#each this.products}}
             <div class="col">
               <div class="card h-100 shadow-sm position-relative">
-                <a href="/{{this.slug}}" class="">
+                <a href="/product/{{this.slug}}/" class="">
 
                   {{{showDiscount this.discount.percent}}}
                   <img
@@ -51,25 +51,18 @@
                     <p class="card-text fw-bold fs-5">
                       {{this.name}}
                     </p>
-                    <ul class="nav">
+                    {{!-- <ul class="nav">
+                      {{#each this.variations}}
                       <li
                         class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
                       ><a href="">8GB-128GB</a></li>
-                      <li
-                        class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
-                      ><a href="">12GB-256GB</a></li>
-                      <li
-                        class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
-                      ><a href="">12GB-256GB</a></li>
-                      <li
-                        class="nav-link px-2 fs-5 rounded custom-bg-gray me-auto mb-1 text-white"
-                      ><a href="">12GB-256GB</a></li>
-                    </ul>
+                      {{/each}}
+                    </ul> --}}
                     <p class="card-text text-decoration-line-through">
-                      17.000.000đ - 17.000.000đ
+                      {{showDefaultPrice this.variations}}
                     </p>
                     <p class="card-text text-danger fs-4 fw-medium">
-                      13.001.000đ -  13.001.000đ
+                      {{showDiscountPrice this.variations this.discount}}
                     </p>
                     <div class="ratings">
                       <i class="bi bi-star"></i>

@@ -10,6 +10,7 @@ const Product = new Schema(
     idCategory: { type: Schema.Types.ObjectId, ref: "Category" },
     variations: [
       {
+        slug: { type: String },
         price: { type: Number, default: 0 },
         quantity: { type: Number, default: 0 },
         attributes: { type: Object },
