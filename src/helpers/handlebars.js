@@ -44,6 +44,15 @@ module.exports = {
       )}`;
     }
   },
+  getBrands: (categories, rootCategory) => {
+    const brands = categories.find((category) => category.slug == rootCategory);
+    if (brands) {
+      return brands.children.map((brand) => ({
+        name: brand.name,
+        slug: brand.slug,
+      }));
+    }
+  },
   statusToast: (type) => {
     if (type == "success") {
       return "bg-success";

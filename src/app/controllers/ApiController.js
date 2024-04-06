@@ -59,12 +59,35 @@ class ApiController {
       res.redirect("/admin/warranty/show");
     });
   }
-  updateWarranty(req, res, next) {
-    Warranty.updateOne({ _id: req.params.id }, req.body).then(() =>
-      res.redirect("/admin/warranty/show")
-    );
+  async updateWarranty(req, res, next) {
+    // try {
+    //   let warranty = await Warranty.findById(req.params.id);
+    //   if (!warranty) {
+    //     res.status(404).send("Không tìm thấy Warranty");
+    //     return;
+    //   }
+
+    //   let productIndex = warranty.details.findIndex(
+    //     (detail) => detail.idProduct.toString() === req.body.idProduct
+    //   );
+
+    //   if (productIndex !== -1) {
+    //     warranty.details[productIndex] = req.body;
+    //   } else {
+    //     res.status(400).send("Không tìm thấy sản phẩm trong Warranty");
+    //     return;
+    //   }
+
+    //   await warranty.save();
+    //   res.redirect("/admin/warranty/show");
+    // } catch (err) {
+    //   console.log(err);
+    //   res.status(500).send("Có lỗi xảy ra trong quá trình cập nhật Warranty");
+    //   next(err);
+    // }
+    res.json(req.body);
   }
-  deleteWarranty(req, res, next) {
+  deleteWarranty(req, res) {
     const warrantyId = req.params.slugWarranty;
     const filePath = path.join(
       __dirname,
@@ -75,26 +98,18 @@ class ApiController {
       "uploads"
     );
 
-    Warranty.findOne({ _id: warrantyId })
-      .then((warranty) => {
-        warranty.images.forEach((image) => {
-          const fullPath = path.join(filePath, image);
-          try {
-            Fs.unlinkSync(fullPath); // try to delete the file
-          } catch {}
-        });
+    Warranty.findOne({ _id: warrantyId }).then((warranty) => {
+      warranty.images.forEach((image) => {
+        const fullPath = path.join(filePath, image);
+        // try {
+        Fs.unlinkSync(fullPath); // try to delete the file
+        // } catch {}
+      });
 
-        Warranty.deleteOne({ _id: warrantyId })
-          .then(() => {
-            res.redirect("back");
-          })
-          .catch((error) => {
-            res.redirect("back");
-          });
-      })
-      .catch(() => {
+      Warranty.deleteOne({ _id: warrantyId }).then(() => {
         res.redirect("back");
       });
+    });
   }
   // api account
   signUp(req, res, next) {

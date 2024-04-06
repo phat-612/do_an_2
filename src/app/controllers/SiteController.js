@@ -42,6 +42,8 @@ class SiteController {
   }
   category(req, res, next) {
     let slugCategory;
+    const rootCategory = req.params.slugCategory;
+    // console.log(req);
     if (req.params[0]) {
       slugCategory = req.params[0]
         .split("/")
@@ -50,6 +52,7 @@ class SiteController {
     } else {
       slugCategory = req.params.slugCategory;
     }
+
     Category.findOne({ slug: slugCategory }).then((category) => {
       if (!category) {
         next();
@@ -59,7 +62,12 @@ class SiteController {
           name: category.name,
           slug: category.slug,
         }));
-        res.render("user/products/show");
+        res.render("user/products/show", {
+          subCategories,
+          rootCategory,
+          path: req.originalUrl,
+          pathName: req._parsedUrl.pathname,
+        });
       });
     });
   }

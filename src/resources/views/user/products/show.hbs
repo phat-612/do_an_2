@@ -15,9 +15,9 @@
       >Hãng</div>
       <div class="body dropdown-menu">
         <ul class="list nav">
-          <li class="bg-light p-1 m-2 rounded">Xiaomi</li>
-          <li class="bg-light p-1 m-2 rounded">Apple</li>
-          <li class="bg-light p-1 m-2 rounded">Samsung</li>
+          {{#each (getBrands categories rootCategory)}}
+            <li > <a class="bg-light p-1 m-2 rounded" href="/{{../rootCategory}}/{{this.slug}}">{{this.name}}</a></li>
+          {{/each}}
         </ul>
         {{! <hr class="dropdown-divider" />
         <div class="action">
@@ -36,7 +36,7 @@
         data-bs-toggle="dropdown"
         data-bs-auto-close="outside"
         aria-expanded="false"
-      >Hãng</div>
+      >Mức giá</div>
       <div class="body dropdown-menu">
         <ul class="list nav">
           <li class="bg-light p-1 m-2 rounded">Xiaomi</li>
@@ -53,8 +53,16 @@
     </div>
     {{!  }}
   </div>
+  <ul class="nav my-3">
+    {{#each subCategories}}
+      <li class=""><a
+          class="bg-light py-1 px-3 me-2 rounded"
+          href="{{../pathName}}/{{this.slug}}"
+        >{{this.name}}</a></li>
+    {{/each}}
+  </ul>
   {{! chi tiết đang lọc }}
-  <div class="filtering my-4">
+  {{!-- <div class="filtering my-4">
     <div class="title fs-5">Đang lọc theo</div>
     <ul class="nav">
 
@@ -75,7 +83,7 @@
         ><i class="bi bi-x-circle text-danger"></i>
           Bỏ chọn tất cả</li></a>
     </ul>
-  </div>
+  </div> --}}
   {{! sắp xếp }}
   <div class="sort d-flex justify-content-between">
     <div class="title fs-4 fw-bold text-uppercase">Điện thoại</div>

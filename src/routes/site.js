@@ -8,6 +8,7 @@ router.get("/signUp", siteController.signUp);
 router.get("/logout", siteController.logout);
 router.get("/test", siteController.test);
 router.get("/product/:slugProduct/:slugVariation?", siteController.product);
+router.get("/:slugCategory", siteController.category);
 router.get("/:slugCategory/*?", siteController.category);
 router.get("/", siteController.index);
 
