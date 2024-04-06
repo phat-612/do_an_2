@@ -148,39 +148,9 @@ class AdminController {
         // console.log(productsAndReasons);
       });
   }
-  editWarranty(req, res, next) {
-    Warranty.findById(req.params.id)
-      .populate("details.idProduct")
-      .exec()
-      .then((warranty) => {
-        // console.log(warranty);
-        const productsAndReasons = [];
-        warranty.details.forEach((detail) => {
-          const productName =
-            detail.idProduct && detail.idProduct.name
-              ? detail.idProduct.name
-              : null;
-          const reasonsAndPrices = detail.reasonAndPrice
-            ? detail.reasonAndPrice.map((reasonPrice) => ({
-                reason: reasonPrice.reason,
-                price: reasonPrice.price,
-              }))
-            : [];
-          if (productName && reasonsAndPrices.length > 0) {
-            productsAndReasons.push({
-              productName,
-              reasonsAndPrices,
-            });
-          }
-        });
-
-        res.render("admin/warrantys/edit-warranty", {
-          layout: "admin",
-          warranty: mongooseToObject(warranty),
-          productsAndReasons,
-        });
-        // console.log(productsAndReasons);
-      });
+  asyncasync editWarranty(req, res, next) {
+    const warrantys = await Warranty.find({});
+    res.render("admin/warrantys/edit-warranty", { layout: "admin" });
   }
 }
 module.exports = new AdminController();

@@ -1,9 +1,5 @@
 <div class="container">
-  <form
-    method="POST"
-    action="/api/{{warranty._id}}?_method=PUT"
-    enctype="multipart/form-data"
-  >
+  <form method="post" action="/api/storeWarranty" enctype="multipart/form-data">
     <div class="mt-4 row">
       <div class="col-md-6">
         <div class="form-group my-4">
@@ -14,8 +10,8 @@
             id="inputEmail4"
             placeholder="Email"
             name="email"
+            readonly
             value="{{warranty.email}}"
-            required
           />
         </div>
         <div class="form-group my-4">
@@ -26,8 +22,8 @@
             placeholder="HoVaTen"
             id="name"
             name="name"
+            readonly
             value="{{warranty.name}}"
-            required
           />
         </div>
         <div class="form-group my-4">
@@ -38,8 +34,8 @@
             id="phone"
             placeholder="Nhập số điện thoại"
             name="phone"
+            readonly
             value="{{warranty.phone}}"
-            required
           />
         </div>
         <div class="form-group my-4">
@@ -51,7 +47,7 @@
             name="address"
             id="address"
             value="{{warranty.address}}"
-            required
+            readonly
           />
         </div>
         <div class="form-group my-4">
@@ -63,7 +59,7 @@
             name="note"
             id="note"
             value="{{warranty.note}}"
-            required
+            readonly
           />
         </div>
       </div>
@@ -88,31 +84,13 @@
                     <div class="table-responsive">
                       <div>
                         <strong>Tên sản phẩm:</strong>
-                        <input
-                          type="text"
-                          name="productName"
-                          value="{{this.productName}}"
-                          required
-                        />
+                        {{this.productName}}
                       </div>
                       <div>
                         <strong>Lý do bảo hành:</strong>
                         <ul>
                           {{#each this.reasonsAndPrices}}
-                            <li>
-                              <input
-                                type="text"
-                                name="reason"
-                                value="{{this.reason}}"
-                                required
-                              />:
-                              <input
-                                type="number"
-                                name="price"
-                                value="{{this.price}}"
-                                required
-                              />
-                            </li>
+                            <li>{{this.reason}}: {{this.price}}</li>
                           {{/each}}
                         </ul>
                       </div>
@@ -127,7 +105,10 @@
     </div>
 
     <div class="form-group col-md-2 my-4">
-      <button type="submit" class="btn btn-primary">Lưu chỉnh sửa</button>
+      <a
+        href="/admin/warranty/{{warranty._id}}/edit"
+        class="btn btn-primary"
+      >Chỉnh Sửa</a>
     </div>
   </form>
 </div>

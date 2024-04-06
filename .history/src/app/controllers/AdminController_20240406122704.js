@@ -174,8 +174,9 @@ class AdminController {
           }
         });
 
-        res.render("admin/warrantys/edit-warranty", {
+        res.render("admin/warrantys/detail-warranty", {
           layout: "admin",
+          js: "admin/detailWarranty",
           warranty: mongooseToObject(warranty),
           productsAndReasons,
         });

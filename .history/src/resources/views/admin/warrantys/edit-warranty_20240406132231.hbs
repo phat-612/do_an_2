@@ -10,8 +10,8 @@
           id="inputEmail4"
           placeholder="Email"
           name="email"
-          readonly
           value="{{warranty.email}}"
+          required
         />
       </div>
       <div class="form-group my-4">
@@ -22,8 +22,8 @@
           placeholder="HoVaTen"
           id="name"
           name="name"
-          readonly
           value="{{warranty.name}}"
+          required
         />
       </div>
       <div class="form-group my-4">
@@ -34,8 +34,8 @@
           id="phone"
           placeholder="Nhập số điện thoại"
           name="phone"
-          readonly
           value="{{warranty.phone}}"
+          required
         />
       </div>
       <div class="form-group my-4">
@@ -47,7 +47,7 @@
           name="address"
           id="address"
           value="{{warranty.address}}"
-          readonly
+          required
         />
       </div>
       <div class="form-group my-4">
@@ -59,7 +59,7 @@
           name="note"
           id="note"
           value="{{warranty.note}}"
-          readonly
+          required
         />
       </div>
     </div>
@@ -84,13 +84,31 @@
                   <div class="table-responsive">
                     <div>
                       <strong>Tên sản phẩm:</strong>
-                      {{this.productName}}
+                      <input
+                        type="text"
+                        name="productName"
+                        value="{{this.productName}}"
+                        required
+                      />
                     </div>
                     <div>
                       <strong>Lý do bảo hành:</strong>
                       <ul>
                         {{#each this.reasonsAndPrices}}
-                          <li>{{this.reason}}: {{this.price}}</li>
+                          <li>
+                            <input
+                              type="text"
+                              name="reason"
+                              value="{{this.reason}}"
+                              required
+                            />:
+                            <input
+                              type="number"
+                              name="price"
+                              value="{{this.price}}"
+                              required
+                            />
+                          </li>
                         {{/each}}
                       </ul>
                     </div>
@@ -105,10 +123,7 @@
   </div>
 
   <div class="form-group col-md-2 my-4">
-    <a
-      href="/admin/warranty/{{warranty._id}}/edit"
-      class="btn btn-primary"
-    >Chỉnh Sửa</a>
+    <button type="submit" class="btn btn-primary">Tạo</button>
   </div>
   {{! </form> }}
 </div>
