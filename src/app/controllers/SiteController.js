@@ -52,17 +52,22 @@ class SiteController {
     } else {
       slugCategory = req.params.slugCategory;
     }
-
     Category.findOne({ slug: slugCategory }).then((category) => {
-      if (!category) {
-        next();
+      if (!category || category == null) {
+        return next();
       }
-      Category.getCategoryChildren(category._id).then((categories) => {
+      Promise.all([
+        Category.getCategoryChildren(category._id),
+        Category.getAllProductsInCategory(category._id),
+      ]).then(([categories, products]) => {
         const subCategories = categories.map((category) => ({
           name: category.name,
           slug: category.slug,
         }));
+        products = products.map((product) => product.toObject());
         res.render("user/products/show", {
+          js: "user/showProducts",
+          products,
           subCategories,
           rootCategory,
           path: req.originalUrl,
