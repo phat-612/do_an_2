@@ -38,7 +38,7 @@
             <tr>
               <th scope="row">{{sum @index 1}}</th>
               <td>{{this.name}}</td>
-              <td>Danh mục chứa các sản phẩm điện tử</td>
+              <td>{{this.idParent.name}}</td>
               <td>
                 <a href="#" class="btn btn-primary">Sửa</a>
                 <a
@@ -86,14 +86,17 @@
             />
           </div>
           <div class="form-group">
-            <label for="categoryDescription">Mô tả</label>
-            <textarea
-              class="form-control"
-              id="values"
-              name="values"
-              rows="3"
-              placeholder="Nhập mô tả"
-            ></textarea>
+            <label for="form-select" class="form-label">Danh mục cha</label>
+            <select
+              name="idParent"
+              id="idParent"
+              class="form-select"
+              aria-label="Default select example"
+            >
+              {{#each category}}
+                <option value="{{this._id}}">{{this.name}}</option>
+              {{/each}}
+            </select>
           </div>
           <div class="modal-footer">
             <button

@@ -17,9 +17,9 @@ router.get("/warranty/show", adminController.showWarranty);
 router.get("/warranty/:id/deltail", adminController.detailWarranty);
 router.get("/warranty/:id/edit", adminController.editWarranty);
 // get product
-router.get("/product/detail", adminController.detail);
-router.get("/product/edit", adminController.editProduct);
-router.get("/product/addProduct", adminController.addPro);
+router.get("/product/:id/detail", adminController.detail);
+router.get("/product/:id/edit", adminController.editProduct);
+router.get("/product/addProduct/", adminController.addPro);
 router.get("/product", adminController.product);
 // home
 router.get("/", adminController.index);

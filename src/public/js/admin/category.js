@@ -52,7 +52,10 @@ btnDelete.forEach(function (button) {
   button.addEventListener("click", function (event) {
     event.preventDefault();
     categoryId = this.getAttribute("data-id");
-    deleteForm.action = "/api/category/" + categoryId + "?_method=DELETE";
-    deleteForm.submit();
+    var confirmed = confirm("Bạn có chắc chắn muốn xóa danh mục này?");
+    if (confirmed) {
+      deleteForm.action = "/api/category/" + categoryId + "?_method=DELETE";
+      deleteForm.submit();
+    }
   });
 });

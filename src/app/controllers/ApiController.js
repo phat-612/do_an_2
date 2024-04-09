@@ -29,11 +29,31 @@ class ApiController {
       });
   }
   deleteCategory(req, res, next) {
-    const categoryId = req.params.slugCategory;
-    Category.findOneAndDelete({ _id: categoryId }).then(() => {
-      // Xóa thành công, thực hiện các hành động khác (ví dụ: chuyển hướng, gửi thông báo thành công)
-      res.redirect("back");
-    });
+    // const categoryId = req.params.slugCategory;
+    // // Kiểm tra xem có sản phẩm nào thuộc danh mục này không
+    // Product.countDocuments({ idCategory: categoryId }).then((count) => {
+    //   if (count > 0) {
+    //     req.flash("message", {
+    //       type: "danger",
+    //       message: "Không thể xóa danh mục",
+    //     });
+    //     return res.redirect("back");
+    //   }
+    //   // Kiểm tra xem có danh mục nào mà "idParent" thuộc danh mục bạn định xóa không
+    //   Category.countDocuments({ idParent: categoryId }).then((count) => {
+    //     if (count > 0) {
+    //       req.flash("message", {
+    //         type: "danger",
+    //         message: "Không thể xóa danh mục cha",
+    //       });
+    //       return res.redirect("back");
+    //     }
+    //     // Nếu không có sản phẩm liên quan và không có danh mục con, tiến hành xóa danh mục
+    //     return Category.findOneAndDelete({ _id: categoryId }).then(() => {
+    //       res.redirect("back");
+    //     });
+    //   });
+    // });
   }
   storeWarranty(req, res, next) {
     const formData = req.body;

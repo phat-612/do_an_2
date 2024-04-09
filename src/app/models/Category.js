@@ -25,7 +25,7 @@ Category.statics.getCategoryChildren = async function (parentId = null) {
   );
 };
 // lấy tất cả sản phẩm trong 1 danh mục
-Category.statics.getAllProductsInCategory = async function (categoryId = null) {
+Category.statics.getArrayChidrendIds = async function (categoryId = null) {
   let categoryIds = [];
   const findChildren = async (id) => {
     categoryIds.push(id);
@@ -36,12 +36,7 @@ Category.statics.getAllProductsInCategory = async function (categoryId = null) {
   };
 
   await findChildren(categoryId);
-  categoryIds = categoryIds.filter((id) => id !== null);
-  return Product.find({
-    idCategory: {
-      $in: categoryIds,
-    },
-  });
+  return categoryIds.filter((id) => id !== null);
 };
 // tạo slug
 Category.pre("validate", function (next) {

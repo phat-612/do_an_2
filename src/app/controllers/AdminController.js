@@ -61,31 +61,43 @@ class AdminController {
   }
   // get /product/detail
   detail(req, res, next) {
-    res.render("admin/products/detailProduct", {
-      layout: "admin",
-      js: "admin/detailProduct",
-      css: "admin/detailProduct",
-    });
+    Product.findById(req.params.id)
+      .then((product) =>
+        res.render("admin/products/detailProduct", {
+          product: mongooseToObject(product),
+          layout: "admin",
+          js: "admin/detailProduct",
+          css: "admin/detailProduct",
+        })
+      )
+      .catch(next);
   }
-  //get /product/edit
+  //get /product/edit/:id
   editProduct(req, res, next) {
-    res.render("admin/products/editProduct", {
-      layout: "admin",
-      js: "admin/editProduct",
-      css: "admin/editProduct",
-    });
+    Product.findById(req.params.id)
+      .then((product) =>
+        res.render("admin/products/editProduct", {
+          product: mongooseToObject(product),
+          layout: "admin",
+          js: "admin/editProduct",
+          css: "admin/editProduct",
+        })
+      )
+      .catch(next);
   }
   //get /category
   category(req, res, next) {
-    Category.find({}).then((category) => {
-      res.render("admin/sites/category", {
-        layout: "admin",
-        js: "admin/category",
-        css: "admin/category",
-        category: multipleMongooseToObject(category),
+    Category.find({})
+      .populate("idParent", "name")
+      .then((category) => {
+        res.render("admin/sites/category", {
+          layout: "admin",
+          js: "admin/category",
+          css: "admin/category",
+          category: multipleMongooseToObject(category),
+        });
+        // console.log(category);
       });
-      // console.log(category);
-    });
   }
   //get /assessProviders
   accessProviders(req, res, next) {

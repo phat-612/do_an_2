@@ -2,22 +2,22 @@ POST http://localhost:3000/api/test
 Content-Type: application/json
 
 {
-    "name": "Samsung Ultra s21",
-    "description": "Samsung Ultra s21",
+    "name": "Xiaomi 13 pro",
+    "description": "Xiaomi 13 pro",
     "images": ["snh 1", "snh 2"],
-    "idCategory": "660b8d5c99baa8b459c76890",
+    "idCategory": "66156c4bb50b2af0420595e7",
     "variations": [
       { 
-        "price":  7899000,
-        "quantity":12 ,
+        "price":  16990000,
+        "quantity":15 ,
         "attributes":
             {
-                "color": "red",
+                "color": "green",
                 "ram": "12GB"
             }
       },
       {
-        "price": 8990000,
+        "price": 13990000,
         "quantity": 10,
         "attributes":
             {
@@ -27,7 +27,7 @@ Content-Type: application/json
       }
     ],
     "discount": {
-        "percent": 0,
+        "percent": 30,
         "start": "2021-10-01",
         "end": "2021-10-30"
     }
@@ -37,7 +37,7 @@ POST http://localhost:3000/api/testAddCategory
 Content-Type: application/json
 
 {
-    "idParent": "660b8dc499baa8b459c768cb",
+    "idParent": "660b8d5c99baa8b459c76890",
     "name": "Xiaomi 13 Series"
 }
 

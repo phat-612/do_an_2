@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const diacritics = require("diacritics");
 const Schema = mongoose.Schema;
 const Product = new Schema(
   {
@@ -24,6 +25,31 @@ const Product = new Schema(
   },
   { timestamps: true }
 );
+// sortable
+Product.query.sortable = function (req) {
+  if (req.query.hasOwnProperty("_sort")) {
+    const isValidType = ["asc", "desc"].includes(req.query.type);
+    return this.sort({
+      [req.query.column]: isValidType ? req.query.type : "desc",
+    });
+  }
+  return this;
+};
+Product.query.findable = function (req) {
+  if (req.query.hasOwnProperty("_find")) {
+    let searchQuery = req.query.q;
+    let words = searchQuery.split(" ");
+
+    let regexWords = words.map((word) => ({
+      name: { $regex: word, $options: "i" },
+    }));
+
+    return this.find({
+      $and: regexWords,
+    });
+  }
+  return this;
+};
 Product.pre("validate", function (next) {
   if (this.name) {
     const nameWithoutAccent = diacritics.remove(this.name);

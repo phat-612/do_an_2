@@ -113,14 +113,14 @@ function createAttri1Row() {
         tbodyHTML += `<tr>
                <td class="td1" rowspan="${numberRow2}">${val1}</td>
                <td>${val2}</td>
-               <td><input type="number"></td>
-               <td><input type="number"></td>
+               <td><input type="number" class="form-control w-50"></td>
+               <td><input type="number" class="form-control w-50"></td>
             </tr>`;
       } else {
         tbodyHTML += `<tr>
                <td>${val2}</td>
-               <td><input type="number"></td>
-               <td><input type="number"></td>
+               <td><input type="number" class="form-control w-50"></td>
+               <td><input type="number" class="form-control w-50"></td>
             </tr>`;
       }
     });
