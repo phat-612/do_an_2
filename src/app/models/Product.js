@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const diacritics = require("diacritics");
+const slugify = require("slugify");
 const Schema = mongoose.Schema;
 const Product = new Schema(
   {
@@ -50,6 +51,14 @@ Product.query.findable = function (req) {
   }
   return this;
 };
+Product.pre("save", function (next) {
+  this.variations.forEach((variation) => {
+    let attributesString = Object.values(variation.attributes).join(" ");
+    const nameWithoutAccent = diacritics.remove(attributesString);
+    variation.slug = slugify(nameWithoutAccent, { lower: true, strict: true });
+  });
+  next();
+});
 Product.pre("validate", function (next) {
   if (this.name) {
     const nameWithoutAccent = diacritics.remove(this.name);

@@ -93,6 +93,7 @@
               class="form-select"
               aria-label="Default select example"
             >
+              <option value="" disabled selected>-- Chọn danh mục cha --</option>
               {{#each category}}
                 <option value="{{this._id}}">{{this.name}}</option>
               {{/each}}

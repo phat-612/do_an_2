@@ -29,31 +29,50 @@ class ApiController {
       });
   }
   deleteCategory(req, res, next) {
-    // const categoryId = req.params.slugCategory;
-    // // Kiểm tra xem có sản phẩm nào thuộc danh mục này không
-    // Product.countDocuments({ idCategory: categoryId }).then((count) => {
-    //   if (count > 0) {
-    //     req.flash("message", {
-    //       type: "danger",
-    //       message: "Không thể xóa danh mục",
-    //     });
-    //     return res.redirect("back");
-    //   }
-    //   // Kiểm tra xem có danh mục nào mà "idParent" thuộc danh mục bạn định xóa không
-    //   Category.countDocuments({ idParent: categoryId }).then((count) => {
-    //     if (count > 0) {
-    //       req.flash("message", {
-    //         type: "danger",
-    //         message: "Không thể xóa danh mục cha",
-    //       });
-    //       return res.redirect("back");
-    //     }
-    //     // Nếu không có sản phẩm liên quan và không có danh mục con, tiến hành xóa danh mục
-    //     return Category.findOneAndDelete({ _id: categoryId }).then(() => {
-    //       res.redirect("back");
-    //     });
-    //   });
-    // });
+    const hasChildCategory = async (categoryId) => {
+      const subCategories = await Category.find({ idParent: categoryId });
+      if (subCategories.length > 0) {
+        return true;
+      }
+      return false;
+    };
+
+    // Logic xóa danh mục
+    const categoryId = req.params.slugCategory;
+
+    // Kiểm tra xem có sản phẩm nào thuộc danh mục này không
+    Product.countDocuments({ idCategory: categoryId }).then(async (count) => {
+      // console.log(count);
+      // Nếu có sản phẩm thuộc danh mục này
+      if (count > 0) {
+        req.flash("message", {
+          type: "danger",
+          message:
+            "Không thể xóa danh mục này vì vẫn còn sản phẩm trong danh mục",
+        });
+        return res.redirect("back");
+      }
+
+      // Kiểm tra xem danh mục này có phải danh mục cha (có danh mục con) không
+      const hasChild = await hasChildCategory(categoryId);
+      // console.log(hasChild);
+      if (hasChild) {
+        req.flash("message", {
+          type: "danger",
+          message: "Không thể xóa danh mục này vì vẫn còn danh mục con",
+        });
+        return res.redirect("back");
+      }
+
+      // Nếu không có sản phẩm liên quan và không có danh mục con, tiến hành xóa danh mục
+      Category.findOneAndDelete({ _id: categoryId }).then(() => {
+        req.flash("message", {
+          type: "success",
+          message: "Danh mục đã được xóa thành công.",
+        });
+        res.redirect("back");
+      });
+    });
   }
   storeWarranty(req, res, next) {
     const formData = req.body;
@@ -371,6 +390,8 @@ class ApiController {
   // end api user
   // test api
   test(req, res, next) {
+    console.log("thêm sản phẩm");
+    console.log(req.body);
     const product = new Product(req.body);
     product
       .save()

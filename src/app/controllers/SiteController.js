@@ -89,7 +89,29 @@ class SiteController {
   }
   product(req, res, next) {
     const slugProduct = req.params.slugProduct;
-    res.render("user/products/detail");
+    console.log(slugProduct);
+    // if (req.params.slugVariation) {
+    //   const slugVariation = req.params.slugVariation;
+    //   console.log(slugVariation);
+    // }
+    Product.findOne({ slug: slugProduct }).then((product) => {
+      if (!product || product == null) {
+        return next();
+      }
+      let resProduct = {
+        name: product.name,
+        price: product.variations[0].price,
+        attribute: product.variations[0].attributes,
+        description: product.description,
+        images: product.images,
+        discount: product.discount,
+      };
+      console.log(resProduct);
+      res.render("user/products/detail", {
+        product: product.toObject(),
+      });
+    });
+    // res.render("user/products/detail");
   }
   test(req, res, next) {
     Category.getAllProductsInCategory().then((categories) => {

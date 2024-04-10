@@ -2,17 +2,17 @@ POST http://localhost:3000/api/test
 Content-Type: application/json
 
 {
-    "name": "Xiaomi 13 pro",
+    "name": "Xiaomi 17 pro",
     "description": "Xiaomi 13 pro",
     "images": ["snh 1", "snh 2"],
-    "idCategory": "66156c4bb50b2af0420595e7",
+    "idCategory": "661620b62af964aba3a62ea1",
     "variations": [
       { 
         "price":  16990000,
         "quantity":15 ,
         "attributes":
             {
-                "color": "green",
+                "color": "đỏ",
                 "ram": "12GB"
             }
       },
@@ -21,7 +21,7 @@ Content-Type: application/json
         "quantity": 10,
         "attributes":
             {
-                "color": "black",
+                "color": "vàng",
                 "ram": "8GB"
             }
       }
@@ -32,6 +32,46 @@ Content-Type: application/json
         "end": "2021-10-30"
     }
 }
+
+###
+
+POST http://localhost:3000/api/test
+Content-Type: application/json
+
+ {
+    "name": "Samsung Galaxy S22 Ultra",
+    "description": "Samsung Galaxy S22 Ultra với công nghệ S-Pen và camera 108 MP.",
+    "images": ["galaxys22-img1", "galaxys22-img2"],
+    "idCategory": "660b8dd099baa8b459c768d3",
+    "variations": [
+      {
+        "price": 30990000,
+        "quantity": 25,
+        "attributes": {
+          "color": "Phantom Black",
+          "ram": "12GB",
+          "storage": "512GB"
+        }
+      },
+      {
+        "price": 28990000,
+        "quantity": 20,
+        "attributes": {
+          "color": "Burgundy",
+          "ram": "8GB",
+          "storage": "256GB"
+        }
+      }
+    ],
+    "discount": {
+      "percent": 15,
+      "start": "2023-08-01",
+      "end": "2023-08-31"
+    }
+  }
+
+
+
 ###
 POST http://localhost:3000/api/testAddCategory
 Content-Type: application/json

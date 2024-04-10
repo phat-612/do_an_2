@@ -8,8 +8,9 @@
       <label for="categoryDataList" class="form-label fs-4">Danh Mục</label>
       <input class="form-control" list="categoryOptions" id="categoryDataList" placeholder="Nhập Danh Mục" required>
       <datalist id="categoryOptions">
-         <option value="Điện thoại">
-         <option value="Laptop">
+         {{#each category}}
+         <option value="{{this.name}}">
+         {{/each}}
       </datalist>
       <label for="brandDataList" class="form-label fs-4">Thương Hiệu</label>
       <input class="form-control" list="BrandOptions" id="brandDataList" placeholder="Nhập Thương Hiệu" required>
