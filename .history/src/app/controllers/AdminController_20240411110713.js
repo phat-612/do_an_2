@@ -90,7 +90,7 @@ class AdminController {
     Category.find({})
       .populate("idParent", "name")
       .then((category) => {
-        res.render("admin/sites/category", {
+        res.render("admin/sites/", {
           layout: "admin",
           js: "admin/category",
           css: "admin/category",
@@ -100,12 +100,9 @@ class AdminController {
       });
   }
   detailCategory(req, res, next) {
-    Category.findById(req.params.id).then((category) => {
-      res.render("admin/sites/category", {
-        layout: "admin",
-        category: multipleMongooseToObject(category),
-      });
-      console.log(category);
+    Category.findById(req.params.id).then((editcategory) => {
+      category: multipleMongooseToObject(editcategory),
+        console.log(editcategory);
     });
   }
   //get /assessProviders

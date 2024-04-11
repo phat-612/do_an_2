@@ -132,33 +132,36 @@
         <h5 class="modal-title" id="editCategoryModalLabel">Chỉnh sửa danh mục</h5>
       </div>
       <div class="modal-body">
-        {{!-- <form method="POST" action="/api/category/{{category._id}}?_method=PUT"> --}}
-        <div class="form-group">
-          <label for="name">Tên danh mục</label>
-          <input
-            type="text"
-            class="form-control"
-            id="name"
-            value="{{category.name}}"
-            name="name"
-            placeholder="Tên danh mục"
-          />
-        </div>
-        <div class="form-group">
-          <label for="form-select" class="form-label">Danh mục cha</label>
-          <select
-            name="idParent"
-            id="idParent"
-            class="form-select"
-            aria-label="Default select example"
-          >
-            <option value="" disabled selected>-- Chọn danh mục cha --</option>
-            {{#each category}}
-              <option value="{{this._id}}">{{this.name}}</option>
-            {{/each}}
-          </select>
-        </div>
-        {{! </form> }}
+        <form
+          method="POST"
+          action="/api/category/{{editcategory._id}}?_method=PUT"
+        >
+          <div class="form-group">
+            <label for="categoryName">Tên danh mục</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              placeholder="Nhập tên danh mục"
+              value="{{editcategory.name}}"
+            />
+          </div>
+          <div class="form-group">
+            <label for="form-select" class="form-label">Danh mục cha</label>
+            <select
+              name="idParent"
+              id="idParent"
+              class="form-select"
+              aria-label="Default select example"
+            >
+              <option value="" disabled selected>-- Chọn danh mục cha --</option>
+              {{#each editcategory}}
+                <option value="{{this._id}}">{{this.name}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </form>
         <!-- Đặt các trường chỉnh sửa danh mục ở đây -->
       </div>
       <div class="modal-footer">

@@ -28,7 +28,31 @@ class ApiController {
         console.log(error);
       });
   }
-  updateCategory(req, res, next) {}
+  updateCategory(req, res, next) {
+    const categoryId = req.params.id;
+
+    // Lấy thông tin cập nhật từ req.body
+    const updatedCategory = {
+      name: req.body.name,
+      idParent: req.body.idParent,
+    };
+
+    // Tìm và cập nhật danh mục
+    Category.findByIdAndUpdate(categoryId, updatedCategory, { new: true }).then(
+      (category) => {
+        if (!category) {
+          // Xử lý nếu không tìm thấy danh mục
+          console.log("Không tìm thấy danh mục");
+          res.redirect("/admin/category"); // Chuyển hướng đến trang danh sách danh mục hoặc trang báo lỗi
+          return;
+        }
+
+        // Xử lý thành công
+        console.log("Danh mục đã được cập nhật:", category);
+        res.redirect("/admin/category");
+      }
+    );
+  }
   deleteCategory(req, res, next) {
     const hasChildCategory = async (categoryId) => {
       const subCategories = await Category.find({ idParent: categoryId });

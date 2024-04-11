@@ -99,15 +99,7 @@ class AdminController {
         // console.log(category);
       });
   }
-  detailCategory(req, res, next) {
-    Category.findById(req.params.id).then((category) => {
-      res.render("admin/sites/category", {
-        layout: "admin",
-        category: multipleMongooseToObject(category),
-      });
-      console.log(category);
-    });
-  }
+  detailCategory(req, res, next) {}
   //get /assessProviders
   accessProviders(req, res, next) {
     User.find({})

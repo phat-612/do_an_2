@@ -105,7 +105,7 @@ class AdminController {
         layout: "admin",
         category: multipleMongooseToObject(category),
       });
-      console.log(category);
+      console.log(editcategory);
     });
   }
   //get /assessProviders

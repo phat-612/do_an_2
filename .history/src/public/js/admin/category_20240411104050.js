@@ -39,9 +39,12 @@ btnDelete.forEach(function (button) {
 });
 // Xử lý sự kiện nhấp vào nút "Sửa"
 $(document).ready(function () {
+  // Bắt sự kiện click trên nút "Sửa"
   $(".edit-category-btn").on("click", function () {
+    // Lấy ID của danh mục từ thuộc tính data-id
     var categoryId = $(this).data("id");
 
+    // Hiển thị modal
     $("#editCategoryModal").modal("show");
 
     // Thiết lập action của form dựa trên ID của danh mục

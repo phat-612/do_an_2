@@ -40,7 +40,7 @@ btnDelete.forEach(function (button) {
 // Xử lý sự kiện nhấp vào nút "Sửa"
 $(document).ready(function () {
   $(".edit-category-btn").on("click", function () {
-    var categoryId = $(this).data("id");
+    // var categoryId = $(this).data("id");
 
     $("#editCategoryModal").modal("show");
 

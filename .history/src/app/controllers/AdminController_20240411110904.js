@@ -100,12 +100,12 @@ class AdminController {
       });
   }
   detailCategory(req, res, next) {
-    Category.findById(req.params.id).then((category) => {
+    Category.findById(req.params.id).then((editcategory) => {
       res.render("admin/sites/category", {
         layout: "admin",
-        category: multipleMongooseToObject(category),
+        category: multipleMongooseToObject(editcategory),
       });
-      console.log(category);
+      console.log(editcategory);
     });
   }
   //get /assessProviders
