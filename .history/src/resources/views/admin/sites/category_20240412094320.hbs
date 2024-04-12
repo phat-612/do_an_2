@@ -78,7 +78,7 @@
         <h5 class="modal-title" id="addCategoryModal">Thêm danh mục mới</h5>
       </div>
       <div class="modal-body">
-        <form id="form" method="post" action="/api/storeCategory">
+        <form>
           <div class="form-group">
             <label for="recipient-name" class="col-form-label">Thêm danh mục</label>
             <input type="text" class="form-control" id="name" name="name" />
@@ -86,22 +86,20 @@
           <div class="form-group">
             <label for="message-text" class="col-form-label">Danh mục cha</label>
             <select name="idParent" id="idParent">
-              <option value="" disabled selected>-- Chọn danh mục cha --</option>
               {{#each category}}
                 <option value="{{this._id}}">{{this.name}}</option>
               {{/each}}
             </select>
           </div>
-
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >Hủy</button>
-            <button type="submit" class="btn btn-primary">Lưu</button>
-          </div>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-dismiss="modal"
+        >Hủy</button>
+        <button type="submit" class="btn btn-primary">Lưu</button>
       </div>
     </div>
   </div>

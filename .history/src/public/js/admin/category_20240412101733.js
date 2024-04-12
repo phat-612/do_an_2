@@ -10,10 +10,35 @@ $(document).ready(function () {
     // Ngăn chặn hành vi mặc định của việc submit form
     event.preventDefault();
 
-    // Tiến hành code để xử lý việc lưu dữ liệu tại đây
+    // Lấy dữ liệu từ các trường của form
+    let name = $("#name").val();
+    let idParent = $("#idParent").val();
 
-    // Đóng cửa sổ modal
-    $("#exampleModal").modal("hide");
+    // Xử lý lưu dữ liệu tại đây
+    // ví dụ: gửi dữ liệu lên server thông qua AJAX
+    $.ajax({
+      type: "POST",
+      url: "/api/storeCategory", // thay đổi url phù hợp với bạn
+      data: {
+        name: name,
+        idParent: idParent,
+      },
+      success: function (res) {
+        // xử lý khi gửi thành công
+        console.log("Lưu thành công");
+
+        // Đóng cửa sổ modal
+        $("#exampleModal").modal("hide");
+
+        // Làm mới dữ liệu sau khi lưu
+        $("#name").val("");
+        $("#idParent").val("");
+      },
+      error: function (err) {
+        // xử lý khi có lỗi xảy ra
+        console.log(err);
+      },
+    });
   });
 
   // Khi nhấp vào nút "Hủy" trong modal

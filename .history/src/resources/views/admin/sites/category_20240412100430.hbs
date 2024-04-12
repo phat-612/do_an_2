@@ -86,7 +86,6 @@
           <div class="form-group">
             <label for="message-text" class="col-form-label">Danh mục cha</label>
             <select name="idParent" id="idParent">
-              <option value="" disabled selected>-- Chọn danh mục cha --</option>
               {{#each category}}
                 <option value="{{this._id}}">{{this.name}}</option>
               {{/each}}

@@ -5,9 +5,9 @@ $(document).ready(function () {
     $("#exampleModal").modal("show");
   });
 
-  // Khi form được submit
-  $("#form").submit(function (event) {
-    // Ngăn chặn hành vi mặc định của việc submit form
+  // Khi nhấp vào nút "Lưu"
+  $(".btn-primary").click(function (event) {
+    // Ngăn chặn hành vi mặc định của nút submit
     event.preventDefault();
 
     // Tiến hành code để xử lý việc lưu dữ liệu tại đây
@@ -16,11 +16,11 @@ $(document).ready(function () {
     $("#exampleModal").modal("hide");
   });
 
-  // Khi nhấp vào nút "Hủy" trong modal
+  // Khi nhấp vào nút "Đóng" trong modal
   $("#exampleModal .modal-footer .btn-secondary").click(function () {
     // Xóa trường dữ liệu
-    $("#name").val("");
-    $("#idParent").val("");
+    $("#recipient-name").val("");
+    $("#message-text").val("");
 
     // Đóng cửa sổ modal
     $("#exampleModal").modal("hide");

@@ -19,7 +19,6 @@ class ApiController {
   storeCategory(req, res, next) {
     const formData = req.body;
     console.log(formData);
-    s;
     const category = new Category(formData);
     category
       .save()

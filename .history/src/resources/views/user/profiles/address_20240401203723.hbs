@@ -1,0 +1,124 @@
+<div class="container">
+  <h1 class="fs-1 text-center">Thông tin nhận hàng</h1>
+  <div class="row my-3">
+    <div class="col text-end">
+      <button
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#addressModal"
+        data-bs-linkAction="/api/address"
+      >Thêm địa chỉ mới</button>
+    </div>
+  </div>
+  {{#each addresses}}
+    <div class="row border align-items-center rounded py-2 my-2">
+      <input type="text" value="${{this._id}}" hidden />
+      <div class="col">
+        <p class="fs-4 fw-medium m-0">{{this.alias}}</p>
+        <p class="m-0 text-secondary">
+          <span>{{this.name}}</span>
+          |
+          <span>{{this.phone}}</span>
+        </p>
+        <p>{{this.address}}</p>
+        {{#if this.defaultAddress}}
+          <span class="border-danger p-1 rounded border d-inline-block">Mặc định</span>
+        {{/if}}
+      </div>
+      <div class="col-2">
+        <form
+          class="d-inline-block"
+          action="/api/address?_method=DELETE"
+          method="post"
+        >
+          <input type="text" value="{{this._id}}" name="idAddress" hidden />
+          <button
+            class="bg-danger px-2 py-1 rounded"
+            {{isDisabled this.defaultAddress}}
+          ><i class="bi bi-trash3 fs-4 text-white"></i></button>
+        </form>
+        <button class="bg-primary px-2 py-1 rounded">
+          <i
+            class="bi bi-pencil-square fs-4 text-white"
+            data-bs-toggle="modal"
+            data-bs-target="#addressModal"
+            data-bs-linkAction="/api/address?_method=PUT"
+            data-bs-idAddress="{{this._id}}"
+            data-bs-alias="{{this.alias}}"
+            data-bs-name="{{this.name}}"
+            data-bs-phone="{{this.phone}}"
+            data-bs-address="{{this.address}}"
+            data-bs-defaultAddress="{{this.defaultAddress}}"
+          ></i>
+        </button>
+      </div>
+    </div>
+  {{/each}}
+</div>
+
+<div
+  class="modal fade"
+  id="addressModal"
+  tabindex="-1"
+  aria-labelledby="addressModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <form action="" method="post" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Thêm thông tin nhận hàng</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        {{!++ input ẩn ++}}
+        <input type="text" name="idAddress" id="idAddress" hidden />
+        {{! input ẩn }}
+        <div class="mb-3">
+          <label for="alias" class="col-form-label">Tên gợi nhớ
+          </label>
+          <input type="text" name="alias" class="form-control" id="alias" />
+        </div>
+        <div class="mb-3">
+          <label for="name" class="col-form-label">Họ tên
+          </label>
+          <input type="text" name="name" class="form-control" id="name" />
+        </div>
+        <div class="mb-3">
+          <label for="phone" class="col-form-label">Số điện thoại
+          </label>
+          <input type="text" name="phone" class="form-control" id="phone" />
+        </div>
+        <div class="mb-3">
+          <label for="address" class="col-form-label">Địa chỉ
+          </label>
+          <input type="text" name="address" class="form-control" id="address" />
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="defaultAddress"
+            value="1"
+            name="defaultAddress"
+          />
+          <label class="form-check-label" for="defaultAddress">
+            Đặt làm địa chỉ mặc định
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >Close</button>
+        <button type="submit" class="btn btn-primary">Thêm địa chỉ nhận hàng</button>
+      </div>
+    </form>
+  </div>
+</div>
