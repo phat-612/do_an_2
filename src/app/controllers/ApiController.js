@@ -18,16 +18,14 @@ class ApiController {
   // aip admin
   storeCategory(req, res, next) {
     const formData = req.body;
-    console.log(formData);
     const category = new Category(formData);
-    category
-      .save()
-      .then(() => {
-        res.redirect("back");
-      })
-      .catch((error) => {
-        console.log(error);
+    category.save().then(() => {
+      req.flash("message", {
+        type: "success",
+        message: "Danh mục đã được thêm thành công!",
       });
+      res.redirect("back");
+    });
   }
   updateCategory(req, res, next) {}
   deleteCategory(req, res, next) {

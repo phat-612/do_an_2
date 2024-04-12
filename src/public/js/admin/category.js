@@ -1,28 +1,24 @@
+// Hàm chỉ chạy khi tài liệu đã hoàn tất việc tải.
 $(document).ready(function () {
-  // Khi nhấp vào một nút nào đó (thay thế '.btn-success' với class/ID của nút mà bạn muốn)
-  $(".btn-success").click(function () {
-    // Hiển thị cửa sổ modal
-    $("#exampleModal").modal("show");
-  });
-
-  // Khi form được submit
-  $("#form").submit(function (event) {
-    // Ngăn chặn hành vi mặc định của việc submit form
-    event.preventDefault();
-
-    // Tiến hành code để xử lý việc lưu dữ liệu tại đây
-
-    // Đóng cửa sổ modal
-    $("#exampleModal").modal("hide");
-  });
-
-  // Khi nhấp vào nút "Hủy" trong modal
-  $("#exampleModal .modal-footer .btn-secondary").click(function () {
-    // Xóa trường dữ liệu
+  // Đặt sự kiện khi nút "Thêm danh mục mới" được nhấn.
+  $(".btn-success").on("click", function (e) {
+    // Chắc chắn rằng nút không làm submit form.
+    e.preventDefault();
+    // Làm sạch form để có thể thêm danh mục mới.
+    // Đặt giá trị của các trường trong form về rỗng.
     $("#name").val("");
     $("#idParent").val("");
 
-    // Đóng cửa sổ modal
+    // Mở lên modal để thêm danh mục.
+    $("#exampleModal").modal("show");
+  });
+
+  // Sự kiện khi nút "Hủy" được nhấp
+  $(".btn-cancel").on("click", function (e) {
+    // Chắc chắn rằng nút không làm submit form.
+    e.preventDefault();
+
+    // Đóng modal.
     $("#exampleModal").modal("hide");
   });
 });

@@ -94,6 +94,8 @@ class SiteController {
     //   const slugVariation = req.params.slugVariation;
     //   console.log(slugVariation);
     // }
+
+    // không truyền slugVariation, có 2 thuộc tính
     Product.findOne({ slug: slugProduct }).then((product) => {
       if (!product || product == null) {
         return next();
@@ -102,6 +104,7 @@ class SiteController {
         name: product.name,
         price: product.variations[0].price,
         attribute: product.variations[0].attributes,
+
         description: product.description,
         images: product.images,
         discount: product.discount,

@@ -8,7 +8,7 @@
       <label for="categoryDataList" class="form-label fs-4">Danh Mục</label>
       <input class="form-control" list="categoryOptions" id="categoryDataList" placeholder="Nhập Danh Mục" required>
       <datalist id="categoryOptions">
-         {{#each category}}
+         {{#each categories}}
          <option value="{{this.name}}">
          {{/each}}
       </datalist>
