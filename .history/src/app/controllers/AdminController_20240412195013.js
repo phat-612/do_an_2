@@ -62,12 +62,13 @@ class AdminController {
   // get /product/detail
   detail(req, res, next) {
     Product.findById(req.params.id)
-      .populate("idCategory", "name")
+      .populate("idParent", "name")
       .then((product) =>
         res.render("admin/products/detailProduct", {
           product: mongooseToObject(product),
           layout: "admin",
           js: "admin/detailProduct",
+          css: "admin/detailProduct",
         })
       )
       .catch(next);

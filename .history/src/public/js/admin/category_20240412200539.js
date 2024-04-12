@@ -4,8 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Xử lý sự kiện nhấp vào nút "Hủy"
   cancelButton.addEventListener("click", function () {
-    const modal = bootstrap.Modal.getInstance(categoryModal);
-    modal.hide();
+    categoryModal.classList.add("modal-hidden");
   });
 
   categoryModal.addEventListener("show.bs.modal", function (event) {
@@ -20,12 +19,12 @@ document.addEventListener("DOMContentLoaded", function () {
       categoryModal.querySelector("#name").value = "";
       categoryModal.querySelector("#idParent").value = "";
     }
+    categoryModal.classList.remove("modal-hidden");
   });
 
   const addCategoryButton = document.querySelector(".btn.btn-success");
   addCategoryButton.addEventListener("click", function () {
-    const modal = new bootstrap.Modal(categoryModal);
-    modal.show();
+    categoryModal.classList.remove("modal-hidden");
   });
 
   const editButtons = document.querySelectorAll(".edit-category-btn");
@@ -40,8 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
       categoryModal.querySelector("#idParent").value = idParent;
 
       // Hiển thị modal
-      const modal = new bootstrap.Modal(categoryModal);
-      modal.show();
+      categoryModal.classList.remove("modal-hidden");
     });
   });
 });

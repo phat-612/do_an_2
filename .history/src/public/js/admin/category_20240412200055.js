@@ -4,8 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Xử lý sự kiện nhấp vào nút "Hủy"
   cancelButton.addEventListener("click", function () {
-    const modal = bootstrap.Modal.getInstance(categoryModal);
-    modal.hide();
+    categoryModal.style.display = "none";
   });
 
   categoryModal.addEventListener("show.bs.modal", function (event) {
@@ -20,12 +19,12 @@ document.addEventListener("DOMContentLoaded", function () {
       categoryModal.querySelector("#name").value = "";
       categoryModal.querySelector("#idParent").value = "";
     }
+    categoryModal.style.display = "block";
   });
 
   const addCategoryButton = document.querySelector(".btn.btn-success");
   addCategoryButton.addEventListener("click", function () {
-    const modal = new bootstrap.Modal(categoryModal);
-    modal.show();
+    categoryModal.style.display = "block";
   });
 
   const editButtons = document.querySelectorAll(".edit-category-btn");
@@ -40,8 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
       categoryModal.querySelector("#idParent").value = idParent;
 
       // Hiển thị modal
-      const modal = new bootstrap.Modal(categoryModal);
-      modal.show();
+      categoryModal.style.display = "block";
     });
   });
 });
@@ -60,5 +58,32 @@ btnDelete.forEach(function (button) {
       deleteForm.action = "/api/category/" + categoryId + "?_method=DELETE";
       deleteForm.submit();
     }
+  });
+});
+// Xử lý sự kiện nhấp vào nút "Sửa"
+$(document).ready(function () {
+  $(".edit-category-btn").on("click", function () {
+    var categoryId = $(this).data("id");
+
+    $("#editCategoryModal").modal("show");
+
+    // Thiết lập action của form dựa trên ID của danh mục
+    var form = $("#editCategoryModal").find("form");
+    var actionUrl = "/api/category/" + categoryId + "?_method=PUT";
+    form.attr("action", actionUrl);
+    return false;
+  });
+
+  // Bắt sự kiện click trên nút "Lưu" trong modal
+  $("#editCategoryModal").on("click", ".btn-primary", function () {
+    // Gửi yêu cầu PUT để cập nhật danh mục
+    $("form#editCategoryForm").submit();
+  });
+
+  // Bắt sự kiện click trên nút "Hủy" trong modal
+  $("#editCategoryModal").on("click", ".btn-secondary", function () {
+    // Ẩn modal
+    $("#editCategoryModal").modal("hide");
+    return false;
   });
 });

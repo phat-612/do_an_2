@@ -62,3 +62,30 @@ btnDelete.forEach(function (button) {
     }
   });
 });
+// // Xử lý sự kiện nhấp vào nút "Sửa"
+// $(document).ready(function () {
+//   $(".edit-category-btn").on("click", function () {
+//     var categoryId = $(this).data("id");
+
+//     $("#editCategoryModal").modal("show");
+
+//     // Thiết lập action của form dựa trên ID của danh mục
+//     var form = $("#editCategoryModal").find("form");
+//     var actionUrl = "/api/category/" + categoryId + "?_method=PUT";
+//     form.attr("action", actionUrl);
+//     return false;
+//   });
+
+//   // Bắt sự kiện click trên nút "Lưu" trong modal
+//   $("#editCategoryModal").on("click", ".btn-primary", function () {
+//     // Gửi yêu cầu PUT để cập nhật danh mục
+//     $("form#editCategoryForm").submit();
+//   });
+
+//   // Bắt sự kiện click trên nút "Hủy" trong modal
+//   $("#editCategoryModal").on("click", ".btn-secondary", function () {
+//     // Ẩn modal
+//     $("#editCategoryModal").modal("hide");
+//     return false;
+//   });
+// });

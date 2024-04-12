@@ -44,7 +44,6 @@
                   data-name="{{this.name}}"
                   data-idParent="{{this.idParent._id}}"
                   data-id="{{this._id}}"
-                  data-bs-target="#addCategoryModal"
                   class="btn btn-primary edit-category-btn"
                 >Sửa</button>
                 <a
@@ -68,7 +67,7 @@
 
 <div
   class="modal fade"
-  id="addCategoryModal"
+  id="exampleModal"
   tabindex="-1"
   role="dialog"
   aria-labelledby="addCategoryModal"
@@ -77,7 +76,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addCategory">Thêm danh mục mới</h5>
+        <h5 class="modal-title" id="addCategoryModal">Thêm danh mục mới</h5>
       </div>
       <div class="modal-body">
         <form id="form" method="post" action="/api/storeCategory">

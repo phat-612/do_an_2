@@ -68,6 +68,7 @@ class AdminController {
           product: mongooseToObject(product),
           layout: "admin",
           js: "admin/detailProduct",
+          css: "admin/detailProduct",
         })
       )
       .catch(next);
