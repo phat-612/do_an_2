@@ -17,9 +17,11 @@
       <!-- Button trigger modal -->
       <button
         type="button"
+        data-linkAction="/api/storeCategory"
         class="btn btn-success"
-        data-toggle="modal"
-        data-target="#addCategoryModal"
+        id="addCategoryButton"
+        data-bs-target="#addCategoryModal"
+        data-bs-toggle="modal"
       >
         Thêm danh mục mới
       </button>
@@ -41,10 +43,12 @@
               <td>{{this.idParent.name}}</td>
               <td>
                 <button
+                  data-linkAction="/api/categoty?_method=PUT"
                   data-name="{{this.name}}"
                   data-idParent="{{this.idParent._id}}"
                   data-id="{{this._id}}"
                   data-bs-target="#addCategoryModal"
+                  data-bs-toggle="modal"
                   class="btn btn-primary edit-category-btn"
                 >Sửa</button>
                 <a
@@ -71,7 +75,7 @@
   id="addCategoryModal"
   tabindex="-1"
   role="dialog"
-  aria-labelledby="addCategoryModal"
+  aria-labelledby="addCategoryModalLabel"
   aria-hidden="true"
 >
   <div class="modal-dialog" role="document">

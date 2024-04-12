@@ -1,5 +1,5 @@
 <div class="container">
-  <h1>Samsung Galaxy S24 Ultra</h1>
+  <h1>{{product.name}}</h1>
   <hr />
   <div class="row">
     <div class="col-6">
@@ -42,10 +42,7 @@
         <div class="title">Mô tả</div>
         <div class="body">
           <p>
-            Samsung Galaxy S24 Ultra sẽ là chiếc điện thoại đầu tiên trên thế
-            giới sử dụng camera 200MP, cùng với đó là cụm camera 4 ống kính, màn
-            hình 6.9 inch, chip Exynos 2200, RAM 12GB, bộ nhớ trong 256GB, pin
-            6000mAh.
+            {{product.description}}
           </p>
         </div>
       </div>
@@ -53,9 +50,10 @@
 
     <div class="col-6">
       <h1 class="fs-1 text-danger">
-        4.111.111 đ
+        {{product.price}}
       </h1>
-      <ul class="nav text-center">
+      {{showVariations product.variations}}
+      {{! <ul class="nav text-center">
         <li class="py-1 px-3 me-3 bg-light border rounded" role="button"><strong
           >8GB-128GB</strong><div>14.000.000 đ</div></li>
         <li class="py-1 px-3 me-3 bg-light border rounded" role="button"><strong
@@ -87,7 +85,7 @@
             ><strong>Vàng</strong><div>13.000.000 đ</div></li>
           </ul>
         </div>
-      </div>
+      </div> }}
       <div class="action my-3 row">
         <div class="col-8"><button
             class="w-100 py-3 h-100 rounded border bg-danger fs-4 text-white fw-bold"

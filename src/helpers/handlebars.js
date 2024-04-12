@@ -44,6 +44,9 @@ module.exports = {
       )}`;
     }
   },
+  showVariations: (variations) => {
+    console.log(variations);
+  },
   getBrands: (categories, rootCategory) => {
     const brands = categories.find((category) => category.slug == rootCategory);
     if (brands) {

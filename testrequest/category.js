@@ -1,85 +1,46 @@
 const data = [
   {
-    slug: "128gb-red",
-    variations: {
-      color: "Red",
-      rom: "128GB",
-    },
+    price: 21990000,
+    quantity: 20,
+    attributes: { color: "Midnight", storage: "128GB" },
+    slug: "midnight-128gb",
   },
   {
-    slug: "256gb-red",
-    variations: {
-      color: "Red",
-      rom: "256GB",
-    },
-  },
-  {
-    slug: "512gb-red",
-    variations: {
-      color: "Red",
-      rom: "512GB",
-    },
-  },
-  {
-    slug: "128gb-blue",
-    variations: {
-      color: "Blue",
-      rom: "128GB",
-    },
-  },
-  {
-    slug: "256gb-blue",
-    variations: {
-      color: "Blue",
-      rom: "256GB",
-    },
-  },
-  {
-    slug: "512gb-blue",
-    variations: {
-      color: "Blue",
-      rom: "512GB",
-    },
-  },
-  {
-    slug: "128gb-green",
-    variations: {
-      color: "Green",
-      rom: "128GB",
-    },
-  },
-  {
-    slug: "256gb-green",
-    variations: {
-      color: "Green",
-      rom: "256GB",
-    },
-  },
-  {
-    slug: "512gb-green",
-    variations: {
-      color: "Green",
-      rom: "512GB",
-    },
+    price: 24990000,
+    quantity: 15,
+    attributes: { color: "Starlight", storage: "256GB" },
+    slug: "starlight-256gb",
   },
 ];
 const currentVariation = {
-  color: "Red",
+  color: "Midnight",
   rom: "128GB",
 };
-const outputData = [
-  {
-    "128GB": "128gb-red",
-    "256GB": "256gb-red",
-    "512GB": "512gb-red",
-  },
-  {
-    Red: "128gb-red",
-    Blue: "128gb-blue",
-    Green: "128gb-green",
-  },
-];
 
+const outputData1 = Object.keys(currentVariation).map((key) => {
+  console.log(key);
+  return data.reduce((acc, cur) => {
+    console.log(cur.attributes);
+    if (cur.attributes[key] === currentVariation[key]) {
+      Object.keys(cur.attributes).forEach((variationKey) => {
+        if (variationKey !== key) {
+          acc[cur.attributes[variationKey]] = cur.slug;
+          const arrValueVariation = [
+            ...new Set(data.map((item) => item.attributes[variationKey])),
+          ];
+          arrValueVariation.forEach((value) => {
+            if (!acc.hasOwnProperty(value)) {
+              acc[value] = "";
+            }
+          });
+        } else {
+        }
+      });
+    }
+    return acc;
+  }, {});
+});
+console.log(outputData1);
 // const colorData = data.reduce((acc, cur) => {
 //   if (cur.variations.color === currentVariation.color) {
 //     acc[cur.variations.rom] = cur.slug;
@@ -97,19 +58,19 @@ const outputData = [
 // const outputData1 = [colorData, romData];
 // console.log(outputData1);
 
-const outputData1 = Object.keys(currentVariation).map((key) => {
-  return data.reduce((acc, cur) => {
-    if (cur.variations[key] === currentVariation[key]) {
-      Object.keys(cur.variations).forEach((variationKey) => {
-        if (variationKey !== key) {
-          acc[cur.variations[variationKey]] = cur.slug;
-        }
-      });
-    }
-    return acc;
-  }, {});
-});
-console.log(outputData1);
+// const outputData1 = Object.keys(currentVariation).map((key) => {
+//   return data.reduce((acc, cur) => {
+//     if (cur.variations[key] === currentVariation[key]) {
+//       Object.keys(cur.variations).forEach((variationKey) => {
+//         if (variationKey !== key) {
+//           acc[cur.variations[variationKey]] = cur.slug;
+//         }
+//       });
+//     }
+//     return acc;
+//   }, {});
+// });
+// console.log(outputData1);
 /*
 128gb-red
 

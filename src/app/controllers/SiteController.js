@@ -104,17 +104,44 @@ class SiteController {
         name: product.name,
         price: product.variations[0].price,
         attribute: product.variations[0].attributes,
-
         description: product.description,
         images: product.images,
         discount: product.discount,
       };
+      const arrVariation = Object.keys(resProduct.attribute).map((key) => {
+        return product.variations.reduce((acc, cur) => {
+          if (cur.attributes[key] === resProduct.attribute[key]) {
+            Object.keys(cur.attributes).forEach((variationKey) => {
+              if (variationKey !== key) {
+                acc[cur.attributes[variationKey]] = {
+                  slug: cur.slug,
+                  price: cur.price,
+                };
+                const arrValueVariation = [
+                  ...new Set(
+                    product.variations.map(
+                      (item) => item.attributes[variationKey]
+                    )
+                  ),
+                ];
+                arrValueVariation.forEach((value) => {
+                  if (!acc.hasOwnProperty(value)) {
+                    acc[value] = "";
+                  }
+                });
+              } else {
+              }
+            });
+          }
+          return acc;
+        }, {});
+      });
+      resProduct.arrVariation = arrVariation;
       console.log(resProduct);
       res.render("user/products/detail", {
-        product: product.toObject(),
+        product: resProduct,
       });
     });
-    // res.render("user/products/detail");
   }
   test(req, res, next) {
     Category.getAllProductsInCategory().then((categories) => {

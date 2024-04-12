@@ -27,7 +27,10 @@ class ApiController {
       res.redirect("back");
     });
   }
-  updateCategory(req, res, next) {}
+  updateCategory(req, res, next) {
+    Category.updateOne({ _id: req.params.id }, req.body);
+    console.log(Category);
+  }
   deleteCategory(req, res, next) {
     const hasChildCategory = async (categoryId) => {
       const subCategories = await Category.find({ idParent: categoryId });
