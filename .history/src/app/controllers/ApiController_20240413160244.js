@@ -37,13 +37,11 @@ class ApiController {
     });
   }
   updateCategory(req, res, next) {
-    const idParent = req.body.idParent || null; // Xử lý giá trị trống và đặt giá trị mặc định là null
-    req.body.idParent = idParent;
-
+    // console.log(req.body);
+    // console.log(req.params.id);
     Category.updateOne({ _id: req.params.id }, { $set: req.body })
       .exec()
-      .then(() => res.redirect("back"))
-      .catch(next);
+      .then(() => res.redirect("back"));
   }
   deleteCategory(req, res, next) {
     const hasChildCategory = async (categoryId) => {
