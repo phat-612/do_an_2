@@ -16,6 +16,12 @@ class ApiController {
   // api user,admin
   // api user
   // aip admin
+
+  // create product
+  createProduct(req, res, next) {
+    const formData = req.body;
+  }
+
   storeCategory(req, res, next) {
     const formData = req.body;
     const category = new Category(formData);
@@ -28,8 +34,11 @@ class ApiController {
     });
   }
   updateCategory(req, res, next) {
-    Category.updateOne({ _id: req.params.id }, req.body);
-    console.log(Category);
+    // console.log(req.body);
+    // console.log(req.params.id);
+    Category.updateOne({ _id: req.params.id }, { $set: req.body })
+      .exec()
+      .then(() => res.redirect("back"));
   }
   deleteCategory(req, res, next) {
     const hasChildCategory = async (categoryId) => {

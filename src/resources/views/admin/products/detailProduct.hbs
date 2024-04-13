@@ -8,10 +8,14 @@
       <h4>Tên Sản phẩm</h4>
       <p>{{product.name}}</p>
       <h4>Danh mục</h4>
-      {{#if product.idCategory.idParent}}<p
-        >{{product.idCategory.idParent.name}}</p>{{/if}}
+      <p>
+        {{#each product.category}}
+          {{this}}/
+        {{/each}}
+      </p>
+
       <h4>Thương Hiệu</h4>
-      <p>{{product.idCategory.name}}</p>
+      <p>{{product.brand}}</p>
     </div>
     <div class="col">
       <h4>Mô Tả Sản Phẩm</h4>

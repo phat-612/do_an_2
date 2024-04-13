@@ -44,9 +44,39 @@ module.exports = {
       )}`;
     }
   },
-  showVariations: (variations) => {
-    console.log(variations);
+  showVariations: (variations, curVariationSlug) => {
+    let outputHtml = "";
+    variations.forEach((variation) => {
+      Object.keys(variation).forEach((key) => {
+        if (key == "nameProperty") {
+          outputHtml += `
+          <div class="chose-color">
+            <div class="title fs-4 my-3">${variation[key]}</div>
+            <div class="body">
+              <ul class="nav text-center">
+          `;
+        } else {
+          let price = variation[key].price
+            ? variation[key].price.toLocaleString("vi-VN")
+            : "";
+          let slug = variation[key].slug ? variation[key].slug : "";
+          outputHtml += `
+            <li
+              class="py-1 px-3 me-3 bg-light border ${
+                slug == curVariationSlug ? "border-danger" : ""
+              } rounded"
+              role="button"
+            >
+              <a href="${slug}"><strong>${key}</strong><div>${price}</div></a>
+            </li>
+          `;
+        }
+      });
+      outputHtml += `</ul></div></div>`;
+    });
+    return outputHtml;
   },
+  showPrice: (price) => price.toLocaleString("vi-VN"),
   getBrands: (categories, rootCategory) => {
     const brands = categories.find((category) => category.slug == rootCategory);
     if (brands) {
@@ -67,5 +97,8 @@ module.exports = {
       return "disabled";
     }
     return "";
+  },
+  consoleHbs: (data) => {
+    console.log(data);
   },
 };

@@ -52,28 +52,51 @@ class AdminController {
     });
   }
   //get /product/addproduct
-  addPro(req, res, next) {
+  async addPro(req, res, next) {
+    const categorys = await Category.find();
     res.render("admin/products/addProduct", {
       layout: "admin",
       js: "admin/addProduct",
       css: "admin/addProduct",
+      categorys: multipleMongooseToObject(categorys),
     });
   }
   // get /product/detail
   detail(req, res, next) {
     Product.findById(req.params.id)
-      .populate("idCategory")
       .populate({
         path: "idCategory",
-        populate: { path: "idParent", select: "name" },
+        populate: { path: "idParent" },
       })
-      .then((product) =>
-        res.render("admin/products/detailProduct", {
-          product: mongooseToObject(product),
-          layout: "admin",
-          js: "admin/detailProduct",
-        })
-      )
+      .then((product) => {
+        const getAllParent = async (category) => {
+          let parents = [];
+          const findParent = async (inpCategory) => {
+            parents.push(inpCategory);
+            const parent = await Category.findOne({
+              _id: inpCategory.idParent,
+            });
+            if (parent) {
+              await findParent(parent);
+            }
+          };
+          await findParent(category);
+          return parents;
+        };
+        getAllParent(product.idCategory).then((parents) => {
+          product = {
+            ...product.toObject(),
+            category: parents.map((parent) => parent.name).reverse(),
+            brand: parents.length > 1 ? parents.reverse()[1].name : null,
+          };
+          // console.log(product);
+          return res.render("admin/products/detailProduct", {
+            product,
+            layout: "admin",
+            js: "admin/detailProduct",
+          });
+        });
+      })
       .catch(next);
   }
   //get /product/edit/:id

@@ -25,7 +25,6 @@
       >
         Thêm danh mục mới
       </button>
-
       <table class="table" id="categoriesTable">
         <thead>
           <tr>
@@ -43,7 +42,7 @@
               <td>{{this.idParent.name}}</td>
               <td>
                 <button
-                  data-linkAction="/api/categoty?_method=PUT"
+                  data-linkAction="/api/category/{{this._id}}?_method=PUT"
                   data-name="{{this.name}}"
                   data-idParent="{{this.idParent._id}}"
                   data-id="{{this._id}}"
@@ -84,7 +83,7 @@
         <h5 class="modal-title" id="addCategory">Thêm danh mục mới</h5>
       </div>
       <div class="modal-body">
-        <form id="form" method="post" action="/api/storeCategory">
+        <form id="form" method="post" action="">
           <div class="form-group">
             <label for="categoryName">Tên danh mục</label>
             <input
@@ -112,7 +111,7 @@
           <div class="modal-footer">
             <button
               type="button"
-              class="btn btn-secondary btn-cancel"
+              class="btn btn-secondary"
               data-dismiss="modal"
             >Hủy</button>
             <button type="submit" class="btn btn-primary">Thêm danh mục</button>

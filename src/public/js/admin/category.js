@@ -1,17 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
   const categoryModal = document.getElementById("addCategoryModal");
-  const cancelButton = categoryModal.querySelector(".btn-secondary");
-
-  // Xử lý sự kiện nhấp vào nút "Hủy"
-  cancelButton.addEventListener("click", function () {
-    const modal = bootstrap.Modal.getInstance(categoryModal);
-    modal.hide();
-  });
 
   categoryModal.addEventListener("show.bs.modal", function (event) {
     // set
     let button = event.relatedTarget;
-    console.log(button);
+    // console.log(button);
     let linkAction = button.getAttribute("data-linkAction");
     categoryModal.querySelector("form").action = linkAction;
     let idCategory = button.getAttribute("data-id");
@@ -26,12 +19,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  const addCategoryButton = document.getElementById("addCategoryButton");
-  addCategoryButton.addEventListener("click", function (event) {
-    event.preventDefault(); // Ngăn chặn hành vi mặc định của nút
-    const modal = new bootstrap.Modal(categoryModal);
-    modal.show();
-  });
+  // const addCategoryButton = document.getElementById("addCategoryButton");
+  // addCategoryButton.addEventListener("click", function (event) {
+  //   event.preventDefault(); // Ngăn chặn hành vi mặc định của nút
+  //   const modal = new bootstrap.Modal(categoryModal);
+  //   modal.show();
+  // });
 
   const editButtons = document.querySelectorAll(".edit-category-btn");
   editButtons.forEach(function (button) {
@@ -43,9 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
       // Điền thông tin vào modal
       categoryModal.querySelector("#name").value = name;
       categoryModal.querySelector("#idParent").value = idParent;
-      // Hiển thị modal
-      const modal = new bootstrap.Modal(categoryModal);
-      modal.show();
     });
   });
 });

@@ -12,8 +12,8 @@ function route(app) {
   app.use("/admin", adminRouter);
   app.use("/me", userLogin, meRouter);
   app.use("/", siteRouter);
-  app.use(function (req, res, next) {
-    res.status(404).render("404");
-  });
+  // app.use(function (req, res, next) {
+  //   res.status(404).render("404");
+  // });
 }
 module.exports = route;

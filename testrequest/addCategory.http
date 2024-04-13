@@ -2,18 +2,17 @@ POST http://localhost:3000/api/test
 Content-Type: application/json
 
 {
-    "name": "Xiaomi 17 pro",
+    "name": "Xiaomi 19 pro",
     "description": "Xiaomi 13 pro",
     "images": ["snh 1", "snh 2"],
-    "idCategory": "661620b62af964aba3a62ea1",
+    "idCategory": "661620982af964aba3a62e4a",
     "variations": [
       { 
         "price":  16990000,
         "quantity":15 ,
         "attributes":
             {
-                "color": "đỏ",
-                "ram": "12GB"
+                "color": "đỏ"
             }
       },
       {
@@ -21,8 +20,15 @@ Content-Type: application/json
         "quantity": 10,
         "attributes":
             {
-                "color": "vàng",
-                "ram": "8GB"
+                "color": "vàng"
+            }
+      },
+      {
+        "price": 11990000,
+        "quantity": 5,
+        "attributes":
+            {
+                "color": "đen"
             }
       }
     ],

@@ -89,55 +89,103 @@ class SiteController {
   }
   product(req, res, next) {
     const slugProduct = req.params.slugProduct;
-    console.log(slugProduct);
-    // if (req.params.slugVariation) {
-    //   const slugVariation = req.params.slugVariation;
-    //   console.log(slugVariation);
-    // }
+    let slugVariation;
+    if (req.params.slugVariation) {
+      slugVariation = req.params.slugVariation;
+    }
 
-    // không truyền slugVariation, có 2 thuộc tính
+    // có 2 thuộc tính
     Product.findOne({ slug: slugProduct }).then((product) => {
       if (!product || product == null) {
         return next();
       }
+      let curVariationSlug = slugVariation
+        ? slugVariation
+        : product.variations[0].slug;
+      let curVariation = product.variations.find(
+        (variation) => variation.slug === curVariationSlug
+      );
+
+      let attribute = curVariation.attributes;
       let resProduct = {
         name: product.name,
-        price: product.variations[0].price,
-        attribute: product.variations[0].attributes,
+        price: curVariation.price,
+        slug: product.slug,
+        curVariation,
+        attribute,
         description: product.description,
         images: product.images,
         discount: product.discount,
       };
-      const arrVariation = Object.keys(resProduct.attribute).map((key) => {
-        return product.variations.reduce((acc, cur) => {
-          if (cur.attributes[key] === resProduct.attribute[key]) {
-            Object.keys(cur.attributes).forEach((variationKey) => {
-              if (variationKey !== key) {
-                acc[cur.attributes[variationKey]] = {
-                  slug: cur.slug,
-                  price: cur.price,
-                };
-                const arrValueVariation = [
-                  ...new Set(
-                    product.variations.map(
-                      (item) => item.attributes[variationKey]
-                    )
-                  ),
-                ];
-                arrValueVariation.forEach((value) => {
-                  if (!acc.hasOwnProperty(value)) {
-                    acc[value] = "";
+      let arrVariation;
+      if (Object.keys(attribute).length === 1) {
+        arrVariation = product.variations.reduce(
+          (acc, cur) => {
+            acc[cur.attributes[Object.keys(attribute)[0]]] = {
+              slug: cur.slug,
+              price: cur.price,
+            };
+            return acc;
+          },
+          {
+            nameProperty: Object.keys(attribute)[0],
+          }
+        );
+        arrVariation = [arrVariation];
+      } else {
+        arrVariation = Object.keys(resProduct.attribute).map((key) => {
+          return product.variations.reduce(
+            (acc, cur) => {
+              if (cur.attributes[key] === resProduct.attribute[key]) {
+                Object.keys(cur.attributes).forEach((variationKey) => {
+                  if (variationKey !== key) {
+                    acc[cur.attributes[variationKey]] = {
+                      slug: cur.slug,
+                      price: cur.price,
+                    };
+                    const arrValueVariation = [
+                      ...new Set(
+                        product.variations.map(
+                          (item) => item.attributes[variationKey]
+                        )
+                      ),
+                    ];
+                    arrValueVariation.forEach((value) => {
+                      if (!acc.hasOwnProperty(value)) {
+                        let tempVariation = product.variations.find((item) =>
+                          Object.values(item.attributes).includes(value)
+                        );
+                        acc[value] = {
+                          slug: tempVariation.slug,
+                          price: tempVariation.price,
+                        };
+                      }
+                    });
                   }
                 });
-              } else {
               }
-            });
-          }
-          return acc;
-        }, {});
+              return acc;
+            },
+            {
+              nameProperty: key,
+            }
+          );
+        });
+      }
+
+      resProduct.arrVariation = arrVariation.map((obj) => {
+        return Object.keys(obj)
+          .sort()
+          .reduce(
+            (result, key) => {
+              if (key !== "nameProperty") result[key] = obj[key];
+              return result;
+            },
+            {
+              nameProperty: obj.nameProperty,
+            }
+          );
       });
-      resProduct.arrVariation = arrVariation;
-      console.log(resProduct);
       res.render("user/products/detail", {
         product: resProduct,
       });

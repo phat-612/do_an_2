@@ -50,9 +50,9 @@
 
     <div class="col-6">
       <h1 class="fs-1 text-danger">
-        {{product.price}}
+        {{showPrice product.price}}
       </h1>
-      {{showVariations product.variations}}
+      {{{showVariations product.arrVariation product.curVariation.slug}}}
       {{! <ul class="nav text-center">
         <li class="py-1 px-3 me-3 bg-light border rounded" role="button"><strong
           >8GB-128GB</strong><div>14.000.000 đ</div></li>
