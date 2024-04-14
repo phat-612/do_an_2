@@ -1,0 +1,110 @@
+<div class="container">
+  <div class="row mt-4">
+    <div class="col-6">
+      <form method="POST" action="/api/warranty/{{warranty._id}}?_method=PUT">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            value="{{warranty.email}}"
+            class="form-control"
+            id="email"
+            name="email"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="name" class="form-label">Họ và Tên</label>
+          <input
+            type="name"
+            value="{{warranty.name}}"
+            name="name"
+            class="form-control"
+            id="name"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="phone" class="form-label">Số điện thoại</label>
+          <input
+            type="phone"
+            value="{{warranty.phone}}"
+            name="phone"
+            class="form-control"
+            id="phone"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="address" class="form-label">Địa chỉ</label>
+          <input
+            type="address"
+            name="address"
+            class="form-control"
+            id="address"
+            value="{{warranty.address}}"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="note" class="form-label">Ghi chú</label>
+          <input
+            type="text"
+            value="{{warranty.note}}"
+            name="note"
+            class="form-control"
+            id="note"
+          />
+        </div>
+        <div class="form-group my-4">
+          <button type="submit" class="btn btn-primary">Lưu chỉnh sửa</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-6">
+      <div class="col w-100">
+        <label for="detail" class="form-label">Sản phẩm</label>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group my-4">
+              <div class="row">
+                {{#each productsAndReasons}}
+                <div class="col-12">
+                  <div class="table-responsive">
+                    <strong>Tên sản phẩm:</strong>
+                    <input type="text" class="m-1" name="name" id="name" value="{{this.productName}}" readonly />
+                    <div>
+                      <strong>Chọn sản phẩm muốn thay đổi:</strong>
+                      <select class="m-2" id="productSelect">
+                        <option value="">----Không thay đổi----</option>
+                        {{#each ../products}}
+                        <option value="{{this._id}}">{{this.name}}</option>
+                        {{/each}}
+                      </select>
+                    </div>
+                    <div>
+                      <strong>Lý do bảo hành:</strong>
+                      <ul>
+                        {{#each this.reasonsAndPrices}}
+                        <li>
+                          <input
+                            type="text"
+                            name="reason"
+                            value="{{this.reason}}"
+                          />
+                          <input
+                            type="text"
+                            name="price"
+                            value="{{this.price}}"
+                          />
+                        </li>
+                        {{/each}}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
