@@ -113,8 +113,8 @@ function createAttri1Row() {
         tbodyHTML += `<tr>
                <td class="td1" rowspan="${numberRow2}">${val1}</td>
                <td>${val2}</td>
-               <td><input type="number" class="form-control w-50" name="variations[${currentRow}][attributes][price]" required></td>
-               <td><input type="number" class="form-control w-50" name="variations[${currentRow}][attributes][quantity]"></td>
+               <td><input type="number" class="form-control w-50" name="variations[${currentRow}][price]" required></td>
+               <td><input type="number" class="form-control w-50" name="variations[${currentRow}][quantity]"></td>
                <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
                <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
             </tr>`;
@@ -122,8 +122,8 @@ function createAttri1Row() {
       } else {
         tbodyHTML += `<tr>
                <td>${val2}</td>
-               <td><input type="number" class="form-control w-50" name="variations[${currentRow}][attributes][price]" required></td>
-               <td><input type="number" class="form-control w-50" name="variations[${currentRow}][attributes][quantity]" required></td>
+               <td><input type="number" class="form-control w-50" name="variations[${currentRow}][price]" required></td>
+               <td><input type="number" class="form-control w-50" name="variations[${currentRow}][quantity]" required></td>
                <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
                <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
             </tr>`;
