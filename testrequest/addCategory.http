@@ -103,3 +103,12 @@ Content-Type: application/json
 {
     "emial": "phatgowin123@gmail.com"
 }
+
+###
+POST http://localhost:3000/api/cart
+Content-Type: application/json
+
+{
+    "idProduct": "6610dd6efa4aa8e85fc63fa5",
+    "quantity": 1
+}

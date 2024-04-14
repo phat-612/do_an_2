@@ -14,6 +14,7 @@ router.put("/address", apiController.updateAddress);
 router.delete("/address", apiController.deleteAddress);
 
 // product
+router.post("/product", upload.array("images"), apiController.createProduct);
 router.post("/storeCategory", apiController.storeCategory);
 // warranty
 router.post(

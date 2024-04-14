@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const Cart = require("../models/Cart");
+const Product = require("../models/Product");
 
 const {
   multipleMongooseToObject,
@@ -46,7 +48,52 @@ class MeController {
     });
   }
   cart(req, res, next) {
-    res.render("user/profiles/cart");
+    // Cart.findOne({ idUser: req.session.idUser })
+    //   .populate("items.idVariation")
+    //   .then((cart) => {
+    //     res.render("user/profiles/cart", {
+    //       layout: "userProfile",
+    //       cart: cart.toObject(),
+    //     });
+    //   });
+    Cart.findOne({ idUser: req.session.idUser }).then((cart) => {
+      const cartItems = cart.items.map((item) => {
+        return Product.findOne({ "variations._id": item.idVariation }).select(
+          "name variations"
+        );
+      });
+      let arrIdVariation = cart.items.map((item) =>
+        item.idVariation.toString()
+      );
+      Promise.all(cartItems).then((products) => {
+        const resCart = products.map((product) => {
+          let cartItem;
+          let variation = product.variations.find((variation) => {
+            if (arrIdVariation.toString().includes(variation._id)) {
+              arrIdVariation = arrIdVariation.filter((val) => {
+                cartItem = cart.items.find((item) => item.idVariation == val);
+                return val !== variation._id;
+              });
+              return variation;
+            }
+          });
+          // console.log(variation);
+
+          return {
+            price: variation.price,
+            cartQuantity: cartItem.quantity,
+            storageQuantity: variation.quantity,
+            attributes: variation.attributes,
+            name: product.name,
+            idVariation: variation._id,
+          };
+        });
+        res.render("user/profiles/cart", {
+          layout: "userProfile",
+          cart: resCart,
+        });
+      });
+    });
   }
 }
 module.exports = new MeController();

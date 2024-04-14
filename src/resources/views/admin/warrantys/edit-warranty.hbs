@@ -70,48 +70,48 @@
           <div class="row">
             <div class="col-md-12">
               <div class="form-group my-4">
-                <div class="row">
-               {{#each productsAndReasons}}
-                  <div class="col-12">
-                      <strong>Chọn sản phẩm muốn thay đổi:</strong>
-                      <div class="table-responsive">
-                          <select class="m-2" id="idProduct-{{@index}}" name="details[{{@index}}][idProduct]">
-                              <option value="{{this.productName}}">{{this.productName}}</option>
-                              {{#each ../products}}
-                                  <option value="{{this._id}}" {{#if this.selected}}selected{{/if}}>{{this.name}}</option>
-                              {{/each}}
-                          </select>
-                          </div>
-                          <div>
-                              <strong>Lý do bảo hành:</strong>
-                              <ul>
-                                  {{#each this.reasonsAndPrices}}
-                                  <li>
-                                      <input
-                                        type="text"
-                                        id="reason-{{@../index}}-{{@index}}"
-                                        name="details[{{@../index}}][reasonAndPrice][{{@index}}][reason]"
-                                        value="{{this.reason}}"
-                                        required
-
-                                      />
-                                      <input
-                                        type="number"
-                                        id="price-{{@../index}}-{{@index}}"
-                                        name="details[{{@../index}}][reasonAndPrice][{{@index}}][price]"
-                                        value="{{this.price}}"
-                                        required
-                                      />
-                                  </li>
-                                  {{/each}}
-                              </ul>
-                          </div>
-                      </div>
-                  </div>
+                {{#each productsAndReasons}}
+                    <div class="col-12">
+                        <strong>Chọn sản phẩm muốn thay đổi:</strong>
+                        <div class="table-responsive">
+                            <select class="m-2" id="idProduct-{{@index}}" name="details[{{@index}}][idProduct]">
+                                <option value="{{this.productName}}">{{this.productName}}</option>
+                                {{#each ../products}}
+                                    <option value="{{this._id}}"{{#if this.selected}}selected{{/if}}>{{this.name}}</option>
+                                {{/each}}
+                            </select>
+                            </div>
+                            <div>
+                                <strong>Lý do bảo hành:</strong>
+                                <ul >
+                                    {{#each this.reasonsAndPrices}}
+                                    <li>
+                                        <input
+                                          type="text"
+                                          id="reason-{{@../index}}-{{@index}}"
+                                          name="details[{{@../index}}][reasonAndPrice][{{@index}}][reason]"
+                                          value="{{this.reason}}"
+                                          required
+                                        />
+                                        <input
+                                          type="number"
+                                          id="price-{{@../index}}-{{@index}}"
+                                          name="details[{{@../index}}][reasonAndPrice][{{@index}}][price]"
+                                          value="{{this.price}}"
+                                          required
+                                        />
+                                    </li>
+                                    {{/each}}
+                                    <li>
+                                        <button type="button" class="addButton">Thêm</button>
+                                        <button type="button" class="deleteButton">Xóa</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                   {{/each}}
-                </div>
-              </div>
-            </div>
+            </div> 
           </div>
         </div>
       </div>

@@ -57,7 +57,7 @@ document
 
 var addAttribute1Btn = document.querySelector(".addAttribute1-btn");
 var Attribute1HTML = `<div class="row my-2">
-               <input type="text" id="thuocTinh1" placeholder="Nhập Thuộc Tính" class="form-control col mx-2">
+               <input type="text" id="thuocTinh1" placeholder="Nhập Thuộc Tính" class="form-control col mx-2" name="attr1">
                <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
             </div>`;
 
@@ -72,7 +72,7 @@ addAttribute1Btn.addEventListener("click", () => {
 // nút them thuoc tinh 2
 var addAttribute2Btn = document.querySelector(".addAttribute2-btn");
 var Attribute2HTML = `<div class="row my-2">
-               <input type="text" id="thuocTinh2" placeholder="Nhập Thuộc Tính" class="form-control col mx-2">
+               <input type="text" id="thuocTinh2" placeholder="Nhập Thuộc Tính" class="form-control col mx-2" name="attr2">
                <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
             </div>`;
 
@@ -106,22 +106,28 @@ function createAttri1Row() {
 
   console.log("--------------------------------");
   let tbodyHTML = "";
-
-  attr1Values.forEach((val1) => {
-    attr2Values.forEach((val2, ind) => {
-      if (ind == 0) {
+  let currentRow = 0;
+  attr1Values.forEach((val1, ind1) => {
+    attr2Values.forEach((val2, ind2) => {
+      if (ind2 == 0) {
         tbodyHTML += `<tr>
                <td class="td1" rowspan="${numberRow2}">${val1}</td>
                <td>${val2}</td>
-               <td><input type="number" class="form-control w-50"></td>
-               <td><input type="number" class="form-control w-50"></td>
+               <td><input type="number" class="form-control w-50" name="priceAttr1" required></td>
+               <td><input type="number" class="form-control w-50" name="quantityAttr1" required></td>
+               <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
+               <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
             </tr>`;
+        currentRow++;
       } else {
         tbodyHTML += `<tr>
                <td>${val2}</td>
-               <td><input type="number" class="form-control w-50"></td>
-               <td><input type="number" class="form-control w-50"></td>
+               <td><input type="number" class="form-control w-50" name="priceAttr2" required></td>
+               <td><input type="number" class="form-control w-50" name="quantityAttr2" required></td>
+               <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
+               <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
             </tr>`;
+        currentRow++;
       }
     });
   });

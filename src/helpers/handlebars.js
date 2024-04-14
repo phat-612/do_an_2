@@ -76,7 +76,12 @@ module.exports = {
     });
     return outputHtml;
   },
-  showPrice: (price) => price.toLocaleString("vi-VN"),
+  showPrice: (...args) => {
+    console.log(args);
+    const numbers = args.filter((arg) => typeof arg === "number");
+    const res = numbers.reduce((a, b) => a * b, 1);
+    return res.toLocaleString("vi-VN");
+  },
   getBrands: (categories, rootCategory) => {
     const brands = categories.find((category) => category.slug == rootCategory);
     if (brands) {

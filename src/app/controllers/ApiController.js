@@ -20,6 +20,30 @@ class ApiController {
   // create product
   createProduct(req, res, next) {
     const formData = req.body;
+    let images = [];
+    if (req.files && Array.isArray(req.files)) {
+      images = req.files.map((file) => {
+        return file.filename;
+      });
+    }
+    formData.images = images;
+    res.send(formData);
+    // const product = new Product(req.body);
+    // const img = req.files;
+    // let images = [];
+    // if (img && Array.isArray(img)) {
+    //   images = img.map((img) => {
+    //     return img.filename;
+    //   });
+    // }
+    // req.body.images = images;
+    // product.save().then(() => {
+    //   req.flash("message", {
+    //     type: "success",
+    //     message: "lưu sản phẩm thành công",
+    //   });
+    //   res.redirect("/admin/products/showProduct");
+    // });
   }
 
   storeCategory(req, res, next) {
@@ -111,14 +135,14 @@ class ApiController {
     // res.json(req.body);
   }
   updateWarranty(req, res, next) {
-    // Warranty.updateOne({ _id: req.params.id }, { $set: req.body }).then(() => {
-    //   req.flash("message", {
-    //     type: "success",
-    //     message: "Đơn bảo hành đã được cập nhật",
-    //   });
-    //   res.redirect("/admin/warranty/show");
-    // });
-    res.json(req.body);
+    Warranty.updateOne({ _id: req.params.id }, { $set: req.body }).then(() => {
+      req.flash("message", {
+        type: "success",
+        message: "Đơn bảo hành đã được cập nhật",
+      });
+      res.redirect("/admin/warranty/show");
+    });
+    // res.json(req.body);
   }
   deleteWarranty(req, res) {
     const warrantyId = req.params.slugWarranty;
@@ -333,45 +357,48 @@ class ApiController {
   addItemToCart(req, res, next) {
     const formData = req.body;
     const idUser = req.session.idUser;
-    Product.findOne({ "variations._id": formData.idVariation }).then(
-      (variation) => {
-        res.send(variation);
-      }
-    );
-    // Cart.findOne({ idUser }).then((cart) => {
-    //   if (!cart) {
-    //     let newCart = new Cart({
-    //       idUser: idUser,
-    //       items: [
-    //         {
-    //           idVariation: formData.idVariation,
-    //           quantity: formData.quantity,
-    //         },
-    //       ],
-    //     });
-    //     newCart.save().then(() => {
-    //       res.redirect("/cart");
-    //     });
-    //   } else {
-    //     let check = false;
-    //     cart.items.forEach((item) => {
-    //       if (item.idVariation == formData.idVariation) {
-    //         item.quantity += parseInt(formData.quantity);
-    //         check = true;
-    //       }
-    //     });
-    //     if (!check) {
-    //       cart.items.push({
-    //         idVariation: formData.idVariation,
-    //         quantity: formData.quantity,
-    //       });
-    //     }
-    //     cart.save().then(() => {
-    //       res.redirect("/cart");
-    //     });
+    console.log(idUser);
+    console.log(formData);
+    // Product.findOne({ "variations._id": formData.idVariation }).then(
+    //   (variation) => {
+    //     res.send(variation);
     //   }
-    // });
+    // );
+    Cart.findOne({ idUser }).then((cart) => {
+      if (!cart) {
+        let newCart = new Cart({
+          idUser: idUser,
+          items: [
+            {
+              idVariation: formData.idVariation,
+              quantity: formData.quantity,
+            },
+          ],
+        });
+        newCart.save().then(() => {
+          res.redirect("/cart");
+        });
+      } else {
+        let check = false;
+        cart.items.forEach((item) => {
+          if (item.idVariation == formData.idVariation) {
+            item.quantity += parseInt(formData.quantity);
+            check = true;
+          }
+        });
+        if (!check) {
+          cart.items.push({
+            idVariation: formData.idVariation,
+            quantity: formData.quantity,
+          });
+        }
+        cart.save().then(() => {
+          res.redirect("back");
+        });
+      }
+    });
   }
+
   // end api user
   // test api
   test(req, res, next) {
