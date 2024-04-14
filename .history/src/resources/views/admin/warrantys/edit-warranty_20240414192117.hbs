@@ -67,20 +67,21 @@
       </div>
       <div class="col-6">
         <div class="col w-100">
+          <label for="detail" class="form-label">Sản phẩm</label>
           <div class="row">
             <div class="col-md-12">
               <div class="form-group my-4">
                 <div class="row">
                {{#each productsAndReasons}}
                   <div class="col-12">
-                      <strong>Chọn sản phẩm muốn thay đổi:</strong>
                       <div class="table-responsive">
-                          <select class="m-2" id="idProduct-{{@index}}" name="details[{{@index}}][idProduct]">
-                              <option value="{{this.productName}}">{{this.productName}}</option>
-                              {{#each ../products}}
-                                  <option value="{{this._id}}" {{#if this.selected}}selected{{/if}}>{{this.name}}</option>
-                              {{/each}}
-                          </select>
+  <strong>Chọn sản phẩm muốn thay đổi:</strong>
+<select class="m-2" id="idProduct-{{@index}}" name="details[{{@index}}][idProduct]">
+    <option value="{{this.productName}}">----Không thay đổi----</option>
+    {{#each ../products}}
+        <option value="{{this._id}}" {{#if this.selected}}selected{{/if}}>{{this.name}}</option>
+    {{/each}}
+</select>
                           </div>
                           <div>
                               <strong>Lý do bảo hành:</strong>

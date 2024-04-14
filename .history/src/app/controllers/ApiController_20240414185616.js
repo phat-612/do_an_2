@@ -111,14 +111,14 @@ class ApiController {
     // res.json(req.body);
   }
   updateWarranty(req, res, next) {
-    // Warranty.updateOne({ _id: req.params.id }, { $set: req.body }).then(() => {
-    //   req.flash("message", {
-    //     type: "success",
-    //     message: "Đơn bảo hành đã được cập nhật",
-    //   });
-    //   res.redirect("/admin/warranty/show");
-    // });
-    res.json(req.body);
+    Warranty.updateOne({ _id: req.params.id }, { $set: req.body }).then(() => {
+      req.flash("message", {
+        type: "success",
+        message: "Đơn bảo hành đã được cập nhật",
+      });
+      res.redirect("/admin/warranty/show");
+    });
+    // res.json(req.body);
   }
   deleteWarranty(req, res) {
     const warrantyId = req.params.slugWarranty;
