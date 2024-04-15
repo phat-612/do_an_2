@@ -121,18 +121,18 @@ class ApiController {
     });
   }
   storeWarranty(req, res, next) {
-    // const formData = req.body;
-    // let images = [];
-    // if (req.files && Array.isArray(req.files)) {
-    //   images = req.files.map((file) => {
-    //     return file.filename;
-    //   });
-    // }
-    // formData.images = images;
-    // const warranty = new Warranty(formData);
-    // warranty.save();
-    // res.redirect("/admin/warranty/show");
-    res.json(req.body);
+    const formData = req.body;
+    let images = [];
+    if (req.files && Array.isArray(req.files)) {
+      images = req.files.map((file) => {
+        return file.filename;
+      });
+    }
+    formData.images = images;
+    const warranty = new Warranty(formData);
+    warranty.save();
+    res.redirect("/admin/warranty/show");
+    // res.json(req.body);
   }
   updateWarranty(req, res, next) {
     // Warranty.updateOne({ _id: req.params.id }, { $set: req.body }).then(() => {

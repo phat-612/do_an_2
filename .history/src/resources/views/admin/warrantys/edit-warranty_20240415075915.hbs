@@ -75,8 +75,8 @@
                         <strong>Chọn sản phẩm muốn thay đổi:</strong>
                         <div class="table-responsive">
                             <select class="m-2" id="idProduct-{{@index}}" name="details[{{@index}}][idProduct]">
-                                <option value="{{this._id}}">{{this.productName}}</option>
                                 {{#each ../products}}
+                                {{!-- <option value="{{this._id}}">{{this.productName}}</option> --}}
                                     <option value="{{this._id}}"{{#if this.selected}}selected{{/if}}>{{this.name}}</option>
                                 {{/each}}
                             </select>
