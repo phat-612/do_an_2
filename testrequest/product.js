@@ -89,6 +89,9 @@ variations[0][attributes][rom] = 128gb
 
 variations[1][price] = 100099009
 variations[1][quantity] = 5
-variations[1][attributes][color] = red
+variations[1][attributes][màu sắc] = red
 variations[1][attributes][rom] = 128gb
+
+variation: 
+
 */

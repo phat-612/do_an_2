@@ -57,7 +57,7 @@ document
 
 var addAttribute1Btn = document.querySelector(".addAttribute1-btn");
 var Attribute1HTML = `<div class="row my-2">
-               <input type="text" id="thuocTinh1" placeholder="Nhập Thuộc Tính" class="form-control col mx-2">
+               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="thuocTinh1 form-control col mx-2 variations">
                <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
             </div>`;
 
@@ -65,14 +65,14 @@ addAttribute1Btn.addEventListener("click", () => {
   var inputAttribute1Div = document.getElementById("inputAttribute1Div");
   var secondChild = inputAttribute1Div.children[0]; // Lấy phần tử con thứ hai trong inputdiv
   secondChild.insertAdjacentHTML("afterend", Attribute1HTML);
-  document.querySelectorAll("input").forEach(function (input) {
+  document.querySelectorAll(".variations").forEach(function (input) {
     input.addEventListener("input", createAttri1Row);
   });
 });
 // nút them thuoc tinh 2
 var addAttribute2Btn = document.querySelector(".addAttribute2-btn");
 var Attribute2HTML = `<div class="row my-2">
-               <input type="text" id="thuocTinh2" placeholder="Nhập Thuộc Tính" class="form-control col mx-2">
+               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="thuocTinh2 form-control col mx-2 variations">
                <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
             </div>`;
 
@@ -80,19 +80,19 @@ addAttribute2Btn.addEventListener("click", () => {
   var inputAttribute2Div = document.getElementById("inputAttribute2Div");
   var secondChild = inputAttribute2Div.children[0]; // Lấy phần tử con thứ hai trong inputdiv
   secondChild.insertAdjacentHTML("afterend", Attribute2HTML);
-  document.querySelectorAll("input").forEach(function (input) {
+  document.querySelectorAll(".variations").forEach(function (input) {
     input.addEventListener("input", createAttri1Row);
   });
 });
-// ====================================================
+// // ====================================================
 
 function createAttri1Row() {
   var nameAttr1 = document.getElementById("inpNameAttributePro1").value;
   var nameAttr2 = document.getElementById("inpNameAttributePro2").value;
-  var attr1Values = Array.from(document.querySelectorAll("#thuocTinh1")).map(
+  var attr1Values = Array.from(document.querySelectorAll(".thuocTinh1")).map(
     (input) => input.value
   );
-  var attr2Values = Array.from(document.querySelectorAll("#thuocTinh2")).map(
+  var attr2Values = Array.from(document.querySelectorAll(".thuocTinh2")).map(
     (input) => input.value
   );
 
@@ -103,86 +103,57 @@ function createAttri1Row() {
 
   document.querySelector(".th1").textContent = nameAttr1;
   document.querySelector(".th2").textContent = nameAttr2;
+  console.log(attr1Values, attr2Values);
 
-  console.log("--------------------------------");
+  let tbody = document.querySelector("tbody");
   let tbodyHTML = "";
+
   let currentRow = 0;
+
   attr1Values.forEach((val1, ind1) => {
     attr2Values.forEach((val2, ind2) => {
-      if (ind2 == 0) {
-        tbodyHTML += `<tr>
-               <td class="td1" rowspan="${numberRow2}">${val1}</td>
-               <td>${val2}</td>
-               <td><input type="number" class="form-control w-50" name="variations[${currentRow}][price]" required></td>
-               <td><input type="number" class="form-control w-50" name="variations[${currentRow}][quantity]"></td>
-               <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
-               <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
-            </tr>`;
+      if (!val2 && !nameAttr2 && ind2 !== 0) {
+        tbodyHTML += `
+          <tr>
+            <td class="td1"> ${val1} </td>
+            <td></td>
+            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][price]" required></td>
+            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][quantity]"></td>
+            <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
+          </tr>
+        `;
         currentRow++;
       } else {
-        tbodyHTML += `<tr>
-               <td>${val2}</td>
-               <td><input type="number" class="form-control w-50" name="variations[${currentRow}][price]" required></td>
-               <td><input type="number" class="form-control w-50" name="variations[${currentRow}][quantity]" required></td>
-               <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
-               <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
-            </tr>`;
-        currentRow++;
+        if (ind2 === 0) {
+          tbodyHTML += `
+          <tr>
+            <td class="td1" rowspan="${numberRow2}">${val1}</td>
+            <td>${val2}</td>
+            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][price]" required></td>
+            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][quantity]"></td>
+            <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
+            <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
+          </tr>
+        `;
+          currentRow++;
+        } else {
+          tbodyHTML += `
+          <tr>
+            <td>${val2}</td>
+            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][price]" required></td>
+            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][quantity]" required></td>
+            <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
+            <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
+          </tr>
+        `;
+          currentRow++;
+        }
       }
     });
   });
   tbody.innerHTML = tbodyHTML;
 }
 
-console.log("--------------------------------");
-
-document.querySelectorAll("input").forEach(function (input) {
+document.querySelectorAll(".variations").forEach(function (input) {
   input.addEventListener("input", createAttri1Row);
 });
-
-// ============================================
-// // gợi ý cách làm cái bảng
-// // Lấy tất cả các giá trị từ các ô input có class attr1 và attr2
-// var attr1Values = Array.from(document.querySelectorAll(".attr1")).map(
-//   (input) => input.value
-// );
-// var attr2Values = Array.from(document.querySelectorAll(".attr2")).map(
-//   (input) => input.value
-// );
-
-// // Tạo ra một bảng mới
-// var table = document.createElement("table");
-
-// // Tạo ra hàng tiêu đề cho bảng
-// var thead = document.createElement("thead");
-// var headerRow = document.createElement("tr");
-// ["Attribute 1", "Attribute 2", "Quantity"].forEach((text) => {
-//   var th = document.createElement("th");
-//   th.textContent = text;
-//   headerRow.appendChild(th);
-// });
-// thead.appendChild(headerRow);
-// table.appendChild(thead);
-
-// // Tạo ra các hàng cho bảng từ các giá trị attr1 và attr2
-// var tbody = document.createElement("tbody");
-// for (let i = 0; i < attr1Values.length; i++) {
-//   var row = document.createElement("tr");
-//   [attr1Values[i], attr2Values[i]].forEach((value) => {
-//     var td = document.createElement("td");
-//     td.textContent = value;
-//     row.appendChild(td);
-//   });
-
-//   // Thêm một ô input để nhập số lượng
-//   var quantityInput = document.createElement("input");
-//   quantityInput.type = "number";
-//   quantityInput.min = "0";
-//   var td = document.createElement("td");
-//   td.appendChild(quantityInput);
-//   row.appendChild(td);
-
-//   tbody.appendChild(row);
-// }
-// table.appendChild(tbody);
-// document.body.appendChild(table);

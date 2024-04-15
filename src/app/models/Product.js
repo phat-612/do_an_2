@@ -54,14 +54,14 @@ Product.query.findable = function (req) {
 Product.pre("save", function (next) {
   this.variations.forEach((variation) => {
     let attributesString = Object.values(variation.attributes).join(" ");
-    const nameWithoutAccent = diacritics.remove(attributesString);
+    const nameWithoutAccent = diacritics.remove(attributesString).trim();
     variation.slug = slugify(nameWithoutAccent, { lower: true, strict: true });
   });
   next();
 });
 Product.pre("validate", function (next) {
   if (this.name) {
-    const nameWithoutAccent = diacritics.remove(this.name);
+    const nameWithoutAccent = diacritics.remove(this.name).trim();
     let slug = nameWithoutAccent.toLowerCase().replace(/[^a-z0-9]+/g, "-");
     const slugRegEx = new RegExp(`^(${slug})((-[0-9]*$)?)$`, "i");
     console.log("regex: ", slugRegEx);

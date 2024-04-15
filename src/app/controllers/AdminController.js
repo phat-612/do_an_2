@@ -174,7 +174,6 @@ class AdminController {
       .populate("details.idProduct")
       .exec()
       .then((warranty) => {
-        // console.log(warranty);
         const productsAndReasons = [];
         warranty.details.forEach((detail) => {
           const productName =
@@ -209,13 +208,11 @@ class AdminController {
       .populate("details.idProduct")
       .exec()
       .then((warranty) => {
-        // console.log(warranty);
         const productsAndReasons = [];
         warranty.details.forEach((detail) => {
-          const productName =
-            detail.idProduct && detail.idProduct.name
-              ? detail.idProduct.name
-              : null;
+          const detailId = detail._id;
+          const productId = detail.idProduct ? detail.idProduct._id : null;
+          const productName = detail.idProduct ? detail.idProduct.name : null;
           const reasonsAndPrices = detail.reasonAndPrice
             ? detail.reasonAndPrice.map((reasonPrice) => ({
                 reason: reasonPrice.reason,
@@ -224,6 +221,8 @@ class AdminController {
             : [];
           if (productName && reasonsAndPrices.length > 0) {
             productsAndReasons.push({
+              detailId: detailId,
+              id: productId,
               productName,
               reasonsAndPrices,
             });

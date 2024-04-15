@@ -10,12 +10,14 @@ class SiteController {
             idCategory: {
               $in: ids,
             },
-          }).then((products) => {
-            return {
-              ...category,
-              products,
-            };
-          });
+          })
+            .limit(10)
+            .then((products) => {
+              return {
+                ...category,
+                products,
+              };
+            });
         });
       });
       Promise.all(promises)
@@ -167,12 +169,12 @@ class SiteController {
               return acc;
             },
             {
-              nameProperty: key,
+              nameProperty: "Phân loại",
             }
           );
         });
       }
-
+      console.log(arrVariation);
       resProduct.arrVariation = arrVariation.map((obj) => {
         return Object.keys(obj)
           .sort()

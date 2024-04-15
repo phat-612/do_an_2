@@ -3,6 +3,13 @@ module.exports = {
   sum: (a, b) => a + b,
   hiddenSentence: (sentence) => sentence.replace(/[^\s]/g, "-"),
   compare: (a, b) => a == b,
+  objectToLi: (object) => {
+    let outputString = "";
+    Object.keys(object).forEach((key, index) => {
+      outputString += `<li>${key}: ${object[key]}</li>`;
+    });
+    return outputString;
+  },
   showDate: (date) => {
     const year = date.getFullYear();
     const month =
@@ -51,7 +58,7 @@ module.exports = {
         if (key == "nameProperty") {
           outputHtml += `
           <div class="chose-color">
-            <div class="title fs-4 my-3">${variation[key]}</div>
+            <div class="title fs-4 my-3 text-capitalize">${variation[key]}</div>
             <div class="body">
               <ul class="nav text-center">
           `;
@@ -77,7 +84,6 @@ module.exports = {
     return outputHtml;
   },
   showPrice: (...args) => {
-    console.log(args);
     const numbers = args.filter((arg) => typeof arg === "number");
     const res = numbers.reduce((a, b) => a * b, 1);
     return res.toLocaleString("vi-VN");

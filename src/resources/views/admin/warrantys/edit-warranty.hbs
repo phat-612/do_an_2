@@ -47,7 +47,6 @@
             id="address"
             value="{{warranty.address}}"
             required
-
           />
         </div>
         <div class="mb-3">
@@ -61,6 +60,39 @@
             required
           />
         </div>
+        <form id="new-product-form">
+            <div class="product-details">
+              <div class="col-12">
+                <strong>Tên sản phẩm:</strong>
+                <select id="newProductName" name="details[0][idProduct]">
+                  <option value="">---Không chọn sản phẩm---</option>
+                  {{#each products}}
+                  <option value="{{this._id}}">{{this.name}}</option>
+                  {{/each}}
+                </select>
+                <div>
+                  <strong>Lý do bảo hành:</strong>
+                  <ul>
+                    <li>
+                      <input
+                        type="text"
+                        id="reason-0-0"
+                        name="details[0][reasonAndPrice][0][reason]"
+                        placeholder="Lý do"
+                      />
+                      <input
+                        type="number"
+                        id="price-0-0"
+                        name="details[0][reasonAndPrice][0][price]"
+                        placeholder="Giá"
+                      />
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          <button type="button">Tạo sản phẩm</button>
+        </form>
         <div class="form-group my-4">
           <button type="submit" class="btn btn-primary" id="saveButton">Lưu chỉnh sửa</button>
         </div>
@@ -71,46 +103,47 @@
             <div class="col-md-12">
               <div class="form-group my-4">
                 {{#each productsAndReasons}}
-                    <div class="col-12">
+                      <div class="col-12">
+                        <input type="hidden" name="details[{{@index}}][detailId]" value="{{this.detailId}}"> 
                         <strong>Chọn sản phẩm muốn thay đổi:</strong>
                         <div class="table-responsive">
-                            <select class="m-2" id="idProduct-{{@index}}" name="details[{{@index}}][idProduct]">
-                                <option value="{{this._id}}">{{this.productName}}</option>
-                                {{#each ../products}}
-                                    <option value="{{this._id}}"{{#if this.selected}}selected{{/if}}>{{this.name}}</option>
-                                {{/each}}
-                            </select>
-                            </div>
-                            <div>
-                                <strong>Lý do bảo hành:</strong>
-                                <ul >
-                                    {{#each this.reasonsAndPrices}}
-                                    <li>
-                                        <input
-                                          type="text"
-                                          id="reason-{{@../index}}-{{@index}}"
-                                          name="details[{{@../index}}][reasonAndPrice][{{@index}}][reason]"
-                                          value="{{this.reason}}"
-                                          required
-                                        />
-                                        <input
-                                          type="number"
-                                          id="price-{{@../index}}-{{@index}}"
-                                          name="details[{{@../index}}][reasonAndPrice][{{@index}}][price]"
-                                          value="{{this.price}}"
-                                          required
-                                        />
-                                    </li>
-                                    {{/each}}
-                                    <li>
-                                        <button type="button" class="addButton">Thêm</button>
-                                        <button type="button" class="deleteButton">Xóa</button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                  {{/each}}
+                          <select class="m-2" id="idProduct-{{@index}}" name="details[{{@index}}][idProduct]">
+                            <option value="{{this.id}}">{{this.productName}}</option>
+                            {{#each ../products}}
+                                <option value="{{this._id}}"{{#if this.selected}}selected{{/if}}>{{this.name}}</option>
+                            {{/each}}
+                          </select>
+                          </div>
+                          <div>
+                              <strong>Lý do bảo hành:</strong>
+                              <ul >
+                                  {{#each this.reasonsAndPrices}}
+                                  <li>
+                                      <input
+                                        type="text"
+                                        id="reason-{{@../index}}-{{@index}}"
+                                        name="details[{{@../index}}][reasonAndPrice][{{@index}}][reason]"
+                                        value="{{this.reason}}"
+                                        required
+                                      />
+                                      <input
+                                        type="number"
+                                        id="price-{{@../index}}-{{@index}}"
+                                        name="details[{{@../index}}][reasonAndPrice][{{@index}}][price]"
+                                        value="{{this.price}}"
+                                        required
+                                      />
+                                  </li>
+                                  {{/each}}
+                                  <li>
+                                      <button type="button" class="addButton">Thêm</button>
+                                      <button type="button" class="deleteButton">Xóa</button>
+                                  </li>
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+              {{/each}}
             </div> 
           </div>
         </div>

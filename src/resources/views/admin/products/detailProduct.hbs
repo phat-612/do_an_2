@@ -26,35 +26,21 @@
     <table class="table-based table">
       <thead>
         <tr>
-          <th>Ram</th>
-          <th>Màu sắc</th>
+          <th>{{product.variations.attributes[key]}}</th>
+          <th></th>
           <th>Giá</th>
           <th>Số lượng</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td rowspan="2">8GB</td>
-          <td>Đỏ</td>
-          <td>1300</td>
-          <td>1200</td>
-        </tr>
-        <tr>
-          <td>Xanh</td>
-          <td>1300</td>
-          <td>1200</td>
-        </tr>
-        <tr>
-          <td rowspan="2">16GB</td>
-          <td>Đỏ</td>
-          <td>1300</td>
-          <td>1200</td>
-        </tr>
-        <tr>
-          <td>Xanh</td>
-          <td>1300</td>
-          <td>1200</td>
-        </tr>
+        {{#each product.variations}}
+          <tr> 
+            <td></td>
+            <td></td>
+            <td>{{this.variations.price}}</td>
+            <td>{{this.variations.quantity}}</td>
+          </tr>
+        {{/each}}
       </tbody>
     </table>
   </div>
@@ -66,19 +52,17 @@
     </div>
     <div class="col">
       <label for="" class="form-label fs-5">Ngày bắt đầu :</label>
-      <p></p>
+      <p>{{product.discount.startDay}}</p>
     </div>
     <div class="col">
       <label for="" class="form-label fs-5">Ngày kết thúc :</label>
-      <p></p>
+      <p>{{product.discount.endDay}}</p>
     </div>
   </div>
   <div class="row">
     <h4>Danh Sách Ảnh</h4>
-    <img
-      src="https://didongmoi.com.vn/upload/images/product/apple/iphone-15-pro-max-chinh-hang-4.jpg"
-      alt=""
-      class="col-3"
-    />
+    {{#each product.images}}
+      <img src="" alt="" class="col-3" />
+    {{/each}}
   </div>
 </div>

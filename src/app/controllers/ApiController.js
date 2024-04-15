@@ -21,30 +21,51 @@ class ApiController {
   createProduct(req, res, next) {
     const formData = req.body;
     let images = [];
+
     if (req.files && Array.isArray(req.files)) {
       images = req.files.map((file) => {
         return file.filename;
       });
     }
+
     formData.images = images;
-    res.send(formData);
-    // const product = new Product(req.body);
-    // const img = req.files;
-    // let images = [];
-    // if (img && Array.isArray(img)) {
-    //   images = img.map((img) => {
-    //     return img.filename;
-    //   });
-    // }
-    // req.body.images = images;
-    // product.save().then(() => {
-    //   req.flash("message", {
-    //     type: "success",
-    //     message: "lưu sản phẩm thành công",
-    //   });
-    //   res.redirect("/admin/products/showProduct");
-    // });
+
+    // Tạo đối tượng sản phẩm từ formData (đảm bảo rằng bạn đã khởi tạo product trước khi sử dụng)
+    const product = new Product(formData);
+    product.save().then(() => {
+      req.flash("message", {
+        type: "success",
+        message: "Lưu sản phẩm thành công",
+      });
+      res.redirect("/admin/product");
+    });
   }
+  // createProduct(req, res, next) {
+  //   const formData = req.body;
+  // let images = [];
+  // if (req.files && Array.isArray(req.files)) {
+  //   images = req.files.map((file) => {
+  //     return file.filename;
+  //   });
+  // }
+  // formData.images = images;
+  // res.send(req.body);
+  //   const product = new Product(req.body);
+  //   let images = [];
+  //   if (req.files && Array.isArray(req.files)) {
+  //     images = req.files.map((file) => {
+  //       return file.filename;
+  //     });
+  //   }
+  //   formData.images = images;
+  //   product.save().then(() => {
+  //     req.flash("message", {
+  //       type: "success",
+  //       message: "lưu sản phẩm thành công",
+  //     });
+  //     res.redirect("/admin/product");
+  //   });
+  // }
 
   storeCategory(req, res, next) {
     const formData = req.body;
@@ -121,18 +142,18 @@ class ApiController {
     });
   }
   storeWarranty(req, res, next) {
-    // const formData = req.body;
-    // let images = [];
-    // if (req.files && Array.isArray(req.files)) {
-    //   images = req.files.map((file) => {
-    //     return file.filename;
-    //   });
-    // }
-    // formData.images = images;
-    // const warranty = new Warranty(formData);
-    // warranty.save();
-    // res.redirect("/admin/warranty/show");
-    res.json(req.body);
+    const formData = req.body;
+    let images = [];
+    if (req.files && Array.isArray(req.files)) {
+      images = req.files.map((file) => {
+        return file.filename;
+      });
+    }
+    formData.images = images;
+    const warranty = new Warranty(formData);
+    warranty.save();
+    res.redirect("/admin/warranty/show");
+    // res.json(req.body);
   }
   updateWarranty(req, res, next) {
     // Warranty.updateOne({ _id: req.params.id }, { $set: req.body }).then(() => {
@@ -142,7 +163,56 @@ class ApiController {
     //   });
     //   res.redirect("/admin/warranty/show");
     // });
-    res.json(req.body);
+    Warranty.findOne({ _id: req.params.id }).then((warranty) => {
+      req.body.details.forEach((detail) => {
+        // Validation và parsing cho idProduct, reason và price như trước đây
+        if (Array.isArray(detail.idProduct)) {
+          detail.idProduct = detail.idProduct[detail.idProduct.length - 1];
+        }
+
+        detail.reasonAndPrice.forEach((reasonAndPrice) => {
+          if (Array.isArray(reasonAndPrice.reason)) {
+            reasonAndPrice.reason =
+              reasonAndPrice.reason[reasonAndPrice.reason.length - 1];
+          }
+          if (Array.isArray(reasonAndPrice.price)) {
+            reasonAndPrice.price = parseFloat(
+              reasonAndPrice.price[reasonAndPrice.price.length - 1]
+            );
+          }
+        });
+
+        // Tìm index của sản phẩm trong danh sách
+        const existingDetailIndex = warranty.details.findIndex(
+          (warrantyDetail) => warrantyDetail.detailId === detail.idProduct
+        );
+
+        if (existingDetailIndex !== -1) {
+          // Nếu sản phẩm tồn tại trong danh sách, tiến hành cập nhật
+          warranty.details[existingDetailIndex] = detail;
+        } else {
+          // Nếu sản phẩm không tồn tại, tiến hành tạo mới và thêm vào danh sách details
+          warranty.details.push(detail);
+        }
+      });
+
+      // Sau khi cập nhật xong dữ liệu, tiến hành lưu thông tin bảo hành
+      warranty
+        .save()
+        .then(() => {
+          req.flash("message", {
+            type: "success",
+            message: "Đơn bảo hành đã được cập nhật",
+          });
+          res.redirect("/admin/warranty/show");
+        })
+        .catch((error) => {
+          // Handle error
+          console.log(error);
+          res.status(500).send("Internal server error");
+        });
+    });
+    // res.json(req.body);
   }
   deleteWarranty(req, res) {
     const warrantyId = req.params.slugWarranty;
@@ -256,6 +326,7 @@ class ApiController {
         birthday: formData.birthday,
       }
     ).then(() => {
+      req.session.name = req.body.name;
       res.redirect("/me");
     });
   }
@@ -398,7 +469,59 @@ class ApiController {
       }
     });
   }
-
+  removeItemToCart(req, res, next) {
+    const idVariation = req.body.idVariation;
+    const idUser = req.session.idUser;
+    Cart.findOne({ idUser }).then((cart) => {
+      if (!cart) {
+        return res.redirect("/cart");
+      }
+      cart.items = cart.items.filter((item) => item.idVariation != idVariation);
+      cart.save().then(() => {
+        res.json({
+          status: "success",
+        });
+      });
+    });
+  }
+  updateCartQuantity(req, res, next) {
+    const idVariation = req.body.idVariation;
+    const quantity = req.body.quantity;
+    console.log(quantity);
+    const idUser = req.session.idUser;
+    const action = req.body.action;
+    const arrAction = ["increase", "decrease", "update"];
+    if (!arrAction.includes(action)) {
+      return res.redirect("/cart");
+    }
+    Cart.findOne({ idUser }).then((cart) => {
+      if (!cart) {
+        return res.redirect("/cart");
+      }
+      cart.items.forEach((item) => {
+        if (item.idVariation == idVariation) {
+          switch (action) {
+            case "increase":
+              item.quantity++;
+              break;
+            case "decrease":
+              item.quantity--;
+              break;
+            case "update":
+              item.quantity = quantity;
+              break;
+          }
+        }
+      });
+      cart.save().then(() => {
+        res.json({
+          status: "success",
+          quantity,
+          action,
+        });
+      });
+    });
+  }
   // end api user
   // test api
   test(req, res, next) {

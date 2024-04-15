@@ -1,64 +1,89 @@
 <div class="container">
   {{!-- {{consoleHbs cart}} --}}
-  <h1 class="fs-3 fw-bold">Cart</h1>
+  <h1 class="fs-3 fw-bold">Cart </h1>
   <div class="row">
-    <div class="col-7">
+    <div class="col">
       <table class="table table-responsive text-center align-middle">
         <thead>
           <tr class="fw-bold fs-5">
             <th class="col-2"></th>
-            <th class="col-4">Tên</th>
-            <th class="col-4">Phân loại</th>
-            <th class="col-1">Giá</th>
-            <th class="col-2">Số lượng</th>
-            <th class="col-2">Tổng tiền</th>
-            <th class="col-1"></th>
+            <th class="col">Tên</th>
+            <th class="col">Phân loại</th>
+            <th class="col">Giá</th>
+            <th class="col">Số lượng</th>
+            <th class="col">Tổng tiền</th>
+            <th class="col"></th>
           </tr>
         </thead>
         <tbody>
           {{#each cart}}
             <tr>
               <td><div class=""><img
-                    src="img/static/login.jpeg"
+                    src="https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/n/o/noi-chien-khong-dau-philips-4-1-lit-hd9200-90_2.png"
                     class="img-thumbnail"
                     alt=""
                   /></div></td>
               <td class="text-start"><a href="google.com">{{this.name}}</a></td>
-              <td class="text-start">{{this.attributes}}</td>
+              <td class="text-start">
+                <ul>
+                  {{{objectToLi this.attributes}}}
+                </ul>
+              </td>
               <td>{{showPrice this.price}}</td>
               <td>
                 <div class="d-flex justify-content-between align-items-center">
-                  <button class="w-25">-</button><input
+                  <button
+                    class="btnMinus w-25"
+                    data-bs-idVariation="{{this.idVariation}}"
+                    data-bs-storageQuantity="{{this.storageQuantity}}"
+                    data-bs-cartQuantity="{{this.cartQuantity}}"
+                    data-bs-price="{{this.price}}"
+                  >-</button><input
                     type="text"
-                    class="w-50 text-center border-0"
-                    value="{{cartQuantity}}"
-                  /><button class="w-25">+</button>
+                    class="w-50 text-center border-0 inpQuantity"
+                    value="{{this.cartQuantity}}"
+                  />
+                  <button
+                    class="btnPlus w-25"
+                    data-bs-idVariation="{{this.idVariation}}"
+                    data-bs-storageQuantity="{{this.storageQuantity}}"
+                    data-bs-cartQuantity="{{this.cartQuantity}}"
+                    data-bs-price="{{this.price}}"
+                  >+</button>
                 </div>
               </td>
-              <td class="fw-bold">{{showPrice price cartQuantity}}</td>
-              <td><i class="bi bi-trash3"></i></td>
+              <td class="totalItem fw-bold">{{showPrice
+                  this.price
+                  this.cartQuantity
+                }}</td>
+              <td><i
+                  class="btnDelete bi bi-trash3"
+                  data-bs-idVariation="{{this.idVariation}}"
+                ></i></td>
             </tr>
           {{/each}}
         </tbody>
       </table>
     </div>
-    <div class="col-5">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title fs-4">Tóm tắt</h5>
-          <div class="row">
-            <div class="col-6">Tổng tiền sản phẩm</div>
-            <div class="col-6 text-end">98.000.000 đ</div>
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title fs-4">Tóm tắt</h5>
+            <div class="row">
+              <div class="col-6">Tổng tiền sản phẩm</div>
+              <div class="totalItems col-6 text-end">98.000.000 đ</div>
+            </div>
+            <div class="row">
+              <div class="col-6">Phí vận chuyển</div>
+              <div class="col-6 text-end">0 đ</div>
+            </div>
+            <div class="row fs-5 fw-bold">
+              <div class="col-6">Tổng cộng</div>
+              <div class="totalPayment col-6 text-end">98.030.000 đ</div>
+            </div>
+            <a href="/payment" class="btn btn-primary w-100 mt-3">Đặt hàng</a>
           </div>
-          <div class="row">
-            <div class="col-6">Phí vận chuyển</div>
-            <div class="col-6 text-end">30000 đ</div>
-          </div>
-          <div class="row fs-5 fw-bold">
-            <div class="col-6">Tổng cộng</div>
-            <div class="col-6 text-end">98.030.000 đ</div>
-          </div>
-          <a href="/payment" class="btn btn-primary w-100 mt-3">Đặt hàng</a>
         </div>
       </div>
     </div>

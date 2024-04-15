@@ -71,14 +71,14 @@ class MeController {
           let variation = product.variations.find((variation) => {
             if (arrIdVariation.toString().includes(variation._id)) {
               arrIdVariation = arrIdVariation.filter((val) => {
-                cartItem = cart.items.find((item) => item.idVariation == val);
-                return val !== variation._id;
+                cartItem = cart.items.find(
+                  (item) => item.idVariation == variation._id.toString()
+                );
+                return val !== variation._id.toString();
               });
               return variation;
             }
           });
-          // console.log(variation);
-
           return {
             price: variation.price,
             cartQuantity: cartItem.quantity,
@@ -90,6 +90,7 @@ class MeController {
         });
         res.render("user/profiles/cart", {
           layout: "userProfile",
+          js: "user/cart",
           cart: resCart,
         });
       });
