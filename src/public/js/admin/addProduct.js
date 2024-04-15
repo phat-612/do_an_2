@@ -112,20 +112,8 @@ function createAttri1Row() {
 
   attr1Values.forEach((val1, ind1) => {
     attr2Values.forEach((val2, ind2) => {
-      if (!val2 && !nameAttr2 && ind2 !== 0) {
+      if (ind2 === 0) {
         tbodyHTML += `
-          <tr>
-            <td class="td1"> ${val1} </td>
-            <td></td>
-            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][price]" required></td>
-            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][quantity]"></td>
-            <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
-          </tr>
-        `;
-        currentRow++;
-      } else {
-        if (ind2 === 0) {
-          tbodyHTML += `
           <tr>
             <td class="td1" rowspan="${numberRow2}">${val1}</td>
             <td>${val2}</td>
@@ -135,8 +123,9 @@ function createAttri1Row() {
             <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
           </tr>
         `;
-          currentRow++;
-        } else {
+        currentRow++;
+      } else {
+        if (val2) {
           tbodyHTML += `
           <tr>
             <td>${val2}</td>
