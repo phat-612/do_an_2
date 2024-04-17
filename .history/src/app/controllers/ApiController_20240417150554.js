@@ -165,21 +165,22 @@ class ApiController {
     // });
     Warranty.findOne({ _id: req.params.id }).then((warranty) => {
       req.body.details.forEach((detail) => {
+        // Tìm index của detail trong danh sách
         const existingDetailIndex = warranty.details.findIndex(
           (warrantyDetail) => warrantyDetail.detailId === detail.detailId
         );
 
         if (existingDetailIndex !== -1) {
-          // Cập nhật thuộc tính cụ thể nếu detail đó đã tồn tại
-          warranty.details[existingDetailIndex].reasonAndPrice =
-            detail.reasonAndPrice;
+          // Nếu detail tồn tại trong danh sách, tiến hành cập nhật
+          warranty.details[existingDetailIndex] = detail;
         } else {
-          // Nếu chi tiết không tồn tại, thêm nó vào array details
+          // Nếu detail không tồn tại, tiến hành tạo mới và thêm vào danh sách details
           warranty.details.push(detail);
+          console.log(warranty.details);
         }
       });
 
-      // Lưu warranty sau khi đã cập nhật
+      // Sau khi cập nhật xong dữ liệu, tiến hành lưu thông tin bảo hành
       warranty
         .save()
         .then(() => {
@@ -187,9 +188,10 @@ class ApiController {
             type: "success",
             message: "Đơn bảo hành đã được cập nhật",
           });
-          res.redirect("/admin/warranty/show");
+          res.redirect("/admin/warranty/edit");
         })
         .catch((error) => {
+          // Handle error
           console.log(error);
           res.status(500).send("Internal server error");
         });

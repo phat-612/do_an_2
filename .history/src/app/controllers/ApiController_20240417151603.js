@@ -194,7 +194,7 @@ class ApiController {
           res.status(500).send("Internal server error");
         });
     });
-    // res.json(req.body);
+    res.json(req.body);
   }
   deleteWarranty(req, res) {
     const warrantyId = req.params.slugWarranty;

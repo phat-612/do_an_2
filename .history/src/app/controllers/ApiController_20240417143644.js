@@ -165,21 +165,42 @@ class ApiController {
     // });
     Warranty.findOne({ _id: req.params.id }).then((warranty) => {
       req.body.details.forEach((detail) => {
+        // Validation và parsing cho idProduct, reason và price như trước đây
+        if (Array.isArray(detail.idProduct)) {
+          detail.idProduct = detail.idProduct[detail.idProduct.length - 1];
+        }
+
+        detail.reasonAndPrice.forEach((reasonAndPrice) => {
+          if (Array.isArray(reasonAndPrice.reason)) {
+            reasonAndPrice.reason =
+              reasonAndPrice.reason[reasonAndPrice.reason.length - 1];
+          }
+          if (Array.isArray(reasonAndPrice.price)) {
+            reasonAndPrice.price = parseFloat(
+              reasonAndPrice.price[reasonAndPrice.price.length - 1]
+            );
+          }
+        });
+
+        // Tìm index của sản phẩm trong danh sách
         const existingDetailIndex = warranty.details.findIndex(
-          (warrantyDetail) => warrantyDetail.detailId === detail.detailId
+          (warrantyDetail) => warrantyDetail.detailId === detail.idProduct
         );
 
         if (existingDetailIndex !== -1) {
-          // Cập nhật thuộc tính cụ thể nếu detail đó đã tồn tại
-          warranty.details[existingDetailIndex].reasonAndPrice =
-            detail.reasonAndPrice;
+          // Nếu sản phẩm tồn tại trong danh sách, tiến hành cập nhật chỉ nếu detailId không thay đổi
+          if (
+            warranty.details[existingDetailIndex].detailId === detail.idProduct
+          ) {
+            warranty.details[existingDetailIndex] = detail;
+          }
         } else {
-          // Nếu chi tiết không tồn tại, thêm nó vào array details
+          // Nếu sản phẩm không tồn tại, tiến hành tạo mới và thêm vào danh sách details
           warranty.details.push(detail);
         }
       });
 
-      // Lưu warranty sau khi đã cập nhật
+      // Sau khi cập nhật xong dữ liệu, tiến hành lưu thông tin bảo hành
       warranty
         .save()
         .then(() => {
@@ -190,11 +211,12 @@ class ApiController {
           res.redirect("/admin/warranty/show");
         })
         .catch((error) => {
+          // Handle error
           console.log(error);
           res.status(500).send("Internal server error");
         });
     });
-    // res.json(req.body);
+    res.json(req.body);
   }
   deleteWarranty(req, res) {
     const warrantyId = req.params.slugWarranty;

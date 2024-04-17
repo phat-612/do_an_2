@@ -163,38 +163,36 @@ class ApiController {
     //   });
     //   res.redirect("/admin/warranty/show");
     // });
-    Warranty.findOne({ _id: req.params.id }).then((warranty) => {
-      req.body.details.forEach((detail) => {
-        const existingDetailIndex = warranty.details.findIndex(
-          (warrantyDetail) => warrantyDetail.detailId === detail.detailId
-        );
+    // Warranty.findOne({ _id: req.params.id }).then((warranty) => {
+    //   req.body.details.forEach((detail) => {
+    //     // Tìm index của detail trong danh sách
+    //     const existingDetailIndex = warranty.details.findIndex(
+    //       (warrantyDetail) => warrantyDetail.detailId === detail.detailId
+    //     );
 
-        if (existingDetailIndex !== -1) {
-          // Cập nhật thuộc tính cụ thể nếu detail đó đã tồn tại
-          warranty.details[existingDetailIndex].reasonAndPrice =
-            detail.reasonAndPrice;
-        } else {
-          // Nếu chi tiết không tồn tại, thêm nó vào array details
-          warranty.details.push(detail);
-        }
-      });
+    //     if (existingDetailIndex !== -1) {
+    //       // Nếu detail tồn tại trong danh sách, tiến hành cập nhật
+    //       warranty.details[existingDetailIndex] = detail;
+    //     }
+    //   });
 
-      // Lưu warranty sau khi đã cập nhật
-      warranty
-        .save()
-        .then(() => {
-          req.flash("message", {
-            type: "success",
-            message: "Đơn bảo hành đã được cập nhật",
-          });
-          res.redirect("/admin/warranty/show");
-        })
-        .catch((error) => {
-          console.log(error);
-          res.status(500).send("Internal server error");
-        });
-    });
-    // res.json(req.body);
+    //   // Sau khi cập nhật xong dữ liệu, tiến hành lưu thông tin bảo hành
+    //   warranty
+    //     .save()
+    //     .then(() => {
+    //       req.flash("message", {
+    //         type: "success",
+    //         message: "Đơn bảo hành đã được cập nhật",
+    //       });
+    //       res.redirect("/admin/warranty/show");
+    //     })
+    //     .catch((error) => {
+    //       // Handle error
+    //       console.log(error);
+    //       res.status(500).send("Internal server error");
+    //     });
+    // });
+    res.json(req.body);
   }
   deleteWarranty(req, res) {
     const warrantyId = req.params.slugWarranty;

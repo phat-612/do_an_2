@@ -163,22 +163,22 @@ class ApiController {
     //   });
     //   res.redirect("/admin/warranty/show");
     // });
-    Warranty.findOne({ _id: req.params.id }).then((warranty) => {
+    /Warranty.findOne({ _id: req.params.id }).then((warranty) => {
       req.body.details.forEach((detail) => {
         const existingDetailIndex = warranty.details.findIndex(
-          (warrantyDetail) => warrantyDetail.detailId === detail.detailId
+          warrantyDetail => warrantyDetail.detailId === detail.detailId
         );
-
+    
         if (existingDetailIndex !== -1) {
           // Cập nhật thuộc tính cụ thể nếu detail đó đã tồn tại
-          warranty.details[existingDetailIndex].reasonAndPrice =
-            detail.reasonAndPrice;
+          warranty.details[existingDetailIndex].reasonAndPrice = detail.reasonAndPrice;
+          
         } else {
           // Nếu chi tiết không tồn tại, thêm nó vào array details
           warranty.details.push(detail);
         }
       });
-
+    
       // Lưu warranty sau khi đã cập nhật
       warranty
         .save()
@@ -194,7 +194,7 @@ class ApiController {
           res.status(500).send("Internal server error");
         });
     });
-    // res.json(req.body);
+    res.json(req.body);
   }
   deleteWarranty(req, res) {
     const warrantyId = req.params.slugWarranty;
