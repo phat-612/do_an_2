@@ -65,8 +65,33 @@ $(document).ready(function () {
     // api update
     updateCartQuantity("update", idVariation, tempQuantity, price, input);
   });
+  // xử lý checkbox
+  $(".checkAll").change((e) => {
+    const isChecked = e.target.checked;
+    $(".checkItem").prop("checked", isChecked);
+    if (isChecked) {
+      $(".totalItem").addClass("isCheck");
+    } else {
+      $(".totalItem").removeClass("isCheck");
+    }
+    updateSummary();
+  });
+  $(".checkItem").change((e) => {
+    const isChecked = $(".checkItem:checked").length;
+    const totalCheck = $(".checkItem").length;
+    $(".checkAll").prop("checked", isChecked === totalCheck);
+    const row = $(e.target.closest("tr"));
+    if (e.target.checked) {
+      row.find(".totalItem").addClass("isCheck");
+    } else {
+      row.find(".totalItem").removeClass("isCheck");
+    }
+    updateSummary();
+  });
+  // hàm xử lý
   function updateSummary() {
-    const totalItem = $(".totalItem");
+    const totalItem = $(".totalItem.isCheck");
+
     const total = totalItem.toArray().reduce((acc, cur) => {
       return acc + parseInt(cur.innerText.replaceAll(".", ""));
     }, 0);

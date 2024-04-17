@@ -11,6 +11,7 @@ class SiteController {
               $in: ids,
             },
           })
+            .sort({ view: -1 })
             .limit(10)
             .then((products) => {
               return {
@@ -48,7 +49,6 @@ class SiteController {
   category(req, res, next) {
     let slugCategory;
     const rootCategory = req.params.slugCategory;
-    // console.log(req);
     if (req.params[0]) {
       slugCategory = req.params[0]
         .split("/")
@@ -96,11 +96,11 @@ class SiteController {
       slugVariation = req.params.slugVariation;
     }
 
-    // có 2 thuộc tính
     Product.findOne({ slug: slugProduct }).then((product) => {
       if (!product || product == null) {
         return next();
       }
+      Product.updateOne({ slug: slugProduct }, { $inc: { view: 1 } }).exec();
       let curVariationSlug = slugVariation
         ? slugVariation
         : product.variations[0].slug;
@@ -174,7 +174,6 @@ class SiteController {
           );
         });
       }
-      console.log(arrVariation);
       resProduct.arrVariation = arrVariation.map((obj) => {
         return Object.keys(obj)
           .sort()
