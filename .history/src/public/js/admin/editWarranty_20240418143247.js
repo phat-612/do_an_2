@@ -37,35 +37,37 @@ deleteButtons.forEach((deleteButton) => {
     }
   });
 });
-var inputSanPham = document.getElementById("detail");
-var addInput = document.getElementById("addInput");
-var addProductButton = document.getElementById("addProduct");
-var productCounter = 0;
 
-addProductButton.addEventListener("click", function () {
-  var inputSanPham = document.getElementById("detail");
+// ===============================================================
+document.querySelector("#new-product-form button").addEventListener("click", function(evt) {
+  evt.preventDefault();
+  
+  // Lấy dữ liệu từ form
+  var formData = new FormData(document.querySelector('#new-product-form'));
 
-  var selectedOption = inputSanPham.value;
-  var selectedProductId = "";
+  // Chuyển dữ liệu form thành JSON
+  var formJson = JSON.stringify(Object.fromEntries(formData));
 
-  var options = document
-    .getElementById("datalistOptions")
-    .getElementsByTagName("option");
-
-  if (!options || options.length === 0) {
-    alert("Hãy chọn ít nhất một lựa chọn!");
-    return;
-  }
-
-  var isOptionSelected = false;
-
-  for (var i = 0; i < options.length; i++) {
-    if (options[i].innerText === selectedOption) {
-      selectedProductId = options[i].id;
-      isOptionSelected = true;
-      break;
-    }
-  }
+  // Gửi dữ liệu đến server
+  fetch('/path/to/your/api', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: formJson
+  }).then(response => response.json())
+    .then((data) => {
+      if (data.status === "Success") {
+        alert('Sản phẩm đã được tạo thành công.');
+      } else {
+        alert('Có lỗi xảy ra khi tạo sản phẩm. Vui lòng thử lại.');
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      alert('Có lỗi xảy ra. Vui lòng thử lại.');
+    });
+});
 
   if (!isOptionSelected) {
     alert("Hãy chọn ít nhất một lựa chọn!");
@@ -101,12 +103,12 @@ addProductButton.addEventListener("click", function () {
 
     deleteButton.addEventListener("click", function () {
       productContainer.remove();
-      // var productContainers =
-      //   document.getElementsByClassName("product-container");
-      // // Nếu không còn sản phẩm nào, thêm lại thuộc tính required
-      // if (productContainers.length === 0) {
-      //   inputSanPham.required = true;
-      // }
+      var productContainers =
+        document.getElementsByClassName("product-container");
+      // Nếu không còn sản phẩm nào, thêm lại thuộc tính required
+      if (productContainers.length === 0) {
+        inputSanPham.required = true;
+      }
     });
 
     var addButton = document.createElement("button");
@@ -212,4 +214,3 @@ form.addEventListener("submit", function (event) {
     }
   }
 });
-s;

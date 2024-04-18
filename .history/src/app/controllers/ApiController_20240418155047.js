@@ -156,32 +156,25 @@ class ApiController {
     // res.json(req.body);
   }
   updateWarranty(req, res, next) {
-    Warranty.findOne({ _id: req.params.id }).then((warranty) => {
-      warranty.email = req.body.email;
-      warranty.name = req.body.name;
-      warranty.phone = req.body.phone;
-      warranty.address = req.body.address;
-      warranty.note = req.body.note;
+    warranty.email = req.body.email;
+    warranty.name = req.body.name;
+    warranty.phone = req.body.phone;
+    warranty.address = req.body.address;
+    warranty.note = req.body.note;
 
-      // Vòng lặp qua từng sản phẩm trong mảng 'details'
-      req.body.details.forEach((detailReq) => {
-        let detail = warranty.details.find((detail) =>
-          detail._id.equals(detailReq.detailId)
-        );
+    // Cập nhật mảng details
+    const newDetail = {
+      detailId: req.body.detailId,
+      idProduct: req.body.idProduct,
+      reasonAndPrice: req.body.reasonAndPrice,
+    };
+    warranty.details.push(newDetail);
 
-        if (detail) {
-          detail.idProduct = detailReq.idProduct;
-          detail.reasonAndPrice = detailReq.reasonAndPrice;
-        } else {
-          warranty.details.push(detailReq);
-        }
-      });
-
-      warranty.save().then(() => {
-        res.redirect("back");
-      });
+    // Lưu lại thay đổi
+    warranty.save().then(() => {
+      res.redirect("admin/warranty/show");
     });
-    // res.json(req.body);
+    res.json(req.body);
   }
   deleteWarranty(req, res) {
     const warrantyId = req.params.slugWarranty;

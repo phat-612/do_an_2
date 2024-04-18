@@ -60,34 +60,40 @@
             required
           />
         </div>
-      <div class="col w-100">
-        <label for="detail" class="form-label">Sản phẩm</label>
-        <div class="row">
-          <div class="col">
-            <input
-              class="form-control"
-              list="datalistOptions"
-              id="detail"
-              {{!-- required --}}
-            />
-            <datalist id="datalistOptions">
-              {{#each products}}
-                <option id="{{this._id}}">{{this.name}}</option>
-              {{/each}}
-            </datalist>
-          </div>
-          <div class="col">
-            <button
-              class="btn btn-success w-100"
-              type="button"
-              id="addProduct"
-            >Thêm</button>
-          </div>
-        </div>
-      </div>  
-       <div id="addInput"></div>
+        <form id="new-product-form " method="post" action="/api/storeWarranty">
+            <div class="product-details">
+              <div class="col-12">
+                <strong>Tên sản phẩm:</strong>
+                <select id="newProductName" name="details[0][idProduct]">
+                  <option value="">---Không chọn sản phẩm---</option>
+                  {{#each products}}
+                  <option value="{{this._id}}">{{this.name}}</option>
+                  {{/each}}
+                </select>
+                <div>
+                  <strong>Lý do bảo hành:</strong>
+                  <ul>
+                    <li>
+                      <input
+                        type="text"
+                        id="reason-0-0"
+                        name="details[0][reasonAndPrice][0][reason]"
+                        placeholder="Lý do"
+                      />
+                      <input
+                        type="number"
+                        id="price-0-0"
+                        name="details[0][reasonAndPrice][0][price]"
+                        placeholder="Giá"
+                      />
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          <button type="button" class="btn btn-primary">Tạo sản phẩm</button>
+        </form>
         <div class="form-group my-4">
-          
           <button type="submit" class="btn btn-primary" id="saveButton">Lưu chỉnh sửa</button>
         </div>
       </div>

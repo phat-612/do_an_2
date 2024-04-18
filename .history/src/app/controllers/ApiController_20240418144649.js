@@ -156,32 +156,39 @@ class ApiController {
     // res.json(req.body);
   }
   updateWarranty(req, res, next) {
-    Warranty.findOne({ _id: req.params.id }).then((warranty) => {
-      warranty.email = req.body.email;
-      warranty.name = req.body.name;
-      warranty.phone = req.body.phone;
-      warranty.address = req.body.address;
-      warranty.note = req.body.note;
+    // Warranty.findOne({ _id: req.params.id }).then((warranty) => {
+    //   req.body.details.forEach((detail) => {
+    //     const existingDetail = warranty.details.find(
+    //       (warrantyDetail) => warrantyDetail.detailId === detail.detailId
+    //     );
 
-      // Vòng lặp qua từng sản phẩm trong mảng 'details'
-      req.body.details.forEach((detailReq) => {
-        let detail = warranty.details.find((detail) =>
-          detail._id.equals(detailReq.detailId)
-        );
+    //     // Kiểm tra xem detail có tồn tại trong warranty.details
+    //     if (existingDetail) {
+    //       existingDetail.productName = detail.productName;
+    //       existingDetail.reasonAndPrice = detail.reasonAndPrice;
+    //     } else {
+    //       // Nếu detail chưa tồn tại, tạo mới và thêm vào warranty.details
+    //       warranty.details.push(detail);
+    //     }
+    //   });
 
-        if (detail) {
-          detail.idProduct = detailReq.idProduct;
-          detail.reasonAndPrice = detailReq.reasonAndPrice;
-        } else {
-          warranty.details.push(detailReq);
-        }
-      });
+    //   warranty.email = req.body.email;
+    //   warranty.name = req.body.name;
+    //   warranty.phone = req.body.phone;
+    //   warranty.address = req.body.address;
+    //   warranty.note = req.body.note;
 
-      warranty.save().then(() => {
-        res.redirect("back");
-      });
-    });
-    // res.json(req.body);
+    //   // Lưu lại thay đổi
+    //   warranty
+    //     .save()
+    //     .then(() => {
+    //       res.status(200).send("Updated successfully.");
+    //     })
+    //     .catch((error) => {
+    //       res.status(500).send("Failed to update: " + error);
+    //     });
+    // });
+    res.json(req.body);
   }
   deleteWarranty(req, res) {
     const warrantyId = req.params.slugWarranty;

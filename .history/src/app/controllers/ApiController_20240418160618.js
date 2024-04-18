@@ -163,25 +163,27 @@ class ApiController {
       warranty.address = req.body.address;
       warranty.note = req.body.note;
 
-      // Vòng lặp qua từng sản phẩm trong mảng 'details'
-      req.body.details.forEach((detailReq) => {
-        let detail = warranty.details.find((detail) =>
-          detail._id.equals(detailReq.detailId)
-        );
+      // Tìm detail trong mảng 'details' theo 'detailId'
+      let detail = warranty.details.find((detail) =>
+        detail._id.equals(req.body.details[0].detailId)
+      );
 
-        if (detail) {
-          detail.idProduct = detailReq.idProduct;
-          detail.reasonAndPrice = detailReq.reasonAndPrice;
-        } else {
-          warranty.details.push(detailReq);
-        }
-      });
+      // Nếu tìm được detail
+      if (detail) {
+        // Cập nhật 'idProduct' và 'reasonAndPrice' cho detail
+        detail.idProduct = req.body.details[0].idProduct;
+        detail.reasonAndPrice = req.body.details[0].reasonAndPrice;
+      } else {
+        // Nếu không tìm được detail, thêm mới detail vào mảng 'details'
+        warranty.details.push(req.body.details[0]);
+      }
 
+      // Lưu lại thay đổi
       warranty.save().then(() => {
         res.redirect("back");
       });
     });
-    // res.json(req.body);
+    res.json(req.body);
   }
   deleteWarranty(req, res) {
     const warrantyId = req.params.slugWarranty;

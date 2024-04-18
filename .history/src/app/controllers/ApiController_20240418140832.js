@@ -156,31 +156,55 @@ class ApiController {
     // res.json(req.body);
   }
   updateWarranty(req, res, next) {
+    // Warranty.updateOne({ _id: req.params.id }, { $set: req.body }).then(() => {
+    //   req.flash("message", {
+    //     type: "success",
+    //     message: "Đơn bảo hành đã được cập nhật",
+    //   });
+    //   res.redirect("/admin/warranty/show");
+    // });
     Warranty.findOne({ _id: req.params.id }).then((warranty) => {
-      warranty.email = req.body.email;
-      warranty.name = req.body.name;
-      warranty.phone = req.body.phone;
-      warranty.address = req.body.address;
-      warranty.note = req.body.note;
+      // Tìm thấy -> sửa đổi
+      if (warranty) {
+        req.body.details.forEach((detail) => {
+          console.log(req.body.details);
 
-      // Vòng lặp qua từng sản phẩm trong mảng 'details'
-      req.body.details.forEach((detailReq) => {
-        let detail = warranty.details.find((detail) =>
-          detail._id.equals(detailReq.detailId)
-        );
+          const existingDetailIndex = warranty.details.findIndex(
+            (warrantyDetail) => warrantyDetail.detailId === detail.detailId
+          );
+          if (existingDetailIndex > -1) {
+            warranty.details[existingDetailIndex].reasonAndPrice =
+              detail.reasonAndPrice;
+          }
+          // else {
+          //   // Chi tiết không tồn tại -> thêm mới
+          //   warranty.details.push(detail);
+          // }
+        });
 
-        if (detail) {
-          detail.idProduct = detailReq.idProduct;
-          detail.reasonAndPrice = detailReq.reasonAndPrice;
-        } else {
-          warranty.details.push(detailReq);
-        }
-      });
-
-      warranty.save().then(() => {
-        res.redirect("back");
-      });
+        // Cập nhật các trường cần thiết
+        warranty.email = req.body.email;
+        warranty.name = req.body.name;
+        warranty.phone = req.body.phone;
+        warranty.address = req.body.address;
+        warranty.note = req.body.note;
+      }
     });
+
+    warranty
+      .save()
+      .then(() => {
+        req.flash("message", {
+          type: "success",
+          message: "Đơn bảo hành đã được cập nhật",
+        });
+        res.redirect("back");
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).send("Internal server error");
+      });
+
     // res.json(req.body);
   }
   deleteWarranty(req, res) {

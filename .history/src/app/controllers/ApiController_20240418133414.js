@@ -156,30 +156,44 @@ class ApiController {
     // res.json(req.body);
   }
   updateWarranty(req, res, next) {
+    // Warranty.updateOne({ _id: req.params.id }, { $set: req.body }).then(() => {
+    //   req.flash("message", {
+    //     type: "success",
+    //     message: "Đơn bảo hành đã được cập nhật",
+    //   });
+    //   res.redirect("/admin/warranty/show");
+    // });
     Warranty.findOne({ _id: req.params.id }).then((warranty) => {
-      warranty.email = req.body.email;
-      warranty.name = req.body.name;
-      warranty.phone = req.body.phone;
-      warranty.address = req.body.address;
-      warranty.note = req.body.note;
-
-      // Vòng lặp qua từng sản phẩm trong mảng 'details'
-      req.body.details.forEach((detailReq) => {
-        let detail = warranty.details.find((detail) =>
-          detail._id.equals(detailReq.detailId)
+      req.body.details.forEach((detail) => {
+        const existingDetailIndex = warranty.details.findIndex(
+          (warrantyDetail) => warrantyDetail.detailId === detail.detailId
         );
-
-        if (detail) {
-          detail.idProduct = detailReq.idProduct;
-          detail.reasonAndPrice = detailReq.reasonAndPrice;
+        console.log(existingDetailIndex);
+        if (existingDetailIndex !== -1) {
+          // Cập nhật thuộc tính cụ thể nếu detail đó đã tồn tại
+          warranty.details[existingDetailIndex].reasonAndPrice =
+            detail.reasonAndPrice;
         } else {
-          warranty.details.push(detailReq);
+          // // Nếu chi tiết không tồn tại, thêm nó vào array details
+          // warranty.details.push(detail);
+          console.log("sản phẩm");
         }
       });
 
-      warranty.save().then(() => {
-        res.redirect("back");
-      });
+      // Lưu warranty sau khi đã cập nhật
+      warranty
+        .save()
+        .then(() => {
+          req.flash("message", {
+            type: "success",
+            message: "Đơn bảo hành đã được cập nhật",
+          });
+          res.redirect("back");
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).send("Internal server error");
+        });
     });
     // res.json(req.body);
   }

@@ -163,22 +163,23 @@ class ApiController {
       warranty.address = req.body.address;
       warranty.note = req.body.note;
 
-      // Vòng lặp qua từng sản phẩm trong mảng 'details'
-      req.body.details.forEach((detailReq) => {
-        let detail = warranty.details.find((detail) =>
-          detail._id.equals(detailReq.detailId)
-        );
-
-        if (detail) {
-          detail.idProduct = detailReq.idProduct;
-          detail.reasonAndPrice = detailReq.reasonAndPrice;
-        } else {
-          warranty.details.push(detailReq);
+      // Tìm sản phẩm dựa trên idProduct trước khi thêm vào details
+      Product.findById(req.body.idProduct).then((product) => {
+        if (!product) {
+          return res.status(404).send({ message: "Product not found" });
         }
-      });
 
-      warranty.save().then(() => {
-        res.redirect("back");
+        const newDetail = {
+          idProduct: product._id,
+          reasonAndPrice: req.body.reasonAndPrice,
+        };
+
+        warranty.details.push(newDetail);
+
+        // Lưu lại thay đổi
+        warranty.save().then(() => {
+          res.redirect("admin/warranty/show");
+        });
       });
     });
     // res.json(req.body);

@@ -101,12 +101,12 @@ addProductButton.addEventListener("click", function () {
 
     deleteButton.addEventListener("click", function () {
       productContainer.remove();
-      // var productContainers =
-      //   document.getElementsByClassName("product-container");
-      // // Nếu không còn sản phẩm nào, thêm lại thuộc tính required
-      // if (productContainers.length === 0) {
-      //   inputSanPham.required = true;
-      // }
+      var productContainers =
+        document.getElementsByClassName("product-container");
+      // Nếu không còn sản phẩm nào, thêm lại thuộc tính required
+      if (productContainers.length === 0) {
+        inputSanPham.required = true;
+      }
     });
 
     var addButton = document.createElement("button");
@@ -212,4 +212,3 @@ form.addEventListener("submit", function (event) {
     }
   }
 });
-s;
