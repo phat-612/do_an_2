@@ -96,5 +96,10 @@ class MeController {
       });
     });
   }
+  payment(req, res, next) {
+    const cookies = req.cookies; // Replace 'userCookie' with the name of your cookie
+    console.log(cookies);
+    res.send(userCookie);
+  }
 }
 module.exports = new MeController();
