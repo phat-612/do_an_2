@@ -152,4 +152,21 @@ $(document).ready(function () {
       }
     });
   }
+  $(".btnPayment").click((e) => {
+    e.preventDefault();
+    let output = [];
+    const rows = $("tr");
+    rows.toArray().forEach((row) => {
+      const isCheck = $(row).find(".checkItem").prop("checked");
+      if (!isCheck) return;
+      const idVariation = $(row).find(".btnMinus").attr("data-bs-idVariation");
+      const quantity = $(row).find(".inpQauntity").val();
+      output.push({ idVariation, quantity });
+    });
+    if (output.length === 0) {
+      alert("Vui lòng chọn sản phẩm");
+      return;
+    }
+    document.cookie = `cart=${JSON.stringify(output)}`;
+  });
 });
