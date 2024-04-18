@@ -95,6 +95,7 @@ class ApiController {
         res.redirect("back");
       });
   }
+
   deleteCategory(req, res, next) {
     const hasChildCategory = async (categoryId) => {
       const subCategories = await Category.find({ idParent: categoryId });
