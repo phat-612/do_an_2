@@ -151,7 +151,8 @@ class ApiController {
           detail.idProduct = detailReq.idProduct;
           detail.reasonAndPrice = detailReq.reasonAndPrice;
         } else {
-          // Đẩy đối tượng detailReq vào mảng warranty.details
+          detailReq.push(warranty.details);
+
           warranty.details.push(detailReq);
         }
       });
