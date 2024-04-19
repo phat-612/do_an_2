@@ -83,6 +83,7 @@ class AdminController {
           await findParent(category);
           return parents;
         };
+
         getAllParent(product.idCategory).then((parents) => {
           product = {
             ...product.toObject(),
