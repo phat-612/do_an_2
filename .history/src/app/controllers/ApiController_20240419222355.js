@@ -142,7 +142,6 @@ class ApiController {
 
       // Vòng lặp qua từng sản phẩm trong mảng 'details'
       req.body.details.forEach((detailReq) => {
-        console.log(req.body.details);
         let detail = warranty.details.find(
           (detail) => detail._id.toString() === detailReq.detailId
         );

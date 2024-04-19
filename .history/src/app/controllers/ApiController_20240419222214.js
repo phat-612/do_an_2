@@ -133,34 +133,33 @@ class ApiController {
     // res.json(req.body);
   }
   updateWarranty(req, res, next) {
-    Warranty.findOne({ _id: req.params.id }).then((warranty) => {
-      warranty.email = req.body.email;
-      warranty.name = req.body.name;
-      warranty.phone = req.body.phone;
-      warranty.address = req.body.address;
-      warranty.note = req.body.note;
+    // Warranty.findOne({ _id: req.params.id }).then((warranty) => {
+    //   warranty.email = req.body.email;
+    //   warranty.name = req.body.name;
+    //   warranty.phone = req.body.phone;
+    //   warranty.address = req.body.address;
+    //   warranty.note = req.body.note;
 
-      // Vòng lặp qua từng sản phẩm trong mảng 'details'
-      req.body.details.forEach((detailReq) => {
-        console.log(req.body.details);
-        let detail = warranty.details.find(
-          (detail) => detail._id.toString() === detailReq.detailId
-        );
+    //   // Vòng lặp qua từng sản phẩm trong mảng 'details'
+    //   req.body.details.forEach((detailReq) => {
+    //     let detail = warranty.details.find((detail) =>
+    //       detail._id.toString() === detailReq.detailId
+    //     );
 
-        if (detail) {
-          detail.idProduct = detailReq.idProduct;
-          detail.reasonAndPrice = detailReq.reasonAndPrice;
-        } else {
-          // Đẩy đối tượng detailReq vào mảng warranty.details
-          warranty.details.push(detailReq);
-        }
-      });
+    //     if (detail) {
+    //       detail.idProduct = detailReq.idProduct;
+    //       detail.reasonAndPrice = detailReq.reasonAndPrice;
+    //     } else {
+    //       // Đẩy đối tượng detailReq vào mảng warranty.details
+    //       warranty.details.push(detailReq);
+    //     }
+    //   });
 
-      warranty.save().then(() => {
-        res.redirect("back");
-      });
-    });
-    // res.json(req.body);
+    //   warranty.save().then(() => {
+    //     res.redirect("back");
+    //   });
+    // });
+    res.json(req.body);
   }
   deleteWarranty(req, res) {
     const warrantyId = req.params.slugWarranty;
