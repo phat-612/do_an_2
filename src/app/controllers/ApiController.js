@@ -17,29 +17,6 @@ class ApiController {
   // api user
   // aip admin
 
-  // create product
-  // createProduct(req, res, next) {
-  //   const formData = req.body;
-  //   let images = [];
-
-  //   if (req.files && Array.isArray(req.files)) {
-  //     images = req.files.map((file) => {
-  //       return file.filename;
-  //     });
-  //   }
-
-  //   formData.images = images;
-
-  //   // Tạo đối tượng sản phẩm từ formData (đảm bảo rằng bạn đã khởi tạo product trước khi sử dụng)
-  //   const product = new Product(formData);
-  //   product.save().then(() => {
-  //     req.flash("message", {
-  //       type: "success",
-  //       message: "Lưu sản phẩm thành công",
-  //     });
-  //     res.redirect("/admin/product");
-  //   });
-  // }
   createProduct(req, res, next) {
     res.send(req.body);
     // const formData = req.body;

@@ -8,6 +8,7 @@ const { engine } = require("express-handlebars");
 const methodOverride = require("method-override");
 const path = require("path");
 const MongoStore = require("connect-mongo");
+const cookieParser = require("cookie-parser");
 
 // import user
 const db = require("./config/db");
@@ -58,6 +59,7 @@ app.use(
   })
 );
 app.use(flash());
+app.use(cookieParser());
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(

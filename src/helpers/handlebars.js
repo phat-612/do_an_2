@@ -11,6 +11,7 @@ module.exports = {
     return outputString;
   },
   showDate: (date) => {
+    if (date instanceof Date || date == undefined) return "";
     const year = date.getFullYear();
     const month =
       parseInt(date.getMonth() + 1) < 10

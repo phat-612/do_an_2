@@ -26,19 +26,31 @@
     <table class="table-based table">
       <thead>
         <tr>
-          <th>{{product.variations}}</th>
-          <th></th>
+          <th>{{#each product.variations}}{{#if @first}}{{#each
+                  this.attributes
+                }}
+                  {{#if @first}}
+                    {{@key}}
+                  {{/if}}
+                {{/each}}{{/if}}{{/each}}</th>
+          <th>{{#each product.variations}}{{#if @first}}{{#each
+                  this.attributes
+                }}
+                  {{#if @last}}
+                    {{@key}}
+                  {{/if}}
+                {{/each}}{{/if}}{{/each}}</th>
           <th>Giá</th>
           <th>Số lượng</th>
         </tr>
       </thead>
       <tbody>
         {{#each product.variations}}
-          <tr> 
+          <tr>
             <td></td>
             <td></td>
-            <td>{{this.variations.price}}</td>
-            <td>{{this.variations.quantity}}</td>
+            <td>{{this.price}}</td>
+            <td>{{this.quantity}}</td>
           </tr>
         {{/each}}
       </tbody>
@@ -52,17 +64,17 @@
     </div>
     <div class="col">
       <label for="" class="form-label fs-5">Ngày bắt đầu :</label>
-      <p>{{product.discount.startDay}}</p>
+      <p>{{showDate product.discount.startDay}}</p>
     </div>
     <div class="col">
       <label for="" class="form-label fs-5">Ngày kết thúc :</label>
-      <p>{{product.discount.endDay}}</p>
+      <p>{{showDate product.discount.endDay}}</p>
     </div>
   </div>
   <div class="row">
     <h4>Danh Sách Ảnh</h4>
     {{#each product.images}}
-      <img src="" alt="" class="col-3" />
+      <img src="/img/uploads/{{this}}" alt="" class="col-3" />
     {{/each}}
   </div>
 </div>

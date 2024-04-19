@@ -25,6 +25,9 @@ a {
 .custom-w-fitcontent {
   width: fit-content;
 }
+.custom-mw-720px {
+  max-width: 720px;
+}
 /* color */
 .custom-bg-red {
   background-color: var(--primary-color);

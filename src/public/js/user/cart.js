@@ -152,7 +152,7 @@ $(document).ready(function () {
       }
     });
   }
-  $(".btnPayment").click((e) => {
+  $(".btnOrder").click((e) => {
     e.preventDefault();
     let output = [];
     const rows = $("tr");
@@ -168,5 +168,6 @@ $(document).ready(function () {
       return;
     }
     document.cookie = `cart=${JSON.stringify(output)}`;
+    window.location.href = "/me/order";
   });
 });
