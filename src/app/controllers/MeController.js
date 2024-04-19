@@ -97,7 +97,8 @@ class MeController {
     });
   }
   order(req, res, next) {
-    const cart = req.cookies.cart;
+    const cart = JSON.parse(req.body.cart);
+    console.log(cart);
     res.render("user/profiles/order", { title: "Đặt hàng" });
   }
 }

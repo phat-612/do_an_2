@@ -60,7 +60,7 @@
       {{#each products}}
         <tr>
           <td>{{this.name}}</td>
-          <td><img src="" /></td>
+          <td><img src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}" /></td>
           <td>NOKIA</td>
           <td>24.000.000</td>
           <td>99</td>

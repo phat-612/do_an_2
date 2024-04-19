@@ -18,30 +18,28 @@ class ApiController {
   // aip admin
 
   createProduct(req, res, next) {
-    res.send(req.body);
-    // const formData = req.body;
-    // let images = [];
-    // if (req.files && Array.isArray(req.files)) {
-    //   images = req.files.map((file) => {
-    //     return file.filename;
-    //   });
-    // }
-    // formData.images = images;
-    // res.send(req.body);
-    // const product = new Product(req.body);
-    // if (req.files && Array.isArray(req.files)) {
-    //   images = req.files.map((file) => {
-    //     return file.filename;
-    //   });
-    // }
-    // formData.images = images;
-    // product.save().then(() => {
-    //   req.flash("message", {
-    //     type: "success",
-    //     message: "lưu sản phẩm thành công",
-    //   });
-    //   res.redirect("/admin/product");
-    // });
+    const formData = req.body;
+    let images = [];
+    if (req.files && Array.isArray(req.files)) {
+      images = req.files.map((file) => {
+        return file.filename;
+      });
+    }
+    formData.images = images;
+    const product = new Product(req.body);
+    if (req.files && Array.isArray(req.files)) {
+      images = req.files.map((file) => {
+        return file.filename;
+      });
+    }
+    formData.images = images;
+    product.save().then(() => {
+      req.flash("message", {
+        type: "success",
+        message: "lưu sản phẩm thành công",
+      });
+      res.redirect("/admin/product");
+    });
   }
 
   storeCategory(req, res, next) {
