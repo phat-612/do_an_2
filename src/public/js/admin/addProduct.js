@@ -146,3 +146,17 @@ function createAttri1Row() {
 document.querySelectorAll(".variations").forEach(function (input) {
   input.addEventListener("input", createAttri1Row);
 });
+
+const percentInput = document.getElementById("percentInput");
+const discountStart = document.getElementById("discountStart");
+const discountEnd = document.getElementById("discountEnd");
+
+percentInput.addEventListener("input", (e) => {
+  if (!e.value) {
+    discountStart.setAttribute("disabled", "true");
+    discountEnd.setAttribute("disabled", "true");
+  } else {
+    discountStart.setAttribute("disabled", "false");
+    discountEnd.setAttribute("disabled", "false");
+  }
+});

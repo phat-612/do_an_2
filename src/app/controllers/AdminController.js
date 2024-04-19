@@ -17,6 +17,7 @@ class AdminController {
       css: "admin/home",
     });
   }
+
   // get /product
   product(req, res, next) {
     Product.find({})

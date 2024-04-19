@@ -6,7 +6,9 @@
           <li class="nav-item">
             <select class="form-select" aria-label="Default select example">
               <option selected>THƯƠNG HIỆU</option>
-              <option value="1">NOKIA</option>
+              {{#each categories}}
+                <option value="{{this.id}}">{{this.name}}</option>
+              {{/each}}
             </select>
           </li>
           <li class="nav-item position-relative">
@@ -61,7 +63,7 @@
         <tr>
           <td>{{this.name}}</td>
           <td><img src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}" /></td>
-          <td>NOKIA</td>
+          <td>{{this.brand}}</td>
           <td>24.000.000</td>
           <td>99</td>
           <td>

@@ -97,8 +97,10 @@ class MeController {
     });
   }
   order(req, res, next) {
-    const cart = JSON.parse(req.body.cart);
-    console.log(cart);
+    const carts = JSON.parse(req.cookies.cart);
+    console.log(carts);
+    // hinh, giá, check soluong, ten, phan loai
+    carts.forEach((cart) => {});
     res.render("user/profiles/order", { title: "Đặt hàng" });
   }
 }

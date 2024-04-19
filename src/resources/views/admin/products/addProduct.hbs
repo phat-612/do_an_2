@@ -26,12 +26,7 @@
         <option value="{{this._id}}">{{this.name}}</option>
       {{/each}}
     </select>
-    {{!-- <input class="form-control" list="categoryOptions" id="categoryDataList" placeholder="Nhập Danh Mục" required>
-      <datalist id="categoryOptions">
-         {{#each categorys}}
-            <option value="{{this.name}}">
-         {{/each}}
-      </datalist> --}}
+
 
     {{! -------------------------------- }}
     <label for="brandDataList" class="form-label fs-4 mt-3">Thuộc Tính</label>
@@ -133,12 +128,12 @@
         <div class="input-group">
           <input
             type="number"
-            class="form-control"
+            class="form-control percentInput"
             max="100"
             min="0"
             oninput="this.value = Math.abs(this.value)"
-            required
             name="discount[percent]"
+            id="percentInput"
           />
           <span class="input-group-text">%</span>
         </div>
@@ -148,13 +143,14 @@
         <input
           type="date"
           name="discount[startDay]"
-          id=""
+          id="discountStart"
           class="form-control"
+          disabled="true"
         />
       </div>
       <div class="col">
         <label for="" class="form-label fs-5">Ngày kết thúc :</label>
-        <input type="date" name="discount[endDay]" id="" class="form-control" />
+        <input type="date" name="discount[endDay]" id="discountEnd" class="form-control" disabled="true" />
       </div>
     </div>
 
@@ -170,6 +166,7 @@
           accept="image/*"
           multiple
           name="images"
+          required
         />
       </div>
       <div class="mb-3">
