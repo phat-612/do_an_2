@@ -100,7 +100,22 @@ class MeController {
     const carts = JSON.parse(req.cookies.cart);
     console.log(carts);
     // hinh, giá, check soluong, ten, phan loai
-    carts.forEach((cart) => {});
+    carts.forEach((cart) => {
+      Promise.all([
+        Product.findOne({ "variations._id": cart.idVariation }),
+        Cart.findOne({ idUser: req.session.idUser }),
+      ]).then(([product, cart]) => {
+        let variation = product.variations.find(
+          (variation) => variation._id == cart.idVariation
+        );
+        if (variation.quantity < cart.quantity) {
+          return res.render("user/profiles/order", {
+            title: "Đặt hàng",
+            error: "Số lượng sản phẩm trong giỏ hàng không đủ",
+          });
+        }
+      });
+    });
     res.render("user/profiles/order", { title: "Đặt hàng" });
   }
 }
