@@ -98,25 +98,49 @@ class MeController {
   }
   order(req, res, next) {
     const carts = JSON.parse(req.cookies.cart);
-    console.log(carts);
     // hinh, giá, check soluong, ten, phan loai
-    carts.forEach((cart) => {
-      Promise.all([
-        Product.findOne({ "variations._id": cart.idVariation }),
+    let promises = carts.map((cookieCart) => {
+      return Promise.all([
+        Product.findOne({ "variations._id": cookieCart.idVariation }),
         Cart.findOne({ idUser: req.session.idUser }),
       ]).then(([product, cart]) => {
+        let data = {};
+        data.name = product.name;
+        data.image = product.images[0];
         let variation = product.variations.find(
-          (variation) => variation._id == cart.idVariation
+          (variation) => variation._id.toString() == cookieCart.idVariation
         );
-        if (variation.quantity < cart.quantity) {
-          return res.render("user/profiles/order", {
-            title: "Đặt hàng",
-            error: "Số lượng sản phẩm trong giỏ hàng không đủ",
-          });
+        if (
+          Date.now() > product.discount.startDay &&
+          Date.now() < product.discount.endDay
+        ) {
+          data.price = variation.price * (1 - product.discount.percent / 100);
+        } else {
+          data.price = variation.price;
         }
+        if (variation.quantity < cart.quantity) {
+          data.error = "Số lượng sản phẩm không đủ";
+          data.quantity = variation.quantity;
+        } else {
+          data.quantity = cookieCart.quantity;
+        }
+        data.variation = variation.attributes;
+        return data;
       });
     });
-    res.render("user/profiles/order", { title: "Đặt hàng" });
+
+    Promise.all(promises).then((resData) => {
+      let cart = {};
+      cart.items = resData;
+      cart.totalPrice = resData.reduce((total, item) => {
+        return total + item.price * item.quantity;
+      }, 0);
+      res.render("user/profiles/order", {
+        title: "Đặt hàng",
+        js: "user/order",
+        cart,
+      });
+    });
   }
 }
 module.exports = new MeController();
