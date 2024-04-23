@@ -1,6 +1,7 @@
 let addButtons = document.querySelectorAll(".addButton");
 let deleteButtons = document.querySelectorAll(".deleteButton");
-
+let tempProduct = $(".areaDetailProducts>div").length;
+console.log(tempProduct);
 addButtons.forEach((addButton, outerIndex) => {
   addButton.addEventListener("click", function (e) {
     let listItemContainer = e.target.parentElement.parentElement;
@@ -92,7 +93,7 @@ addProductButton.addEventListener("click", function () {
     var productIdInput = document.createElement("input");
     productIdInput.type = "hidden";
     productIdInput.value = selectedProductId;
-    productIdInput.name = `details[${productCounter}][idProduct]`;
+    productIdInput.name = `details[${productCounter + tempProduct}][idProduct]`;
 
     var deleteButton = document.createElement("button");
     deleteButton.className = "btn btn-outline-secondary delete-button";
@@ -120,18 +121,20 @@ addProductButton.addEventListener("click", function () {
       newReasonInput.className = "form-control";
       newReasonInput.type = "text";
       newReasonInput.placeholder = "Lý do";
-      newReasonInput.name = `details[${currentProductContainer.getAttribute(
-        "data-product-counter"
-      )}][reasonAndPrice][${reasonCounter}][reason]`;
+      newReasonInput.name = `details[${
+        parseInt(currentProductContainer.getAttribute("data-product-counter")) +
+        tempProduct
+      }][reasonAndPrice][${reasonCounter}][reason]`;
       newReasonInput.required = true;
 
       var newPriceInput = document.createElement("input");
       newPriceInput.className = "form-control";
       newPriceInput.type = "number";
       newPriceInput.placeholder = "Giá";
-      newPriceInput.name = `details[${currentProductContainer.getAttribute(
-        "data-product-counter"
-      )}][reasonAndPrice][${reasonCounter}][price]`;
+      newPriceInput.name = `details[${
+        parseInt(currentProductContainer.getAttribute("data-product-counter")) +
+        tempProduct
+      }][reasonAndPrice][${reasonCounter}][price]`;
       newPriceInput.required = true;
 
       var newDeleteButton = document.createElement("button");

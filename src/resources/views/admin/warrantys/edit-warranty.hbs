@@ -95,7 +95,7 @@
         <div class="col w-100">
           <div class="row">
             <div class="col-md-12">
-              <div class="form-group my-4">
+              <div class="form-group my-4 areaDetailProducts">
                 {{#each productsAndReasons}}
                       <div class="col-12">
                         <input type="hidden" name="details[{{@index}}][detailId]" value="{{this.detailId}}"> 
@@ -136,8 +136,9 @@
                               </ul>
                           </div>
                       </div>
-                  </div>
+                  
               {{/each}}
+              </div>
             </div> 
           </div>
         </div>

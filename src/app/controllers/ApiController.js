@@ -133,6 +133,7 @@ class ApiController {
     // res.json(req.body);
   }
   updateWarranty(req, res, next) {
+    // return res.send(req.body);
     Warranty.findOne({ _id: req.params.id }).then((warranty) => {
       warranty.email = req.body.email;
       warranty.name = req.body.name;
