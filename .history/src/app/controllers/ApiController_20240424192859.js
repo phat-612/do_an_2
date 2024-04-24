@@ -132,42 +132,43 @@ class ApiController {
     res.redirect("/admin/warranty/show");
   }
   updateWarranty(req, res, next) {
-    Warranty.findOne({ _id: req.params.id }).then((warranty) => {
-      warranty.email = req.body.email;
-      warranty.name = req.body.name;
-      warranty.phone = req.body.phone;
-      warranty.address = req.body.address;
-      warranty.note = req.body.note;
-      if (req.body.details) {
-        // Kiểm tra xem req.body.details có tồn tại hay không
-        let updatedWarrantyDetails = [];
-        req.body.details.forEach((detailReq) => {
-          let detail = warranty.details.find(
-            (detail) => detail._id.toString() === detailReq.detailId
-          );
-          if (detail) {
-            detail.idProduct = detailReq.idProduct;
-            detail.reasonAndPrice = detailReq.reasonAndPrice;
-            updatedWarrantyDetails.push(detail);
-          } else {
-            updatedWarrantyDetails.push(detailReq);
-          }
-        });
-        warranty.details = updatedWarrantyDetails;
-      } else {
-        req.flash("message", {
-          type: "danger",
-          message: "Phải có ít nhất 1 sản phẩm trong đơn bảo hành",
-        });
-      }
-      warranty.save().then(() => {
-        req.flash("message", {
-          type: "success",
-          message: "Đơn bảo hành đã được cập nhật",
-        });
-        res.redirect("/admin/warranty/" + req.params.id + "/deltail");
-      });
-    });
+    // Warranty.findOne({ _id: req.params.id }).then((warranty) => {
+    //   warranty.email = req.body.email;
+    //   warranty.name = req.body.name;
+    //   warranty.phone = req.body.phone;
+    //   warranty.address = req.body.address;
+    //   warranty.note = req.body.note;
+    //   if (req.body.details) {
+    //     // Kiểm tra xem req.body.details có tồn tại hay không
+    //     let updatedWarrantyDetails = [];
+    //     req.body.details.forEach((detailReq) => {
+    //       let detail = warranty.details.find(
+    //         (detail) => detail._id.toString() === detailReq.detailId
+    //       );
+    //       if (detail) {
+    //         detail.idProduct = detailReq.idProduct;
+    //         detail.reasonAndPrice = detailReq.reasonAndPrice;
+    //         updatedWarrantyDetails.push(detail);
+    //       } else {
+    //         updatedWarrantyDetails.push(detailReq);
+    //       }
+    //     });
+    //     warranty.details = updatedWarrantyDetails;
+    //   } else {
+    //     req.flash("message", {
+    //       type: "danger",
+    //       message: "Phải có ít nhất 1 sản phẩm trong đơn bảo hành",
+    //     });
+    //   }
+    //   warranty.save().then(() => {
+    //     req.flash("message", {
+    //       type: "success",
+    //       message: "Đơn bảo hành đã được cập nhật",
+    //     });
+    //     res.redirect("/admin/warranty/" + req.params.id + "/deltail");
+    //   });
+    // });
+    res.json(req.body);
   }
   deleteWarranty(req, res) {
     const warrantyId = req.params.slugWarranty;

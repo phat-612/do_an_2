@@ -130,6 +130,7 @@ class ApiController {
     const warranty = new Warranty(formData);
     warranty.save();
     res.redirect("/admin/warranty/show");
+    // res.json(req.body);
   }
   updateWarranty(req, res, next) {
     Warranty.findOne({ _id: req.params.id }).then((warranty) => {

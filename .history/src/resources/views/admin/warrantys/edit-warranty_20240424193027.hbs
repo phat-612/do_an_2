@@ -1,5 +1,5 @@
 <div class="container">
-  <form method="POST" action="/api/warranty/{{warranty._id}}?_method=PUT" >
+  <form method="POST"  action="/api/warranty/{{warranty._id}}?_method=PUT" >
     <div class="row mt-4">
       <div class="col-6">
         <div class="mb-3">
@@ -59,7 +59,16 @@
             required
           />
         </div>
-     
+        <div class="input-group mb-3">
+        <label class="input-group-text" for="images">Tải ảnh</label>
+        <input
+          type="file"
+          name="images"
+          class="form-control"
+          id="images"
+          multiple
+        />
+      </div>
       <div class="col w-100">
         <label for="detail" class="form-label">Sản phẩm</label>
         <div class="row">

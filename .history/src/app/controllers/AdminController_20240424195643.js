@@ -40,7 +40,7 @@ class AdminController {
           layout: "admin",
           js: "admin/orderProduct",
           css: "admin/orderProduct",
-          orders: multipleMongooseToObject(orders),
+          oders: multipleMongooseToObject(oders),
         });
       })
       .catch(next);

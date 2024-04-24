@@ -138,6 +138,13 @@ class ApiController {
       warranty.phone = req.body.phone;
       warranty.address = req.body.address;
       warranty.note = req.body.note;
+      let images = [];
+      if (req.files && Array.isArray(req.files)) {
+        images = req.files.map((file) => {
+          return file.filename;
+        });
+      }
+      warranty.images = images;
       if (req.body.details) {
         // Kiểm tra xem req.body.details có tồn tại hay không
         let updatedWarrantyDetails = [];

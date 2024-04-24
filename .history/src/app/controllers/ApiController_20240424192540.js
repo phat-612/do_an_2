@@ -130,6 +130,7 @@ class ApiController {
     const warranty = new Warranty(formData);
     warranty.save();
     res.redirect("/admin/warranty/show");
+    // res.json(req.body);
   }
   updateWarranty(req, res, next) {
     Warranty.findOne({ _id: req.params.id }).then((warranty) => {
@@ -160,6 +161,7 @@ class ApiController {
           message: "Phải có ít nhất 1 sản phẩm trong đơn bảo hành",
         });
       }
+
       warranty.save().then(() => {
         req.flash("message", {
           type: "success",
