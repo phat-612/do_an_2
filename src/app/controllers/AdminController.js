@@ -230,7 +230,6 @@ class AdminController {
             });
           }
         });
-
         Product.find({}).then((products) => {
           res.render("admin/warrantys/edit-warranty", {
             layout: "admin",

@@ -97,9 +97,10 @@
             <div class="col-md-12">
               <div class="form-group my-4 areaDetailProducts">
                 {{#each productsAndReasons}}
-                      <div class="col-12">
+                      <div class="col-12" id="product-{{@index}}">
                         <input type="hidden" name="details[{{@index}}][detailId]" value="{{this.detailId}}"> 
                         <strong>Chọn sản phẩm muốn thay đổi:</strong>
+                        <button type="button" class="deleteButton" onclick="removeProduct('product-{{@index}}')">Xóa sản phẩm</button>
                         <div class="table-responsive">
                           <select class="m-2" id="idProduct-{{@index}}" name="details[{{@index}}][idProduct]">
                             <option value="{{this.id}}">{{this.productName}}</option>

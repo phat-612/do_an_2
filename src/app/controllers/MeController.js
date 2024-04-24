@@ -57,6 +57,13 @@ class MeController {
     //     });
     //   });
     Cart.findOne({ idUser: req.session.idUser }).then((cart) => {
+      if (!cart) {
+        return res.render("user/profiles/cart", {
+          layout: "userProfile",
+          js: "user/cart",
+          cart: [],
+        });
+      }
       const cartItems = cart.items.map((item) => {
         return Product.findOne({ "variations._id": item.idVariation }).select(
           "name variations"
@@ -125,6 +132,7 @@ class MeController {
           data.quantity = cookieCart.quantity;
         }
         data.variation = variation.attributes;
+        data.idVariation = variation._id;
         return data;
       });
     });

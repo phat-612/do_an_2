@@ -6,8 +6,12 @@ const Order = new Schema(
     note: { type: String },
     total: { type: Number },
     status: { type: String },
-    paymentStatus: { type: Boolean },
-    paymentMethod: { type: String },
+    paymentDetail: {
+      method: { type: String, enum: ["cod", "online"], required: true },
+      status: { type: Boolean },
+      date: { type: Date },
+      amount: { type: Number },
+    },
     details: [
       {
         price: { type: Number },

@@ -1,7 +1,11 @@
+function removeProduct(id) {
+  var product = document.getElementById(id);
+  product.parentNode.removeChild(product);
+}
 let addButtons = document.querySelectorAll(".addButton");
 let deleteButtons = document.querySelectorAll(".deleteButton");
 let tempProduct = $(".areaDetailProducts>div").length;
-console.log(tempProduct);
+// console.log(tempProduct);
 addButtons.forEach((addButton, outerIndex) => {
   addButton.addEventListener("click", function (e) {
     let listItemContainer = e.target.parentElement.parentElement;
@@ -29,14 +33,20 @@ addButtons.forEach((addButton, outerIndex) => {
   });
 });
 
-deleteButtons.forEach((deleteButton) => {
-  deleteButton.addEventListener("click", function (e) {
-    let listItemContainer = e.target.parentElement.parentElement;
-    let listItems = listItemContainer.querySelectorAll("li");
-    if (listItems.length > 2) {
-      listItems[listItems.length - 2].remove(); // xóa li cuối cùng trước nút "Thêm"
-    }
-  });
+let listItemContainer = document.querySelector(".areaDetailProducts");
+
+document.querySelector(".deleteButton").addEventListener("click", function () {
+  // tìm tất cả li chứa input kiểu text hoặc number
+  const inputLis = Array.from(document.querySelectorAll("li")).filter((li) =>
+    li.querySelector("input[type='text'], input[type='number']")
+  );
+  // chỉ xóa nếu số lượng li chứa input lớn hơn 1
+  if (inputLis.length > 1) {
+    // xóa li cuối cùng
+    inputLis[inputLis.length - 1].remove();
+  } else {
+    alert("Không thể xóa: Cần ít nhất 1 ô nhập liệu.");
+  }
 });
 var inputSanPham = document.getElementById("detail");
 var addInput = document.getElementById("addInput");
