@@ -118,10 +118,10 @@ Content-Type: application/json
  {
     "idUser": "6600f1a67e13636c0006b205",
     "note": "hong có gì",
-   "total": 20000,
+   " total": 20000,
     "status": "Thành công",
     "paymentDetail": {
-      "method": "cod",
+      "method": "PaymentDetail",
       "status": "Thành công",
       "date": 29-12-2022,
       "amount": 123,
@@ -131,7 +131,7 @@ Content-Type: application/json
         "price": 200000,
         "quantity": 50000,
         "idVariation": {
-          "ref":"661615a669b48ade27ecf1ae"
+          "ref": "Product.variations",
         },
       },
     ],
@@ -140,4 +140,4 @@ Content-Type: application/json
         "phone":"123",
         "address": "cần thơ"
     },
-  }
+  },

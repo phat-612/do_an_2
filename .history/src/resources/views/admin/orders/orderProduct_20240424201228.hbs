@@ -41,17 +41,17 @@
         </tr>
       </thead>
       <tbody>
-        {{!-- {{#each orders}} --}}
-        <tr>
-          <td>Nguyen Van A</td>
-          <td>{{this.status}}</td>
-          <td>{{this.total}}</td>
-          <td>{{this.createAt}}</td>
-          <td><a href="/admin/order/detail" class="btn btn-primary"><i
-                class="bi bi-eye"
-              ></i></a></td>
-        </tr>
-        {{!-- {{/each}} --}}
+        {{#each orders}}
+          <tr>
+            <td>Nguyen Van A</td>
+            <td>{{this.status}}</td>
+            <td>{{this.total}}</td>
+            <td>{{this.createAt}}</td>
+            <td><a href="/admin/order/detail" class="btn btn-primary"><i
+                  class="bi bi-eye"
+                ></i></a></td>
+          </tr>
+        {{/each}}
       </tbody>
     </table>
   </div>

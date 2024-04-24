@@ -143,7 +143,6 @@ class MeController {
       cart.totalPrice = resData.reduce((total, item) => {
         return total + item.price * item.quantity;
       }, 0);
-
       res.render("user/profiles/order", {
         title: "Đặt hàng",
         js: "user/order",

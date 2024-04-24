@@ -116,28 +116,29 @@ Content-Type: application/json
 POST http://localhost:3000/api/test
 Content-Type: application/json
  {
-    "idUser": "6600f1a67e13636c0006b205",
-    "note": "hong có gì",
-   "total": 20000,
-    "status": "Thành công",
-    "paymentDetail": {
-      "method": "cod",
-      "status": "Thành công",
-      "date": 29-12-2022,
-      "amount": 123,
+    idUser: { type: Schema.Types.ObjectId, ref: "User" },
+    note: { type: String },
+    total: { type: Number },
+    status: { type: String },
+    paymentDetail: {
+      method: { type: String, enum: ["cod", "online"], required: true },
+      status: { type: Boolean },
+      date: { type: Date },
+      amount: { type: Number },
     },
     "details": [
       {
-        "price": 200000,
-        "quantity": 50000,
+        "price": { type: Number },
+        "quantity": { type: Number },
         "idVariation": {
-          "ref":"661615a669b48ade27ecf1ae"
+          type: Schema.Types.ObjectId,
+          ref: "Product.variations",
         },
       },
     ],
     "shipmentDetail": {
-        "name": "đơn hàng",
-        "phone":"123",
-        "address": "cần thơ"
+   "   name": { type: String },
+    "  phone": { type: String },
+      "address": { type: String },
     },
-  }
+  },
