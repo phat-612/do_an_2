@@ -35,7 +35,7 @@ addButtons.forEach((addButton, outerIndex) => {
 
 let listItemContainer = document.querySelector(".areaDetailProducts");
 
-document.querySelectorAll(".deleteButton").forEach(function (button) {
+document.querySelector(".deleteButton").forEach(function (button) {
   button.addEventListener("click", function () {
     // tìm tất cả li chứa input kiểu text hoặc number
     const inputLis = Array.from(document.querySelectorAll("li")).filter((li) =>

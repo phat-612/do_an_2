@@ -164,10 +164,10 @@ class ApiController {
 
       warranty.save().then(() => {
         req.flash("message", {
-          type: "success",
+          type: "danger",
           message: "Đơn bảo hành đã được cập nhật",
         });
-        res.redirect("/admin/warranty/" + req.params.id + "/deltail");
+        res.redirect("/admin/warranty/" + req.params.id + "/detail");
       });
     });
   }
