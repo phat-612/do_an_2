@@ -4,6 +4,7 @@ const Product = require("../models/Product");
 const UserLogin = require("../models/UserLogin");
 const User = require("../models/User");
 const Cart = require("../models/Cart");
+const Order = require("../models/Order");
 const fs = require("fs");
 const path = require("path");
 // ------------------------
@@ -590,6 +591,12 @@ class ApiController {
       .catch((error) => {
         console.log(error);
       });
+  }
+  testAddOrder(req, res, next) {
+    let order = new Order(req.body);
+    order.save().then(() => {
+      res.send("Thêm order thành công");
+    });
   }
 }
 module.exports = new ApiController();

@@ -141,3 +141,34 @@ Content-Type: application/json
         "address": "cần thơ"
     },
   }
+
+
+
+###
+POST http://localhost:3000/api/testAddOrder
+Content-Type: application/json
+
+{
+    "idUser": "6600f1a67e13636c0006b205",
+    "note": "hong có gì",
+    "total": 20000,
+    "status": "Thành công",
+    "paymentDetail": {
+      "method": "cod",
+      "status": true,
+      "date": "2022-12-29",
+      "amount": 20000
+    },
+    "details": [
+      {
+        "price": 200000,
+        "quantity": 5,
+        "idVariation": "6600f1a67e13636c0006b205"
+      }
+    ],
+    "shipmentDetail": {
+        "name": "nguyễn văn a",
+        "phone":"0123456789",
+        "address": "cần thơ"
+    }
+}
