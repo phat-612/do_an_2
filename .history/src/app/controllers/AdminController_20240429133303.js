@@ -55,6 +55,19 @@ class AdminController {
     //     orders: mongooseToObject(orders),
     //   });
     // });
+    Order.findById(orderId).then((order) => {
+      // giả sử cứ order detail đầu tiên trong mảng 'details'
+      const firstOrderDetail = order.details[0];
+      const targetVariationId = firstOrderDetail.variation;
+      // giả sử rằng field 'variation' này chứa id của biến thể sản phẩm
+
+      // tìm sản phẩm chứa biến thể này
+      Product.findOne({ "variations._id": targetVariationId }).then(
+        (product) => {
+          console.log(product.name);
+        }
+      );
+    });
   }
   //get /product/addproduct
   async addPro(req, res, next) {

@@ -1,5 +1,4 @@
 const Handlebars = require("handlebars");
-const moment = require("moment");
 module.exports = {
   sum: (a, b) => a + b,
   hiddenSentence: (sentence) => sentence.replace(/[^\s]/g, "-"),
@@ -115,12 +114,6 @@ module.exports = {
   consoleHbs: (data) => {
     console.log(data);
   },
-  formatDate: (datetime, format) => {
-    if (moment) {
-      format = format || "DD/MM/YYYY";
-      return moment(datetime).format(format);
-    } else {
-      return datetime;
-    }
-  },
+formatDate:(type) => 
+
 };

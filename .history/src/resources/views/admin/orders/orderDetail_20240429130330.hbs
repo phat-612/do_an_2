@@ -1,6 +1,6 @@
 <div class="container">
-  <h2>ID đơn hàng: {{orders._id}}</h2>
-  <h4>ID Khách Hàng: {{orders.idUser}}</h4>
+  <h2></h2>
+  <h4>ID Khách Hàng: 456</h4>
   <div class="row">
     <div class="col-9">
       <table class="table">
@@ -15,17 +15,30 @@
           </tr>
         </thead>
         <tbody>
-          {{#each orders}}
-            <tr>
-              <th class="col-1">
-                {{#each orders.images}}
-                  <img src="/img/uploads/{{this}}" alt="" class="w-25" />
-                {{/each}}
-              </th>
-              <td>{{this.details.idVariation}}</td>
-
-            </tr>
-          {{/each}}
+          <tr>
+            <th class="col-1"><img
+                src="https://cdn.tgdd.vn/Products/Images/42/299033/iphone-15-pro-white-2.jpg"
+                class="card-img"
+                alt=""
+              /></th>
+            <td>Iphone 15 pro max</td>
+            <td>128gb / 8gb</td>
+            <td>Titan Trắng</td>
+            <td>2</td>
+            <td>53.800.000</td>
+          </tr>
+          <tr>
+            <th class="col-1"><img
+                src="https://cdn.tgdd.vn/Products/Images/42/299033/iphone-15-pro-white-2.jpg"
+                class="card-img"
+                alt=""
+              /></th>
+            <td>Iphone 15 pro max</td>
+            <td>128gb / 8gb</td>
+            <td>Titan Trắng</td>
+            <td>2</td>
+            <td>53.800.000</td>
+          </tr>
         </tbody>
       </table>
       <div

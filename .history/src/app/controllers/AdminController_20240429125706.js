@@ -35,7 +35,7 @@ class AdminController {
   // get /orderproducts
   order(req, res, next) {
     Order.find({})
-      .populate("idUser", "name") // chỉ lưu trữ 'name' từ bản ghi User
+      .populate("idUser", "name")
       .then((orders) => {
         res.render("admin/orders/orderProduct", {
           layout: "admin",
@@ -47,14 +47,11 @@ class AdminController {
   }
   // get /order/detail
   orderDetail(req, res, next) {
-    // Order.findById(req.params.id).then((orders) => {
-    //   res.render("admin/orders/orderDetail", {
-    //     layout: "admin",
-    //     js: "admin/orderDetail",
-    //     css: "admin/orderDetail",
-    //     orders: mongooseToObject(orders),
-    //   });
-    // });
+    res.render("admin/orders/orderDetail", {
+      layout: "admin",
+      js: "admin/orderDetail",
+      css: "admin/orderDetail",
+    });
   }
   //get /product/addproduct
   async addPro(req, res, next) {

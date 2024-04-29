@@ -47,14 +47,12 @@ class AdminController {
   }
   // get /order/detail
   orderDetail(req, res, next) {
-    // Order.findById(req.params.id).then((orders) => {
-    //   res.render("admin/orders/orderDetail", {
-    //     layout: "admin",
-    //     js: "admin/orderDetail",
-    //     css: "admin/orderDetail",
-    //     orders: mongooseToObject(orders),
-    //   });
-    // });
+    User.findById(req.params.id).then((orders) =>{
+      res.render("admin/orders/orderDetail", {
+        layout: "admin",
+        js: "admin/orderDetail",
+        css: "admin/orderDetail",
+    })
   }
   //get /product/addproduct
   async addPro(req, res, next) {

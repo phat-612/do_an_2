@@ -55,6 +55,31 @@ class AdminController {
     //     orders: mongooseToObject(orders),
     //   });
     // });
+    Order.findById(req.params.id).then((order) => {
+      if (!order) {
+        console.log(`Order with id ${req.params.id} not found`);
+        return;
+      }
+
+      // Assume the first order detail in the array 'details'
+      const firstOrderDetail = order.details[0];
+      const targetVariationId = firstOrderDetail.variation;
+
+      console.log(`Target variation id: ${targetVariationId}`);
+
+      // Find product containing this variation
+      Product.findOne({ "variations._id": targetVariationId }).then(
+        (product) => {
+          if (!product) {
+            console.log(
+              `Product with variation id ${targetVariationId} not found`
+            );
+            return;
+          }
+          console.log(product.name);
+        }
+      );
+    });
   }
   //get /product/addproduct
   async addPro(req, res, next) {

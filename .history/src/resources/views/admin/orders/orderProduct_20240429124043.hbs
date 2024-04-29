@@ -43,14 +43,13 @@
       <tbody>
         {{#each orders}}
           <tr>
-            <td>{{this.idUser.name}}</td>
+            <td>{{this.idUser}}</td>
             <td>{{this.status}}</td>
             <td>{{this.total}}</td>
             <td>{{formatDate this.createdAt "DD/MM/YYYY"}}</td>
-            <td><a
-                href="/admin/order/{{this._id}}/detail"
-                class="btn btn-primary"
-              ><i class="bi bi-eye"></i></a></td>
+            <td><a href="/admin/order/detail" class="btn btn-primary"><i
+                  class="bi bi-eye"
+                ></i></a></td>
           </tr>
         {{/each}}
       </tbody>
