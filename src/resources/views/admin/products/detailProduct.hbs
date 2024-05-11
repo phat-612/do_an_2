@@ -23,23 +23,11 @@
     </div>
   </div>
   <div>
-    <table class="table-based table">
+    <table class="table-based table table-hover">
       <thead>
-        <tr>
-          <th>{{#each product.variations}}{{#if @first}}{{#each
-                  this.attributes
-                }}
-                  {{#if @first}}
-                    {{@key}}
-                  {{/if}}
-                {{/each}}{{/if}}{{/each}}</th>
-          <th>{{#each product.variations}}{{#if @first}}{{#each
-                  this.attributes
-                }}
-                  {{#if @last}}
-                    {{@key}}
-                  {{/if}}
-                {{/each}}{{/if}}{{/each}}</th>
+        <tr>  
+          <th>{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
+          <th>{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
           <th>Giá</th>
           <th>Số lượng</th>
         </tr>
@@ -47,8 +35,8 @@
       <tbody>
         {{#each product.variations}}
           <tr>
-            <td></td>
-            <td></td>
+            <td>{{#each this.attributes}}{{#if @first}}{{this}}{{/if}}{{/each}}</td>
+            <td>{{#each this.attributes}}{{#if @last}}{{this}}{{/if}}{{/each}}</td>
             <td>{{this.price}}</td>
             <td>{{this.quantity}}</td>
           </tr>
@@ -78,3 +66,5 @@
     {{/each}}
   </div>
 </div>
+
+

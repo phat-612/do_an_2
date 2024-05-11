@@ -8,18 +8,21 @@
           <tr>
             <th scope="col"></th>
             <th scope="col">Sản Phẩm</th>
-            <th scope="col">Thuộc Tính</th>
             <th scope="col">Màu Sắc</th>
+            <th scope="col">Dung Lượng</th>
             <th scope="col">Số Lượng</th>
             <th scope="col">Tổng</th>
           </tr>
         </thead>
         <tbody>
-          {{#each orders}}
+         {{#each orders}}
             <tr>
               <th scope="row">{{sum @index 1}}</th>
               <td>{{this.productName}}</td>
-              <!-- Tại đây bạn đang truy cập tên sản phẩm -->
+              <td>{{this.variationAttributes.color}}</td>
+              <td>{{this.variationAttributes.storage}}</td>
+              <td>{{this.quantity}}</td>
+              <td>{{this.price}}</td>
             </tr>
           {{/each}}
         </tbody>

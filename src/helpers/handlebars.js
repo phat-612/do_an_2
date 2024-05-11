@@ -99,7 +99,10 @@ module.exports = {
       }));
     }
   },
-
+  // chuyển đổi thành chuỗi
+  printObject: (object) => {
+    return new Handlebars.SafeString(JSON.stringify(object, null, 2));
+  },
   statusToast: (type) => {
     if (type == "success") {
       return "bg-success";

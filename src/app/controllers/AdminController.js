@@ -50,28 +50,32 @@ class AdminController {
   orderDetail(req, res, next) {
     Order.findById(req.params.id).then((order) => {
       let promises = order.details.map((detail) => {
-        // Here we query Product
         return Product.findOne({ "variations._id": detail.idVariation }).then(
           (product) => {
             if (!product) {
-              console.error(`No product found for id ${detail.idVariation}`);
+              console.error(`Không thấy sản phẩm ${detail.idVariation}`);
               return null;
             }
-
             let variation = product.variations.id(detail.idVariation);
             let productName =
               product.name + " " + (variation ? variation.slug : "");
+            // console.log(`Product name: ${productName}`);
+            let variationAttributes = variation ? variation.attributes : {};
+            // console.log(typeof variationAttributes);
+            // console.log(Array.isArray(variationAttributes));
+            let price = variation ? variation.price : 0;
+            let quantity = variation ? variation.quantity : 0;
 
-            // Log the name of the product to the console
-            console.log(`Product name: ${productName}`);
-
-            return {
-              ...detail.toObject(),
-              productName: productName,
-            };
+            let detailObject = detail.toObject();
+            detailObject.productName = productName;
+            detailObject.variationAttributes = variationAttributes;
+            detailObject.price = price;
+            detailObject.quantity = quantity;
+            return detailObject;
           }
         );
       });
+
       Promise.all(promises).then((result) => {
         // handle the result
         res.render("admin/orders/orderDetail", {
@@ -85,13 +89,14 @@ class AdminController {
     });
   }
   //get /product/addproduct
-  async addPro(req, res, next) {
-    const categorys = await Category.find();
-    res.render("admin/products/addProduct", {
-      layout: "admin",
-      js: "admin/addProduct",
-      css: "admin/addProduct",
-      categorys: multipleMongooseToObject(categorys),
+  addPro(req, res, next) {
+    Category.find().then((categorys) => {
+      res.render("admin/products/addProduct", {
+        layout: "admin",
+        js: "admin/addProduct",
+        css: "admin/addProduct",
+        categorys: multipleMongooseToObject(categorys),
+      });
     });
   }
   // get /product/detail
@@ -135,16 +140,19 @@ class AdminController {
   }
   //get /product/edit/:id
   editProduct(req, res, next) {
-    Product.findById(req.params.id)
-      .then((product) =>
-        res.render("admin/products/editProduct", {
-          product: mongooseToObject(product),
-          layout: "admin",
-          js: "admin/editProduct",
-          css: "admin/editProduct",
-        })
-      )
-      .catch(next);
+    Category.find().then((categorys) => {
+      Product.findById(req.params.id)
+        .then((product) =>
+          res.render("admin/products/editProduct", {
+            product: mongooseToObject(product),
+            layout: "admin",
+            js: "admin/editProduct",
+            css: "admin/editProduct",
+            categorys: multipleMongooseToObject(categorys),
+          })
+        )
+        .catch(next);
+    });
   }
   //get /category
   category(req, res, next) {

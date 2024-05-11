@@ -6,11 +6,12 @@
     <label for="description-Product" class="col-form-label fs-4">Mô Tả Sản Phẩm</label>
     <textarea class="form-control" id="description-Product">{{product.description}}</textarea>
     <label for="categoryDataList" class="form-label fs-4">Danh Mục</label>
-    <input class="form-control" list="categoryOptions" id="categoryDataList" value="Điện Thoại">
-    <datalist id="categoryOptions">
-        <option value="Điện thoại">
-        <option value="Laptop">
-    </datalist>
+    <select class="form-control" name="idCategory" id="">
+      <option value="">Chọn Danh Mục</option>
+      {{#each categorys}}
+        <option value="{{this._id}}">{{this.name}}</option>
+      {{/each}}
+    </select>
     <label for="brandDataList" class="form-label fs-4">Thương Hiệu</label>
     <input class="form-control" list="BrandOptions" id="brandDataList" value="Apple">
     <datalist id="BrandOptions">
@@ -25,7 +26,7 @@
                <label for="ipNameAttributePro1" class="form-label fs-5">Nhập Tên Thuộc tính</label>
             </div>
             <div class="col-md-6">
-               <input type="text" id="inpNameAttributePro1" class="form-control" value="Ram">
+               <input type="text" id="inpNameAttributePro1" class="form-control" value="{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}">
             </div>
             <div class="col-md-6 my-3">
                <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
@@ -50,7 +51,7 @@
             <label for="inpNameAttributePro2" class="form-label fs-5">Nhập Tên Thuộc Tính</label>
          </div>
          <div class="col-md-6">
-            <input type="text" id="inpNameAttributePro2" class="form-control" value="Màu Sắc">
+            <input type="text" id="inpNameAttributePro2" class="form-control" value="{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}">
          </div>
          <div class="col-md-6 my-3">
             <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
@@ -72,34 +73,18 @@
       <table id="custom-varriant" class="table-based table ">
          <thead>
             <tr>
-               <th>Ram</th>
-               <th>Màu sắc</th>
+               <th>{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
+               <th>{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
                <th>Giá</th>
                <th>Số lượng</th>
             </tr>
          </thead>
          <tbody>
             <tr>
-               <td rowspan="2">8GB</td>
-               <td>Đỏ</td>
-               <td>1300</td>
-               <td>1200</td>
-            </tr>
-            <tr>
-               <td>Xanh</td>
-               <td>1300</td>
-               <td>1200</td>
-            </tr>
-            <tr>
-               <td rowspan="2">16GB</td>
-               <td>Đỏ</td>
-               <td>1300</td>
-               <td>1200</td>
-            </tr>
-            <tr>
-               <td>Xanh</td>
-               <td>1300</td>
-               <td>1200</td>
+               <td></td>
+               <td></td>
+               <td></td>
+               <td></td>
             </tr>
          </tbody>
       </table>
