@@ -64,14 +64,14 @@ class AdminController {
             // console.log(typeof variationAttributes);
             // console.log(Array.isArray(variationAttributes));
             let price = variation ? variation.price : 0;
-            // let quantity = variation ? variation.quantity : 0;
+            let quantity = variation ? variation.quantity : 0;
 
             let detailObject = detail.toObject();
             detailObject.productName = productName;
             detailObject.variationAttributes = variationAttributes;
-            // detailObject.price = price;
-            // detailObject.quantity = quantity;
-            // console.log(detailObject.quantity);
+            detailObject.price = price;
+            console.log(detailObject.price);
+            detailObject.quantity = quantity;
             return detailObject;
           }
         );

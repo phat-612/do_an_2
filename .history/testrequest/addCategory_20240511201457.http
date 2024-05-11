@@ -131,7 +131,7 @@ Content-Type: application/json
         "price": 200000,
         "quantity": 50000,
         "idVariation": {
-          "ref":"661615a669b48ade27ecf1ae"
+          "ref":"66161155fd1714d066d1c193"
         },
       },
     ],
@@ -149,9 +149,9 @@ POST http://localhost:3000/api/testAddOrder
 Content-Type: application/json
 
 {
-    "idUser": "660a2b86ec57e594a8456a45",
+    "idUser": "6600f792f664fbdbe6967bd1",
     "note": "hong có gì",
-    "total": 40000,
+    "total": 20000,
     "status": "Thành công",
     "paymentDetail": {
       "method": "cod",
@@ -161,13 +161,13 @@ Content-Type: application/json
     },
     "details": [
       {
-        "price": 20000,
-        "quantity": 1,
+        "price": 200000,
+        "quantity": 5,
         "idVariation": "66161155fd1714d066d1c192"
       },
        {
-        "price": 20000,
-        "quantity": 1,
+        "price": 200000,
+        "quantity": 5,
         "idVariation": "66161155fd1714d066d1c193"
       }
     ],

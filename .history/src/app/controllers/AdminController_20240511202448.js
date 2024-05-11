@@ -69,7 +69,7 @@ class AdminController {
             let detailObject = detail.toObject();
             detailObject.productName = productName;
             detailObject.variationAttributes = variationAttributes;
-            // detailObject.price = price;
+            detailObject.price = price;
             // detailObject.quantity = quantity;
             // console.log(detailObject.quantity);
             return detailObject;
