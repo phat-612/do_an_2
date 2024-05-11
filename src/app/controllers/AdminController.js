@@ -49,31 +49,37 @@ class AdminController {
   // get /order/detail
   orderDetail(req, res, next) {
     Order.findById(req.params.id).then((order) => {
-      let promises = order.details.map((detailItem) => {
-        return Product.findById(detailItem.idVariation).then((product) => {
-          // Check if product actually exists
-          if (!product) {
-            console.log(`No product found for id ${detailItem.idVariation}`);
-            return null; // Or however you want to handle this
+      let promises = order.details.map((detail) => {
+        // Here we query Product
+        return Product.findOne({ "variations._id": detail.idVariation }).then(
+          (product) => {
+            if (!product) {
+              console.error(`No product found for id ${detail.idVariation}`);
+              return null;
+            }
+
+            let variation = product.variations.id(detail.idVariation);
+            let productName =
+              product.name + " " + (variation ? variation.slug : "");
+
+            // Log the name of the product to the console
+            console.log(`Product name: ${productName}`);
+
+            return {
+              ...detail.toObject(),
+              productName: productName,
+            };
           }
-
-          let variation = product.variations.find(
-            (variation) =>
-              variation._id.toString() === detailItem.idVariation.toString()
-          );
-          return {
-            ...detailItem._doc,
-            productName: variation ? variation.slug : "",
-          };
-        });
+        );
       });
-
       Promise.all(promises).then((result) => {
+        // handle the result
         res.render("admin/orders/orderDetail", {
           layout: "admin",
           js: "admin/orderDetail",
           css: "admin/orderDetail",
-          orders: multipleMongooseToObject(result),
+          orders: result,
+          // orders: result.filter((item) => item !== null),
         });
       });
     });

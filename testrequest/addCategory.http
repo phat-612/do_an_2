@@ -149,7 +149,7 @@ POST http://localhost:3000/api/testAddOrder
 Content-Type: application/json
 
 {
-    "idUser": "6600f1a67e13636c0006b205",
+    "idUser": "6600f792f664fbdbe6967bd1",
     "note": "hong có gì",
     "total": 20000,
     "status": "Thành công",
@@ -163,7 +163,7 @@ Content-Type: application/json
       {
         "price": 200000,
         "quantity": 5,
-        "idVariation": "6600f1a67e13636c0006b205"
+        "idVariation": "66161155fd1714d066d1c192"
       }
     ],
     "shipmentDetail": {

@@ -15,11 +15,12 @@
           </tr>
         </thead>
         <tbody>
-          {{#each orders.details}}   
-              <tr>
-                <th scope="row">{{sum @index 1}}</th>
-                <td>{{this.price}}</td>
-              </tr>
+          {{#each orders}}
+            <tr>
+              <th scope="row">{{sum @index 1}}</th>
+              <td>{{this.productName}}</td>
+              <!-- Tại đây bạn đang truy cập tên sản phẩm -->
+            </tr>
           {{/each}}
         </tbody>
       </table>
