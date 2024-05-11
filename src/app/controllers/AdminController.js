@@ -35,8 +35,9 @@ class AdminController {
   // get /orderproducts
   order(req, res, next) {
     Order.find({})
-      .populate("idUser", "name") // chỉ lưu trữ 'name' từ bản ghi User
+      .populate("idUser", "name")
       .then((orders) => {
+        // console.log(orders);
         res.render("admin/orders/orderProduct", {
           layout: "admin",
           js: "admin/orderProduct",
@@ -47,14 +48,35 @@ class AdminController {
   }
   // get /order/detail
   orderDetail(req, res, next) {
-    // Order.findById(req.params.id).then((orders) => {
-    //   res.render("admin/orders/orderDetail", {
-    //     layout: "admin",
-    //     js: "admin/orderDetail",
-    //     css: "admin/orderDetail",
-    //     orders: mongooseToObject(orders),
-    //   });
-    // });
+    Order.findById(req.params.id).then((order) => {
+      let promises = order.details.map((detailItem) => {
+        return Product.findById(detailItem.idVariation).then((product) => {
+          // Check if product actually exists
+          if (!product) {
+            console.log(`No product found for id ${detailItem.idVariation}`);
+            return null; // Or however you want to handle this
+          }
+
+          let variation = product.variations.find(
+            (variation) =>
+              variation._id.toString() === detailItem.idVariation.toString()
+          );
+          return {
+            ...detailItem._doc,
+            productName: variation ? variation.slug : "",
+          };
+        });
+      });
+
+      Promise.all(promises).then((result) => {
+        res.render("admin/orders/orderDetail", {
+          layout: "admin",
+          js: "admin/orderDetail",
+          css: "admin/orderDetail",
+          orders: multipleMongooseToObject(result),
+        });
+      });
+    });
   }
   //get /product/addproduct
   async addPro(req, res, next) {

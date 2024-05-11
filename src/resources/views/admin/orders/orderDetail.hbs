@@ -15,16 +15,11 @@
           </tr>
         </thead>
         <tbody>
-          {{#each orders}}
-            <tr>
-              <th class="col-1">
-                {{#each orders.images}}
-                  <img src="/img/uploads/{{this}}" alt="" class="w-25" />
-                {{/each}}
-              </th>
-              <td>{{this.details.idVariation}}</td>
-
-            </tr>
+          {{#each orders.details}}   
+              <tr>
+                <th scope="row">{{sum @index 1}}</th>
+                <td>{{this.price}}</td>
+              </tr>
           {{/each}}
         </tbody>
       </table>

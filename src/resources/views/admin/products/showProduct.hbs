@@ -50,7 +50,7 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">TEN</th>
+        <th scope="col" class="col-3">TEN</th>
         <th scope="col">HINH ANH</th>
         <th scope="col">THUONG HIEU</th>
         <th scope="col">GIA</th>
@@ -60,22 +60,34 @@
     </thead>
     <tbody>
       {{#each products}}
-        <tr>
-          <td>{{this.name}}</td>
-          <td><img src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}" /></td>
-          <td>{{this.brand}}</td>
-          <td>24.000.000</td>
-          <td>99</td>
-          <td>
-            <a class="btn btn-dark" href="/admin/product/{{this._id}}/detail"><i
+        
+          {{#each this.variations}}
+          <tr>
+            <td>{{../this.name}}
+              (
+              {{#each this.attributes}}
+              {{#if @first}}{{this}}{{/if}}
+              {{#if @last}}{{this}}{{/if}}
+              {{/each}}
+              )
+              </td>
+            <td><img src="/img/uploads/{{#each ../this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}" /></td>
+            <td>{{this.brand}}</td>
+            <td>{{this.price}}</td> 
+            <td>{{this.quantity}}</td>
+            <td>
+            <a class="btn btn-dark" href="/admin/product/{{../this._id}}/detail"><i
                 class="bi bi-eye"
               ></i></a>
-            <a class="btn btn-dark" href="/admin/product/{{this._id}}/edit"><i
+            <a class="btn btn-dark" href="/admin/product/{{../this._id}}/edit"><i
                 class="bi bi-wrench"
               ></i></a>
             <Button class="btn btn-dark"><i class="bi bi-trash"></i></Button>
           </td>
-        </tr>
+          </tr>
+            
+          {{/each}}
+        
       {{/each}}
 
     </tbody>
@@ -102,3 +114,21 @@
     </ul>
   </nav>
 </div>
+
+
+
+
+{{!-- <td>{{this.name}}</td>
+          <td><img src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}" /></td>
+          <td>{{this.brand}}</td>
+          <td>24.000.000</td> 
+          <td>99</td>
+          <td>
+            <a class="btn btn-dark" href="/admin/product/{{this._id}}/detail"><i
+                class="bi bi-eye"
+              ></i></a>
+            <a class="btn btn-dark" href="/admin/product/{{this._id}}/edit"><i
+                class="bi bi-wrench"
+              ></i></a>
+            <Button class="btn btn-dark"><i class="bi bi-trash"></i></Button>
+          </td> --}}
