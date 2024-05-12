@@ -64,62 +64,38 @@
     <p>Không có đơn hàng nào thỏa mãn!</p>
   </div>
   {{! có sản phẩm }}
-  <div class="tag_product mb-2">
-    <div class="row card mt-3 d-flex flex-row py-2">
-      <div class="col-2 py-1">
-        <img
-          class="w-100"
-          src="https://cdn2.cellphones.com.vn/358x/media/catalog/product/t/a/tai-nghe-khong-day-havit-tw958-pro_2_.png"
-          alt=""
-        />
-      </div>
-      <div class="col-8">
-        <a class="fs-5" href="#">Tên sản phẩm</a>
+  {{#each orders}}
+    <div class="tag_product mb-2">
+      <div class="row card mt-3 d-flex flex-row py-2">
+        <div class="col-2 py-1">
+          <img class="w-100" src="{{image}}" alt="{{image}}" />
+        </div>
+        <div class="col-8">
+          <a class="fs-5" href="/me/detailOrder/{{_id}}">{{name}}</a>
+          {{#if (compareMore this.quantityProduct 1)}}
+            <div class="fs-6 text-black-50">và
+              {{this.quantityProduct}}
+              sản phẩm khác</div>
+          {{/if}}
+          <div
+            class="p-2 mt-3 text-success bg-success bg-opacity-25 custom-w-fitcontent custom-fs-12px"
+          >{{showStatusOrder status}}</div>
+          <div class="mt-5 fs-5 text-danger fw-bold">{{showPrice
+              this.total
+            }}</div>
+        </div>
         <div
-          class="p-2 mt-3 text-success bg-success bg-opacity-25 custom-w-fitcontent custom-fs-12px"
-        >Đã giao hàng</div>
-        <div class="mt-5 fs-5 text-danger fw-bold">123456</div>
-      </div>
-      <div
-        class="col d-flex flex-column align-items-end justify-content-between"
-      >
-        <p class="opacity-75">
-          03/11/2023 11:18
-        </p>
-        <a
-          class="border border-1 border-danger rounded-2 px-3 bg-white text-danger custom-w-fitcontent"
-          href="/me/detailOrder"
-        >Xem chi tiết</a>
+          class="col d-flex flex-column align-items-end justify-content-between"
+        >
+          <p class="opacity-75">
+            {{formatDate createdAt "DD/MM/YYYY HH:mm"}}
+          </p>
+          <a
+            class="border border-1 border-danger rounded-2 px-3 bg-white text-danger custom-w-fitcontent"
+            href="/me/detailOrder/{{_id}}"
+          >Xem chi tiết</a>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="tag_product mb-2">
-    <div class="row card mt-3 d-flex flex-row py-2">
-      <div class="col-2 py-1">
-        <img
-          class="w-100"
-          src="https://cdn2.cellphones.com.vn/358x/media/catalog/product/t/a/tai-nghe-khong-day-havit-tw958-pro_2_.png"
-          alt=""
-        />
-      </div>
-      <div class="col-8">
-        <a class="fs-5" href="#">Tên sản phẩm</a>
-        <div
-          class="p-2 mt-3 text-success bg-success bg-opacity-25 custom-w-fitcontent custom-fs-12px"
-        >Đã giao hàng</div>
-        <div class="mt-5 fs-5 text-danger fw-bold">123456</div>
-      </div>
-      <div
-        class="col d-flex flex-column align-items-end justify-content-between"
-      >
-        <p class="opacity-75">
-          03/11/2023 11:18
-        </p>
-        <a
-          class="border border-1 border-danger rounded-2 px-3 bg-white text-danger custom-w-fitcontent"
-          href="#"
-        >Xem chi tiết</a>
-      </div>
-    </div>
-  </div>
+  {{/each}}
 </div>

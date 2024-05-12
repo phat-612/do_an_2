@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const User = require("../models/User");
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
@@ -6,6 +8,7 @@ const {
   multipleMongooseToObject,
   mongooseToObject,
 } = require("../../util/mongoose");
+const Order = require("../models/Order");
 class MeController {
   profile(req, res, next) {
     User.findOne({ _id: req.session.idUser }).then((user) => {
@@ -24,7 +27,43 @@ class MeController {
     });
   }
   historyOrder(req, res, next) {
-    res.render("user/profiles/historyOrder", { layout: "userProfile" });
+    // tên, ảnh giá, của một sản phẩm đầu tiên, thời gian
+    const idUser = req.session.idUser;
+    Order.aggregate([
+      {
+        $match: { idUser: new mongoose.Types.ObjectId(idUser) },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "details.idVariation",
+          foreignField: "variations._id",
+          as: "product",
+        },
+      },
+      {
+        $unwind: "$product",
+      },
+      {
+        $project: {
+          _id: 1,
+          total: 1,
+          status: 1,
+          createdAt: 1,
+          name: "$product.name",
+          image: { $arrayElemAt: ["$product.images", 0] },
+          quantityProduct: { $size: "$details" },
+        },
+      },
+    ]).then((orders) => {
+      res.render("user/profiles/historyOrder", {
+        layout: "userProfile",
+        orders,
+      });
+    });
   }
   detailOrder(req, res, next) {
     res.render("user/profiles/detailOrder", { layout: "userProfile" });
@@ -48,14 +87,6 @@ class MeController {
     });
   }
   cart(req, res, next) {
-    // Cart.findOne({ idUser: req.session.idUser })
-    //   .populate("items.idVariation")
-    //   .then((cart) => {
-    //     res.render("user/profiles/cart", {
-    //       layout: "userProfile",
-    //       cart: cart.toObject(),
-    //     });
-    //   });
     Cart.findOne({ idUser: req.session.idUser }).then((cart) => {
       if (!cart) {
         return res.render("user/profiles/cart", {
@@ -66,7 +97,7 @@ class MeController {
       }
       const cartItems = cart.items.map((item) => {
         return Product.findOne({ "variations._id": item.idVariation }).select(
-          "name variations"
+          "name variations discount"
         );
       });
       let arrIdVariation = cart.items.map((item) =>
@@ -86,8 +117,17 @@ class MeController {
               return variation;
             }
           });
+          let discount;
+          if (
+            Date.now() > product.discount.startDay &&
+            Date.now() < product.discount.endDay
+          ) {
+            discount = product.discount.percent;
+          } else {
+            discount = 0;
+          }
           return {
-            price: variation.price,
+            price: variation.price * (1 - discount / 100),
             cartQuantity: cartItem.quantity,
             storageQuantity: variation.quantity,
             attributes: variation.attributes,
@@ -95,6 +135,7 @@ class MeController {
             idVariation: variation._id,
           };
         });
+        // return res.json(resCart);
         res.render("user/profiles/cart", {
           layout: "userProfile",
           js: "user/cart",

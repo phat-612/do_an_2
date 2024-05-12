@@ -2,9 +2,11 @@ const Handlebars = require("handlebars");
 const moment = require("moment");
 module.exports = {
   sum: (a, b) => a + b,
-  total: (a, b) => a * b,
   hiddenSentence: (sentence) => sentence.replace(/[^\s]/g, "-"),
   compare: (a, b) => a == b,
+  compareNot: (a, b) => a != b,
+  compareMore: (a, b) => a > b,
+  compareLess: (a, b) => a < b,
   objectToLi: (object) => {
     let outputString = "";
     Object.keys(object).forEach((key, index) => {
@@ -22,6 +24,22 @@ module.exports = {
     const day =
       parseInt(date.getDate() + 1) < 10 ? `0${date.getDate()}` : date.getDate();
     return `${year}-${month}-${day}`;
+  },
+  showStatusOrder: (status) => {
+    switch (status) {
+      case "pending":
+        return "Chờ xác nhận";
+      case "success":
+        return "Thành công";
+      case "cancel":
+        return "Đã hủy";
+      case "shipping":
+        return "Đang vận chuyển";
+      case "failed":
+        return "Thất bại";
+      default:
+        return status;
+    }
   },
   showDiscount: (discount) => {
     if (discount > 0) {
@@ -91,6 +109,9 @@ module.exports = {
     const res = numbers.reduce((a, b) => a * b, 1);
     return res.toLocaleString("vi-VN");
   },
+  discountPrice: (price, discount) => {
+    return price * (1 - discount / 100);
+  },
   getBrands: (categories, rootCategory) => {
     const brands = categories.find((category) => category.slug == rootCategory);
     if (brands) {
@@ -118,7 +139,6 @@ module.exports = {
   },
   isRadio: (value, currentValue) => {
     if (value == currentValue) {
-      console.log("checked");
       return "checked";
     }
     return "";
@@ -145,17 +165,54 @@ module.exports = {
         return "Đã hủy";
       case "shipping":
         return "Đang vận chuyển";
+      case "cancel":
+        return "Bị hủy";
       default:
         return status;
     }
   },
-  salePrice: (price, discout) => {
-    return price * ((100 - discout) / 100);
+  salePriceProduct: (price, salePrice) => {
+    return price - salePrice;
   },
-  chaneStatus: (arg1, arg2) => {
+  salePrice: (price, discout, quantity) => {
+    return price * ((100 - discout) / 100) * quantity;
+  },
+  total: (a, b) => a * b,
+  changeStatus: (arg1, arg2) => {
     return arg1 == arg2;
   },
-  isSelect: (val, opt) => {
-    return val == opt ? "selected" : "";
+  isSelectedObejctId: (val, opt) => {
+    return val.toString() == opt.toString() ? "selected" : "";
+  },
+  countOrdersPending: (orders) => {
+    let count = 0;
+    orders.forEach((order) => {
+      if (order.status == "pending") {
+        count++;
+      }
+    });
+    return count;
+  },
+  countOrdersSuccess: (orders) => {
+    let count = 0;
+    orders.forEach((order) => {
+      if (order.status == "success") {
+        count++;
+      }
+    });
+    return count;
+  },
+  checkOutOfStock: (products) => {
+    let count = 0;
+    products.forEach((product) => {
+      let tempQuantity = 0;
+      product.variations.forEach((variation) => {
+        tempQuantity += variation.quantity;
+      });
+      if (tempQuantity == 0) {
+        count++;
+      }
+    });
+    return count;
   },
 };

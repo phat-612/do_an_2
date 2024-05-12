@@ -1,5 +1,5 @@
 const data = {
-  labels: ["Đơn Mới Đang Chờ Xủ Lý", "Đơn Chờ xử Lý", "Hết Hàng"],
+  labels: ["Đơn Mới Đang Chờ Xủ Lý", "Đơn Thành Công", "Hết Hàng"],
   datasets: [
     {
       label: "My First Dataset",

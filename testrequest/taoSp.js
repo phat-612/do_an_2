@@ -175,4 +175,18 @@ function sendData() {
     });
   }
 }
-sendData();
+
+const Student = {
+  name: "Nguyen Van A",
+  age: 20,
+  address: "Hanoi",
+  getInfo: function () {
+    console.log("name: ", this.name);
+    console.log("age: ", this.age);
+    console.log("address: ", this.address);
+  },
+  diHoc: () => {
+    console.log("đi hoc");
+  },
+};
+Student.getInfo();

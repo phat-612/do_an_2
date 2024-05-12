@@ -28,7 +28,7 @@ const Order = new Schema(
           type: Schema.Types.ObjectId,
           ref: "Product.variations",
         },
-        discout: { type: Number },
+        discount: { type: Number },
       },
     ],
     shipmentDetail: {

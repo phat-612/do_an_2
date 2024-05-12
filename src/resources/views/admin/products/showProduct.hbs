@@ -60,36 +60,23 @@
     </thead>
     <tbody>
       {{#each products}}
-        
-          {{#each this.variations}}
           <tr>
-            <td>{{../this.name}}
-              (
-              {{#each this.attributes}}
-              {{#if @first}}{{this}}{{/if}}
-              {{#if @last}}{{this}}{{/if}}
-              {{/each}}
-              )
-              </td>
-            <td><img src="/img/uploads/{{#each ../this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}" /></td>
+            <td>{{this.name}}</td>
+            <td><img src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}"/></td>
             <td>{{this.brand}}</td>
             <td>{{this.price}}</td> 
             <td>{{this.quantity}}</td>
             <td>
-            <a class="btn btn-dark" href="/admin/product/{{../this._id}}/detail"><i
+            <a class="btn btn-primary" href="/admin/product/{{this._id}}/detail"><i
                 class="bi bi-eye"
               ></i></a>
-            <a class="btn btn-dark" href="/admin/product/{{../this._id}}/edit"><i
+            <a class="btn btn-warning" href="/admin/product/{{this._id}}/edit"><i
                 class="bi bi-wrench"
               ></i></a>
-            <Button class="btn btn-dark"><i class="bi bi-trash"></i></Button>
-          </td>
+            <Button class="btn btn-danger "><i class="bi bi-trash"></i></Button>
+            </td>
           </tr>
-            
-          {{/each}}
-        
       {{/each}}
-
     </tbody>
   </table>
 </div>

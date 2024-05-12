@@ -276,7 +276,6 @@ class ApiController {
   }
   updateProfile(req, res, next) {
     const formData = req.body;
-    console.log(formData);
     User.updateOne(
       { _id: req.session.idUser },
       {
@@ -292,7 +291,6 @@ class ApiController {
   }
   updatePassword(req, res, next) {
     const formData = req.body;
-    console.log(formData);
     UserLogin.findOne({ idUser: req.session.idUser }).then((userLogin) => {
       if (!userLogin) {
         return res.redirect("/login");
@@ -388,8 +386,7 @@ class ApiController {
   addItemToCart(req, res, next) {
     const formData = req.body;
     const idUser = req.session.idUser;
-    console.log(idUser);
-    console.log(formData);
+
     // Product.findOne({ "variations._id": formData.idVariation }).then(
     //   (variation) => {
     //     res.send(variation);
@@ -447,7 +444,6 @@ class ApiController {
   updateCartQuantity(req, res, next) {
     const idVariation = req.body.idVariation;
     const quantity = req.body.quantity;
-    console.log(quantity);
     const idUser = req.session.idUser;
     const action = req.body.action;
     const arrAction = ["increase", "decrease", "update"];
@@ -514,6 +510,17 @@ class ApiController {
             });
             return res.redirect("/cart");
           }
+          // cập nhật số lượng sản phẩm
+          variation.quantity -= detail.quantity;
+          product.save();
+          // xóa sản phẩm khỏi giỏ hàng
+          Cart.updateOne(
+            {
+              idUser: idUser,
+            },
+            { $pull: { items: { idVariation: detail.idVariation } } }
+          ).then(() => {});
+          // trả về thông tin chi tiết đơn hàng
           return {
             idVariation: detail.idVariation,
             quantity: detail.quantity,
@@ -529,25 +536,21 @@ class ApiController {
           total + detail.price * (1 - detail.discount / 100) * detail.quantity
         );
       }, 0);
-      console.log(details);
-      console.log(total);
       const newOrder = new Order({
         idUser,
         note: formData.note,
         total,
         paymentDetail: {
-          paymentMethod: formData.paymentMethod,
+          method: formData.paymentMethod,
           date: new Date(),
           amount: total,
         },
         details,
         shipmentDetail: formData.shipmentDetail,
       });
-      newOrder.save().then(() => {
-        console.log("thêm order thành công");
-      });
+      newOrder.save();
     });
-    return res.json(formData);
+    return res.redirect("/me/historyOrder");
   }
   creatPaymentUrl(req, res, next) {
     process.env.TZ = "Asia/Ho_Chi_Minh";
@@ -598,8 +601,6 @@ class ApiController {
     let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
     vnp_Params["vnp_SecureHash"] = signed;
     vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
-    console.log(vnp_Params);
-    console.log(vnpUrl);
     res.redirect(vnpUrl);
   }
   // end api user
@@ -663,7 +664,11 @@ class ApiController {
   changeStatus(req, res) {
     Order.updateOne({ _id: req.params.id }, req.body)
       .then(() => {
-        res.json({ message: "Status updated successfully!" });
+        req.flash("message", {
+          type: "success",
+          message: "Đổi trạng thái thanh toán thành công",
+        });
+        res.redirect("back");
       })
       .catch((err) => {
         res.status(500).json({

@@ -11,10 +11,16 @@ const {
 class AdminController {
   // get /
   index(req, res, next) {
-    res.render("admin/sites/home", {
-      layout: "admin",
-      js: "admin/home",
-      css: "admin/home",
+    Product.find({}).then((products) => {
+      Order.find({}).then((orders) => {
+        res.render("admin/sites/home", {
+          layout: "admin",
+          js: "admin/home",
+          css: "admin/home",
+          orders: multipleMongooseToObject(orders),
+          products: multipleMongooseToObject(products),
+        });
+      });
     });
   }
 
@@ -51,6 +57,13 @@ class AdminController {
     Order.findById(req.params.id)
       .populate("idUser")
       .then((order) => {
+        if (!order) {
+          return res.json({ message: "Không tìm thấy đơn hàng" });
+        }
+
+        let totalNotSale = order.details.reduce((accumulator, detail) => {
+          return accumulator + detail.price * detail.quantity;
+        }, 0);
         let promises = order.details.map((detail) => {
           return Product.findOne({ "variations._id": detail.idVariation }).then(
             (product) => {
@@ -66,24 +79,26 @@ class AdminController {
               detailObject.productName = productName;
               detailObject.variationAttributes = variationAttributes;
 
+              let discountedPrice =
+                detail.price - detail.price * (detail.discount / 100);
+              detailObject.totalPrice = discountedPrice * detail.quantity;
+              detailObject.originalTotalPrice = detail.price * detail.quantity;
               return detailObject;
             }
           );
         });
 
         Promise.all(promises).then((result) => {
-          const totalSalePrice = result.reduce((accumulator, detail) => {
-            return accumulator + detail.salePrice * detail.quantity;
-          }, 0);
           res.render("admin/orders/orderDetail", {
             layout: "admin",
             js: "admin/orderDetail",
             css: "admin/orderDetail",
-            totalSalePrice,
-            orders: result, // Key 'orders' chứa mảng 'result' chứa chi tiết sản phẩm
-            order: order, // Key 'order' chứa thông tin toàn bộ đơn hàng
+            orders: result,
+            order: order,
+
+            totalNotSale: totalNotSale, //gia chua giam
           });
-          // console.log(result);
+          // console.log(totalNotSale, totalOrder);
         });
       });
   }
@@ -141,15 +156,16 @@ class AdminController {
   editProduct(req, res, next) {
     Category.find().then((categorys) => {
       Product.findById(req.params.id)
-        .then((product) =>
+        .then((product) => {
+          return res.json(product);
           res.render("admin/products/editProduct", {
             product: mongooseToObject(product),
             layout: "admin",
             js: "admin/editProduct",
             css: "admin/editProduct",
             categorys: multipleMongooseToObject(categorys),
-          })
-        )
+          });
+        })
         .catch(next);
     });
   }
