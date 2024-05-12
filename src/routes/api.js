@@ -37,5 +37,6 @@ router.post("/testAddCategory", apiController.testAddCategory);
 router.post("/testUpdateQuantity", apiController.testUpdateQuantity);
 // router.get("/testGetProduct", apiController.testGetProduct);
 router.post("/testAddOrder", apiController.testAddOrder);
+router.get("/test/thanhToan", apiController.testThanhToan);
 
 module.exports = router;

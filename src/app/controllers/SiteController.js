@@ -197,5 +197,8 @@ class SiteController {
       res.json(categories);
     });
   }
+  vnpayReturn(req, res, next) {
+    res.json(req.query);
+  }
 }
 module.exports = new SiteController();

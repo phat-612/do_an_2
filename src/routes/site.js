@@ -3,6 +3,7 @@ const router = express.Router();
 
 const siteController = require("../app/controllers/SiteController");
 
+router.get("/vnpay_return", siteController.vnpayReturn);
 router.get("/login", siteController.login);
 router.get("/signUp", siteController.signUp);
 router.get("/logout", siteController.logout);
