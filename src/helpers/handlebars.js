@@ -152,4 +152,7 @@ module.exports = {
   chaneStatus: (arg1, arg2) => {
     return arg1 == arg2 ? "selected" : "";
   },
+  isSelect: (val, opt) => {
+    return val == opt ? "selected" : "";
+  },
 };

@@ -9,13 +9,9 @@
     <select class="form-control" name="idCategory" id="">
       <option value="">Chọn Danh Mục</option>
       {{#each categorys}}
-        <option value="{{this._id}}">{{this.name}}</option>
+        <option value="{{this._id}}" {{isSelect ../product.idCategory this._id}} >{{this.name}}</option>
       {{/each}}
     </select>
-    <datalist id="BrandOptions">
-        <option value="SamSung">
-        <option value="Apple">
-    </datalist>
    {{!-- -------------------------------- --}}
       <label for="brandDataList" class="form-label fs-4 mt-3">Thuộc Tính</label>
       <div class="w-75 container-sm py-4 my-4 border rounded">
