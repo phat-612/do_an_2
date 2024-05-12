@@ -44,7 +44,7 @@
         {{#each orders}}
           <tr>
             <td>{{this.idUser.name}}</td>
-            <td>{{this.status}}</td>
+            <td>{{formatStatus this.status}}</td>
             <td>{{this.total}}</td>
             <td>{{formatDate this.createdAt "DD/MM/YYYY"}}</td>
             <td><a

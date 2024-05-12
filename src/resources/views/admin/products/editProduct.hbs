@@ -12,8 +12,6 @@
         <option value="{{this._id}}">{{this.name}}</option>
       {{/each}}
     </select>
-    <label for="brandDataList" class="form-label fs-4">Thương Hiệu</label>
-    <input class="form-control" list="BrandOptions" id="brandDataList" value="Apple">
     <datalist id="BrandOptions">
         <option value="SamSung">
         <option value="Apple">
@@ -99,11 +97,11 @@
          </div>
          <div class="col">
             <label for="" class="form-label fs-5">Ngày bắt đầu :</label>
-            <input type="date" name="" id="" class="form-control">
+            <input type="date" name="" id="" class="form-control" value="{{formatDate product.discount.startDay "YYYY-MM-DD"}}">
          </div>
          <div class="col">
             <label for="" class="form-label fs-5">Ngày kết thúc :</label>
-            <input type="date" name="" id="" class="form-control">
+            <input type="date" name="" id="" class="form-control" value="{{formatDate product.discount.endDay "YYYY-MM-DD"}}">
          </div>
       </div>
      {{!-- ------------------------- --}}

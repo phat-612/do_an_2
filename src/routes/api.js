@@ -15,6 +15,8 @@ router.put("/address", apiController.updateAddress);
 router.put("/cart", apiController.updateCartQuantity);
 router.delete("/address", apiController.deleteAddress);
 router.delete("/cart", apiController.removeItemToCart);
+// order
+router.put("/order/:id/detail", apiController.changeStatus);
 
 // product
 router.post("/product", upload.array("images"), apiController.createProduct);
@@ -37,6 +39,6 @@ router.post("/testAddCategory", apiController.testAddCategory);
 router.post("/testUpdateQuantity", apiController.testUpdateQuantity);
 // router.get("/testGetProduct", apiController.testGetProduct);
 router.post("/testAddOrder", apiController.testAddOrder);
-router.get("/test/thanhToan", apiController.testThanhToan);
+router.get("/test/thanhToan", apiController.creatPaymentUrl);
 
 module.exports = router;

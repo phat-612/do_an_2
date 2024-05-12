@@ -2,6 +2,7 @@ const Handlebars = require("handlebars");
 const moment = require("moment");
 module.exports = {
   sum: (a, b) => a + b,
+  total: (a, b) => a * b,
   hiddenSentence: (sentence) => sentence.replace(/[^\s]/g, "-"),
   compare: (a, b) => a == b,
   objectToLi: (object) => {
@@ -115,6 +116,13 @@ module.exports = {
     }
     return "";
   },
+  isRadio: (value, currentValue) => {
+    if (value == currentValue) {
+      console.log("checked");
+      return "checked";
+    }
+    return "";
+  },
   consoleHbs: (data) => {
     console.log(data);
   },
@@ -125,5 +133,23 @@ module.exports = {
     } else {
       return datetime;
     }
+  },
+  // minh luan
+  formatStatus: (status) => {
+    switch (status) {
+      case "pending":
+        return "Chờ xác nhận";
+      case "success":
+        return "Thành công";
+      case "cancel":
+        return "Đã hủy";
+      case "shipping":
+        return "Đang vận chuyển";
+      default:
+        return status;
+    }
+  },
+  chaneStatus: (arg1, arg2) => {
+    return arg1 == arg2 ? "selected" : "";
   },
 };

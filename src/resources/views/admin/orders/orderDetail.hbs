@@ -1,28 +1,30 @@
 <div class="container">
-  <h2>ID đơn hàng: {{orders._id}}</h2>
-  <h4>ID Khách Hàng: {{orders.idUser}}</h4>
+  <h2>ID đơn hàng: {{order._id}}</h2>
+  <h4>ID Khách Hàng: {{order.idUser._id}}</h4>
   <div class="row">
     <div class="col-9">
       <table class="table">
         <thead>
           <tr>
-            <th scope="col"></th>
+            <th scope="col">STT</th>
             <th scope="col">Sản Phẩm</th>
-            <th scope="col">Màu Sắc</th>
-            <th scope="col">Dung Lượng</th>
+            <th scope="col">Phân loại</th>
             <th scope="col">Số Lượng</th>
+            <th scope="col">Giá</th>
             <th scope="col">Tổng</th>
           </tr>
         </thead>
         <tbody>
-         {{#each orders}}
+          {{#each orders}}
             <tr>
               <th scope="row">{{sum @index 1}}</th>
               <td>{{this.productName}}</td>
-              <td>{{this.variationAttributes.color}}</td>
-              <td>{{this.variationAttributes.storage}}</td>
+              <td>Màu sắc:
+                {{this.variationAttributes.color}}, Dung lượng:
+                {{this.variationAttributes.storage}}</td>
               <td>{{this.quantity}}</td>
               <td>{{this.price}}</td>
+              <td>{{total this.quantity this.price}}</td>
             </tr>
           {{/each}}
         </tbody>
@@ -31,22 +33,24 @@
         class="d-flex justify-content-between py-3 border-bottom border-translucent mb-6"
       >
         <p class="text-body-emphasis fw-semibold">Tổng :</p>
-        <p class="text-body-emphasis fw-bold me-5">53.800.000</p>
+        <p class="text-body-emphasis fw-bold me-5">{{order.total}}</p>
       </div>
       <div class="row">
         <div class="col-4">
           <h5>Chi Tiết Khách Hàng</h5>
-          <h6><i class="bi bi-person-circle"></i> Nguyễn Văn A</h6>
-          <h6><i class="bi bi-envelope"></i> nguyenvanA@gmail.com</h6>
-          <h6><i class="bi bi-telephone"></i> 0354514832</h6>
+          <h6><i class="bi bi-person-circle"></i> {{order.idUser.name}}</h6>
+          <h6><i class="bi bi-envelope"></i> {{order.idUser.email}}</h6>
+          <h6><i class="bi bi-telephone"></i> {{order.idUser.phone}}</h6>
         </div>
         <div class="col-4">
-          <h5>Chi Tiết Giao Hàng</h5>
-          <h6><i class="bi bi-person-circle"></i> Nguyễn Văn A</h6>
-          <h6><i class="bi bi-envelope"></i> nguyenvanA@gmail.com</h6>
-          <h6><i class="bi bi-telephone"></i> 0354514832</h6>
+          <h5>Thông Tin Giao Hàng</h5>
+          <h6><i
+              class="bi bi-person-circle"
+            ></i>{{order.shipmentDetail.name}}</h6>
+          <h6><i class="bi bi-telephone"></i>
+            {{order.shipmentDetail.phone}}</h6>
           <h6><i class="bi bi-house"></i>
-            số 55, đường 3/2, phường Xuân Khánh, Quận Ninh Kiều, TP Cần Thơ</h6>
+            {{order.shipmentDetail.address}}</h6>
         </div>
         <div class="col">
           <h5>Chi Tiết Khác</h5>
@@ -62,17 +66,17 @@
             <div>
               <div class="d-flex justify-content-between">
                 <p class="text-body fw-semibold">Tổng :</p>
-                <p class="text-body-emphasis fw-semibold">53.800.000</p>
+                <p class="text-body-emphasis fw-semibold">{{order.total}}</p>
               </div>
               <div class="d-flex justify-content-between">
                 <p class="text-body fw-semibold">Tổng giảm giá :</p>
-                <p class="text-body-emphasis fw-semibold">800.000</p>
+                {{! <p class="text-body-emphasis fw-semibold">800.000</p> }}
               </div>
               <div
                 class="d-flex justify-content-between border-top border-translucent border-dashed pt-4"
               >
                 <h4 class="mb-0">Tổng :</h4>
-                <h4 class="mb-0">53.000.000</h4>
+                <h4 class="mb-0">{{order.total}}</h4>
               </div>
             </div>
           </div>
@@ -83,17 +87,19 @@
             <h5>Trạng thái thanh toán</h5>
             <select class="form-select" aria-label="Default select example">
               <option selected>Trạng thái</option>
-              <option value="1">rỗng</option>
+              <option value="1">Chờ xác nhận</option>
+              <option value="1">Thành công</option>
+              <option value="1">Thất bại</option>
             </select>
             <h5 class="mt-3">Trạng thái đơn hàng</h5>
-            <select class="form-select" aria-label="Default select example">
-              <option selected>Trạng thái</option>
-              <option value="1">Chờ xác nhận</option>
-              <option value="2">Đã xác nhận</option>
-              <option value="3">Đang Vận chuyển</option>
-              <option value="3">Đã giao hàng</option>
-              <option value="3">Đã hủy</option>
-            </select>
+            <form id="chaneStatus" method="put" action="/api/{{order._id}}/detail">
+              <select id="orderStatus" class="form-select" aria-label="Default select example">
+                  <option value="pending" {{#if (chaneStatus orderStatus 'pending')}}selected{{/if}}>Chờ xác nhận</option>
+                  <option value="shipping" {{#if (chaneStatus orderStatus 'shipping')}}selected{{/if}}>Đang Vận chuyển</option>
+                  <option value="success" {{#if (chaneStatus orderStatus 'success')}}selected{{/if}}>Đã giao hàng</option>
+                  <option value="cancel" {{#if (chaneStatus orderStatus 'cancel')}}selected{{/if}}>Đã hủy</option>
+              </select>
+            </form>
           </div>
         </div>
 

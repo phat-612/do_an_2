@@ -9,7 +9,7 @@ const fs = require("fs");
 const path = require("path");
 const moment = require("moment");
 const crypto = require("crypto");
-const qs = require("qs");
+const querystring = require("qs");
 const bcrypt = require("bcrypt");
 const validator = require("email-validator");
 
@@ -483,47 +483,106 @@ class ApiController {
     });
   }
   createOrder(req, res, next) {
-    res.json(req.body);
+    const formData = req.body;
+    const idUser = req.session.idUser;
+    const promise = formData.details.map((detail) => {
+      return Product.findOne({ "variations._id": detail.idVariation }).then(
+        (product) => {
+          const variation = product.variations.id(detail.idVariation);
+          // kiểm tra số lượng sản phẩm
+          if (variation.quantity < detail.quantity) {
+            req.flash("message", {
+              type: "danger",
+              message: "Sản phẩm " + product.name + " đã hết hàng",
+            });
+            return res.redirect("/cart");
+          }
+          let discount;
+          if (
+            Date.now() > product.discount.startDay &&
+            Date.now() < product.discount.endDay
+          ) {
+            discount = product.discount.percent;
+          } else {
+            discount = 0;
+          }
+          // kiểm tra giá sản phẩm
+          if (detail.price != (variation.price * (100 - discount)) / 100) {
+            req.flash("message", {
+              type: "danger",
+              message: "Giá sản phẩm đã thay đổi",
+            });
+            return res.redirect("/cart");
+          }
+          return {
+            idVariation: detail.idVariation,
+            quantity: detail.quantity,
+            price: detail.price,
+            discount,
+          };
+        }
+      );
+    });
+    Promise.all(promise).then((details) => {
+      const total = details.reduce((total, detail) => {
+        return (
+          total + detail.price * (1 - detail.discount / 100) * detail.quantity
+        );
+      }, 0);
+      console.log(details);
+      console.log(total);
+      const newOrder = new Order({
+        idUser,
+        note: formData.note,
+        total,
+        paymentDetail: {
+          paymentMethod: formData.paymentMethod,
+          date: new Date(),
+          amount: total,
+        },
+        details,
+        shipmentDetail: formData.shipmentDetail,
+      });
+      newOrder.save().then(() => {
+        console.log("thêm order thành công");
+      });
+    });
+    return res.json(formData);
   }
   creatPaymentUrl(req, res, next) {
-    var ipAddr =
+    process.env.TZ = "Asia/Ho_Chi_Minh";
+
+    let date = new Date();
+    let createDate = moment(date).format("YYYYMMDDHHmmss");
+
+    let ipAddr =
       req.headers["x-forwarded-for"] ||
       req.connection.remoteAddress ||
       req.socket.remoteAddress ||
       req.connection.socket.remoteAddress;
 
-    var config = require("config");
-    var dateFormat = require("dateformat");
+    let tmnCode = process.env.vnp_TmnCode;
+    let secretKey = process.env.vnp_HashSecret;
+    let vnpUrl = process.env.vnp_Url;
+    let returnUrl = process.env.vnp_ReturnUrl;
+    let orderId = moment(date).format("DDHHmmss");
+    let amount = 100000;
+    let bankCode = "";
 
-    var tmnCode = config.get("vnp_TmnCode");
-    var secretKey = config.get("vnp_HashSecret");
-    var vnpUrl = config.get("vnp_Url");
-    var returnUrl = config.get("vnp_ReturnUrl");
-
-    var date = new Date();
-
-    var createDate = dateFormat(date, "yyyymmddHHmmss");
-    var orderId = dateFormat(date, "HHmmss");
-    var amount = req.body.amount;
-    var bankCode = req.body.bankCode;
-
-    var orderInfo = req.body.orderDescription;
-    var orderType = req.body.orderType;
-    var locale = req.body.language;
+    let locale = "vn";
     if (locale === null || locale === "") {
       locale = "vn";
     }
-    var currCode = "VND";
-    var vnp_Params = {};
+    let currCode = "VND";
+    let vnp_Params = {};
     vnp_Params["vnp_Version"] = "2.1.0";
     vnp_Params["vnp_Command"] = "pay";
     vnp_Params["vnp_TmnCode"] = tmnCode;
-    // vnp_Params['vnp_Merchant'] = ''
     vnp_Params["vnp_Locale"] = locale;
     vnp_Params["vnp_CurrCode"] = currCode;
     vnp_Params["vnp_TxnRef"] = orderId;
-    vnp_Params["vnp_OrderInfo"] = orderInfo;
-    vnp_Params["vnp_OrderType"] = orderType;
+    vnp_Params["vnp_OrderInfo"] = "Thanh toan cho ma GD:" + orderId;
+    vnp_Params["vnp_OrderType"] = "other";
     vnp_Params["vnp_Amount"] = amount * 100;
     vnp_Params["vnp_ReturnUrl"] = returnUrl;
     vnp_Params["vnp_IpAddr"] = ipAddr;
@@ -534,14 +593,13 @@ class ApiController {
 
     vnp_Params = sortObject(vnp_Params);
 
-    var querystring = require("qs");
-    var signData = querystring.stringify(vnp_Params, { encode: false });
-    var crypto = require("crypto");
-    var hmac = crypto.createHmac("sha512", secretKey);
-    var signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
+    let signData = querystring.stringify(vnp_Params, { encode: false });
+    let hmac = crypto.createHmac("sha512", secretKey);
+    let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
     vnp_Params["vnp_SecureHash"] = signed;
     vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
-
+    console.log(vnp_Params);
+    console.log(vnpUrl);
     res.redirect(vnpUrl);
   }
   // end api user
@@ -602,67 +660,8 @@ class ApiController {
       res.send("Thêm order thành công");
     });
   }
-  testThanhToan(req, res, next) {
-    var ipAddr =
-      req.headers["x-forwarded-for"] ||
-      req.connection.remoteAddress ||
-      req.socket.remoteAddress ||
-      req.connection.socket.remoteAddress;
-
-    var tmnCode = process.env.vnp_TmnCode;
-    var secretKey = process.env.vnp_HashSecret;
-    var vnpUrl = process.env.vnp_Url;
-    var returnUrl = process.env.vnp_ReturnUrl;
-
-    var date = new Date();
-
-    var createDate = moment(date).format("YYYYMMDDHHmmss");
-    var expireDate = moment(date).add(10, "minutes").format("YYYYMMDDHHmmss");
-    var orderId = moment(date).format("HHmmss");
-    var amount = 500000;
-    // var bankCode = req.body.bankCode;
-
-    var orderInfo = "thanh toan hoa don";
-    var orderType = "billpayment";
-    var locale = "vn";
-    if (locale === null || locale === "") {
-      locale = "vn";
-    }
-    var currCode = "VND";
-    var vnp_Params = {};
-    vnp_Params["vnp_Version"] = "2.1.0";
-    vnp_Params["vnp_Command"] = "pay";
-    vnp_Params["vnp_TmnCode"] = tmnCode;
-    // vnp_Params['vnp_Merchant'] = ''
-    vnp_Params["vnp_Locale"] = locale;
-    vnp_Params["vnp_CurrCode"] = currCode;
-    vnp_Params["vnp_TxnRef"] = orderId;
-    vnp_Params["vnp_OrderInfo"] = orderInfo;
-    vnp_Params["vnp_OrderType"] = orderType;
-
-    vnp_Params["vnp_Amount"] = amount * 100;
-    vnp_Params["vnp_ReturnUrl"] = returnUrl;
-    vnp_Params["vnp_IpAddr"] = ipAddr;
-    vnp_Params["vnp_CreateDate"] = createDate;
-    vnp_Params["vnp_ExpireDate"] = expireDate;
-    vnp_Params["vnp_BankCode"] = "";
-    vnp_Params = sortObject(vnp_Params);
-    console.log(secretKey);
-    const signData = new URLSearchParams(vnp_Params).toString();
-    const hmac = crypto.createHmac("sha512", secretKey);
-    const signed = hmac.update(Buffer.from(signData, "utf-8")).digest("hex");
-    vnp_Params["vnp_SecureHash"] = signed;
-    const url = new URL(vnpUrl);
-    url.search = new URLSearchParams(vnp_Params).toString();
-    vnpUrl = url.href;
-
-    console.log(vnp_Params);
-    console.log("-----");
-    console.log(vnpUrl);
-    console.log("-----");
-    res.redirect(vnpUrl);
-
-    // Vui lòng tham khảo thêm tại code demo
+  changeStatus(req, res) {
+    res.send(req.body);
   }
 }
 module.exports = new ApiController();

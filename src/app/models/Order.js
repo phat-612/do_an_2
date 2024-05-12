@@ -5,10 +5,18 @@ const Order = new Schema(
     idUser: { type: Schema.Types.ObjectId, ref: "User" },
     note: { type: String },
     total: { type: Number },
-    status: { type: String },
+    status: {
+      type: String,
+      enum: ["pending", "success", "cancel", "failed", "shipping"],
+      default: "pending",
+    },
     paymentDetail: {
       method: { type: String, enum: ["cod", "online"], required: true },
-      status: { type: Boolean },
+      status: {
+        type: String,
+        enum: ["pending", "success", "failed"],
+        default: "pending",
+      },
       date: { type: Date },
       amount: { type: Number },
     },
@@ -20,6 +28,7 @@ const Order = new Schema(
           type: Schema.Types.ObjectId,
           ref: "Product.variations",
         },
+        discout: { type: Number },
       },
     ],
     shipmentDetail: {

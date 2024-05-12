@@ -48,46 +48,40 @@ class AdminController {
   }
   // get /order/detail
   orderDetail(req, res, next) {
-    Order.findById(req.params.id).then((order) => {
-      let promises = order.details.map((detail) => {
-        return Product.findOne({ "variations._id": detail.idVariation }).then(
-          (product) => {
-            if (!product) {
-              console.error(`Không thấy sản phẩm ${detail.idVariation}`);
-              return null;
+    Order.findById(req.params.id)
+      .populate("idUser")
+      .then((order) => {
+        let promises = order.details.map((detail) => {
+          return Product.findOne({ "variations._id": detail.idVariation }).then(
+            (product) => {
+              if (!product) {
+                console.error(`Không thấy sản phẩm ${detail.idVariation}`);
+                return null;
+              }
+              let variation = product.variations.id(detail.idVariation);
+              let productName = product.name;
+              let variationAttributes = variation ? variation.attributes : {};
+
+              let detailObject = detail.toObject();
+              detailObject.productName = productName;
+              detailObject.variationAttributes = variationAttributes;
+
+              return detailObject;
             }
-            let variation = product.variations.id(detail.idVariation);
-            let productName =
-              product.name + " " + (variation ? variation.slug : "");
-            // console.log(`Product name: ${productName}`);
-            let variationAttributes = variation ? variation.attributes : {};
-            // console.log(typeof variationAttributes);
-            // console.log(Array.isArray(variationAttributes));
-            let price = variation ? variation.price : 0;
-            // let quantity = variation ? variation.quantity : 0;
+          );
+        });
 
-            let detailObject = detail.toObject();
-            detailObject.productName = productName;
-            detailObject.variationAttributes = variationAttributes;
-            // detailObject.price = price;
-            // detailObject.quantity = quantity;
-            // console.log(detailObject.quantity);
-            return detailObject;
-          }
-        );
-      });
-
-      Promise.all(promises).then((result) => {
-        // handle the result
-        res.render("admin/orders/orderDetail", {
-          layout: "admin",
-          js: "admin/orderDetail",
-          css: "admin/orderDetail",
-          orders: result,
-          // orders: result.filter((item) => item !== null),
+        Promise.all(promises).then((result) => {
+          res.render("admin/orders/orderDetail", {
+            layout: "admin",
+            js: "admin/orderDetail",
+            css: "admin/orderDetail",
+            orders: result, // Key 'orders' chứa mảng 'result' chứa chi tiết sản phẩm
+            order: order, // Key 'order' chứa thông tin toàn bộ đơn hàng
+          });
+          // console.log(result);
         });
       });
-    });
   }
   //get /product/addproduct
   addPro(req, res, next) {

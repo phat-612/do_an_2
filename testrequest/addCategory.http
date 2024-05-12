@@ -149,15 +149,13 @@ POST http://localhost:3000/api/testAddOrder
 Content-Type: application/json
 
 {
-    "idUser": "660a2b86ec57e594a8456a45",
+    "idUser": "661ba3c6cd84476c129cbbce",
     "note": "hong có gì",
     "total": 40000,
-    "status": "Thành công",
     "paymentDetail": {
       "method": "cod",
-      "status": true,
       "date": "2022-12-29",
-      "amount": 20000
+      "amount": 40000
     },
     "details": [
       {

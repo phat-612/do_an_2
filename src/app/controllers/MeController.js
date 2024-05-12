@@ -143,11 +143,16 @@ class MeController {
       cart.totalPrice = resData.reduce((total, item) => {
         return total + item.price * item.quantity;
       }, 0);
-
-      res.render("user/profiles/order", {
-        title: "Đặt hàng",
-        js: "user/order",
-        cart,
+      User.findOne({ _id: req.session.idUser }).then((user) => {
+        const shipmentDetail = user.shipmentDetail.map(
+          (detail) => (detail = detail.toObject())
+        );
+        res.render("user/profiles/order", {
+          title: "Đặt hàng",
+          js: "user/order",
+          cart,
+          shipmentDetail,
+        });
       });
     });
   }
