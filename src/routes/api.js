@@ -16,7 +16,7 @@ router.put("/cart", apiController.updateCartQuantity);
 router.delete("/address", apiController.deleteAddress);
 router.delete("/cart", apiController.removeItemToCart);
 // order
-router.put("/order/:id/detail", apiController.changeStatus);
+router.put("/order/:id", apiController.changeStatus);
 
 // product
 router.post("/product", upload.array("images"), apiController.createProduct);

@@ -92,17 +92,16 @@
               <option value="1">Thất bại</option>
             </select>
             <h5 class="mt-3">Trạng thái đơn hàng</h5>
-            <form id="chaneStatus" method="put" action="/api/{{order._id}}/detail">
-              <select id="orderStatus" class="form-select" aria-label="Default select example">
-                  <option value="pending" {{#if (chaneStatus orderStatus 'pending')}}selected{{/if}}>Chờ xác nhận</option>
-                  <option value="shipping" {{#if (chaneStatus orderStatus 'shipping')}}selected{{/if}}>Đang Vận chuyển</option>
-                  <option value="success" {{#if (chaneStatus orderStatus 'success')}}selected{{/if}}>Đã giao hàng</option>
-                  <option value="cancel" {{#if (chaneStatus orderStatus 'cancel')}}selected{{/if}}>Đã hủy</option>
+            <form id="chaneStatus" method="POST" action="/api/order/{{order._id}}?_method=PUT">
+              <select id="orderStatus" name="status" class="form-select" aria-label="Default select example">
+                  <option value="pending" {{#if (chaneStatus order.status 'pending')}}selected{{/if}}>Chờ xác nhận</option>
+                  <option value="shipping" {{#if (chaneStatus order.status 'shipping')}}selected{{/if}}>Đang Vận chuyển</option>
+                  <option value="success" {{#if (chaneStatus order.status 'success')}}selected{{/if}}>Đã giao hàng</option>
+                  <option value="cancel" {{#if (chaneStatus order.status 'cancel')}}selected{{/if}}>Đã hủy</option>
               </select>
             </form>
           </div>
         </div>
-
       </div>
     </div>
   </div>

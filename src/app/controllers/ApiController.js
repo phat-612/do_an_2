@@ -661,7 +661,16 @@ class ApiController {
     });
   }
   changeStatus(req, res) {
-    res.send(req.body);
+    Order.updateOne({ _id: req.params.id }, req.body)
+      .then(() => {
+        res.json({ message: "Status updated successfully!" });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: "An error occurred while updating the status.",
+          error: err,
+        });
+      });
   }
 }
 module.exports = new ApiController();
