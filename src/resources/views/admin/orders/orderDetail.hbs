@@ -7,8 +7,9 @@
         <thead>
           <tr>
             <th scope="col">STT</th>
-            <th scope="col">Sản Phẩm</th>
+            <th scope="col">Sản Phẩm</th>   
             <th scope="col">Phân loại</th>
+            <th scope="col">Giảm giá</th>
             <th scope="col">Số Lượng</th>
             <th scope="col">Giá</th>
             <th scope="col">Tổng</th>
@@ -22,9 +23,10 @@
               <td>Màu sắc:
                 {{this.variationAttributes.color}}, Dung lượng:
                 {{this.variationAttributes.storage}}</td>
+                <td>{{this.discout}}%</td>
               <td>{{this.quantity}}</td>
               <td>{{this.price}}</td>
-              <td>{{total this.quantity this.price}}</td>
+              <td>{{salePrice this.price this.discout}}</td>
             </tr>
           {{/each}}
         </tbody>
@@ -33,9 +35,11 @@
         class="d-flex justify-content-between py-3 border-bottom border-translucent mb-6"
       >
         <p class="text-body-emphasis fw-semibold">Tổng :</p>
+      
         <p class="text-body-emphasis fw-bold me-5">{{order.total}}</p>
+        
       </div>
-      <div class="row">
+      <div class="row"> 
         <div class="col-4">
           <h5>Chi Tiết Khách Hàng</h5>
           <h6><i class="bi bi-person-circle"></i> {{order.idUser.name}}</h6>
@@ -52,13 +56,8 @@
           <h6><i class="bi bi-house"></i>
             {{order.shipmentDetail.address}}</h6>
         </div>
-        <div class="col">
-          <h5>Chi Tiết Khác</h5>
-          <h6><i class="bi bi-gift"></i> Giảm Giá: Có</h6>
-
-        </div>
       </div>
-    </div>
+    </div>s
     <div class="col">
       <div class="row">
         <div class="col-12 card w-100">

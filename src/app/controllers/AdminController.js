@@ -72,10 +72,14 @@ class AdminController {
         });
 
         Promise.all(promises).then((result) => {
+          const totalSalePrice = result.reduce((accumulator, detail) => {
+            return accumulator + detail.salePrice * detail.quantity;
+          }, 0);
           res.render("admin/orders/orderDetail", {
             layout: "admin",
             js: "admin/orderDetail",
             css: "admin/orderDetail",
+            totalSalePrice,
             orders: result, // Key 'orders' chứa mảng 'result' chứa chi tiết sản phẩm
             order: order, // Key 'order' chứa thông tin toàn bộ đơn hàng
           });

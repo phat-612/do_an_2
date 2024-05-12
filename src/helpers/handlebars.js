@@ -149,8 +149,11 @@ module.exports = {
         return status;
     }
   },
+  salePrice: (price, discout) => {
+    return price * ((100 - discout) / 100);
+  },
   chaneStatus: (arg1, arg2) => {
-    return arg1 == arg2 ? "selected" : "";
+    return arg1 == arg2;
   },
   isSelect: (val, opt) => {
     return val == opt ? "selected" : "";

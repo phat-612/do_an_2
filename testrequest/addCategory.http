@@ -161,12 +161,14 @@ Content-Type: application/json
       {
         "price": 20000,
         "quantity": 1,
-        "idVariation": "66161155fd1714d066d1c192"
+        "idVariation": "66161155fd1714d066d1c192",
+        "discout":10
       },
        {
         "price": 20000,
         "quantity": 1,
-        "idVariation": "66161155fd1714d066d1c193"
+        "idVariation": "66161155fd1714d066d1c193",
+        "discout":15
       }
     ],
     "shipmentDetail": {
