@@ -1,85 +1,90 @@
 <div class="container">
   <div class="row fw-bold">
-    <div class="col-1 fs-3"><i class="bi bi-arrow-left"></i></div>
+    <a class="col-1 fs-3" href="/me/historyOrder"><i
+        class="bi bi-arrow-left"
+      ></i></a>
     <div class="col text-center fs-4">Chi tiết đơn hàng</div>
   </div>
-  <div class="row mt-2">
-    <p class="col mb-0">Mã đơn hàng: <span class="fw-bold">012345678</span></p>
+  <div class="row mt-2 align-items-center">
+    <p class="col mb-0">Mã đơn hàng:
+      <span class="fw-bold">{{order._id}}</span></p>
     <div
-      class="col-2 p-2 text-success bg-success bg-opacity-25 custom-w-fitcontent custom-fs-10px"
-    >Đã giao hàng</div>
+      class="col-2 p-2 text-success bg-success bg-opacity-25 custom-w-fitcontent"
+    >{{showStatusOrder order.status}}</div>
+    {{#if (compare order.status "pending")}}
+      <div class="col-2 p-2 text-success"><form
+          action="/api/cancelOrder?_method=PUT"
+          method="post"
+        >
+          <input type="text" value="{{order._id}}" name="idOrder" hidden />
+          <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
+        </form></div>
+    {{/if}}
   </div>
   <div class="row">
     <p class="opacity-75">
-      03/11/2023 11:18
+      {{formatDate order.createdAt "HH:mm DD/MM/YYYY"}}
     </p>
   </div>
   <div class="row card tag_product mb-2">
-    <div class="d-flex flex-row py-2">
-      <div class="col-2 py-1">
-        <img
-          class="w-75"
-          src="https://cdn2.cellphones.com.vn/358x/media/catalog/product/t/a/tai-nghe-khong-day-havit-tw958-pro_2_.png"
-          alt=""
-        />
+    {{#each order.details}}
+      <div class="d-flex flex-row py-2">
+        <div class="col-2 py-1">
+          <img class="w-75" src="/{{this.image}}" alt="{{this.image}}" />
+        </div>
+        <div class="col-8">
+          <a class="fs-5" href="/product/{{slugProduct}}">{{name}}</a>
+          <ul
+            class="p-2 mt-2 text-dark custom-w-fitcontent custom-fs-12px"
+          >{{{objectToLi variationProduct.attributes}}}</ul>
+          {{#if (compareMore discount 0)}}
+            <div class="text-decoration-line-through">{{showPrice price}}</div>
+            <div class="fs-5 text-danger fw-bold">{{showPrice
+                (discountPrice price discount)
+              }}</div>
+          {{else}}
+            <div class="fs-5 text-danger fw-bold">{{showPrice price}}</div>
+          {{/if}}
+
+        </div>
+        <div class="col text-end">
+          <p class="">
+            Số lượng:
+            <span class="text-danger fw-bold">{{quantity}}</span>
+          </p>
+        </div>
       </div>
-      <div class="col-8">
-        <a class="fs-5" href="#">Tên sản phẩm</a>
-        <div
-          class="p-2 mt-2 border boder-1 rounded-2 text-dark custom-w-fitcontent custom-fs-12px"
-        >Màu</div>
-        <div class="mt-3 fs-5 text-danger fw-bold">123456</div>
-      </div>
-      <div class="col text-end">
-        <p class="">
-          Số lượng:
-          <span class="text-danger fw-bold">1</span>
-        </p>
-      </div>
-    </div>
-    <hr class="m-0 p-0" />
-    <div class="d-flex flex-row py-2">
-      <div class="col-2 py-1">
-        <img
-          class="w-75"
-          src="https://cdn2.cellphones.com.vn/358x/media/catalog/product/t/a/tai-nghe-khong-day-havit-tw958-pro_2_.png"
-          alt=""
-        />
-      </div>
-      <div class="col-8">
-        <a class="fs-5" href="#">Tên sản phẩm</a>
-        <div
-          class="p-2 mt-2 border boder-1 rounded-2 text-dark custom-w-fitcontent custom-fs-12px"
-        >Màu</div>
-        <div class="mt-3 fs-5 text-danger fw-bold">123456</div>
-      </div>
-      <div class="col text-end">
-        <p class="">
-          Số lượng:
-          <span class="text-danger fw-bold">1</span>
-        </p>
-      </div>
-    </div>
+      <hr class="m-0 p-0" />
+    {{/each}}
   </div>
-  <div class="row custom-bg-gray p-3 mt-4">
-    <h4 class="col fw-bold text-center"><i class="bi bi-credit-card"></i>
+
+  <div class="row custom-bg-gray">
+    <h4 class="col-12 fw-bold text-center"><i class="bi bi-credit-card"></i>
       Thông tin thanh toán</h4>
-    <div class="d-flex justify-content-between fs-5">
-      <p>Tổng tiền sản phẩm:</p>
-      <span>123456</span>
+    <div class="col row p-3 mt-4">
+      <div class="d-flex justify-content-between fs-5">
+        <p>Hình thức thanh toán:</p>
+        <span>{{showPaymentMethod order.paymentDetail.method}}</span>
+      </div>
+      <div class="d-flex justify-content-between fs-5">
+        <p>Trạng thái thanh toán:</p>
+        <span>{{showPaymentStatus order.paymentDetail.status}}</span>
+      </div>
     </div>
-    <div class="d-flex justify-content-between fs-5">
-      <p>Giảm giá:</p>
-      <span>123456</span>
-    </div>
-    <div class="d-flex justify-content-between fs-5">
-      <p>Phí vận chuyển:</p>
-      <span>Miễn phí</span>
-    </div>
-    <hr />
-    <div class="d-flex justify-content-between fs-5">
-      <p>Tổng thanh toán</p>
-      <span>12345689</span>
+    <div class="col row p-3 mt-4">
+      <div class="d-flex justify-content-between fs-5">
+        <p>Tổng tiền sản phẩm:</p>
+        <span>{{showPrice (totalPriceOrder order.details)}}</span>
+      </div>
+      <div class="d-flex justify-content-between fs-5">
+        <p>Giảm giá:</p>
+        <span>- {{showPrice (totalPriceDiscountOrder order.details)}}</span>
+      </div>
+      <hr />
+      <div class="d-flex justify-content-between fs-5">
+        <p>Tổng thanh toán</p>
+        <span>{{showPrice order.total}}</span>
+      </div>
     </div>
   </div>
 </div>

@@ -404,7 +404,7 @@ class ApiController {
           ],
         });
         newCart.save().then(() => {
-          res.redirect("/cart");
+          res.redirect("back");
         });
       } else {
         let check = false;
@@ -487,6 +487,7 @@ class ApiController {
           const variation = product.variations.id(detail.idVariation);
           // kiểm tra số lượng sản phẩm
           if (variation.quantity < detail.quantity) {
+            console.log("sản phẩm " + product.name + " đã hết hàng");
             req.flash("message", {
               type: "danger",
               message: "Sản phẩm " + product.name + " đã hết hàng",
@@ -504,6 +505,7 @@ class ApiController {
           }
           // kiểm tra giá sản phẩm
           if (detail.price != (variation.price * (100 - discount)) / 100) {
+            console.log("sản phẩm " + product.name + " đã thay đổi giá bán");
             req.flash("message", {
               type: "danger",
               message: "Giá sản phẩm đã thay đổi",
@@ -551,6 +553,28 @@ class ApiController {
       newOrder.save();
     });
     return res.redirect("/me/historyOrder");
+  }
+  cancelOrder(req, res, next) {
+    const idOrder = req.body.idOrder;
+    console.log("hủy đơn hàng");
+    Order.findOne({ _id: idOrder }).then((order) => {
+      if (order.status != "pending") {
+        req.flash("message", {
+          type: "danger",
+          message: "Không thể hủy đơn hàng này",
+        });
+        return res.redirect("back");
+      }
+      order.status = "cancel";
+      order.paymentDetail.status = "cancel";
+      order.save().then(() => {
+        req.flash("message", {
+          type: "success",
+          message: "Hủy đơn hàng thành công",
+        });
+        return res.redirect("back");
+      });
+    });
   }
   creatPaymentUrl(req, res, next) {
     process.env.TZ = "Asia/Ho_Chi_Minh";
@@ -662,20 +686,28 @@ class ApiController {
     });
   }
   changeStatus(req, res) {
-    Order.updateOne({ _id: req.params.id }, req.body)
-      .then(() => {
-        req.flash("message", {
-          type: "success",
-          message: "Đổi trạng thái thanh toán thành công",
-        });
-        res.redirect("back");
-      })
-      .catch((err) => {
-        res.status(500).json({
-          message: "An error occurred while updating the status.",
-          error: err,
-        });
+    // return res.send(req.body);
+    // Order.updateOne({_id: req.params.id}, {
+    //   status : req.body.status,
+    //   "paymentDetail.method": req.body.paymentMethod,
+    // })
+    Order.findOne({ _id: req.params.id }).then((order) => {
+      order.status = req.body.status;
+      if (order.paymentDetail.method != "cod") {
+        order.save();
+        return res.redirect("back");
+      }
+      if (req.body.status == "success") {
+        order.paymentDetail.status = "success";
+      }
+      if (req.body.status == "failed") {
+        order.paymentDetail.status = "failed";
+      }
+
+      order.save().then(() => {
+        return res.redirect("back");
       });
+    });
   }
 }
 module.exports = new ApiController();

@@ -33,24 +33,30 @@
       <span>01/07/2023</span></p>
   </div>
   <ul class="row nav gap-2">
-    <li
-      class="border border-1 rounded-2 px-3 py-2 bg-white col-2 custom-w-fitcontent"
-    >Tất cả</li>
-    <li
-      class="border border-1 rounded-2 px-3 py-2 bg-white col-2 custom-w-fitcontent"
-    >Chờ xác nhận</li>
-    <li
-      class="border border-1 rounded-2 px-3 py-2 bg-white col-2 custom-w-fitcontent"
-    >Đã xác nhận</li>
-    <li
-      class="border border-1 rounded-2 px-3 py-2 bg-white col-2 custom-w-fitcontent"
-    >Đang vận chuyển</li>
-    <li
-      class="border border-1 rounded-2 px-3 py-2 bg-white col-2 custom-w-fitcontent"
-    >Đã giao hàng</li>
-    <li
-      class="border border-1 rounded-2 px-3 py-2 bg-white col-2 custom-w-fitcontent"
-    >Đã hủy</li>
+    <li class="custom-w-fitcontent"><a
+        class="border border-1 rounded-2 px-3 py-2 bg-white col-2"
+        href="/me/historyOrder"
+      >Tất cả</a></li>
+    <li class="custom-w-fitcontent"><a
+        class="border border-1 rounded-2 px-3 py-2 bg-white col-2"
+        href="?_filter&column=status&value=pending"
+      >Chờ xác nhận</a></li>
+    <li class="custom-w-fitcontent"><a
+        class="border border-1 rounded-2 px-3 py-2 bg-white col-2"
+        href="?_filter&column=status&value=shipping"
+      >Đang vận chuyển</a></li>
+    <li class="custom-w-fitcontent"><a
+        class="border border-1 rounded-2 px-3 py-2 bg-white col-2"
+        href="?_filter&column=status&value=success"
+      >Thành công</a></li>
+    <li class="custom-w-fitcontent"><a
+        class="border border-1 rounded-2 px-3 py-2 bg-white col-2"
+        href="?_filter&column=status&value=failed"
+      >Thất bại</a></li>
+    <li class="custom-w-fitcontent"><a
+        class="border border-1 rounded-2 px-3 py-2 bg-white col-2"
+        href="?_filter&column=status&value=cancel"
+      >Bị hủy</a></li>
   </ul>
   {{! không có sản phẩm }}
   <div class="row text-center d-flex justify-content-center mt-5 d-none">

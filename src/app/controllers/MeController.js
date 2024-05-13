@@ -29,6 +29,7 @@ class MeController {
   historyOrder(req, res, next) {
     // tên, ảnh giá, của một sản phẩm đầu tiên, thời gian
     const idUser = req.session.idUser;
+
     Order.aggregate([
       {
         $match: { idUser: new mongoose.Types.ObjectId(idUser) },
@@ -59,6 +60,11 @@ class MeController {
         },
       },
     ]).then((orders) => {
+      if (req.query.hasOwnProperty("_filter")) {
+        orders = orders.filter(
+          (order) => order[req.query.column] == req.query.value
+        );
+      }
       res.render("user/profiles/historyOrder", {
         layout: "userProfile",
         orders,
@@ -66,7 +72,46 @@ class MeController {
     });
   }
   detailOrder(req, res, next) {
-    res.render("user/profiles/detailOrder", { layout: "userProfile" });
+    Order.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(req.params.idOrder),
+          idUser: new mongoose.Types.ObjectId(req.session.idUser),
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "details.idVariation",
+          foreignField: "variations._id",
+          as: "products",
+        },
+      },
+    ]).then((orders) => {
+      if (orders.length == 0) {
+        return res.render("404");
+      }
+      const order = orders[0];
+      order.details = order.details.map((detail) => {
+        let tempProduct = order.products.find((product) => {
+          return product.variations.find((variation) => {
+            return variation._id.toString() == detail.idVariation.toString();
+          });
+        });
+        let tempVariation = tempProduct.variations.find((variation) => {
+          return variation._id.toString() == detail.idVariation.toString();
+        });
+        return {
+          ...detail,
+          name: tempProduct.name,
+          image: tempProduct.images[0],
+          slugProduct: tempProduct.slug,
+          variationProduct: tempVariation,
+        };
+      });
+      // return res.json(order);
+      res.render("user/profiles/detailOrder", { layout: "userProfile", order });
+    });
   }
   historyWaranty(req, res, next) {
     res.render("user/profiles/historyWaranty", { layout: "userProfile" });

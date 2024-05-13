@@ -13,6 +13,7 @@ router.put("/profile", apiController.updateProfile);
 router.put("/password", apiController.updatePassword);
 router.put("/address", apiController.updateAddress);
 router.put("/cart", apiController.updateCartQuantity);
+router.put("/cancelOrder", apiController.cancelOrder);
 router.delete("/address", apiController.deleteAddress);
 router.delete("/cart", apiController.removeItemToCart);
 // order

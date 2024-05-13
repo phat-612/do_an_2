@@ -14,7 +14,7 @@ const Order = new Schema(
       method: { type: String, enum: ["cod", "online"], required: true },
       status: {
         type: String,
-        enum: ["pending", "success", "failed"],
+        enum: ["pending", "success", "failed", "cancel"],
         default: "pending",
       },
       date: { type: Date },
@@ -39,4 +39,14 @@ const Order = new Schema(
   },
   { timestamps: true }
 );
+
+// filterable
+Order.query.filterable = function (req) {
+  if (req.query.hasOwnProperty("_filter")) {
+    return this.find({
+      [req.query.column]: req.query.value,
+    });
+  }
+  return this;
+};
 module.exports = mongoose.model("Order", Order);

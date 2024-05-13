@@ -20,18 +20,25 @@
       <div><hr /></div>
       <div class="row">
         <div class="col-5">
-          <p>Ngày Bắt Đầu :</p>
-          <input type="date" name="" id="" class="form-control" />
+          <p>Từ Ngày :</p>
+          <input type="date" name="" id="" class="form-control dateStart" />
         </div>
         <div class="col-5">
-          <p>Ngày Kết Thúc :</p>
-          <input type="date" name="" id="" class="form-control" />
+          <p>Đến Ngày :</p>
+          <input
+            type="date"
+            name=""
+            id=""
+            class="form-control dateEnd"
+            disabled
+          />
         </div>
         <div class="col-2 position-relative">
           <button
             type="button"
-            class="btn btn-success position-absolute bottom-0"
-          >Đến</button>
+            class="btn btn-success position-absolute bottom-0 btn-gotoDate"
+            disabled
+          >Đi</button>
         </div>
       </div>
       <canvas id="chart" class="mt-3"></canvas>

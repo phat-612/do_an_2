@@ -95,7 +95,6 @@ class AdminController {
             css: "admin/orderDetail",
             orders: result,
             order: order,
-
             totalNotSale: totalNotSale, //gia chua giam
           });
           // console.log(totalNotSale, totalOrder);

@@ -41,6 +41,30 @@ module.exports = {
         return status;
     }
   },
+  showPaymentMethod: (method) => {
+    switch (method) {
+      case "cod":
+        return "Thanh toán khi nhận hàng";
+      case "online":
+        return "Thanh toán online";
+      default:
+        return method;
+    }
+  },
+  showPaymentStatus: (status) => {
+    switch (status) {
+      case "pending":
+        return "Chờ Thanh Toán";
+      case "success":
+        return "Thành công";
+      case "failed":
+        return "Thất bại";
+      case "cancel":
+        return "Đã hủy";
+      default:
+        return status;
+    }
+  },
   showDiscount: (discount) => {
     if (discount > 0) {
       return `<p
@@ -112,6 +136,16 @@ module.exports = {
   discountPrice: (price, discount) => {
     return price * (1 - discount / 100);
   },
+  totalPriceOrder: (details) => {
+    return details.reduce((acc, detail) => {
+      return acc + detail.price * detail.quantity;
+    }, 0);
+  },
+  totalPriceDiscountOrder: (details) => {
+    return details.reduce((acc, detail) => {
+      return acc + (detail.price * detail.quantity * detail.discount) / 100;
+    }, 0);
+  },
   getBrands: (categories, rootCategory) => {
     const brands = categories.find((category) => category.slug == rootCategory);
     if (brands) {
@@ -177,10 +211,11 @@ module.exports = {
   salePrice: (price, discout, quantity) => {
     return price * ((100 - discout) / 100) * quantity;
   },
-  total: (a, b) => a * b,
+  mutiple: (a, b) => a * b,
   changeStatus: (arg1, arg2) => {
     return arg1 == arg2;
   },
+
   isSelectedObejctId: (val, opt) => {
     return val.toString() == opt.toString() ? "selected" : "";
   },
