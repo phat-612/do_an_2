@@ -153,19 +153,45 @@ class AdminController {
   }
   //get /product/edit/:id
   editProduct(req, res, next) {
-    Category.find().then((categorys) => {
-      Product.findById(req.params.id)
-        .then((product) => {
-          return res.json(product);
-          res.render("admin/products/editProduct", {
-            product: mongooseToObject(product),
-            layout: "admin",
-            js: "admin/editProduct",
-            css: "admin/editProduct",
-            categorys: multipleMongooseToObject(categorys),
-          });
-        })
-        .catch(next);
+    // Category.find().then((categorys) => {
+    //   Product.findById(req.params.id)
+    //     .then((product) => {
+    //       // return res.json(product);
+    //       res.render("admin/products/editProduct", {
+    //         product: mongooseToObject(product),
+    //         layout: "admin",
+    //         js: "admin/editProduct",
+    //         css: "admin/editProduct",
+    //         categorys: multipleMongooseToObject(categorys),
+    //       });
+    //     })
+    //     .catch(next);
+    // });
+    // Minh Luân đã từng ghé qua
+    Product.findById(req.params.id).then((product) => {
+      if (!product) {
+        return res.json({ message: "Không tìm thấy sản phẩm" });
+      }
+      let productAttributes = product.variations.map((detail) => {
+        return detail.attributes;
+      });
+      // console.log(productAttributes);
+      let attributes = productAttributes.reduce((result, attr) => {
+        for (let key in attr) {
+          if (!result[key]) result[key] = [attr[key]];
+          else if (!result[key].includes(attr[key]))
+            result[key].push(attr[key]);
+        }
+        return result;
+      }, {});
+      res.render("admin/products/editProduct", {
+        layout: "admin",
+        js: "admin/editProduct",
+        css: "admin/editProduct",
+        product: mongooseToObject(product),
+        productAttributes: attributes,
+      });
+      // console.log(attributes);
     });
   }
   //get /category

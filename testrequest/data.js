@@ -145,3 +145,7 @@ const dataDetailOrder = {
     },
   ],
 };
+const dataVariationsProduct = {
+  ram: ["8G", "64G"],
+  color: ["đỏ", "xanh"],
+};
