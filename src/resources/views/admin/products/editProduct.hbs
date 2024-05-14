@@ -52,15 +52,13 @@
          </div>
          <div class="col-md-6 my-3" id="inputAttribute2Div">
             <button type="button" class="btn btn-success form-control addAttribute2-btn">Thêm Thuộc Tính</button>
-           {{#each productAttributes as |value key|}}
-                  <div class="row">
+               {{#each productAttributes as |value key|}}
                      {{#each value}}
-                     <div>
+                     <div class="row">
                            <input type="text" id="thuocTinh1" class="form-control my-2 col" value="{{this}}">
                            <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
                      </div>
                      {{/each}}
-                  </div>
                {{/each}}
          </div>
       </div>
