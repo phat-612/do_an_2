@@ -22,7 +22,12 @@ router.get("/createPaymentUrl", apiController.creatPaymentUrl);
 router.get("/returnPayment", apiController.returnPayment);
 // product
 router.post("/product", upload.array("images"), apiController.createProduct);
-router.post("/storeCategory", apiController.storeCategory);
+router.post(
+  "/updateProduct",
+  upload.array("images"),
+  apiController.updateProduct
+);
+
 // warranty
 router.post(
   "/storeWarranty",
@@ -33,6 +38,7 @@ router.delete("/warranty/:slugWarranty", apiController.deleteWarranty);
 router.put("/warranty/:id", apiController.updateWarranty);
 // category
 router.delete("/category/:slugCategory", apiController.deleteCategory);
+router.post("/storeCategory", apiController.storeCategory);
 router.put("/category/:id", apiController.updateCategory);
 
 // dành cho test

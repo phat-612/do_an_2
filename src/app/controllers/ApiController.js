@@ -23,6 +23,7 @@ class ApiController {
 
   // aip admin
 
+  // tạo sản phẩm
   createProduct(req, res, next) {
     const formData = req.body;
     let images = [];
@@ -46,6 +47,10 @@ class ApiController {
       });
       res.redirect("/admin/product");
     });
+  }
+  //cập nhật sản phẩm
+  updateProduct(req, res, next) {
+    console.log(req.body);
   }
 
   storeCategory(req, res, next) {

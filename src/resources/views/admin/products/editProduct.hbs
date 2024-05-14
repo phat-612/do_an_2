@@ -1,10 +1,10 @@
-<form action="">
-
+<form action="/api/updateProduct" method="post">
+   <input type="text" value="{{product._id}}" name="id" hidden>
   <div class="container">
     <label for="name-Product" class="form-label fs-4">Tên Sản phẩm</label>
-    <input type="text" class="form-control" id="name-Product" value="{{product.name}}" />
+    <input type="text" class="form-control" id="name-Product" value="{{product.name}}" name="name" />
     <label for="description-Product" class="col-form-label fs-4">Mô Tả Sản Phẩm</label>
-    <textarea class="form-control" id="description-Product">{{product.description}}</textarea>
+    <textarea class="form-control" id="description-Product" name="description">{{product.description}}</textarea>
     <label for="categoryDataList" class="form-label fs-4">Danh Mục</label>
     <select class="form-control" name="idCategory" id="">
       <option value="">Chọn Danh Mục</option>
@@ -91,11 +91,11 @@
          </div>
          <div class="col">
             <label for="discountStart" class="form-label fs-5">Ngày bắt đầu :</label>
-            <input type="date" name="startDay" id="discountStart" class="form-control" value="{{formatDate product.discount.startDay "YYYY-MM-DD"}}">
+            <input type="date" name="discount[startDay]" id="discountStart" class="form-control" value="{{formatDate product.discount.startDay "YYYY-MM-DD"}}">
          </div>
          <div class="col">
             <label for="discountEnd" class="form-label fs-5">Ngày kết thúc :</label>
-            <input type="date" name="endDay" id="discountEnd" class="form-control" value="{{formatDate product.discount.endDay "YYYY-MM-DD"}}">
+            <input type="date" name="discount[endDay]" id="discountEnd" class="form-control" value="{{formatDate product.discount.endDay "YYYY-MM-DD"}}">
          </div>
       </div>
      {{!-- ------------------------- --}}
@@ -107,6 +107,7 @@
             id="multiImageUpload"
             accept="image/*"
             multiple
+            name="images"
             />
       </div>
       <div class="mb-3">
@@ -117,6 +118,10 @@
             {{/each}}
          </div>
       </div>
+
+      <div class="d-flex flex-row-reverse bd-highlight">
+      <button type="submit" class="btn btn-success mb-4 submitbtn">LƯU SẢN PHẨM</button>
+    </div>
   </div>
 
 </form>
