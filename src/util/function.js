@@ -14,4 +14,18 @@ module.exports = {
     }
     return sorted;
   },
+  /**
+   * dùng để lấy ra giá trị giảm giá của sản phẩm dữ vào object discount
+   * @param {Object} objDiscount
+   * @return {Number}
+   */
+  getDiscount: (objDiscount) => {
+    let discount;
+    if (Date.now() > objDiscount.startDay && Date.now() < objDiscount.endDay) {
+      discount = objDiscount.percent;
+    } else {
+      discount = 0;
+    }
+    return discount;
+  },
 };

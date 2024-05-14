@@ -8,10 +8,15 @@ const {
   multipleMongooseToObject,
   mongooseToObject,
 } = require("../../util/mongoose");
+const { getDiscount } = require("../../util/function");
 const Order = require("../models/Order");
 class MeController {
   profile(req, res, next) {
     User.findOne({ _id: req.session.idUser }).then((user) => {
+      req.flash("message", {
+        type: "danger",
+        message: "Số lượng sản phẩm trong giỏ hàng đã bị thay đổi",
+      });
       res.render("user/profiles/profile", {
         layout: "userProfile",
         js: "user/profile",
@@ -149,6 +154,7 @@ class MeController {
         item.idVariation.toString()
       );
       Promise.all(cartItems).then((products) => {
+        let isChangeQuantity = false;
         const resCart = products.map((product) => {
           let cartItem;
           let variation = product.variations.find((variation) => {
@@ -157,20 +163,18 @@ class MeController {
                 cartItem = cart.items.find(
                   (item) => item.idVariation == variation._id.toString()
                 );
+                // xử lý số lượng trong giỏ hàng lớn hơn số lượng trong kho
+                if (variation.quantity < cartItem.quantity) {
+                  cartItem.quantity = variation.quantity;
+                  cart.items.id(cartItem._id).quantity = variation.quantity;
+                  isChangeQuantity = true;
+                }
                 return val !== variation._id.toString();
               });
               return variation;
             }
           });
-          let discount;
-          if (
-            Date.now() > product.discount.startDay &&
-            Date.now() < product.discount.endDay
-          ) {
-            discount = product.discount.percent;
-          } else {
-            discount = 0;
-          }
+          let discount = getDiscount(product.discount);
           return {
             price: variation.price * (1 - discount / 100),
             cartQuantity: cartItem.quantity,
@@ -180,7 +184,15 @@ class MeController {
             idVariation: variation._id,
           };
         });
+        cart.save();
         // return res.json(resCart);
+        console.log(isChangeQuantity);
+        if (isChangeQuantity) {
+          res.locals.message = {
+            type: "danger",
+            message: "Số lượng sản phẩm trong giỏ hàng đã bị thay đổi",
+          };
+        }
         res.render("user/profiles/cart", {
           layout: "userProfile",
           js: "user/cart",

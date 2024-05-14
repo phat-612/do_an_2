@@ -20,21 +20,23 @@
                <label for="ipNameAttributePro1" class="form-label fs-5">Nhập Tên Thuộc tính</label>
             </div>
             <div class="col-md-6">
-               <input type="text" id="inpNameAttributePro1" class="form-control" value="{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}">
+               <input type="text" id="inpNameAttributePro1" class="form-control variations" value="{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}">
             </div>
             <div class="col-md-6 my-3">
                <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
             </div>
             <div class="col-md-6 my-3" id="inputAttribute1Div">
                <button type="button" class="btn btn-success form-control addAttribute1-btn">Thêm Thuộc Tính</button>
-               <div class="row">
-                  <input type="text" id="thuocTinh1" class="form-control my-2 col" value="8GB">
-                  <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
-               </div>
-               <div class="row">
-                  <input type="text" id="thuocTinh1" class="form-control my-2 col" value="16GB">
-                  <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
-               </div>
+               {{#each attributes1}}
+                  {{#if @first}}
+                     {{#each this}}
+                        <div class="row">
+                           <input type="text" id="thuocTinh1" class="form-control my-2 col variations thuocTinh1" value="{{this}}">
+                           <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
+                        </div>
+                     {{/each}}
+                  {{/if}}
+               {{/each}}
             </div>
          </div>
      </div>
@@ -45,20 +47,22 @@
             <label for="inpNameAttributePro2" class="form-label fs-5">Nhập Tên Thuộc Tính</label>
          </div>
          <div class="col-md-6">
-            <input type="text" id="inpNameAttributePro2" class="form-control" value="{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}">
+            <input type="text" id="inpNameAttributePro2" class="form-control variations" value="{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}">
          </div>
          <div class="col-md-6 my-3">
             <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
          </div>
          <div class="col-md-6 my-3" id="inputAttribute2Div">
             <button type="button" class="btn btn-success form-control addAttribute2-btn">Thêm Thuộc Tính</button>
-               {{#each productAttributes as |value key|}}
-                     {{#each value}}
-                     <div class="row">
-                           <input type="text" id="thuocTinh1" class="form-control my-2 col" value="{{this}}">
+               {{#each attributes2}}
+                  {{#if @first}}
+                     {{#each this}}
+                        <div class="row">
+                           <input type="text" id="thuocTinh1" class="form-control my-2 col variations thuocTinh2" value="{{this}}">
                            <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
-                     </div>
+                        </div>
                      {{/each}}
+                  {{/if}}
                {{/each}}
          </div>
       </div>
@@ -67,19 +71,13 @@
       <table id="custom-varriant" class="table-based table ">
          <thead>
             <tr>
-               <th>{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
-               <th>{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
+               <th class="th1">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
+               <th class="th2">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
                <th>Giá</th>
                <th>Số lượng</th>
             </tr>
          </thead>
          <tbody>
-            <tr>
-               <td></td>
-               <td></td>
-               <td></td>
-               <td></td>
-            </tr>
          </tbody>
       </table>
       {{!-- ------------------------- --}}
@@ -87,17 +85,17 @@
          <div class="col">
             <label for="" class="form-label fs-5">Nhập số phần trăm giảm :</label>
             <div class="input-group">
-               <input type="number" class="form-control" max="100" min="0" oninput="this.value = Math.abs(this.value)" required value="{{product.discount.percent}}">
+               <input type="number" name="percent" id="percentInput" class="form-control" max="100" min="0" oninput="this.value = Math.abs(this.value)" required value="{{product.discount.percent}}">
                <span class="input-group-text">%</span>
             </div>
          </div>
          <div class="col">
-            <label for="" class="form-label fs-5">Ngày bắt đầu :</label>
-            <input type="date" name="" id="" class="form-control" value="{{formatDate product.discount.startDay "YYYY-MM-DD"}}">
+            <label for="discountStart" class="form-label fs-5">Ngày bắt đầu :</label>
+            <input type="date" name="startDay" id="discountStart" class="form-control" value="{{formatDate product.discount.startDay "YYYY-MM-DD"}}">
          </div>
          <div class="col">
-            <label for="" class="form-label fs-5">Ngày kết thúc :</label>
-            <input type="date" name="" id="" class="form-control" value="{{formatDate product.discount.endDay "YYYY-MM-DD"}}">
+            <label for="discountEnd" class="form-label fs-5">Ngày kết thúc :</label>
+            <input type="date" name="endDay" id="discountEnd" class="form-control" value="{{formatDate product.discount.endDay "YYYY-MM-DD"}}">
          </div>
       </div>
      {{!-- ------------------------- --}}
@@ -113,7 +111,11 @@
       </div>
       <div class="mb-3">
          <p>Danh sách Ảnh :</p>
-         <div id="multiImagePreview" class="row"></div>
+         <div id="multiImagePreview" class="row">
+            {{#each product.images}}
+               <img src="/img/uploads/{{this}}" alt="" class="col-3" />
+            {{/each}}
+         </div>
       </div>
   </div>
 

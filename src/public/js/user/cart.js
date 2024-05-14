@@ -68,17 +68,21 @@ $(document).ready(function () {
   // xử lý checkbox
   $(".checkAll").change((e) => {
     const isChecked = e.target.checked;
-    $(".checkItem").prop("checked", isChecked);
-    if (isChecked) {
-      $(".totalItem").addClass("isCheck");
-    } else {
-      $(".totalItem").removeClass("isCheck");
-    }
+    $(".checkItem").each((index, item) => {
+      if ($(item).is(":disabled")) return;
+      item.checked = isChecked;
+      const row = $(item.closest("tr"));
+      if (isChecked) {
+        row.find(".totalItem").addClass("isCheck");
+      } else {
+        row.find(".totalItem").removeClass("isCheck");
+      }
+    });
     updateSummary();
   });
   $(".checkItem").change((e) => {
-    const isChecked = $(".checkItem:checked").length;
-    const totalCheck = $(".checkItem").length;
+    const isChecked = $(".checkItem:checked:not(:disabled)").length;
+    const totalCheck = $(".checkItem:not(:disabled)").length;
     $(".checkAll").prop("checked", isChecked === totalCheck);
     const row = $(e.target.closest("tr"));
     if (e.target.checked) {

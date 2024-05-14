@@ -49,10 +49,24 @@
     </div>
 
     <div class="col-6">
-      <h1 class="fs-1 text-danger">
-        {{showPrice product.price}}
-      </h1>
-      {{{showVariations product.arrVariation product.curVariation.slug}}}
+      {{#if (compareMore product.discount 0)}}
+        <div class="text-decoration-line-through">{{showPrice
+            product.price
+          }}</div>
+        <div class="fs-1 text-danger">
+          {{showPrice (discountPrice product.price product.discount)}}
+        </div>
+      {{else}}
+        <div class="fs-1 text-danger">
+          {{showPrice product.price}}
+        </div>
+      {{/if}}
+
+      {{{showVariations
+        product.arrVariation
+        product.curVariation.slug
+        product.discount
+      }}}
       {{! <ul class="nav text-center">
         <li class="py-1 px-3 me-3 bg-light border rounded" role="button"><strong
           >8GB-128GB</strong><div>14.000.000 đ</div></li>

@@ -134,18 +134,35 @@ class AdminController {
           await findParent(category);
           return parents;
         };
-
         getAllParent(product.idCategory).then((parents) => {
           product = {
             ...product.toObject(),
             category: parents.map((parent) => parent.name).reverse(),
             brand: parents.length > 1 ? parents.reverse()[1].name : null,
           };
-          // console.log(product);
-          return res.render("admin/products/detailProduct", {
+          // ===============================
+          const productAttrs = product.variations.map((detail) => {
+            return detail.attributes;
+          });
+          let attributes1 = {};
+          let attributes2 = {};
+          productAttrs.forEach((attr) => {
+            for (let key in attr) {
+              let target =
+                key === Object.keys(attr)[0] ? attributes1 : attributes2;
+              if (!target[key]) {
+                target[key] = [attr[key]];
+              } else if (!target[key].includes(attr[key])) {
+                target[key].push(attr[key]);
+              }
+            }
+          });
+          res.render("admin/products/detailProduct", {
             product,
             layout: "admin",
             js: "admin/detailProduct",
+            attributes1: attributes1,
+            attributes2: attributes2,
           });
         });
       })
@@ -156,13 +173,21 @@ class AdminController {
     Category.find().then((categorys) => {
       Product.findById(req.params.id)
         .then((product) => {
-          // console.log(product.variations);
           const productAttrs = product.variations.map((detail) => {
             return detail.attributes;
           });
-          // console.log(productAttrs);
-          productAttrs.forEach((attrs) => {
-            console.log(attrs);
+          let attributes1 = {};
+          let attributes2 = {};
+          productAttrs.forEach((attr) => {
+            for (let key in attr) {
+              let target =
+                key === Object.keys(attr)[0] ? attributes1 : attributes2;
+              if (!target[key]) {
+                target[key] = [attr[key]];
+              } else if (!target[key].includes(attr[key])) {
+                target[key].push(attr[key]);
+              }
+            }
           });
           res.render("admin/products/editProduct", {
             product: mongooseToObject(product),
@@ -170,37 +195,40 @@ class AdminController {
             js: "admin/editProduct",
             css: "admin/editProduct",
             categorys: multipleMongooseToObject(categorys),
+            attributes1: attributes1,
+            attributes2: attributes2,
           });
         })
         .catch(next);
     });
-    // Minh Luân đã từng ghé qua
-    // Product.findById(req.params.id).then((product) => {
-    //   if (!product) {
-    //     return res.json({ message: "Không tìm thấy sản phẩm" });
-    //   }
-    //   let productAttributes = product.variations.map((detail) => {
-    //     return detail.attributes;
-    //   });
-    //   // console.log(productAttributes);
-    //   let attributes = productAttributes.reduce((result, attr) => {
-    //     for (let key in attr) {
-    //       if (!result[key]) result[key] = [attr[key]];
-    //       else if (!result[key].includes(attr[key]))
-    //         result[key].push(attr[key]);
-    //     }
-    //     return result;
-    //   }, {});
-    //   res.render("admin/products/editProduct", {
-    //     layout: "admin",
-    //     js: "admin/editProduct",
-    //     css: "admin/editProduct",
-    //     product: mongooseToObject(product),
-    //     productAttributes: attributes,
-    //   });
-    //   console.log(attributes);
-    // });
   }
+  // Minh Luân đã từng ghé qua
+  // Product.findById(req.params.id).then((product) => {
+  //   if (!product) {
+  //     return res.json({ message: "Không tìm thấy sản phẩm" });
+  //   }
+  //   let productAttributes = product.variations.map((detail) => {
+  //     return detail.attributes;
+  //   });
+  //   // console.log(productAttributes);
+  //   let attributes = productAttributes.reduce((result, attr) => {
+  //     for (let key in attr) {
+  //       if (!result[key]) result[key] = [attr[key]];
+  //       else if (!result[key].includes(attr[key]))
+  //         result[key].push(attr[key]);
+  //     }
+  //     return result;
+  //   }, {});
+  //   res.render("admin/products/editProduct", {
+  //     layout: "admin",
+  //     js: "admin/editProduct",
+  //     css: "admin/editProduct",
+  //     product: mongooseToObject(product),
+  //     productAttributes: attributes,
+  //   });
+  //   console.log(attributes);
+  // });
+
   //get /category
   category(req, res, next) {
     Category.find({})

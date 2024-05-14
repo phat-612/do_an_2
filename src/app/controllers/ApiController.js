@@ -387,44 +387,50 @@ class ApiController {
     const formData = req.body;
     const idUser = req.session.idUser;
 
-    // Product.findOne({ "variations._id": formData.idVariation }).then(
-    //   (variation) => {
-    //     res.send(variation);
-    //   }
-    // );
-    Cart.findOne({ idUser }).then((cart) => {
-      if (!cart) {
-        let newCart = new Cart({
-          idUser: idUser,
-          items: [
-            {
+    Product.findOne({ "variations._id": formData.idVariation }).then(
+      (product) => {
+        const variation = product.variations.id(formData.idVariation);
+        if (variation.quantity < formData.quantity) {
+          req.flash("message", {
+            type: "danger",
+            message: "Sản phẩm đã hết hàng",
+          });
+          return res.redirect("back");
+        }
+        Cart.findOne({ idUser }).then((cart) => {
+          if (!cart) {
+            let newCart = new Cart({
+              idUser: idUser,
+              items: [
+                {
+                  idVariation: formData.idVariation,
+                  quantity: formData.quantity,
+                },
+              ],
+            });
+            newCart.save().then(() => {
+              res.redirect("back");
+            });
+          }
+          let check = false;
+          cart.items.forEach((item) => {
+            if (item.idVariation == formData.idVariation) {
+              item.quantity += parseInt(formData.quantity);
+              check = true;
+            }
+          });
+          if (!check) {
+            cart.items.push({
               idVariation: formData.idVariation,
               quantity: formData.quantity,
-            },
-          ],
-        });
-        newCart.save().then(() => {
-          res.redirect("back");
-        });
-      } else {
-        let check = false;
-        cart.items.forEach((item) => {
-          if (item.idVariation == formData.idVariation) {
-            item.quantity += parseInt(formData.quantity);
-            check = true;
+            });
           }
-        });
-        if (!check) {
-          cart.items.push({
-            idVariation: formData.idVariation,
-            quantity: formData.quantity,
+          cart.save().then(() => {
+            res.redirect("back");
           });
-        }
-        cart.save().then(() => {
-          res.redirect("back");
         });
       }
-    });
+    );
   }
   removeItemToCart(req, res, next) {
     const idVariation = req.body.idVariation;
@@ -550,9 +556,18 @@ class ApiController {
         details,
         shipmentDetail: formData.shipmentDetail,
       });
-      newOrder.save();
+      newOrder.save().then((order) => {
+        if (formData.paymentMethod == "cod") {
+          return res.redirect("/me/historyOrder");
+        }
+        // xử lý thanh toán online
+        // tạo url thanh toán
+        const idOrder = order._id;
+        const amount = order.total;
+        const urlPayment = `/api/createPaymentUrl?idOrder=${idOrder}&amount=${amount}`;
+        return res.redirect(urlPayment);
+      });
     });
-    return res.redirect("/me/historyOrder");
   }
   cancelOrder(req, res, next) {
     const idOrder = req.body.idOrder;
@@ -565,6 +580,17 @@ class ApiController {
         });
         return res.redirect("back");
       }
+      const detailsOrder = order.details;
+      // bất đồng bộ cập nhật số lượng sản phẩm
+      detailsOrder.forEach((detail) => {
+        Product.findOne({ "variations._id": detail.idVariation }).then(
+          (product) => {
+            const variation = product.variations.id(detail.idVariation);
+            variation.quantity += detail.quantity;
+            product.save();
+          }
+        );
+      });
       order.status = "cancel";
       order.paymentDetail.status = "cancel";
       order.save().then(() => {
@@ -577,55 +603,84 @@ class ApiController {
     });
   }
   creatPaymentUrl(req, res, next) {
-    process.env.TZ = "Asia/Ho_Chi_Minh";
+    const idOrder = req.query.idOrder;
+    const amountOder = req.query.amount;
+    // return console.log(idOrder, amount);
+    Order.findOne({ _id: idOrder }).then((order) => {
+      if (!order) {
+        return res.redirect("/me/historyOrder");
+      }
+      process.env.TZ = "Asia/Ho_Chi_Minh";
 
-    let date = new Date();
-    let createDate = moment(date).format("YYYYMMDDHHmmss");
+      let date = new Date();
+      let createDate = moment(date).format("YYYYMMDDHHmmss");
 
-    let ipAddr =
-      req.headers["x-forwarded-for"] ||
-      req.connection.remoteAddress ||
-      req.socket.remoteAddress ||
-      req.connection.socket.remoteAddress;
+      let ipAddr =
+        req.headers["x-forwarded-for"] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
 
-    let tmnCode = process.env.vnp_TmnCode;
-    let secretKey = process.env.vnp_HashSecret;
-    let vnpUrl = process.env.vnp_Url;
-    let returnUrl = process.env.vnp_ReturnUrl;
-    let orderId = moment(date).format("DDHHmmss");
-    let amount = 100000;
-    let bankCode = "";
+      let tmnCode = process.env.vnp_TmnCode;
+      let secretKey = process.env.vnp_HashSecret;
+      let vnpUrl = process.env.vnp_Url;
+      let returnUrl = process.env.vnp_ReturnUrl;
+      let orderId = idOrder;
+      let amount = amountOder;
+      let bankCode = "";
 
-    let locale = "vn";
-    if (locale === null || locale === "") {
-      locale = "vn";
-    }
-    let currCode = "VND";
-    let vnp_Params = {};
-    vnp_Params["vnp_Version"] = "2.1.0";
-    vnp_Params["vnp_Command"] = "pay";
-    vnp_Params["vnp_TmnCode"] = tmnCode;
-    vnp_Params["vnp_Locale"] = locale;
-    vnp_Params["vnp_CurrCode"] = currCode;
-    vnp_Params["vnp_TxnRef"] = orderId;
-    vnp_Params["vnp_OrderInfo"] = "Thanh toan cho ma GD:" + orderId;
-    vnp_Params["vnp_OrderType"] = "other";
-    vnp_Params["vnp_Amount"] = amount * 100;
-    vnp_Params["vnp_ReturnUrl"] = returnUrl;
-    vnp_Params["vnp_IpAddr"] = ipAddr;
-    vnp_Params["vnp_CreateDate"] = createDate;
-    if (bankCode !== null && bankCode !== "") {
-      vnp_Params["vnp_BankCode"] = bankCode;
-    }
+      let locale = "vn";
+      if (locale === null || locale === "") {
+        locale = "vn";
+      }
+      let currCode = "VND";
+      let vnp_Params = {};
+      vnp_Params["vnp_Version"] = "2.1.0";
+      vnp_Params["vnp_Command"] = "pay";
+      vnp_Params["vnp_TmnCode"] = tmnCode;
+      vnp_Params["vnp_Locale"] = locale;
+      vnp_Params["vnp_CurrCode"] = currCode;
+      vnp_Params["vnp_TxnRef"] = orderId;
+      vnp_Params["vnp_OrderInfo"] = "Thanh toan cho ma GD:" + orderId;
+      vnp_Params["vnp_OrderType"] = "other";
+      vnp_Params["vnp_Amount"] = amount * 100;
+      vnp_Params["vnp_ReturnUrl"] = returnUrl;
+      vnp_Params["vnp_IpAddr"] = ipAddr;
+      vnp_Params["vnp_CreateDate"] = createDate;
+      if (bankCode !== null && bankCode !== "") {
+        vnp_Params["vnp_BankCode"] = bankCode;
+      }
+
+      vnp_Params = sortObject(vnp_Params);
+
+      let signData = querystring.stringify(vnp_Params, { encode: false });
+      let hmac = crypto.createHmac("sha512", secretKey);
+      let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
+      vnp_Params["vnp_SecureHash"] = signed;
+      vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
+      res.redirect(vnpUrl);
+    });
+  }
+  returnPayment(req, res, next) {
+    let vnp_Params = req.query;
+
+    let secureHash = vnp_Params["vnp_SecureHash"];
+
+    delete vnp_Params["vnp_SecureHash"];
+    delete vnp_Params["vnp_SecureHashType"];
 
     vnp_Params = sortObject(vnp_Params);
+
+    let secretKey = process.env.vnp_HashSecret;
 
     let signData = querystring.stringify(vnp_Params, { encode: false });
     let hmac = crypto.createHmac("sha512", secretKey);
     let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
-    vnp_Params["vnp_SecureHash"] = signed;
-    vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
-    res.redirect(vnpUrl);
+    const isTrust = secureHash == signed;
+    if (!isTrust) {
+      return res.send({ RspCode: "97", Message: "Fail checksum" });
+    }
+    return res.send({ RspCode: "00", Message: "Confirm Success" });
   }
   // end api user
   // test api
@@ -697,13 +752,38 @@ class ApiController {
         order.save();
         return res.redirect("back");
       }
+      if (req.body.status == "pending") {
+        order.paymentDetail.status = "pending";
+      }
       if (req.body.status == "success") {
         order.paymentDetail.status = "success";
       }
       if (req.body.status == "failed") {
         order.paymentDetail.status = "failed";
+        order.details.forEach((detail) => {
+          Product.findOne(
+            { "variations._id": detail.idVariation },
+            { "variations.$": 1 }
+          ).then((product) => {
+            console.log(product);
+            if (
+              product &&
+              product.variations &&
+              product.variations.length > 0
+            ) {
+              // Tìm variation được chỉ định dựa trên detail.idVariation
+              let variation = product.variations.id(detail.idVariation);
+              console.log(variation);
+              // Nếu tìm thấy variation, cập nhật số lượng
+              if (variation) {
+                variation.quantity += detail.quantity;
+                product.save();
+              }
+            }
+            console.log(product);
+          });
+        });
       }
-
       order.save().then(() => {
         return res.redirect("back");
       });

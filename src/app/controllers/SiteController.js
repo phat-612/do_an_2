@@ -1,6 +1,8 @@
 const Category = require("../models/Category");
 const Product = require("../models/Product");
 
+const { getDiscount } = require("../../util/function");
+
 class SiteController {
   index(req, res, next) {
     Category.getCategoryChildren().then((categories) => {
@@ -109,6 +111,7 @@ class SiteController {
       );
 
       let attribute = curVariation.attributes;
+      let discount = getDiscount(product.discount);
       let resProduct = {
         name: product.name,
         price: curVariation.price,
@@ -117,7 +120,7 @@ class SiteController {
         attribute,
         description: product.description,
         images: product.images,
-        discount: product.discount,
+        discount,
       };
       let arrVariation;
       if (Object.keys(attribute).length === 1) {
@@ -187,6 +190,7 @@ class SiteController {
             }
           );
       });
+      // return res.json(resProduct);
       res.render("user/products/detail", {
         product: resProduct,
       });
@@ -196,9 +200,6 @@ class SiteController {
     Category.getAllProductsInCategory().then((categories) => {
       res.json(categories);
     });
-  }
-  vnpayReturn(req, res, next) {
-    res.json(req.query);
   }
 }
 module.exports = new SiteController();

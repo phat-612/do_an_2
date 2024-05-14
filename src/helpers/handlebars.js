@@ -72,6 +72,13 @@ module.exports = {
               >Giảm ${discount} %</p>`;
     }
   },
+  showTagSoldout: (quantity) => {
+    if (quantity == 0) {
+      return `<p
+                class="position-absolute bg-danger p-1 text-white rounded-end-5"
+              >Hết hàng</p>`;
+    }
+  },
   showDefaultPrice: (variations) => {
     const defaultPrizes = variations.map((variation) => variation.price);
     const minPrice = Math.min(...defaultPrizes);
@@ -96,7 +103,7 @@ module.exports = {
       )}`;
     }
   },
-  showVariations: (variations, curVariationSlug) => {
+  showVariations: (variations, curVariationSlug, discount) => {
     let outputHtml = "";
     variations.forEach((variation) => {
       Object.keys(variation).forEach((key) => {
@@ -109,7 +116,9 @@ module.exports = {
           `;
         } else {
           let price = variation[key].price
-            ? variation[key].price.toLocaleString("vi-VN")
+            ? (variation[key].price * (1 - discount / 100)).toLocaleString(
+                "vi-VN"
+              )
             : "";
           let slug = variation[key].slug ? variation[key].slug : "";
           outputHtml += `
@@ -177,6 +186,12 @@ module.exports = {
     }
     return "";
   },
+  disabledQuantityZero: (quantity) => {
+    if (quantity == 0) {
+      return "disabled";
+    }
+    return "";
+  },
   consoleHbs: (data) => {
     console.log(data);
   },
@@ -196,11 +211,11 @@ module.exports = {
       case "success":
         return "Thành công";
       case "cancel":
-        return "Đã hủy";
+        return "Bị Hủy";
       case "shipping":
         return "Đang vận chuyển";
-      case "cancel":
-        return "Bị hủy";
+      case "failed":
+        return "Thất Bại";
       default:
         return status;
     }

@@ -117,7 +117,6 @@
               <option value="success"{{#if (changeStatus order.paymentDetail.status 'success')}}selected{{/if}}>Thành công</option>
               <option value="failed"{{#if (changeStatus order.paymentDetail.status 'failed')}}selected{{/if}}>Thất bại</option>
               <option value="cancel"{{#if (changeStatus order.paymentDetail.status 'cancel')}}selected{{/if}}>Đơn hàng đã bị hủy</option>
-
             </select>
             <h5 class="mt-3">Trạng thái đơn hàng</h5>
               <select id="orderStatus" name="status" class="form-select" aria-label="Default select example" {{#if (changeStatus order.status 'cancel')}}disabled{{/if}}>

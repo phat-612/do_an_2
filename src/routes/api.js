@@ -18,7 +18,8 @@ router.delete("/address", apiController.deleteAddress);
 router.delete("/cart", apiController.removeItemToCart);
 // order
 router.put("/order/:id", apiController.changeStatus);
-
+router.get("/createPaymentUrl", apiController.creatPaymentUrl);
+router.get("/returnPayment", apiController.returnPayment);
 // product
 router.post("/product", upload.array("images"), apiController.createProduct);
 router.post("/storeCategory", apiController.storeCategory);
@@ -40,6 +41,5 @@ router.post("/testAddCategory", apiController.testAddCategory);
 router.post("/testUpdateQuantity", apiController.testUpdateQuantity);
 // router.get("/testGetProduct", apiController.testGetProduct);
 router.post("/testAddOrder", apiController.testAddOrder);
-router.get("/test/thanhToan", apiController.creatPaymentUrl);
 
 module.exports = router;
