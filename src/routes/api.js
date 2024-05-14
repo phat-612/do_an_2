@@ -20,6 +20,7 @@ router.delete("/cart", apiController.removeItemToCart);
 router.put("/order/:id", apiController.changeStatus);
 router.get("/createPaymentUrl", apiController.creatPaymentUrl);
 router.get("/returnPayment", apiController.returnPayment);
+router.post("/rePayment", apiController.rePayment);
 // product
 router.post("/product", upload.array("images"), apiController.createProduct);
 router.post(

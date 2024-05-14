@@ -39,6 +39,20 @@ class ApiController {
         return file.filename;
       });
     }
+    // Kiểm tra và xử lý các biến thể (variations)
+    if (Array.isArray(formData.variations)) {
+      formData.variations = formData.variations.map((variation) => {
+        // Xóa các trường attributes rỗng
+        if (variation.attributes) {
+          for (let key in variation.attributes) {
+            if (variation.attributes[key] === "") {
+              delete variation.attributes[key];
+            }
+          }
+        }
+        return variation;
+      });
+    }
     formData.images = images;
     product.save().then(() => {
       req.flash("message", {
@@ -54,7 +68,7 @@ class ApiController {
   }
 
   removeProduct(req, res, next) {
-    const id = req.body.id;
+    console.log(req.body);
   }
 
   storeCategory(req, res, next) {
@@ -407,7 +421,7 @@ class ApiController {
           return res.redirect("back");
         }
         Cart.findOne({ idUser }).then((cart) => {
-          if (!cart) {
+          if (!cart || cart.items.length == 0) {
             let newCart = new Cart({
               idUser: idUser,
               items: [
@@ -417,8 +431,8 @@ class ApiController {
                 },
               ],
             });
-            newCart.save().then(() => {
-              res.redirect("back");
+            return newCart.save().then(() => {
+              return res.redirect("back");
             });
           }
           let check = false;
@@ -435,7 +449,7 @@ class ApiController {
             });
           }
           cart.save().then(() => {
-            res.redirect("back");
+            return res.redirect("back");
           });
         });
       }
@@ -496,6 +510,7 @@ class ApiController {
   createOrder(req, res, next) {
     const formData = req.body;
     const idUser = req.session.idUser;
+    let messageError = false;
     const promise = formData.details.map((detail) => {
       return Product.findOne({ "variations._id": detail.idVariation }).then(
         (product) => {
@@ -503,11 +518,10 @@ class ApiController {
           // kiểm tra số lượng sản phẩm
           if (variation.quantity < detail.quantity) {
             console.log("sản phẩm " + product.name + " đã hết hàng");
-            req.flash("message", {
+            messageError = {
               type: "danger",
               message: "Sản phẩm " + product.name + " đã hết hàng",
-            });
-            return res.redirect("/cart");
+            };
           }
           let discount;
           if (
@@ -521,11 +535,10 @@ class ApiController {
           // kiểm tra giá sản phẩm
           if (detail.price != (variation.price * (100 - discount)) / 100) {
             console.log("sản phẩm " + product.name + " đã thay đổi giá bán");
-            req.flash("message", {
+            messageError = {
               type: "danger",
               message: "Giá sản phẩm đã thay đổi",
-            });
-            return res.redirect("/cart");
+            };
           }
           // cập nhật số lượng sản phẩm
           variation.quantity -= detail.quantity;
@@ -547,6 +560,10 @@ class ApiController {
         }
       );
     });
+    if (messageError) {
+      req.flash("message", messageError);
+      return res.redirect("/cart");
+    }
     Promise.all(promise).then((details) => {
       const total = details.reduce((total, detail) => {
         return (
@@ -649,7 +666,7 @@ class ApiController {
       vnp_Params["vnp_TmnCode"] = tmnCode;
       vnp_Params["vnp_Locale"] = locale;
       vnp_Params["vnp_CurrCode"] = currCode;
-      vnp_Params["vnp_TxnRef"] = orderId;
+      vnp_Params["vnp_TxnRef"] = `${orderId}-${createDate}`;
       vnp_Params["vnp_OrderInfo"] = "Thanh toan cho ma GD:" + orderId;
       vnp_Params["vnp_OrderType"] = "other";
       vnp_Params["vnp_Amount"] = amount * 100;
@@ -686,10 +703,33 @@ class ApiController {
     let hmac = crypto.createHmac("sha512", secretKey);
     let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
     const isTrust = secureHash == signed;
-    if (!isTrust) {
-      return res.send({ RspCode: "97", Message: "Fail checksum" });
+    const transactionStatus = vnp_Params["vnp_TransactionStatus"];
+    let orderId = vnp_Params["vnp_TxnRef"].split("-")[0];
+    if (!isTrust || transactionStatus != "00") {
+      console.log("Thanh toán thất bại");
+      return Order.updateOne(
+        { _id: orderId },
+        { "paymentDetail.status": "failed" }
+      ).then(() => {
+        return res.redirect("/me/historyOrder");
+      });
     }
-    return res.send({ RspCode: "00", Message: "Confirm Success" });
+
+    console.log("Thanh toán thành công");
+    Order.updateOne(
+      { _id: orderId },
+      { "paymentDetail.status": "success" }
+    ).then(() => {
+      return res.redirect("/me/historyOrder");
+    });
+  }
+  rePayment(req, res, next) {
+    const idOrder = req.body.idOrder;
+    Order.findOne({ _id: idOrder }).then((order) => {
+      const total = order.total;
+      const urlPayment = `/api/createPaymentUrl?idOrder=${idOrder}&amount=${total}`;
+      return res.redirect(urlPayment);
+    });
   }
   // end api user
   // test api
@@ -750,11 +790,6 @@ class ApiController {
     });
   }
   changeStatus(req, res) {
-    // return res.send(req.body);
-    // Order.updateOne({_id: req.params.id}, {
-    //   status : req.body.status,
-    //   "paymentDetail.method": req.body.paymentMethod,
-    // })
     Order.findOne({ _id: req.params.id }).then((order) => {
       order.status = req.body.status;
       if (order.paymentDetail.method != "cod") {
@@ -762,6 +797,9 @@ class ApiController {
         return res.redirect("back");
       }
       if (req.body.status == "pending") {
+        order.paymentDetail.status = "pending";
+      }
+      if (req.body.status == "shipping") {
         order.paymentDetail.status = "pending";
       }
       if (req.body.status == "success") {

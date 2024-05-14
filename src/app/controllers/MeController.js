@@ -50,17 +50,24 @@ class MeController {
           as: "product",
         },
       },
-      {
-        $unwind: "$product",
-      },
+      // {
+      //   $unwind: "$product",
+      // },
       {
         $project: {
           _id: 1,
           total: 1,
           status: 1,
           createdAt: 1,
-          name: "$product.name",
-          image: { $arrayElemAt: ["$product.images", 0] },
+          name: { $arrayElemAt: ["$product.name", 0] },
+          image: {
+            $arrayElemAt: [
+              {
+                $arrayElemAt: ["$product.images", 0],
+              },
+              0,
+            ],
+          },
           quantityProduct: { $size: "$details" },
         },
       },
@@ -70,6 +77,7 @@ class MeController {
           (order) => order[req.query.column] == req.query.value
         );
       }
+      // return res.json(orders);
       res.render("user/profiles/historyOrder", {
         layout: "userProfile",
         orders,
@@ -147,7 +155,7 @@ class MeController {
       }
       const cartItems = cart.items.map((item) => {
         return Product.findOne({ "variations._id": item.idVariation }).select(
-          "name variations discount"
+          "name variations discount images"
         );
       });
       let arrIdVariation = cart.items.map((item) =>
@@ -181,12 +189,12 @@ class MeController {
             storageQuantity: variation.quantity,
             attributes: variation.attributes,
             name: product.name,
+            image: product.images[0],
             idVariation: variation._id,
           };
         });
         cart.save();
         // return res.json(resCart);
-        console.log(isChangeQuantity);
         if (isChangeQuantity) {
           res.locals.message = {
             type: "danger",

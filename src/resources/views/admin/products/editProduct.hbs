@@ -1,7 +1,9 @@
 <form action="/api/updateProduct" method="post">
    <input type="text" value="{{product._id}}" name="id" hidden>
   <div class="container">
-
+   {{!-- {{#each variations}}
+   <h2>{{this.price}}</h2>
+   {{/each}} --}}
     <label for="name-Product" class="form-label fs-4">Tên Sản phẩm</label>
    
     <input type="text" class="form-control" id="name-Product" value="{{product.name}}" name="name" />
@@ -70,7 +72,8 @@
       </div>
      </div>
      {{!-- ------------------------- --}}
-      <table id="custom-varriant" class="table-based table ">
+    <table id="custom-varriant" class="table-based table" data-variations="{{variations}}">
+      {{!-- <table id="custom-varriant" class="table-based table "> --}}
          <thead>
             <tr>
                <th class="th1">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>

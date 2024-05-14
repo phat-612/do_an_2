@@ -1,4 +1,5 @@
 const Handlebars = require("handlebars");
+require("dotenv").config();
 const moment = require("moment");
 module.exports = {
   sum: (a, b) => a + b,
@@ -13,6 +14,15 @@ module.exports = {
       outputString += `<li>${key}: ${object[key]}</li>`;
     });
     return outputString;
+  },
+  showImgUpload: (img) => {
+    if (typeof img == "object") {
+      img = img[0];
+    }
+    if (img) {
+      return `/${process.env.PATH_IMG_UPLOAD}/${img}`;
+    }
+    return "";
   },
   showDate: (date) => {
     if (date instanceof Date || date == undefined) return "";
@@ -186,6 +196,14 @@ module.exports = {
     }
     return "";
   },
+  isShowBtnRePayment: (status) => {
+    let statusArr = ["pending", "failed"];
+    let isCheck = statusArr.some((item) => status.includes(item));
+    if (isCheck) {
+      return true;
+    }
+    return false;
+  },
   disabledQuantityZero: (quantity) => {
     if (quantity == 0) {
       return "disabled";
@@ -196,11 +214,15 @@ module.exports = {
     console.log(data);
   },
   formatDate: (datetime, format) => {
-    if (moment) {
-      format = format || "DD/MM/YYYY";
-      return moment(datetime).format(format);
+    if (datetime == undefined) {
+      return "";
     } else {
-      return datetime;
+      if (moment) {
+        format = format || "DD/MM/YYYY";
+        return moment(datetime).format(format);
+      } else {
+        return datetime;
+      }
     }
   },
   // minh luan

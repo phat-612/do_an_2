@@ -30,7 +30,11 @@
     {{#each order.details}}
       <div class="d-flex flex-row py-2">
         <div class="col-2 py-1">
-          <img class="w-75" src="/{{this.image}}" alt="{{this.image}}" />
+          <img
+            class="w-75"
+            src="{{showImgUpload this.image}}"
+            alt="{{this.image}}"
+          />
         </div>
         <div class="col-8">
           <a class="fs-5" href="/product/{{slugProduct}}">{{name}}</a>
@@ -69,6 +73,12 @@
       <div class="d-flex justify-content-between fs-5">
         <p>Trạng thái thanh toán:</p>
         <span>{{showPaymentStatus order.paymentDetail.status}}</span>
+        {{#if (isShowBtnRePayment order.paymentDetail.status)}}
+          <form action="/api/rePayment" method="post">
+            <input type="text" value="{{order._id}}" name="idOrder" hidden />
+            <button type="submit" class="btn btn-primary">Thanh toán</button>
+          </form>
+        {{/if}}
       </div>
     </div>
     <div class="col row p-3 mt-4">

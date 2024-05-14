@@ -57,7 +57,7 @@ document
 
 var addAttribute1Btn = document.querySelector(".addAttribute1-btn");
 var Attribute1HTML = `<div class="row my-2">
-               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="thuocTinh1 form-control col mx-2 variations">
+               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="thuocTinh1 thuocTinh1moi form-control col mx-2 variations variationsmoi">
                <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
             </div>`;
 
@@ -65,14 +65,14 @@ addAttribute1Btn.addEventListener("click", () => {
   var inputAttribute1Div = document.getElementById("inputAttribute1Div");
   var secondChild = inputAttribute1Div.children[0]; // Lấy phần tử con thứ hai trong inputdiv
   secondChild.insertAdjacentHTML("afterend", Attribute1HTML);
-  document.querySelectorAll(".variations").forEach(function (input) {
-    input.addEventListener("input", createAttri1Row);
-  });
+  // document.querySelectorAll(".variations").forEach(function (input) {
+  //   input.addEventListener("input", createAttri1Row);
+  // });
 });
 // nút them thuoc tinh 2
 var addAttribute2Btn = document.querySelector(".addAttribute2-btn");
 var Attribute2HTML = `<div class="row my-2">
-               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="thuocTinh2 form-control col mx-2 variations">
+               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="thuocTinh2 thuocTinh2moi form-control col mx-2 variations variationsmoi">
                <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
             </div>`;
 
@@ -80,13 +80,16 @@ addAttribute2Btn.addEventListener("click", () => {
   var inputAttribute2Div = document.getElementById("inputAttribute2Div");
   var secondChild = inputAttribute2Div.children[0]; // Lấy phần tử con thứ hai trong inputdiv
   secondChild.insertAdjacentHTML("afterend", Attribute2HTML);
-  document.querySelectorAll(".variations").forEach(function (input) {
-    input.addEventListener("input", createAttri1Row);
-  });
+  // document.querySelectorAll(".variations").forEach(function (input) {
+  //   input.addEventListener("input", createAttri1Row);
+  // });
 });
 // // ==================================== create Table ============================================
 
 function createAttri1Row() {
+  const table = document.getElementById("custom-varriant");
+  const variations = JSON.parse(table.dataset.variations);
+  variations.forEach((element) => {});
   var nameAttr1 = document.getElementById("inpNameAttributePro1").value;
   var nameAttr2 = document.getElementById("inpNameAttributePro2").value;
   var attr1Values = Array.from(document.querySelectorAll(".thuocTinh1")).map(
@@ -101,7 +104,7 @@ function createAttri1Row() {
 
   document.querySelector(".th1").textContent = nameAttr1;
   document.querySelector(".th2").textContent = nameAttr2;
-  console.log(attr1Values, attr2Values);
+  // console.log(attr1Values, attr2Values);
 
   let tbody = document.querySelector("tbody");
   let tbodyHTML = "";
@@ -110,29 +113,30 @@ function createAttri1Row() {
 
   attr1Values.forEach((val1, ind1) => {
     attr2Values.forEach((val2, ind2) => {
+      let detail = variations[currentRow];
       if (ind2 === 0) {
         tbodyHTML += `
-          <tr>
-            <td class="td1" rowspan="${numberRow2}">${val1}</td>
-            <td>${val2}</td>
-            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][price]" value="" required></td>
-            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][quantity]" value=""></td>
-            <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
-            <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
-          </tr>
-        `;
+        <tr>
+          <td class="td1" rowspan="${numberRow2}">${val1}</td>
+          <td>${val2}</td>
+          <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][price]" value="${detail.price}" required></td>
+          <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][quantity]" value="${detail.quantity}" ></td>
+          <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
+          <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
+        </tr>
+      `;
         currentRow++;
       } else {
         if (val2) {
           tbodyHTML += `
-          <tr>
-            <td>${val2}</td>
-            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][price]" value="" required></td>
-            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][quantity]" value="" required></td>
-            <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
-            <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
-          </tr>
-        `;
+        <tr>
+          <td>${val2}</td>
+          <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][price]" value="${detail.price}" required></td>
+          <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][quantity]" value="${detail.quantity}" required></td>
+          <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
+          <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
+        </tr>
+      `;
           currentRow++;
         }
       }
@@ -141,9 +145,24 @@ function createAttri1Row() {
   tbody.innerHTML = tbodyHTML;
 }
 
-document.querySelectorAll(".variations").forEach(function (input) {
-  input.addEventListener("input", createAttri1Row);
+document.querySelectorAll(".variationsmoi").forEach(function (input) {
+  input.addEventListener("input", function updateTable() {
+    console.log(input);
+    let tbody = document.querySelector("tbody");
+    var attr1Values = Array.from(
+      document.querySelectorAll(".thuocTinh1moi")
+    ).map((input) => input.value);
+    var attr2Values = Array.from(
+      document.querySelectorAll(".thuocTinh2moi")
+    ).map((input) => input.value);
+    console.log(attr1Values);
+    console.log(attr2Values);
+  });
 });
+
+// document.querySelectorAll(".variations").forEach(function (input) {
+//   input.addEventListener("input", createAttri1Row);
+// });
 
 window.addEventListener("load", createAttri1Row);
 

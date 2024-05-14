@@ -1,5 +1,5 @@
 <div class="container">
-  <form action="/api/order" method="post">
+  <form id="formOrder" action="/api/order" method="post">
     <div class="custom-mw-720px m-auto">
       <div class="text-center">
         <a class="float-start fs-2"><i class="bi bi-arrow-left"></i></a>
@@ -9,7 +9,8 @@
         {{#each cart.items}}
           <div class="row">
             <div class="col-3"><img
-                src="https://cdn2.cellphones.com.vn/100x100,webp,q100/media/catalog/product/2/_/2_352_2.jpg"
+                class="card-img"
+                src="{{showImgUpload this.image}}"
                 alt=""
               /></div>
             <div class="col-9">
@@ -43,11 +44,13 @@
       </div>
       <div class="mt-3">
         <div>
-          <h5 class="text-capitalize">thông tin nhận hàng<button
-              id="btnAddAddress"
-              type="button"
-              class="float-end"
-            >Thêm địa chỉ mới</button></h5>
+          <h5 class="text-capitalize">thông tin nhận hàng
+            <button id="btnAddAddress" type="button" class="float-end">
+              Thêm địa chỉ mới
+            </button>
+          </h5>
+          <p class="error-shipping d-none text-danger">*Vui lòng chọn hoặc nhập
+            địa chỉ giao hàng</p>
           <div id="listAddress" class="listAddress">
             {{#each shipmentDetail}}
               <div class="row mt-2">
@@ -75,8 +78,7 @@
               <input
                 type="text"
                 name="shipmentDetail[name]"
-                class="form-control"
-                required
+                class="required form-control"
               />
             </div>
             <div>
@@ -84,8 +86,7 @@
               <input
                 type="text"
                 name="shipmentDetail[phone]"
-                class="form-control"
-                required
+                class="required form-control"
               />
             </div>
             <div>
@@ -93,8 +94,7 @@
               <input
                 type="text"
                 name="shipmentDetail[address]"
-                class="form-control"
-                required
+                class="required form-control"
               />
             </div>
           </div>
@@ -112,13 +112,16 @@
         </div>
         <div>
           <h5>Phương thức thanh toán</h5>
+          <p class="error-payment-method d-none text-danger">
+            *Vui lòng chọn phương thức thanh toán
+          </p>
           <div class="">
             <input
+              class="required"
               type="text"
               name="paymentMethod"
               id="paymentMethod"
               hidden
-              required
             />
             <button
               type="button"

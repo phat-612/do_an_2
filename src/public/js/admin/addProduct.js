@@ -31,7 +31,6 @@ document
     });
     document.querySelectorAll("#multiImagePreview img").forEach((preview) => {
       preview.addEventListener("click", function (event) {
-        // console.log(event.target.classList[event.target.classList.length - 1]);
         let isDelete = confirm("Bạn có chắc chắn muốn xóa ảnh này không ?");
         if (!isDelete) return;
         let indDelete =
@@ -69,7 +68,9 @@ addAttribute1Btn.addEventListener("click", () => {
     input.addEventListener("input", createAttri1Row);
   });
 });
+
 // nút them thuoc tinh 2
+
 var addAttribute2Btn = document.querySelector(".addAttribute2-btn");
 var Attribute2HTML = `<div class="row my-2">
                <input type="text" id="" placeholder="Nhập Thuộc Tính" class="thuocTinh2 form-control col mx-2 variations">
@@ -84,7 +85,7 @@ addAttribute2Btn.addEventListener("click", () => {
     input.addEventListener("input", createAttri1Row);
   });
 });
-// // ====================================================
+//  ====================================================
 
 function createAttri1Row() {
   var nameAttr1 = document.getElementById("inpNameAttributePro1").value;
@@ -97,9 +98,7 @@ function createAttri1Row() {
   );
 
   var numberRow1 = attr1Values.length;
-  // console.log(attr1Values.reverse());
   var numberRow2 = attr2Values.length;
-  // console.log(numberRow2);
 
   document.querySelector(".th1").textContent = nameAttr1;
   document.querySelector(".th2").textContent = nameAttr2;
@@ -157,7 +156,9 @@ function checkExistValue() {
     discountEnd.setAttribute("disabled", "true");
   } else {
     discountStart.removeAttribute("disabled");
+    discountStart.setAttribute("required", "true");
     discountEnd.removeAttribute("disabled");
+    discountEnd.setAttribute("required", "true");
   }
 }
 percentInput.addEventListener("input", checkExistValue);

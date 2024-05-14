@@ -40,4 +40,38 @@ $(document).ready(function () {
     $("input[name=listAddress]").prop("checked", false);
     $("#addAddress").removeClass("d-none");
   });
+  // handle submit form
+  $("#formOrder").submit((event) => {
+    event.preventDefault();
+    let isValidate = true;
+    const inpShipmentDetail = [
+      "shipmentDetail[name]",
+      "shipmentDetail[phone]",
+      "shipmentDetail[address]",
+    ];
+    let isErrorShipping = false;
+    $("input.required").each(function (ind, ele) {
+      if ($(ele).val() == "") {
+        isValidate = false;
+        if (
+          inpShipmentDetail.includes($(ele).attr("name")) ||
+          isErrorShipping
+        ) {
+          isErrorShipping = true;
+          $(".error-shipping").removeClass("d-none");
+        } else {
+          $(".error-shipping").addClass("d-none");
+        }
+        if ($(ele).attr("name") == "paymentMethod") {
+          $(".error-payment-method").removeClass("d-none");
+        } else {
+          $(".error-payment-method").addClass("d-none");
+        }
+      }
+    });
+    if (!isValidate) {
+      return;
+    }
+    event.target.submit();
+  });
 });

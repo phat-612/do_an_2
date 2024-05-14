@@ -32,8 +32,8 @@ function createAttri1Row() {
           <tr>
             <td class="td1" rowspan="${numberRow2}">${val1}</td>
             <td>${val2}</td>
-            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][price]" required></td>
-            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][quantity]"></td>
+            <td><input type="number"  class="form-control w-50 variations" name="variations[${currentRow}][price]" required></td>
+            <td><input type="number"  class="form-control w-50 variations" name="variations[${currentRow}][quantity]"></td>
             <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
             <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
           </tr>
@@ -59,3 +59,25 @@ function createAttri1Row() {
 }
 
 window.addEventListener("load", createAttri1Row);
+
+window.addEventListener("load", function () {
+  const td1 = document.querySelectorAll(".td1");
+  const td2 = document.querySelectorAll(".td2");
+
+  console.log(td1.textContent);
+  console.log(td2);
+});
+
+// window.addEventListener("load", function () {
+//   $(".td1").each(function () {
+//     const td1value = $(this).text();
+//     $(".td2").each(function () {
+//       const td2value = $(this).text();
+//       if (td1value == td2value) {
+//         $("td2").each(function () {
+//           $(this).hide();
+//         });
+//       }
+//     });
+//   });
+// });

@@ -172,11 +172,12 @@ class AdminController {
   editProduct(req, res, next) {
     Category.find().then((categorys) => {
       Product.findById(req.params.id).then((product) => {
-        // console.log(product);
+        const variations = product.variations.map((variations) => {
+          return variations;
+        });
         const productAttrs = product.variations.map((detail) => {
           return detail.attributes;
         });
-        console.log(variations);
         let attributes1 = {};
         let attributes2 = {};
         productAttrs.forEach((attr) => {
@@ -190,8 +191,14 @@ class AdminController {
             }
           }
         });
-        // console.log(attributes1);
-        // console.log(attributes2);
+        // fat pan phước
+        // return res.json({
+        //   categorys: multipleMongooseToObject(categorys),
+        //   attributes1: attributes1,
+        //   attributes2: attributes2,
+        //   variations: JSON.stringify(variations),
+        // });
+
         res.render("admin/products/editProduct", {
           product: mongooseToObject(product),
           layout: "admin",
@@ -200,6 +207,7 @@ class AdminController {
           categorys: multipleMongooseToObject(categorys),
           attributes1: attributes1,
           attributes2: attributes2,
+          variations: JSON.stringify(variations),
         });
       });
     });
