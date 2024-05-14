@@ -171,35 +171,37 @@ class AdminController {
   //get /product/edit/:id
   editProduct(req, res, next) {
     Category.find().then((categorys) => {
-      Product.findById(req.params.id)
-        .then((product) => {
-          const productAttrs = product.variations.map((detail) => {
-            return detail.attributes;
-          });
-          let attributes1 = {};
-          let attributes2 = {};
-          productAttrs.forEach((attr) => {
-            for (let key in attr) {
-              let target =
-                key === Object.keys(attr)[0] ? attributes1 : attributes2;
-              if (!target[key]) {
-                target[key] = [attr[key]];
-              } else if (!target[key].includes(attr[key])) {
-                target[key].push(attr[key]);
-              }
+      Product.findById(req.params.id).then((product) => {
+        // console.log(product);
+        const productAttrs = product.variations.map((detail) => {
+          return detail.attributes;
+        });
+        console.log(variations);
+        let attributes1 = {};
+        let attributes2 = {};
+        productAttrs.forEach((attr) => {
+          for (let key in attr) {
+            let target =
+              key === Object.keys(attr)[0] ? attributes1 : attributes2;
+            if (!target[key]) {
+              target[key] = [attr[key]];
+            } else if (!target[key].includes(attr[key])) {
+              target[key].push(attr[key]);
             }
-          });
-          res.render("admin/products/editProduct", {
-            product: mongooseToObject(product),
-            layout: "admin",
-            js: "admin/editProduct",
-            css: "admin/editProduct",
-            categorys: multipleMongooseToObject(categorys),
-            attributes1: attributes1,
-            attributes2: attributes2,
-          });
-        })
-        .catch(next);
+          }
+        });
+        // console.log(attributes1);
+        // console.log(attributes2);
+        res.render("admin/products/editProduct", {
+          product: mongooseToObject(product),
+          layout: "admin",
+          js: "admin/editProduct",
+          css: "admin/editProduct",
+          categorys: multipleMongooseToObject(categorys),
+          attributes1: attributes1,
+          attributes2: attributes2,
+        });
+      });
     });
   }
   // Minh Luân đã từng ghé qua

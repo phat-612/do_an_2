@@ -1,13 +1,14 @@
 const data = {
-  labels: ["Đơn Mới Đang Chờ Xủ Lý", "Đơn Thành Công", "Hết Hàng"],
+  labels: ["Đơn Đã Giao Hàng", "Đơn Chờ Xác Nhận", "Đang Vận Chuyển", "Đã Hủy"],
   datasets: [
     {
       label: "My First Dataset",
-      data: [300, 50, 100],
+      data: [25, 25, 30, 20],
       backgroundColor: [
         "rgb(25, 135, 84)",
         "rgb(255, 193, 7)",
         "rgb(220, 53, 69)",
+        "rgb(200, 10, 20)",
       ],
       hoverOffset: 4,
     },

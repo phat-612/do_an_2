@@ -1,7 +1,9 @@
 <form action="/api/updateProduct" method="post">
    <input type="text" value="{{product._id}}" name="id" hidden>
   <div class="container">
+
     <label for="name-Product" class="form-label fs-4">Tên Sản phẩm</label>
+   
     <input type="text" class="form-control" id="name-Product" value="{{product.name}}" name="name" />
     <label for="description-Product" class="col-form-label fs-4">Mô Tả Sản Phẩm</label>
     <textarea class="form-control" id="description-Product" name="description">{{product.description}}</textarea>
@@ -57,7 +59,7 @@
                {{#each attributes2}}
                   {{#if @first}}
                      {{#each this}}
-                        <div class="row">
+                        <div class="row"> 
                            <input type="text" id="thuocTinh1" class="form-control my-2 col variations thuocTinh2" value="{{this}}">
                            <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
                         </div>
@@ -85,7 +87,7 @@
          <div class="col">
             <label for="" class="form-label fs-5">Nhập số phần trăm giảm :</label>
             <div class="input-group">
-               <input type="number" name="percent" id="percentInput" class="form-control" max="100" min="0" oninput="this.value = Math.abs(this.value)" required value="{{product.discount.percent}}">
+               <input type="number" name="discount[percent]" id="percentInput" class="form-control" max="100" min="0" oninput="this.value = Math.abs(this.value)" required value="{{product.discount.percent}}">
                <span class="input-group-text">%</span>
             </div>
          </div>
@@ -114,7 +116,7 @@
          <p>Danh sách Ảnh :</p>
          <div id="multiImagePreview" class="row">
             {{#each product.images}}
-               <img src="/img/uploads/{{this}}" alt="" class="col-3" />
+               <img src="/img/uploads/{{this}}" name="images[{{this}}]" alt="" class="col-3" />
             {{/each}}
          </div>
       </div>

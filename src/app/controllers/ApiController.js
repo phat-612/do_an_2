@@ -50,7 +50,11 @@ class ApiController {
   }
   //cập nhật sản phẩm
   updateProduct(req, res, next) {
-    console.log(req.body);
+    res.json(req.body);
+  }
+
+  removeProduct(req, res, next) {
+    const id = req.body.id;
   }
 
   storeCategory(req, res, next) {
@@ -768,24 +772,19 @@ class ApiController {
         order.details.forEach((detail) => {
           Product.findOne(
             { "variations._id": detail.idVariation },
-            { "variations.$": 1 }
+            { "variations.$": 1 } //tìm bảng ghi
           ).then((product) => {
-            console.log(product);
-            if (
-              product &&
-              product.variations &&
-              product.variations.length > 0
-            ) {
+            if (!product) {
+              console.log("Product not found");
+            } else {
               // Tìm variation được chỉ định dựa trên detail.idVariation
               let variation = product.variations.id(detail.idVariation);
-              console.log(variation);
               // Nếu tìm thấy variation, cập nhật số lượng
               if (variation) {
                 variation.quantity += detail.quantity;
                 product.save();
               }
             }
-            console.log(product);
           });
         });
       }

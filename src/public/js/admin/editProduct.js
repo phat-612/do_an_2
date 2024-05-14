@@ -5,7 +5,7 @@ function deleteAttribute(event) {
   event.target.closest(".row").remove();
 }
 
-// =====================================
+// ===================================== ảnh
 document
   .getElementById("multiImageUpload")
   .addEventListener("change", function (event) {
@@ -51,7 +51,7 @@ document
       });
     });
   });
-//   ================================
+//   ==========================================================================================================================================================
 
 // nút them thuoc tinh 1
 
@@ -84,7 +84,7 @@ addAttribute2Btn.addEventListener("click", () => {
     input.addEventListener("input", createAttri1Row);
   });
 });
-// // ====================================================
+// // ==================================== create Table ============================================
 
 function createAttri1Row() {
   var nameAttr1 = document.getElementById("inpNameAttributePro1").value;
@@ -144,8 +144,10 @@ function createAttri1Row() {
 document.querySelectorAll(".variations").forEach(function (input) {
   input.addEventListener("input", createAttri1Row);
 });
+
 window.addEventListener("load", createAttri1Row);
 
+// =================================================== discount ==================================================================================================== discount
 const percentInput = document.getElementById("percentInput");
 const discountStart = document.getElementById("discountStart");
 const discountEnd = document.getElementById("discountEnd");

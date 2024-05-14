@@ -73,6 +73,9 @@
             <a class="btn btn-warning" href="/admin/product/{{this._id}}/edit"><i
                 class="bi bi-wrench"
               ></i></a>
+              <form action="/api/removeProduct">
+                <input type="text" name="id" value="{{this._id}}" hidden>
+              </form>
             <Button class="btn btn-danger "><i class="bi bi-trash"></i></Button>
             </td>
           </tr>

@@ -23,6 +23,11 @@ router.get("/returnPayment", apiController.returnPayment);
 // product
 router.post("/product", upload.array("images"), apiController.createProduct);
 router.post(
+  "/removeProduct",
+  upload.array("images"),
+  apiController.removeProduct
+);
+router.post(
   "/updateProduct",
   upload.array("images"),
   apiController.updateProduct
