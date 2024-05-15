@@ -72,8 +72,7 @@
       </div>
      </div>
      {{!-- ------------------------- --}}
-    <table id="custom-varriant" class="table-based table" data-variations="{{variations}}">
-      {{!-- <table id="custom-varriant" class="table-based table "> --}}
+    <table id="custom-varriant" class="table-based table">
          <thead>
             <tr>
                <th class="col-3 th1">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
@@ -87,10 +86,14 @@
           <tr>
             <td class="td1">{{#each this.attributes}}{{#if
                   @first
-                }}{{this}}{{/if}}{{/each}}</td>
+                }}{{this}}{{/if}}{{/each}}<input type="text" class="tdAttribute1" value="{{#each this.attributes}}{{#if
+                  @first
+                }}{{this}}{{/if}}{{/each}}" required hidden></td>
             <td class="td2">{{#each this.attributes}}{{#if
                   @last
-                }}{{this}}{{/if}}{{/each}}</td>
+                }}{{this}}{{/if}}{{/each}}<input type="text" class="tdAttribute2" value="{{#each this.attributes}}{{#if
+                  @last
+                }}{{this}}{{/if}}{{/each}}" required hidden></td>
             <td><input type="number" class="form-control tdPrice" value="{{this.price}}"></td>
             <td><input type="number" class="form-control tdQuantity" value="{{this.quantity}}"></td>
           </tr>
@@ -102,17 +105,17 @@
          <div class="col">
             <label for="" class="form-label fs-5">Nhập số phần trăm giảm :</label>
             <div class="input-group">
-               <input type="number" name="discount[percent]" id="percentInput" class="form-control" max="100" min="0" oninput="this.value = Math.abs(this.value)" required value="{{product.discount.percent}}">
+               <input type="number" name="discount[percent]" id="percentInput" class="form-control" max="100" min="0" oninput="this.value = Math.abs(this.value)" value="{{product.discount.percent}}">
                <span class="input-group-text">%</span>
             </div>
          </div>
          <div class="col">
             <label for="discountStart" class="form-label fs-5">Ngày bắt đầu :</label>
-            <input type="date" name="discount[startDay]" id="discountStart" class="form-control" value="{{formatDate product.discount.startDay "YYYY-MM-DD"}}">
+            <input type="date" name="discount[startDay]" id="discountStart" class="form-control" value="{{formatDate product.discount.startDay "YYYY-MM-DD"}}" disabled>
          </div>
          <div class="col">
             <label for="discountEnd" class="form-label fs-5">Ngày kết thúc :</label>
-            <input type="date" name="discount[endDay]" id="discountEnd" class="form-control" value="{{formatDate product.discount.endDay "YYYY-MM-DD"}}">
+            <input type="date" name="discount[endDay]" id="discountEnd" class="form-control" value="{{formatDate product.discount.endDay "YYYY-MM-DD"}}" disabled>
          </div>
       </div>
      {{!-- ------------------------- --}}

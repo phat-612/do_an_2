@@ -81,16 +81,42 @@ addAttribute2Btn.addEventListener("click", () => {
 // // ==================================== create Table ================================================================================================ create Table
 
 function addAttributeName() {
-  const count = 0;
-  $(".tdPrice").each((price) => {
-    $(this).attr("name", variations[count][price]);
+  let nameAttr1 = document.getElementById("inpNameAttributePro1").value;
+  let nameAttr2 = document.getElementById("inpNameAttributePro2").value;
+
+  let count = 0;
+
+  $(".tdAttribute1").each(function () {
+    $(this).attr(
+      "name",
+      "variations[" + count + "][attributes][" + nameAttr1 + "]"
+    );
+    count++;
   });
-  $(".tdQuantity").each((quantity) => {
-    $(this).attr("name", variations[count][quantity]);
+  count = 0;
+  $(".tdAttribute2").each(function () {
+    $(this).attr(
+      "name",
+      "variations[" + count + "][attributes][" + nameAttr2 + "]"
+    );
+    count++;
+  });
+  count = 0; // Reset count for the next set of elements
+  $(".tdPrice").each(function () {
+    $(this).attr("name", "variations[" + count + "][price]");
+    count++;
+  });
+
+  count = 0; // Reset count for the next set of elements
+  $(".tdQuantity").each(function () {
+    $(this).attr("name", "variations[" + count + "][quantity]");
+    count++;
   });
 }
 
-window.addEventListener("load", addAttributeName());
+document.addEventListener("DOMContentLoaded", function () {
+  addAttributeName();
+});
 
 // ======================================= discount ==================================================================================================== discount
 const percentInput = document.getElementById("percentInput");

@@ -744,82 +744,10 @@ class ApiController {
       return res.redirect(urlPayment);
     });
   }
-  // end api user
-  // test api
-  test(req, res, next) {
-    console.log("thêm sản phẩm");
-    console.log(req.body);
-    const product = new Product(req.body);
-    product
-      .save()
-      .then(() => {
-        res.send("Thêm thành công");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-  testAddCategory(req, res, next) {
-    const category = new Category(req.body);
-    category
-      .save()
-      .then(() => {
-        res.send("Thêm thành công");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-  testGetProduct(req, res, next) {
-    Product.find({
-      "variations._id": "65ed65e2c3155828e37b0aa6",
-    })
-      .then((products) => {
-        res.send(products);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-  testUpdateQuantity(req, res, next) {
-    const id = req.body.id;
-    const quantity = req.body.quantity;
-    console.log(req.body);
-    Product.updateOne(
-      { "variations._id": id },
-      { $set: { "variations.$.quantity": quantity } }
-    )
-      .then(() => {
-        res.send("Cập nhật thành công");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-  testAddOrder(req, res, next) {
-    let order = new Order(req.body);
-    order.save().then(() => {
-      res.send("Thêm order thành công");
-    });
-  }
   changeStatus(req, res) {
     Order.findOne({ _id: req.params.id }).then((order) => {
       order.status = req.body.status;
-      if (order.paymentDetail.method != "cod") {
-        order.save();
-        return res.redirect("back");
-      }
-      if (req.body.status == "pending") {
-        order.paymentDetail.status = "pending";
-      }
-      if (req.body.status == "shipping") {
-        order.paymentDetail.status = "pending";
-      }
-      if (req.body.status == "success") {
-        order.paymentDetail.status = "success";
-      }
       if (req.body.status == "failed") {
-        order.paymentDetail.status = "failed";
         order.details.forEach((detail) => {
           Product.findOne(
             { "variations._id": detail.idVariation },
@@ -839,9 +767,59 @@ class ApiController {
           });
         });
       }
+      if (order.paymentDetail.method != "cod") {
+        order.save();
+        return res.redirect("back");
+      }
+      if (
+        req.body.status == "pending" &&
+        order.paymentDetail.status == "pending"
+      ) {
+        order.paymentDetail.status = "pending";
+      }
+      if (
+        req.body.status == "shipping" &&
+        order.paymentDetail.status == "pending"
+      ) {
+        order.paymentDetail.status = "pending";
+      }
+      if (
+        req.body.status == "success" &&
+        order.paymentDetail.status != "failed"
+      ) {
+        order.paymentDetail.status = "success";
+      }
+      if (
+        req.body.status == "failed" &&
+        order.paymentDetail.status != "success"
+      ) {
+        order.paymentDetail.status = "failed";
+      }
       order.save().then(() => {
         return res.redirect("back");
       });
+    });
+  }
+  // phân quyền
+  changeHierarchy(req, res) {
+    User.findById(req.params.id).then((user) => {
+      user.role = req.body.role;
+      user.save().then(() => {
+        req.flash("message", {
+          type: "success",
+          message: "Phân quyên thành công",
+        });
+        res.redirect("back");
+      });
+    });
+  }
+  // end api user
+
+  // test api
+  testAddProduct(req, res, next) {
+    const product = new Product(req.body);
+    product.save().then(() => {
+      res.json({ status: "success" });
     });
   }
 }

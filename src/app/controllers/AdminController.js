@@ -269,10 +269,18 @@ class AdminController {
   accessProviders(req, res, next) {
     User.find({})
       .then((users) => {
+        const usersData = users.map((user) => {
+          return {
+            id: user._id, // Hoặc dùng "_id" hoặc thuộc tính tương ứng, tùy vào đặc điểm của đối tượng 'user'
+            role: user.role,
+          };
+        });
+        // console.log(usersData);
         res.render("admin/sites/accessProviders", {
           layout: "admin",
           js: "admin/accessProviders",
           users: multipleMongooseToObject(users),
+          usersData: usersData,
         });
       })
       .catch(next);

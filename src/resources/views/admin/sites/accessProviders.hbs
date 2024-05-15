@@ -8,32 +8,32 @@
         aria-label="Search"
         id="searchInput"
       />
-      <button class="btn btn-outline-success" type="submit">Search</button>
+      <button class="btn btn-outline-success" type="button">Search</button>
     </form>
   </div>
-  <form action="">
     <table class="table">
       <thead>
         <tr>
           <th scope="col">Email</th>
           <th scope="col">Họ Tên</th>
-          <th scope="col" class="col-3">Hành Động</th>
+          <th scope="col" class="col-3">Hành Động </th>
         </tr>
       </thead>
       <tbody>
-        {{#each users}}
+      {{#each users}}
+        <form id="hierarchy-{{this._id}}" action="/api/accessProviders/{{this._id}}?_method=PUT" method="post">
           <tr>
-            <td>{{this.email}}</td>
-            <td>{{this.name}}</td>
+            <td>{{this.email}}</td> 
+            <td>{{this.name}}</td>  
             <td>
-              <select class="form-select" aria-label="Default select example">
-                <option value="user" {{#if (compare this.role "user")}}selected{{/if}} >Khách Hàng</option>
-                <option value="admin" {{#if (compare this.role "admin")}}selected{{/if}} >Admin</option>
+              <select class="changeHierarchy" name="role" class="form-select" aria-label="Default select example" data-formid="hierarchy-{{this._id}}">
+                <option  value="user" {{#if (compare this.role "user")}}selected{{/if}}>Khách Hàng</option>
+                <option  value="admin" {{#if (compare this.role "admin")}}selected{{/if}}>Admin</option>
               </select>
             </td>
           </tr>
-        {{/each}}
+        </form>
+      {{/each}}
       </tbody>
     </table>
-  </form>
 </div>

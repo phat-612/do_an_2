@@ -1,3 +1,5 @@
+const url = require("url");
+const querystring = require("querystring");
 const Handlebars = require("handlebars");
 require("dotenv").config();
 const moment = require("moment");
@@ -5,6 +7,7 @@ module.exports = {
   sum: (a, b) => a + b,
   minus: (a, b) => a - b,
   hiddenSentence: (sentence) => sentence.replace(/[^\s]/g, "-"),
+  notTrue: (a) => !a,
   compare: (a, b) => a == b,
   compareNot: (a, b) => a != b,
   compareMore: (a, b) => a > b,
@@ -294,7 +297,6 @@ module.exports = {
   // code phân trang https://gist.github.com/trantorLiu/5924389
   pagination: (currentPage, totalPage, size, options) => {
     var startPage, endPage, context;
-
     if (arguments.length === 3) {
       options = size;
       size = 5;
@@ -318,12 +320,13 @@ module.exports = {
     }
 
     context = {
-      startFromFirstPage: false,
+      currentPage: currentPage,
+      notFirstPage: false,
       pages: [],
-      endAtLastPage: false,
+      notLastPage: false,
     };
-    if (startPage === 1) {
-      context.startFromFirstPage = true;
+    if (currentPage !== 1) {
+      context.notFirstPage = true;
     }
     for (var i = startPage; i <= endPage; i++) {
       context.pages.push({
@@ -331,10 +334,29 @@ module.exports = {
         isCurrent: i === currentPage,
       });
     }
-    if (endPage === totalPage) {
-      context.endAtLastPage = true;
+    if (currentPage !== totalPage) {
+      context.notLastPage = true;
     }
-
+    context.currentPage = currentPage;
     return options.fn(context);
+  },
+  getPagiUrl: (tempUrl) => {
+    let parseUrl = url.parse(tempUrl, true);
+    delete parseUrl.query.page;
+    parseUrl.search = querystring.stringify(parseUrl.query);
+    let urlPagi = url.format(parseUrl);
+    return urlPagi;
+  },
+  getSortUrl: (tempUrl) => {
+    let parseUrl = url.parse(tempUrl, true);
+    delete parseUrl.query.column;
+    delete parseUrl.query.type;
+    console.log(parseUrl.query._sort);
+    if (parseUrl.query._sort == undefined) {
+      parseUrl.query._sort = "";
+    }
+    parseUrl.search = querystring.stringify(parseUrl.query);
+    let urlSort = url.format(parseUrl);
+    return urlSort;
   },
 };

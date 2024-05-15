@@ -207,17 +207,25 @@ class SiteController {
   }
   search(req, res, next) {
     const url = req.url;
-    console.log(url);
-    Product.find({})
-      .findable(req)
-      .sortable(req)
-      .then((products) => {
-        let countProduct = products.length;
-        res.render("user/products/search", {
-          products: products.map((product) => product.toObject()),
-          countProduct,
-        });
+    Promise.all([
+      Product.find({}).findable(req).sortable(req).paginate(req).exec(),
+      Product.find({}).findable(req).sortable(req).exec(),
+    ]).then(([products, dataPagi]) => {
+      let countProduct = dataPagi.length;
+      let currentPage = parseInt(req.query.page) || 1;
+      let limit = parseInt(req.query.limit) || 16;
+      let totalPage =
+        countProduct % limit === 0
+          ? countProduct / limit
+          : Math.floor(countProduct / limit) + 1;
+      return res.render("user/products/search", {
+        products: products.map((product) => product.toObject()),
+        countProduct,
+        currentPage,
+        totalPage,
+        url,
       });
+    });
   }
   test(req, res, next) {
     Category.getAllProductsInCategory().then((categories) => {

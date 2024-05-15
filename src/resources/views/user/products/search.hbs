@@ -7,19 +7,19 @@
     <ul class="nav">
       <li><a
           class="btn rounded border ms-2"
-          href="?_sort&column=price&type=asc"
+          href="{{getSortUrl url}}&column=price&type=asc"
         >Giá thấp đến cao</a></li>
       <li><a
           class="btn rounded border ms-2"
-          href="?_sort&column=price&type=desc"
+          href="{{getSortUrl url}}&column=price&type=desc"
         >Giá cao đến thấp</a></li>
       <li><a
           class="btn rounded border ms-2"
-          href="?_sort&column=createdAt&type=desc"
+          href="{{getSortUrl url}}&column=createdAt&type=desc"
         >Mới nhất</a></li>
       <li><a
           class="btn rounded border ms-2"
-          href="?_sort&column=createdAt&type=asc"
+          href="{{getSortUrl url}}&column=createdAt&type=asc"
         >Cũ nhất</a></li>
     </ul>
   </div>
@@ -28,7 +28,6 @@
   >
     {{#each products}}
       {{! bắt đầu card }}
-
       <div class="col">
         <div class="card h-100 shadow-sm position-relative">
           <a href="/product/{{this.slug}}/" class="">
@@ -62,7 +61,32 @@
       {{! kêt thúc card }}
     {{/each}}
   </div>
-  <div class="d-flex justify-content-center"><button
-      class="m-auto btn btn-light fs-5 border"
-    >Xem thêm <i class="bi bi-caret-down"></i></button></div>
+  <div>
+    {{#pagination currentPage totalPage 5}}
+      <nav aria-label="...">
+        <ul class="pagination justify-content-center">
+          {{#if notFirstPage}}
+            <li class="page-item">
+              <a
+                class="page-link fs-5"
+                href="{{getPagiUrl ../url}}&page={{minus currentPage 1}}"
+                tabindex="-1"
+                aria-disabled="true"
+              >Previous</a>
+            </li>
+          {{/if}}
+          {{#each pages}}
+            <li class="page-item {{#if this.isCurrent}}active{{/if}}">
+              <a class="page-link fs-5" href="{{getPagiUrl ../../url}}&page={{this.page}}">{{this.page}}</a>
+            </li>
+          {{/each}}
+          {{#if notLastPage}}
+            <li class="page-item">
+              <a class="page-link fs-5" href="{{getPagiUrl ../url}}&page={{sum currentPage 1}}">Next</a>
+            </li>
+          {{/if}}
+        </ul>
+      </nav>
+    {{/pagination}}
+  </div>
 </div>

@@ -38,7 +38,8 @@ router.post(
   upload.array("images"),
   apiController.updateProduct
 );
-
+///////////////////
+router.put("/accessProviders/:id", apiController.changeHierarchy);
 // warranty
 router.post(
   "/storeWarranty",
@@ -53,10 +54,6 @@ router.post("/storeCategory", apiController.storeCategory);
 router.put("/category/:id", apiController.updateCategory);
 
 // dành cho test
-router.post("/test", apiController.test);
-router.post("/testAddCategory", apiController.testAddCategory);
-router.post("/testUpdateQuantity", apiController.testUpdateQuantity);
-// router.get("/testGetProduct", apiController.testGetProduct);
-router.post("/testAddOrder", apiController.testAddOrder);
+router.post("/testAddProduct", apiController.testAddProduct);
 
 module.exports = router;
