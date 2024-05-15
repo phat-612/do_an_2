@@ -37,6 +37,13 @@ Product.query.sortable = function (req) {
   }
   return this;
 };
+// page navigation
+Product.query.paginate = function (req) {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+  return this.skip(skip).limit(limit);
+};
 Product.query.findable = function (req) {
   if (req.query.hasOwnProperty("_find")) {
     let searchQuery = req.query.q;

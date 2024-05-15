@@ -3,6 +3,7 @@ require("dotenv").config();
 const moment = require("moment");
 module.exports = {
   sum: (a, b) => a + b,
+  minus: (a, b) => a - b,
   hiddenSentence: (sentence) => sentence.replace(/[^\s]/g, "-"),
   compare: (a, b) => a == b,
   compareNot: (a, b) => a != b,
@@ -196,9 +197,12 @@ module.exports = {
     }
     return "";
   },
-  isShowBtnRePayment: (status) => {
+  isShowBtnRePayment: (paymentDetail) => {
+    if (paymentDetail.method == "cod") {
+      return false;
+    }
     let statusArr = ["pending", "failed"];
-    let isCheck = statusArr.some((item) => status.includes(item));
+    let isCheck = statusArr.some((item) => paymentDetail.status.includes(item));
     if (isCheck) {
       return true;
     }
@@ -286,5 +290,51 @@ module.exports = {
       }
     });
     return count;
+  },
+  // code phân trang https://gist.github.com/trantorLiu/5924389
+  pagination: (currentPage, totalPage, size, options) => {
+    var startPage, endPage, context;
+
+    if (arguments.length === 3) {
+      options = size;
+      size = 5;
+    }
+
+    startPage = currentPage - Math.floor(size / 2);
+    endPage = currentPage + Math.floor(size / 2);
+
+    if (startPage <= 0) {
+      endPage -= startPage - 1;
+      startPage = 1;
+    }
+
+    if (endPage > totalPage) {
+      endPage = totalPage;
+      if (endPage - size + 1 > 0) {
+        startPage = endPage - size + 1;
+      } else {
+        startPage = 1;
+      }
+    }
+
+    context = {
+      startFromFirstPage: false,
+      pages: [],
+      endAtLastPage: false,
+    };
+    if (startPage === 1) {
+      context.startFromFirstPage = true;
+    }
+    for (var i = startPage; i <= endPage; i++) {
+      context.pages.push({
+        page: i,
+        isCurrent: i === currentPage,
+      });
+    }
+    if (endPage === totalPage) {
+      context.endAtLastPage = true;
+    }
+
+    return options.fn(context);
   },
 };

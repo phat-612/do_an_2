@@ -421,7 +421,7 @@ class ApiController {
           return res.redirect("back");
         }
         Cart.findOne({ idUser }).then((cart) => {
-          if (!cart || cart.items.length == 0) {
+          if (!cart) {
             let newCart = new Cart({
               idUser: idUser,
               items: [
@@ -435,20 +435,31 @@ class ApiController {
               return res.redirect("back");
             });
           }
-          let check = false;
-          cart.items.forEach((item) => {
-            if (item.idVariation == formData.idVariation) {
-              item.quantity += parseInt(formData.quantity);
-              check = true;
-            }
-          });
-          if (!check) {
+          if (cart.items.length == 0) {
             cart.items.push({
               idVariation: formData.idVariation,
               quantity: formData.quantity,
             });
+          } else {
+            let check = false;
+            cart.items.forEach((item) => {
+              if (item.idVariation == formData.idVariation) {
+                item.quantity += parseInt(formData.quantity);
+                check = true;
+              }
+            });
+            if (!check) {
+              cart.items.push({
+                idVariation: formData.idVariation,
+                quantity: formData.quantity,
+              });
+            }
           }
           cart.save().then(() => {
+            req.flash("message", {
+              type: "success",
+              message: "Thêm vào giỏ hàng thành công",
+            });
             return res.redirect("back");
           });
         });
@@ -510,18 +521,14 @@ class ApiController {
   createOrder(req, res, next) {
     const formData = req.body;
     const idUser = req.session.idUser;
-    let messageError = false;
     const promise = formData.details.map((detail) => {
       return Product.findOne({ "variations._id": detail.idVariation }).then(
         (product) => {
           const variation = product.variations.id(detail.idVariation);
           // kiểm tra số lượng sản phẩm
           if (variation.quantity < detail.quantity) {
-            console.log("sản phẩm " + product.name + " đã hết hàng");
-            messageError = {
-              type: "danger",
-              message: "Sản phẩm " + product.name + " đã hết hàng",
-            };
+            console.log("sản phẩm " + product.name + " không đủ số lượng");
+            throw new Error("Sản phẩm " + product.name + " không đủ số lượng");
           }
           let discount;
           if (
@@ -535,21 +542,10 @@ class ApiController {
           // kiểm tra giá sản phẩm
           if (detail.price != (variation.price * (100 - discount)) / 100) {
             console.log("sản phẩm " + product.name + " đã thay đổi giá bán");
-            messageError = {
-              type: "danger",
-              message: "Giá sản phẩm đã thay đổi",
-            };
+            throw new Error(
+              "Sản phẩm " + product.name + " đã thay đổi giá bán"
+            );
           }
-          // cập nhật số lượng sản phẩm
-          variation.quantity -= detail.quantity;
-          product.save();
-          // xóa sản phẩm khỏi giỏ hàng
-          Cart.updateOne(
-            {
-              idUser: idUser,
-            },
-            { $pull: { items: { idVariation: detail.idVariation } } }
-          ).then(() => {});
           // trả về thông tin chi tiết đơn hàng
           return {
             idVariation: detail.idVariation,
@@ -560,40 +556,57 @@ class ApiController {
         }
       );
     });
-    if (messageError) {
-      req.flash("message", messageError);
-      return res.redirect("/cart");
-    }
-    Promise.all(promise).then((details) => {
-      const total = details.reduce((total, detail) => {
-        return (
-          total + detail.price * (1 - detail.discount / 100) * detail.quantity
-        );
-      }, 0);
-      const newOrder = new Order({
-        idUser,
-        note: formData.note,
-        total,
-        paymentDetail: {
-          method: formData.paymentMethod,
-          date: new Date(),
-          amount: total,
-        },
-        details,
-        shipmentDetail: formData.shipmentDetail,
+    Promise.all(promise)
+      .then((details) => {
+        // cập nhật số lượng sản phẩm và xóa sản phẩm khỏi giỏ hàng
+        details.forEach((detail) => {
+          Product.updateOne(
+            { "variations._id": detail.idVariation },
+            { $inc: { "variations.$.quantity": -detail.quantity } }
+          ).exec();
+          console.log("idVariation", detail.idVariation);
+          Cart.updateOne(
+            { idUser },
+            { $pull: { items: { idVariation: detail.idVariation } } }
+          ).exec();
+        });
+        const total = details.reduce((total, detail) => {
+          return (
+            total + detail.price * (1 - detail.discount / 100) * detail.quantity
+          );
+        }, 0);
+        const newOrder = new Order({
+          idUser,
+          note: formData.note,
+          total,
+          paymentDetail: {
+            method: formData.paymentMethod,
+            date: new Date(),
+            amount: total,
+          },
+          details,
+          shipmentDetail: formData.shipmentDetail,
+        });
+        newOrder.save().then((order) => {
+          if (formData.paymentMethod == "cod") {
+            return res.redirect("/me/historyOrder");
+          }
+          // xử lý thanh toán online
+          // tạo url thanh toán
+          const idOrder = order._id;
+          const amount = order.total;
+          const urlPayment = `/api/createPaymentUrl?idOrder=${idOrder}&amount=${amount}`;
+          return res.redirect(urlPayment);
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        req.flash("message", {
+          type: "danger",
+          message: error.message,
+        });
+        return res.redirect("/me/cart");
       });
-      newOrder.save().then((order) => {
-        if (formData.paymentMethod == "cod") {
-          return res.redirect("/me/historyOrder");
-        }
-        // xử lý thanh toán online
-        // tạo url thanh toán
-        const idOrder = order._id;
-        const amount = order.total;
-        const urlPayment = `/api/createPaymentUrl?idOrder=${idOrder}&amount=${amount}`;
-        return res.redirect(urlPayment);
-      });
-    });
   }
   cancelOrder(req, res, next) {
     const idOrder = req.body.idOrder;

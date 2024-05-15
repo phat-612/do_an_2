@@ -27,79 +27,38 @@ class AdminController {
   // get /product
   product(req, res, next) {
     Product.find({})
+      .populate("idCategory", "idParent")
       .then((products) => {
-        res.render("admin/products/showProduct", {
-          layout: "admin",
-          js: "admin/showProduct",
-          css: "admin/showProduct",
-          products: multipleMongooseToObject(products),
+        const getAllParent = async (category) => {
+          let parents = [];
+          const findParent = async (inpCategory) => {
+            parents.push(inpCategory);
+            const parent = await Category.findOne({
+              _id: inpCategory.idParent,
+            });
+            if (parent) {
+              await findParent(parent);
+            }
+          };
+          await findParent(category);
+          return parents;
+        };
+        getAllParent(products.idCategory).then((parents) => {
+          products = {
+            ...products.toObject(),
+            category: parents.map((parent) => parent.name).reverse(),
+            brand: parents.length > 1 ? parents.reverse()[1].name : null,
+          };
+          return res.json(products);
+          res.render("admin/products/showProduct", {
+            layout: "admin",
+            js: "admin/showProduct",
+            css: "admin/showProduct",
+            products: multipleMongooseToObject(products),
+          });
         });
       })
       .catch(next);
-  }
-
-  // get /orderproducts
-  order(req, res, next) {
-    Order.find({})
-      .populate("idUser", "name")
-      .then((orders) => {
-        // console.log(orders);
-        res.render("admin/orders/orderProduct", {
-          layout: "admin",
-          js: "admin/orderProduct",
-          css: "admin/orderProduct",
-          orders: multipleMongooseToObject(orders),
-        });
-      });
-  }
-  // get /order/detail
-  orderDetail(req, res, next) {
-    Order.findById(req.params.id)
-      .populate("idUser")
-      .then((order) => {
-        if (!order) {
-          return res.json({ message: "Không tìm thấy đơn hàng" });
-        }
-
-        let totalNotSale = order.details.reduce((accumulator, detail) => {
-          return accumulator + detail.price * detail.quantity;
-        }, 0);
-        let promises = order.details.map((detail) => {
-          return Product.findOne({ "variations._id": detail.idVariation }).then(
-            (product) => {
-              if (!product) {
-                console.error(`Không thấy sản phẩm ${detail.idVariation}`);
-                return null;
-              }
-              let variation = product.variations.id(detail.idVariation);
-              let productName = product.name;
-              let variationAttributes = variation ? variation.attributes : {};
-
-              let detailObject = detail.toObject();
-              detailObject.productName = productName;
-              detailObject.variationAttributes = variationAttributes;
-
-              let discountedPrice =
-                detail.price - detail.price * (detail.discount / 100);
-              detailObject.totalPrice = discountedPrice * detail.quantity;
-              detailObject.originalTotalPrice = detail.price * detail.quantity;
-              return detailObject;
-            }
-          );
-        });
-
-        Promise.all(promises).then((result) => {
-          res.render("admin/orders/orderDetail", {
-            layout: "admin",
-            js: "admin/orderDetail",
-            css: "admin/orderDetail",
-            orders: result,
-            order: order,
-            totalNotSale: totalNotSale, //gia chua giam
-          });
-          // console.log(totalNotSale, totalOrder);
-        });
-      });
   }
   //get /product/addproduct
   addPro(req, res, next) {
@@ -238,6 +197,70 @@ class AdminController {
   //   });
   //   console.log(attributes);
   // });
+
+  // get /orderproducts
+  order(req, res, next) {
+    Order.find({})
+      .populate("idUser", "name")
+      .then((orders) => {
+        // console.log(orders);
+        res.render("admin/orders/orderProduct", {
+          layout: "admin",
+          js: "admin/orderProduct",
+          css: "admin/orderProduct",
+          orders: multipleMongooseToObject(orders),
+        });
+      });
+  }
+  // get /order/detail
+  orderDetail(req, res, next) {
+    Order.findById(req.params.id)
+      .populate("idUser")
+      .then((order) => {
+        if (!order) {
+          return res.json({ message: "Không tìm thấy đơn hàng" });
+        }
+
+        let totalNotSale = order.details.reduce((accumulator, detail) => {
+          return accumulator + detail.price * detail.quantity;
+        }, 0);
+        let promises = order.details.map((detail) => {
+          return Product.findOne({ "variations._id": detail.idVariation }).then(
+            (product) => {
+              if (!product) {
+                console.error(`Không thấy sản phẩm ${detail.idVariation}`);
+                return null;
+              }
+              let variation = product.variations.id(detail.idVariation);
+              let productName = product.name;
+              let variationAttributes = variation ? variation.attributes : {};
+
+              let detailObject = detail.toObject();
+              detailObject.productName = productName;
+              detailObject.variationAttributes = variationAttributes;
+
+              let discountedPrice =
+                detail.price - detail.price * (detail.discount / 100);
+              detailObject.totalPrice = discountedPrice * detail.quantity;
+              detailObject.originalTotalPrice = detail.price * detail.quantity;
+              return detailObject;
+            }
+          );
+        });
+
+        Promise.all(promises).then((result) => {
+          res.render("admin/orders/orderDetail", {
+            layout: "admin",
+            js: "admin/orderDetail",
+            css: "admin/orderDetail",
+            orders: result,
+            order: order,
+            totalNotSale: totalNotSale, //gia chua giam
+          });
+          // console.log(totalNotSale, totalOrder);
+        });
+      });
+  }
 
   //get /category
   category(req, res, next) {

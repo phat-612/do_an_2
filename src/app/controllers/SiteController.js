@@ -191,10 +191,33 @@ class SiteController {
           );
       });
       // return res.json(resProduct);
+      // thêm dữ liệu vào cookie để mua ngay
+      let dataBuyNow = {
+        idVariation: curVariation._id,
+        quantity: 1,
+      };
+      res.cookie("cart", JSON.stringify([dataBuyNow]), {
+        maxAge: 1000 * 60 * 60 * 24,
+        path: "/me",
+      });
       res.render("user/products/detail", {
         product: resProduct,
       });
     });
+  }
+  search(req, res, next) {
+    const url = req.url;
+    console.log(url);
+    Product.find({})
+      .findable(req)
+      .sortable(req)
+      .then((products) => {
+        let countProduct = products.length;
+        res.render("user/products/search", {
+          products: products.map((product) => product.toObject()),
+          countProduct,
+        });
+      });
   }
   test(req, res, next) {
     Category.getAllProductsInCategory().then((categories) => {

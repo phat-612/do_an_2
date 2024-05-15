@@ -16,6 +16,7 @@
             >{{messageError}}</p>
           {{/if}}
           <div class="form-outline mb-2">
+            <label class="form-label" for="name">Họ và tên</label>
             <input
               type="text"
               id="name"
@@ -25,9 +26,10 @@
               value="{{formData.name}}"
               required
             />
-            <label class="form-label" for="name">Họ và tên</label>
+
           </div>
           <div class="form-outline mb-2">
+            <label class="form-label" for="email">Email</label>
             <input
               type="email"
               id="email"
@@ -37,9 +39,10 @@
               value="{{formData.email}}"
               required
             />
-            <label class="form-label" for="email">Email</label>
+
           </div>
           <div class="form-outline mb-2">
+            <label class="form-label" for="password">Mật khẩu</label>
             <input
               type="password"
               id="password"
@@ -48,9 +51,10 @@
               name="password"
               required
             />
-            <label class="form-label" for="password">Mật khẩu</label>
+
           </div>
           <div class="form-outline mb-2">
+            <label class="form-label" for="confirmPassword">Nhập lại mật khẩu</label>
             <input
               type="password"
               id="confirmPassword"
@@ -59,7 +63,6 @@
               name="confirmPassword"
               required
             />
-            <label class="form-label" for="confirmPassword">Nhập lại mật khẩu</label>
             <p id="errorPassword" class="opacity-0 text-danger">*Mật khẩu không
               khớp</p>
           </div>
@@ -67,6 +70,9 @@
           <div class="d-flex justify-content-between align-items-center">
             <!-- Checkbox -->
             <div class="form-check mb-0">
+              <label class="form-check-label" for="form2Example3">
+                Đồng ý với các điều khoản của chúng tôi
+              </label>
               <input
                 class="form-check-input me-2"
                 type="checkbox"
@@ -74,9 +80,6 @@
                 id="form2Example3"
                 required
               />
-              <label class="form-check-label" for="form2Example3">
-                Đồng ý với các điều khoản của chúng tôi
-              </label>
             </div>
           </div>
 
@@ -89,7 +92,6 @@
             <p class="small fw-bold mt-2 pt-1 mb-0">Do have an account?
               <a href="/login" class="link-danger">Login</a></p>
           </div>
-
         </form>
       </div>
     </div>

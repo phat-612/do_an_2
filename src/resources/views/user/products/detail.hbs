@@ -4,37 +4,43 @@
   <div class="row">
     <div class="col-6">
       <div
-        id="carouselExampleControlsNoTouching"
-        class="carousel slide"
-        data-bs-touch="false"
-        data-bs-interval="false"
+        id="carouselExampleControls"
+        class="carousel slide border rounded"
+        data-bs-ride="carousel"
       >
         <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img
-              src="https://cdn2.cellphones.com.vn/insecure/rs:fill:58:58/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone_15_pro_max_256gb_-_10.png"
-              class="d-block w-100"
-              alt="..."
-            />
-          </div>
-
+          {{#each product.images}}
+            <div class="carousel-item active">
+              <img
+                src="{{showImgUpload this}}"
+                class="d-block w-100"
+                alt="..."
+              />
+            </div>
+          {{/each}}
         </div>
         <button
-          class="carousel-control-prev"
+          class="carousel-control-prev justify-content-start"
           type="button"
-          data-bs-target="#carouselExampleControlsNoTouching"
+          data-bs-target="#carouselExampleControls"
           data-bs-slide="prev"
         >
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span
+            class="bg-black bg-opacity-50 rounded px-2 py-3 rounded-end-circle"
+            aria-hidden="true"
+          ><span class="carousel-control-prev-icon"></span></span>
           <span class="visually-hidden">Previous</span>
         </button>
         <button
-          class="carousel-control-next"
+          class="carousel-control-next justify-content-end"
           type="button"
-          data-bs-target="#carouselExampleControlsNoTouching"
+          data-bs-target="#carouselExampleControls"
           data-bs-slide="next"
         >
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span
+            class="bg-black bg-opacity-50 rounded px-2 py-3 rounded-start-circle"
+            aria-hidden="true"
+          > <span class="carousel-control-next-icon"></span></span>
           <span class="visually-hidden">Next</span>
         </button>
       </div>
@@ -101,9 +107,10 @@
         </div>
       </div> }}
       <div class="action my-3 row">
-        <div class="col-8"><button
-            class="w-100 py-3 rounded border bg-danger fs-4 text-white fw-bold"
-          >Mua Ngay</button></div>
+        <div class="col-8"><a
+            href="/me/order"
+            class="btn w-100 py-3 rounded border bg-danger fs-4 text-white fw-bold"
+          >Mua Ngay</a></div>
         <div class="col-4">
           <form action="/api/cart" method="post">
             <input

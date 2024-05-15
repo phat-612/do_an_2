@@ -16,22 +16,22 @@
   </div>
   <div class="row bg-white border rounded-3 py-2 d-flex mb-4">
     <div class="col-6 text-center mt-2 border-end border-dark">
-      <h3>3</h3>
+      <h3>{{countOrder}}</h3>
       <p>đơn hàng</p>
     </div>
 
     <div class="col-6 text-center mt-2">
-      <h3>10M</h3>
+      <h3>{{showPrice totalMoneyPaid}}</h3>
       <p>tổng tiền tích lũy</p>
     </div>
   </div>
 
-  <div class="row d-flex border rounded-2 px-1 mb-4 custom-w-fitcontent">
+  {{! <div class="row d-flex border rounded-2 px-1 mb-4 custom-w-fitcontent">
     <div class="col-1 custom-w-fitcontent"><i class="bi bi-calendar"></i></div>
     <p class="col m-0 ps-0"><span>01/07/2023</span>
       -
       <span>01/07/2023</span></p>
-  </div>
+  </div> }}
   <ul class="row nav gap-2">
     <li class="custom-w-fitcontent"><a
         class="border border-1 rounded-2 px-3 py-2 bg-white col-2"
@@ -80,7 +80,7 @@
           <a class="fs-5" href="/me/detailOrder/{{_id}}">{{name}}</a>
           {{#if (compareMore this.quantityProduct 1)}}
             <div class="fs-6 text-black-50">và
-              {{this.quantityProduct}}
+              {{minus this.quantityProduct 1}}
               sản phẩm khác</div>
           {{/if}}
           <div

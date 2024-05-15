@@ -73,7 +73,7 @@
       <div class="d-flex justify-content-between fs-5">
         <p>Trạng thái thanh toán:</p>
         <span>{{showPaymentStatus order.paymentDetail.status}}</span>
-        {{#if (isShowBtnRePayment order.paymentDetail.status)}}
+        {{#if (isShowBtnRePayment order.paymentDetail)}}
           <form action="/api/rePayment" method="post">
             <input type="text" value="{{order._id}}" name="idOrder" hidden />
             <button type="submit" class="btn btn-primary">Thanh toán</button>

@@ -77,10 +77,27 @@ class MeController {
           (order) => order[req.query.column] == req.query.value
         );
       }
-      // return res.json(orders);
-      res.render("user/profiles/historyOrder", {
-        layout: "userProfile",
-        orders,
+      Order.find(
+        { idUser },
+        {
+          _id: 1,
+          total: 1,
+          paymentDetail: 1,
+        }
+      ).then((tempOrders) => {
+        let countOrder = tempOrders.length;
+        let totalMoneyPaid = tempOrders.reduce((total, order) => {
+          if (order.paymentDetail.status == "success") {
+            return total + order.total;
+          }
+          return total;
+        }, 0);
+        res.render("user/profiles/historyOrder", {
+          layout: "userProfile",
+          orders,
+          countOrder,
+          totalMoneyPaid,
+        });
       });
     });
   }

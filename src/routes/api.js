@@ -3,24 +3,29 @@ const router = express.Router();
 const upload = require("../app/middlewares/uploadMiddleware");
 
 const apiController = require("../app/controllers/ApiController");
+const {
+  adminLogin,
+  userLogin,
+  isLoggedIn,
+} = require("../app/middlewares/authMiddleware");
 // account
 router.post("/signUp", apiController.signUp);
 router.post("/login", apiController.login);
-router.post("/address", apiController.storeAddress);
-router.post("/cart", apiController.addItemToCart);
-router.post("/order", apiController.createOrder);
-router.put("/profile", apiController.updateProfile);
-router.put("/password", apiController.updatePassword);
-router.put("/address", apiController.updateAddress);
-router.put("/cart", apiController.updateCartQuantity);
-router.put("/cancelOrder", apiController.cancelOrder);
-router.delete("/address", apiController.deleteAddress);
-router.delete("/cart", apiController.removeItemToCart);
+router.post("/address", isLoggedIn, apiController.storeAddress);
+router.post("/cart", isLoggedIn, apiController.addItemToCart);
+router.post("/order", isLoggedIn, apiController.createOrder);
+router.put("/profile", isLoggedIn, apiController.updateProfile);
+router.put("/password", isLoggedIn, apiController.updatePassword);
+router.put("/address", isLoggedIn, apiController.updateAddress);
+router.put("/cart", isLoggedIn, apiController.updateCartQuantity);
+router.put("/cancelOrder", isLoggedIn, apiController.cancelOrder);
+router.delete("/address", isLoggedIn, apiController.deleteAddress);
+router.delete("/cart", isLoggedIn, apiController.removeItemToCart);
 // order
-router.put("/order/:id", apiController.changeStatus);
+router.put("/order/:id", isLoggedIn, apiController.changeStatus);
 router.get("/createPaymentUrl", apiController.creatPaymentUrl);
 router.get("/returnPayment", apiController.returnPayment);
-router.post("/rePayment", apiController.rePayment);
+router.post("/rePayment", isLoggedIn, apiController.rePayment);
 // product
 router.post("/product", upload.array("images"), apiController.createProduct);
 router.post(

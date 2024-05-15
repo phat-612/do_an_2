@@ -147,7 +147,6 @@ function createAttri1Row() {
 
 document.querySelectorAll(".variationsmoi").forEach(function (input) {
   input.addEventListener("input", function updateTable() {
-    console.log(input);
     let tbody = document.querySelector("tbody");
     var attr1Values = Array.from(
       document.querySelectorAll(".thuocTinh1moi")
