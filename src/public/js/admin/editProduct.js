@@ -79,6 +79,35 @@ addAttribute2Btn.addEventListener("click", () => {
   secondChild.insertAdjacentHTML("afterend", Attribute2HTML);
 });
 // // ==================================== create Table ================================================================================================ create Table
+document
+  .getElementById("inpNameAttributePro1")
+  .addEventListener("input", () => {
+    document.querySelector(".th1").textContent = document.getElementById(
+      "inpNameAttributePro1"
+    ).value;
+  });
+
+document
+  .getElementById("inpNameAttributePro2")
+  .addEventListener("input", () => {
+    document.querySelector(".th2").textContent = document.getElementById(
+      "inpNameAttributePro2"
+    ).value;
+  });
+
+let attribute1Array = [];
+let attribute2Array = [];
+
+function innerHTMLtd() {
+  let tdHTML = `
+    <tr>
+      <td class="td1"><input type="text" class="tdAttribute1" value="" hidden name="variations[0][attributes][Bá» nhá»]"></td>
+      <td class="td2"><input type="text" class="tdAttribute2" value="" hidden name="variations[0][attributes][MÃ&nbsp;u sáº¯c]"></td>
+      <td><input type="number" class="form-control tdPrice" value="{{this.price}}"></td>
+      <td><input type="number" class="form-control tdQuantity" value="{{this.quantity}}"></td>
+    </tr>
+  `;
+}
 
 function addAttributeName() {
   let nameAttr1 = document.getElementById("inpNameAttributePro1").value;
@@ -101,13 +130,13 @@ function addAttributeName() {
     );
     count++;
   });
-  count = 0; // Reset count for the next set of elements
+  count = 0;
   $(".tdPrice").each(function () {
     $(this).attr("name", "variations[" + count + "][price]");
     count++;
   });
 
-  count = 0; // Reset count for the next set of elements
+  count = 0;
   $(".tdQuantity").each(function () {
     $(this).attr("name", "variations[" + count + "][quantity]");
     count++;
@@ -116,6 +145,9 @@ function addAttributeName() {
 
 document.addEventListener("DOMContentLoaded", function () {
   addAttributeName();
+});
+document.addEventListener("DOMContentLoaded", function () {
+  checkExistValue();
 });
 
 // ======================================= discount ==================================================================================================== discount
