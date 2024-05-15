@@ -65,6 +65,7 @@ addAttribute1Btn.addEventListener("click", () => {
   var inputAttribute1Div = document.getElementById("inputAttribute1Div");
   var secondChild = inputAttribute1Div.children[0]; // Lấy phần tử con thứ hai trong inputdiv
   secondChild.insertAdjacentHTML("afterend", Attribute1HTML);
+  $(".variationsmoi").on("input", createTable());
 });
 // nút them thuoc tinh 2
 var addAttribute2Btn = document.querySelector(".addAttribute2-btn");
@@ -77,22 +78,89 @@ addAttribute2Btn.addEventListener("click", () => {
   var inputAttribute2Div = document.getElementById("inputAttribute2Div");
   var secondChild = inputAttribute2Div.children[0]; // Lấy phần tử con thứ hai trong inputdiv
   secondChild.insertAdjacentHTML("afterend", Attribute2HTML);
+  $(".variationsmoi").on("input", createTable());
 });
-// // ==================================== create Table ================================================================================================ create Table
+// // ==================================== create Table ============================================
 
-function addAttributeName() {
-  const count = 0;
-  $(".tdPrice").each((price) => {
-    $(this).attr("name", variations[count][price]);
-  });
-  $(".tdQuantity").each((quantity) => {
-    $(this).attr("name", variations[count][quantity]);
-  });
+function createTable() {
+  let tr = document.querySelector(".trbody");
+
+  var tdHtml = `<td></td>
+          <td><input type="number" class="form-control w-50 variations" name="" value="" required></td>
+          <td><input type="number" class="form-control w-50 variations" name="" value="" ></td>
+          <input type="text" value="" name="" hidden />
+          <input type="text" value="" name="" hidden />`;
+  tr.innerHTML = tdHtml;
 }
 
-window.addEventListener("load", addAttributeName());
+$(".variationsmoi").on("input", function () {});
 
-// ======================================= discount ==================================================================================================== discount
+function createAttri1Row() {
+  const table = document.getElementById("custom-varriant");
+  const variations = JSON.parse(table.dataset.variations);
+  variations.forEach((element) => {});
+  var nameAttr1 = document.getElementById("inpNameAttributePro1").value;
+  var nameAttr2 = document.getElementById("inpNameAttributePro2").value;
+  var attr1Values = Array.from(document.querySelectorAll(".thuocTinh1")).map(
+    (input) => input.value
+  );
+  var attr2Values = Array.from(document.querySelectorAll(".thuocTinh2")).map(
+    (input) => input.value
+  );
+
+  var numberRow1 = attr1Values.length;
+  var numberRow2 = attr2Values.length;
+
+  document.querySelector(".th1").textContent = nameAttr1;
+  document.querySelector(".th2").textContent = nameAttr2;
+  // console.log(attr1Values, attr2Values);
+
+  let tbody = document.querySelector("tbody");
+  let tbodyHTML = "";
+
+  let currentRow = 0;
+
+  attr1Values.forEach((val1, ind1) => {
+    attr2Values.forEach((val2, ind2) => {
+      let detail = variations[currentRow];
+      if (ind2 === 0) {
+        tbodyHTML += `
+        <tr class="trbody">
+          <td class="td1" rowspan="${numberRow2}">${val1}</td>
+          <td>${val2}</td>
+          <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][price]" value="${detail.price}" required></td>
+          <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][quantity]" value="${detail.quantity}" ></td>
+          <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
+          <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
+        </tr>
+      `;
+        currentRow++;
+      } else {
+        if (val2) {
+          tbodyHTML += `
+        <tr class="trbody">
+          <td>${val2}</td>
+          <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][price]" value="${detail.price}" required></td>
+          <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][quantity]" value="${detail.quantity}" required></td>
+          <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
+          <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
+        </tr>
+      `;
+          currentRow++;
+        }
+      }
+    });
+  });
+  tbody.innerHTML = tbodyHTML;
+}
+
+// document.querySelectorAll(".variations").forEach(function (input) {
+//   input.addEventListener("input", createAttri1Row);
+// });
+
+window.addEventListener("load", createAttri1Row);
+
+// =================================================== discount ==================================================================================================== discount
 const percentInput = document.getElementById("percentInput");
 const discountStart = document.getElementById("discountStart");
 const discountEnd = document.getElementById("discountEnd");

@@ -76,13 +76,25 @@
       {{!-- <table id="custom-varriant" class="table-based table "> --}}
          <thead>
             <tr>
-               <th class="th1">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
-               <th class="th2">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
-               <th>Giá</th>
-               <th>Số lượng</th>
+               <th class="col-3 th1">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
+               <th class="col-3 th2">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
+               <th class="col-3">Giá</th>
+               <th class="col-3">Số lượng</th>
             </tr>
          </thead>
          <tbody>
+            {{#each product.variations}}
+          <tr>
+            <td class="td1">{{#each this.attributes}}{{#if
+                  @first
+                }}{{this}}{{/if}}{{/each}}</td>
+            <td class="td2">{{#each this.attributes}}{{#if
+                  @last
+                }}{{this}}{{/if}}{{/each}}</td>
+            <td><input type="number" class="form-control tdPrice" value="{{this.price}}"></td>
+            <td><input type="number" class="form-control tdQuantity" value="{{this.quantity}}"></td>
+          </tr>
+        {{/each}}
          </tbody>
       </table>
       {{!-- ------------------------- --}}
@@ -130,3 +142,4 @@
   </div>
 
 </form>
+

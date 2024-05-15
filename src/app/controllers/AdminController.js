@@ -27,35 +27,12 @@ class AdminController {
   // get /product
   product(req, res, next) {
     Product.find({})
-      .populate("idCategory", "idParent")
       .then((products) => {
-        const getAllParent = async (category) => {
-          let parents = [];
-          const findParent = async (inpCategory) => {
-            parents.push(inpCategory);
-            const parent = await Category.findOne({
-              _id: inpCategory.idParent,
-            });
-            if (parent) {
-              await findParent(parent);
-            }
-          };
-          await findParent(category);
-          return parents;
-        };
-        getAllParent(products.idCategory).then((parents) => {
-          products = {
-            ...products.toObject(),
-            category: parents.map((parent) => parent.name).reverse(),
-            brand: parents.length > 1 ? parents.reverse()[1].name : null,
-          };
-          return res.json(products);
-          res.render("admin/products/showProduct", {
-            layout: "admin",
-            js: "admin/showProduct",
-            css: "admin/showProduct",
-            products: multipleMongooseToObject(products),
-          });
+        res.render("admin/products/showProduct", {
+          layout: "admin",
+          js: "admin/showProduct",
+          css: "admin/showProduct",
+          products: multipleMongooseToObject(products),
         });
       })
       .catch(next);
@@ -131,9 +108,9 @@ class AdminController {
   editProduct(req, res, next) {
     Category.find().then((categorys) => {
       Product.findById(req.params.id).then((product) => {
-        const variations = product.variations.map((variations) => {
-          return variations;
-        });
+        // const variations = product.variations.map((variations) => {
+        //   return variations;
+        // });
         const productAttrs = product.variations.map((detail) => {
           return detail.attributes;
         });
@@ -150,14 +127,6 @@ class AdminController {
             }
           }
         });
-        // fat pan phước
-        // return res.json({
-        //   categorys: multipleMongooseToObject(categorys),
-        //   attributes1: attributes1,
-        //   attributes2: attributes2,
-        //   variations: JSON.stringify(variations),
-        // });
-
         res.render("admin/products/editProduct", {
           product: mongooseToObject(product),
           layout: "admin",
@@ -166,11 +135,18 @@ class AdminController {
           categorys: multipleMongooseToObject(categorys),
           attributes1: attributes1,
           attributes2: attributes2,
-          variations: JSON.stringify(variations),
+          // variations: JSON.stringify(variations),
         });
       });
     });
   }
+  // fat pan phước
+  // return res.json({
+  //   categorys: multipleMongooseToObject(categorys),
+  //   attributes1: attributes1,
+  //   attributes2: attributes2,
+  //   variations: JSON.stringify(variations),
+  // });
   // Minh Luân đã từng ghé qua
   // Product.findById(req.params.id).then((product) => {
   //   if (!product) {
