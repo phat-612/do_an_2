@@ -66,7 +66,7 @@ addAttribute1Btn.addEventListener("click", () => {
   secondChild.insertAdjacentHTML("afterend", Attribute1HTML);
   document.querySelectorAll(".variations").forEach(function (input) {
     // bat dau
-    // input.addEventListener("input", createAttri1Row);
+    input.addEventListener("input", createAttri1Row);
     // ket thuc
   });
 });
@@ -86,9 +86,9 @@ addAttribute2Btn.addEventListener("click", () => {
 
   document.querySelectorAll(".variations").forEach(function (input) {
     // bat dau
-    // input.addEventListener("input", createAttri1Row);
-    // ket thuc
+    input.addEventListener("input", createAttri1Row);
   });
+  // ket thuc
 });
 //  ====================================================
 
@@ -147,11 +147,10 @@ function createAttri1Row() {
   tbody.innerHTML = tbodyHTML;
 }
 
-// batdau
-// document.querySelectorAll(".variations").forEach(function (input) {
-//   input.addEventListener("input", createAttri1Row);
-// });
-// ketthuc
+document.querySelectorAll(".variations").forEach(function (input) {
+  input.addEventListener("input", createAttri1Row);
+});
+
 const percentInput = document.getElementById("percentInput");
 const discountStart = document.getElementById("discountStart");
 const discountEnd = document.getElementById("discountEnd");

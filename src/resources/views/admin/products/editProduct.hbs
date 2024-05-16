@@ -83,21 +83,21 @@
          </thead>
          <tbody>
             {{#each product.variations}}
-          <tr>
-            <td class="td1">{{#each this.attributes}}{{#if
-                  @first
-                }}{{this}}{{/if}}{{/each}}<input type="text" class="tdAttribute1" value="{{#each this.attributes}}{{#if
-                  @first
-                }}{{this}}{{/if}}{{/each}}" required hidden></td>
-            <td class="td2">{{#each this.attributes}}{{#if
-                  @last
-                }}{{this}}{{/if}}{{/each}}<input type="text" class="tdAttribute2" value="{{#each this.attributes}}{{#if
-                  @last
-                }}{{this}}{{/if}}{{/each}}" required hidden></td>
-            <td><input type="number" class="form-control tdPrice" value="{{this.price}}"></td>
-            <td><input type="number" class="form-control tdQuantity" value="{{this.quantity}}"></td>
-          </tr>
-        {{/each}}
+               <tr data-bs-id="{{this._id}}" data-bs-sold="{{this.sold}}">
+                  <td class="td1">{{#each this.attributes}}{{#if
+                        @first
+                     }}{{this}}{{/if}}{{/each}}<input type="text" class="tdAttribute1" value="{{#each this.attributes}}{{#if
+                        @first
+                     }}{{this}}{{/if}}{{/each}}" required hidden></td>
+                  <td class="td2">{{#each this.attributes}}{{#if
+                        @last
+                     }}{{this}}{{/if}}{{/each}}<input type="text" class="tdAttribute2" value="{{#each this.attributes}}{{#if
+                        @last
+                     }}{{this}}{{/if}}{{/each}}" required hidden></td>
+                  <td><input type="number" class="form-control tdPrice" value="{{this.price}}" ></td>
+                  <td><input type="number" class="form-control tdQuantity" value="{{this.quantity}}"></td>
+               </tr>
+            {{/each}}
          </tbody>
       </table>
       {{!-- ------------------------- --}}
@@ -128,6 +128,8 @@
             accept="image/*"
             multiple
             name="images"
+            value=""
+            data-bs-datas="{{#each product.images}}{{this}} {{/each}}"
             />
       </div>
       <div class="mb-3">

@@ -24,4 +24,6 @@ router.get("/product", adminController.product);
 // home
 router.get("/", adminController.index);
 
+// newAddProduct
+router.get("/newAddProduct", adminController.newAddProduct);
 module.exports = router;

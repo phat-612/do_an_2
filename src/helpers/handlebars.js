@@ -3,6 +3,8 @@ const querystring = require("querystring");
 const Handlebars = require("handlebars");
 require("dotenv").config();
 const moment = require("moment");
+const { getDiscount } = require("../util/function");
+const { type } = require("os");
 module.exports = {
   sum: (a, b) => a + b,
   minus: (a, b) => a - b,
@@ -79,7 +81,10 @@ module.exports = {
         return status;
     }
   },
-  showDiscount: (discount) => {
+  showTagDiscount: (discount) => {
+    if (typeof discount == "object") {
+      discount = getDiscount(discount);
+    }
     if (discount > 0) {
       return `<p
                 class="position-absolute bg-danger p-1 text-white rounded-end-5"
@@ -296,6 +301,9 @@ module.exports = {
   },
   // code phân trang https://gist.github.com/trantorLiu/5924389
   pagination: (currentPage, totalPage, size, options) => {
+    if (totalPage == 1) {
+      return;
+    }
     var startPage, endPage, context;
     if (arguments.length === 3) {
       options = size;
@@ -343,15 +351,18 @@ module.exports = {
   getPagiUrl: (tempUrl) => {
     let parseUrl = url.parse(tempUrl, true);
     delete parseUrl.query.page;
+    let isEmty = Object.keys(parseUrl.query).length == 0;
     parseUrl.search = querystring.stringify(parseUrl.query);
     let urlPagi = url.format(parseUrl);
+    if (isEmty) {
+      urlPagi = `${urlPagi}?`;
+    }
     return urlPagi;
   },
   getSortUrl: (tempUrl) => {
     let parseUrl = url.parse(tempUrl, true);
     delete parseUrl.query.column;
     delete parseUrl.query.type;
-    console.log(parseUrl.query._sort);
     if (parseUrl.query._sort == undefined) {
       parseUrl.query._sort = "";
     }

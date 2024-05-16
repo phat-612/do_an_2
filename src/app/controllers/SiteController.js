@@ -1,7 +1,7 @@
 const Category = require("../models/Category");
 const Product = require("../models/Product");
 
-const { getDiscount } = require("../../util/function");
+const { getDiscount, getDataPagination } = require("../../util/function");
 
 class SiteController {
   index(req, res, next) {
@@ -50,6 +50,7 @@ class SiteController {
   }
   category(req, res, next) {
     let slugCategory;
+    const url = req.url;
     const rootCategory = req.params.slugCategory;
     if (req.params[0]) {
       slugCategory = req.params[0]
@@ -59,6 +60,7 @@ class SiteController {
     } else {
       slugCategory = req.params.slugCategory;
     }
+
     Category.findOne({ slug: slugCategory }).then((category) => {
       if (!category || category == null) {
         return next();
@@ -72,13 +74,32 @@ class SiteController {
             },
           })
             .findable(req)
-            .sortable(req),
-        ]).then(([categories, products]) => {
+            .paginate(req),
+          Product.find({
+            idCategory: {
+              $in: ids,
+            },
+          }).findable(req),
+        ]).then(([categories, products, dataPagi]) => {
+          let [currentPage, totalPage, countChild] = getDataPagination(
+            dataPagi,
+            req
+          );
           const subCategories = categories.map((category) => ({
             name: category.name,
             slug: category.slug,
           }));
           products = products.map((product) => product.toObject());
+          return res.send({
+            products,
+            subCategories,
+            rootCategory,
+            path: req.originalUrl,
+            pathName: req._parsedUrl.pathname,
+            currentPage,
+            totalPage,
+            url,
+          });
           res.render("user/products/show", {
             js: "user/showProducts",
             products,
@@ -86,6 +107,9 @@ class SiteController {
             rootCategory,
             path: req.originalUrl,
             pathName: req._parsedUrl.pathname,
+            currentPage,
+            totalPage,
+            url,
           });
         });
       });
@@ -208,28 +232,20 @@ class SiteController {
   search(req, res, next) {
     const url = req.url;
     Promise.all([
-      Product.find({}).findable(req).sortable(req).paginate(req).exec(),
-      Product.find({}).findable(req).sortable(req).exec(),
+      Product.find({}).findable(req).paginate(req).exec(),
+      Product.find({}).findable(req).exec(),
     ]).then(([products, dataPagi]) => {
-      let countProduct = dataPagi.length;
-      let currentPage = parseInt(req.query.page) || 1;
-      let limit = parseInt(req.query.limit) || 16;
-      let totalPage =
-        countProduct % limit === 0
-          ? countProduct / limit
-          : Math.floor(countProduct / limit) + 1;
+      let [currentPage, totalPage, countChild] = getDataPagination(
+        dataPagi,
+        req
+      );
       return res.render("user/products/search", {
         products: products.map((product) => product.toObject()),
-        countProduct,
+        countProduct: countChild,
         currentPage,
         totalPage,
         url,
       });
-    });
-  }
-  test(req, res, next) {
-    Category.getAllProductsInCategory().then((categories) => {
-      res.json(categories);
     });
   }
 }

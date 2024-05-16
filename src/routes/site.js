@@ -11,7 +11,6 @@ const {
 router.get("/login", isLoggedIn, siteController.login);
 router.get("/signUp", isLoggedIn, siteController.signUp);
 router.get("/logout", siteController.logout);
-router.get("/test", siteController.test);
 router.get("/search", siteController.search);
 router.get("/product/:slugProduct/:slugVariation?", siteController.product);
 router.get("/:slugCategory", siteController.category);

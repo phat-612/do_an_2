@@ -28,15 +28,6 @@ const Product = new Schema(
   { timestamps: true }
 );
 // sortable
-Product.query.sortable = function (req) {
-  if (req.query.hasOwnProperty("_sort")) {
-    const isValidType = ["asc", "desc"].includes(req.query.type);
-    return this.sort({
-      [req.query.column]: isValidType ? req.query.type : "desc",
-    });
-  }
-  return this;
-};
 // page navigation
 Product.query.paginate = function (req) {
   const page = parseInt(req.query.page) || 1;
@@ -44,6 +35,7 @@ Product.query.paginate = function (req) {
   const skip = (page - 1) * limit;
   return this.skip(skip).limit(limit);
 };
+// findable
 Product.query.findable = function (req) {
   if (req.query.hasOwnProperty("_find")) {
     let searchQuery = req.query.q;

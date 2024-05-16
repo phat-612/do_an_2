@@ -374,5 +374,13 @@ class AdminController {
         });
       });
   }
+  // --------------------------------------------------newAddProduct----------------------
+  newAddProduct(req, res, next) {
+    res.render("admin/products/newAddProduct", {
+      layout: "admin",
+      js: "admin/newAddProduct",
+    });
+  }
+  // --------------------------------------------------newAddProduct----------------------
 }
 module.exports = new AdminController();
