@@ -1,24 +1,40 @@
-const data = {
-  labels: ["Đơn Đã Giao Hàng", "Đơn Chờ Xác Nhận", "Đang Vận Chuyển", "Đã Hủy"],
-  datasets: [
-    {
-      label: "My First Dataset",
-      data: [25, 25, 30, 20],
-      backgroundColor: [
-        "rgb(25, 135, 84)",
-        "rgb(255, 193, 7)",
-        "rgb(220, 53, 69)",
-        "rgb(200, 10, 20)",
-      ],
-      hoverOffset: 4,
-    },
-  ],
+window.onload = function () {
+  countStatus();
 };
 
-new Chart("chart", {
-  type: "doughnut",
-  data: data,
-});
+function countStatus() {
+  let countFailed = $(".failed").length;
+  let countCancel = $(".cancel").length;
+  let countPending = $(".pending").length;
+  let countSuccess = $(".success").length;
+
+  const data = {
+    labels: [
+      "Đơn Đã Giao Hàng",
+      "Đơn Chờ Xác Nhận",
+      "Đơn Hàng Thất Bại",
+      "Đã Hủy",
+    ],
+    datasets: [
+      {
+        label: "My First Dataset",
+        data: [countSuccess, countPending, countFailed, countCancel],
+        backgroundColor: [
+          "rgb(25, 135, 84)",
+          "rgb(255, 193, 7)",
+          "rgb(220, 53, 69)",
+          "rgb(200, 10, 20)",
+        ],
+        hoverOffset: 4,
+      },
+    ],
+  };
+
+  new Chart("chart", {
+    type: "doughnut",
+    data: data,
+  });
+}
 
 // giới hạn ngày nhập =================================================================
 

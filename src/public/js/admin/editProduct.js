@@ -54,10 +54,6 @@ document
     });
   });
 
-let dataIMG = $("#multiImageUpload").attr("data-bs-datas");
-let datas = dataIMG.trim().split(" ");
-for (var i = 0; i < datas.length; i++) {}
-
 //   ==========================================================================================================================================================
 
 // Nút thêm thuộc tính 1
