@@ -127,18 +127,17 @@
             id="multiImageUpload"
             accept="image/*"
             multiple
-            name="newImages"
+            name="images"
             value=""
             data-bs-datas="{{#each product.images}}{{this}} {{/each}}"
             />
       </div>
       <div class="mb-3">
          <p>Danh sách Ảnh :</p>
-         <div id="multiImagePreview" class="row"></div>
-         <div id="multiImagePreviewOld" class="row">
+         <div id="multiImagePreview" class="row">
             {{#each product.images}}
                <img src="/img/uploads/{{this}}" class="col-3 oldImg" />
-               <input type="text" value="{{this}}" name="oldImages[{{@index}}]" hidden>
+               <input type="text" value="{{this}}" name="images[{{@index}}]" hidden>
             {{/each}}
          </div>
       </div>

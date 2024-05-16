@@ -11,7 +11,6 @@ let historyImages;
 document
   .getElementById("multiImageUpload")
   .addEventListener("change", function (event) {
-    document.getElementById("multiImageUploadOld").classList.add("hidden");
     var fileInput = document.getElementById("multiImageUpload");
     var files = fileInput.files;
     // Số lượng tệp tối đa được phép tải lên
