@@ -12,16 +12,42 @@ class AdminController {
   // get /
   index(req, res, next) {
     Product.find({}).then((products) => {
-      Order.find({}).then((orders) => {
-        res.render("admin/sites/home", {
-          layout: "admin",
-          js: "admin/home",
-          css: "admin/home",
-          orders: multipleMongooseToObject(orders),
-          products: multipleMongooseToObject(products),
+      // Lấy tất cả đơn hàng
+      return Order.find({}).then((orders) => {
+        // Sử dụng aggregation framework của MongoDB để lấy sản phẩm có sold lớn nhất
+        return Product.aggregate([
+          { $unwind: "$variations" }, // Giải nén mảng variations
+          { $sort: { "variations.sold": -1 } }, // Sắp xếp theo số lượng sold giảm dần
+          { $limit: 3 }, // Giới hạn kết quả để chỉ lấy sản phẩm có sold lớn nhất
+        ]).then((productWithMaxSold) => {
+          res.render("admin/sites/home", {
+            layout: "admin",
+            js: "admin/home",
+            css: "admin/home",
+            orders: multipleMongooseToObject(orders),
+            products: multipleMongooseToObject(products),
+            productWithMaxSold: productWithMaxSold,
+          });
         });
       });
     });
+    // Product.find({}).then((products) => {
+    //   Order.find({}).then((orders) => {
+    //     const productWithMaxSold = Product.aggregate([
+    //       { $unwind: "$variations" },
+    //       { $sort: { "variations.sold": -1 } },
+    //       { $limit: 1 },
+    //     ]);
+    //     res.render("admin/sites/home", {
+    //       layout: "admin",
+    //       js: "admin/home",
+    //       css: "admin/home",
+    //       orders: multipleMongooseToObject(orders),
+    //       products: multipleMongooseToObject(products),
+    //       productWithMaxSold: productWithMaxSold[0],
+    //     });
+    //   });
+    // });
   }
 
   // get /product
