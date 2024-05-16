@@ -64,7 +64,12 @@ class ApiController {
   }
   //cập nhật sản phẩm
   updateProduct(req, res, next) {
-    res.json(req.body);
+    const newImages = req.body.newImages;
+    const dataOldIMG = req.body.oldImages;
+    const oldImages = dataOldIMG.map((image) => {
+      return image.replace(/^\d+-/, "");
+    });
+    res.json(req.body, newImages, oldImages);
   }
 
   removeProduct(req, res, next) {

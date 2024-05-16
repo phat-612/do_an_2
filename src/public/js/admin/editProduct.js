@@ -7,9 +7,11 @@ function deleteAttribute(event) {
 }
 
 // ===================================== ảnh
+let historyImages;
 document
   .getElementById("multiImageUpload")
   .addEventListener("change", function (event) {
+    document.getElementById("multiImageUploadOld").classList.add("hidden");
     var fileInput = document.getElementById("multiImageUpload");
     var files = fileInput.files;
     // Số lượng tệp tối đa được phép tải lên
@@ -30,6 +32,7 @@ document
       };
       previewContainer.appendChild(preview);
     });
+    // sự kiện xóa ảnh
     document.querySelectorAll("#multiImagePreview img").forEach((preview) => {
       preview.addEventListener("click", function (event) {
         let isDelete = confirm("Bạn có chắc chắn muốn xóa ảnh này không ?");
@@ -53,8 +56,8 @@ document
   });
 
 let dataIMG = $("#multiImageUpload").attr("data-bs-datas");
-let dataIMGArray = [];
-let data = dataIMG.split(" ");
+let datas = dataIMG.trim().split(" ");
+for (var i = 0; i < datas.length; i++) {}
 
 //   ==========================================================================================================================================================
 
