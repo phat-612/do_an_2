@@ -63,7 +63,7 @@ class AdminController {
       })
       .catch(next);
   }
-  //get /product/addproduct
+  // get /product/addproduct
   addPro(req, res, next) {
     Category.find().then((categorys) => {
       res.render("admin/products/addProduct", {

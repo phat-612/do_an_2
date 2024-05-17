@@ -47,7 +47,7 @@
       {{#each orders}}<p hidden class="{{this.status}}">{{this.status}}</p>{{/each}}
     </div>
     <div class="col">
-      <div class="row">
+      <div class="row mt-4">
         <h3>Phân Loại Sản Phẩm Bán Chạy:</h3>
         {{#each productWithMaxSold}}
           <div class="col-4">
@@ -55,7 +55,7 @@
               <img src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}" class="card-img-top">
               <div class="card-body">
                 <h5 class="card-title">{{this.name}}</h5>
-                <p class="card-text">{{#each this.variations.attributes}}{{this}}{{/each}}</p>
+                <p class="card-text">Phân Loại: {{#each this.variations.attributes}}{{this}} {{/each}}</p>
               </div>
             </div>
           </div>

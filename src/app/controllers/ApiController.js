@@ -68,7 +68,7 @@ class ApiController {
   }
 
   removeProduct(req, res, next) {
-    console.log(req.body);
+    res.json(req.body);
   }
 
   storeCategory(req, res, next) {

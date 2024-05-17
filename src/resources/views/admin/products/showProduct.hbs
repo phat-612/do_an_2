@@ -61,19 +61,24 @@
           <tr>
             <td>{{this.name}}</td>
             <td><img src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}"/></td>
-            <td>{{this.category}}</td>
+            <td>{{this.parentCategoryNames}}</td>
             <td>
               <div class="row">
-                <div class="col-4"> <a class="btn btn-primary" href="/admin/product/{{this._id}}/detail"><i
-                class="bi bi-eye"
-              ></i></a></div>
-                <div class="col-4"><a class="btn btn-warning" href="/admin/product/{{this._id}}/edit"><i
-                class="bi bi-wrench"
-              ></i></a></div>
-                <div class="col-4"> <form action="/api/removeProduct">
-                <input type="text" name="id" value="{{this._id}}" hidden>
-                <Button type="submit" class="btn btn-danger "><i class="bi bi-trash"></i></Button>
-              </form></div>
+                <div class="col-4">
+                  <a class="btn btn-primary" href="/admin/product/{{this._id}}/detail">
+                    <i class="bi bi-eye"></i>
+                  </a>
+                </div>
+                <div class="col-4">
+                  <a class="btn btn-warning" href="/admin/product/{{this._id}}/edit">
+                  <i class="bi bi-wrench"></i>
+              </a>
+              </div>
+                <div class="col-4"> 
+                  <form action="/admin/api/removeProduct">
+                    <input type="text" name="id" value="{{this._id}}" hidden>
+                    <Button type="submit" class="btn btn-danger "><i class="bi bi-trash"></i></Button>
+                  </form></div>
               </div>
             </td>
           </tr>
@@ -81,6 +86,7 @@
     </tbody>
   </table>
 </div>
+
 <div class="pagination">
   <nav aria-label="Page navigation example">
     <ul class="pagination">
@@ -102,21 +108,3 @@
     </ul>
   </nav>
 </div>
-
-
-
-
-{{!-- <td>{{this.name}}</td>
-          <td><img src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}" /></td>
-          <td>{{this.brand}}</td>
-          <td>24.000.000</td> 
-          <td>99</td>
-          <td>
-            <a class="btn btn-dark" href="/admin/product/{{this._id}}/detail"><i
-                class="bi bi-eye"
-              ></i></a>
-            <a class="btn btn-dark" href="/admin/product/{{this._id}}/edit"><i
-                class="bi bi-wrench"
-              ></i></a>
-            <Button class="btn btn-dark"><i class="bi bi-trash"></i></Button>
-          </td> --}}

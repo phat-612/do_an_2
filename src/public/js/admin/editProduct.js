@@ -32,25 +32,22 @@ document
       previewContainer.appendChild(preview);
     });
     // sự kiện xóa ảnh
-    document.querySelectorAll("#multiImagePreview img").forEach((preview) => {
-      preview.addEventListener("click", function (event) {
-        let isDelete = confirm("Bạn có chắc chắn muốn xóa ảnh này không ?");
-        if (!isDelete) return;
-        let indDelete =
-          event.target.classList[event.target.classList.length - 1];
-        let fileArray = Array.from(
-          document.getElementById("multiImageUpload").files
-        );
-        fileArray.splice(indDelete, 1);
-        let dataTransfer = new DataTransfer();
-        fileArray.forEach((file) => {
-          dataTransfer.items.add(file);
-        });
-        document.getElementById("multiImageUpload").files = dataTransfer.files;
-        document
-          .getElementById("multiImageUpload")
-          .dispatchEvent(new Event("change"));
+    $("img").on("click", function (event) {
+      let isDelete = confirm("Bạn có chắc chắn muốn xóa ảnh này không ?");
+      if (!isDelete) return;
+      let indDelete = event.target.classList[event.target.classList.length - 1];
+      let fileArray = Array.from(
+        document.getElementById("multiImageUpload").files
+      );
+      fileArray.splice(indDelete, 1);
+      let dataTransfer = new DataTransfer();
+      fileArray.forEach((file) => {
+        dataTransfer.items.add(file);
       });
+      document.getElementById("multiImageUpload").files = dataTransfer.files;
+      document
+        .getElementById("multiImageUpload")
+        .dispatchEvent(new Event("change"));
     });
   });
 
