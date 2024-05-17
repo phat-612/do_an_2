@@ -75,8 +75,8 @@
               </a>
               </div>
                 <div class="col-4"> 
-                  <form action="/admin/api/removeProduct">
-                    <input type="text" name="id" value="{{this._id}}" hidden>
+                  <form action="/api/removeProduct" method="post">
+                    <input type="text" name="_id" value="{{this._id}}" hidden>
                     <Button type="submit" class="btn btn-danger "><i class="bi bi-trash"></i></Button>
                   </form></div>
               </div>

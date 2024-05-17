@@ -17,6 +17,7 @@ const validator = require("email-validator");
 // ------------------------
 require("dotenv").config();
 const { sortObject } = require("../../util/function");
+const { response } = require("express");
 
 class ApiController {
   // api user,admin
@@ -69,7 +70,28 @@ class ApiController {
   }
 
   removeProduct(req, res, next) {
-    res.json(req.body);
+    Product.findOne(req.body).then((product) => {
+      const hasNonZeroSold = product.variations.some(
+        (variation) => variation.sold !== 0
+      ); // kiểm tra xem có ít nhất một phần tử trong mảng thỏa mãn một điều kiện nào đó hay không.
+      // Nó trả về true nếu có ít nhất một phần tử thỏa mãn điều kiện và false nếu không có phần tử nào thỏa mãn điều kiện.
+      if (!hasNonZeroSold) {
+        // Nếu tất cả các biến thể đều có sold là 0, xóa sản phẩm
+        product.deleteOne({ _id: req.body }).then(() => {
+          req.flash("message", {
+            type: "success",
+            message: "Sản Phẩm đã được xóa thành công!",
+          });
+          res.redirect("back");
+        });
+      } else {
+        req.flash("message", {
+          type: "danger",
+          message: "Không thể xóa SP này vì SP này có trong Đơn Hàng",
+        });
+        return res.redirect("back");
+      }
+    });
   }
 
   storeCategory(req, res, next) {
