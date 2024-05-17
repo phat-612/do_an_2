@@ -136,7 +136,7 @@
          <p>Danh sách Ảnh :</p>
          <div id="multiImagePreview" class="row">
             {{#each product.images}}
-               <img src="/img/uploads/{{this}}" class="col-3 oldImg" />
+               <img src="/img/uploads/{{this}}" class="img-fluid col-md-4 mb-3 w-25 {{@index}}" />
                <input type="text" value="{{this}}" name="images[{{@index}}]" hidden>
             {{/each}}
          </div>

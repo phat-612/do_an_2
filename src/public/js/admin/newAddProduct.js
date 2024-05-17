@@ -64,4 +64,90 @@ percentInput.addEventListener("input", checkExistValue);
 
 // xử lý phân loại
 
-// tên thuộc tính 1
+$("#inpNameAttributePro1").on("input", (e) => {
+  let value = e.target.value;
+  $(".th1").text(value);
+});
+$("#inpNameAttributePro2").on("input", (e) => {
+  let value = e.target.value;
+  $(".th2").text(value);
+});
+
+// Nút thêm giá trị
+$(".btnAddValue1").on("click", function () {
+  let html = `
+  <div class="row my-2 attri1-box">
+    <input
+      type="text"
+      placeholder="Giá trị"
+      class="valueAttr1 form-control col mx-2 variations"
+      oninput="handleInpValue(1,event)"
+    />
+    <button
+      type="button"
+      class="btn btn-danger col-2"
+      onclick="deleteValue(event)"
+    >Xóa</button>
+  </div>`;
+  $(".areaInpValue1").prepend(html);
+});
+$(".btnAddValue2").on("click", function () {
+  let html = `
+  <div class="row my-2 attri1-box">
+    <input
+      type="text"
+      placeholder="Giá trị"
+      class="valueAttr2 form-control col mx-2 variations"
+      oninput="handleInpValue(2,event)"
+    />
+    <button
+      type="button"
+      class="btn btn-danger col-2"
+      onclick="deleteValue(event)"
+    >Xóa</button>
+  </div>`;
+  $(".areaInpValue2").prepend(html);
+});
+// thêm giá trị vào bảng
+function handleInpValue(valAttr, event) {
+  let attr = valAttr;
+  let row = $(event.target.closest(".row"));
+  let indInp = $(row.parent()).find(".row").length - $(row).index() - 1;
+  let valueInp = event.target.value;
+  console.log(attr, indInp);
+  if ((attr = 1)) {
+    let rowTable = $("tbody").children().eq(indInp);
+    console.log(rowTable.length);
+    if (rowTable.length == 0) {
+      let html = genRowTable(
+        valueInp,
+        "",
+        `quantity1[${indInp}]`,
+        `price1[${indInp}]`
+      );
+      $("tbody").children().eq(indInp).append(html);
+    }
+  }
+}
+function deleteValue(event) {
+  event.target.closest(".row").remove();
+}
+function deleteVariation(event) {
+  let row = $(event.target.closest(".row"));
+  row.find("input").val(0);
+}
+function genRowTable(td1, td2, nameInpQuantity, nameInpPrice) {
+  return `
+  <tr>
+    <td>${td1}</td>
+    <td>${td2}</td>
+    <td><input type="number" name="${nameInpQuantity}" /></td>
+    <td><input type="number" name="${nameInpPrice}" /></td>
+    <td><button
+        type="button"
+        onclick="deleteVariation(event)"
+        class="btn btn-danger"
+      >Xóa phân loại</button></td>
+  </tr>
+  `;
+}

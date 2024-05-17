@@ -21,7 +21,7 @@ document
       document.getElementById("multiImageUpload").files = dataTransfer.files;
     }
     var previewContainer = document.getElementById("multiImagePreview");
-    previewContainer.innerHTML = ""; // Clear existing previews
+    // previewContainer.innerHTML = "";
     Array.from(event.target.files).forEach((file, ind) => {
       var preview = document.createElement("img");
       preview.src = URL.createObjectURL(file);

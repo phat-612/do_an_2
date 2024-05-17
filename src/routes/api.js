@@ -48,6 +48,8 @@ router.post(
 );
 router.delete("/warranty/:slugWarranty", apiController.deleteWarranty);
 router.put("/warranty/:id", apiController.updateWarranty);
+//banner
+router.post("/storeBanner", upload.array("images"), apiController.storeBanner);
 // category
 router.delete("/category/:slugCategory", apiController.deleteCategory);
 router.post("/storeCategory", apiController.storeCategory);

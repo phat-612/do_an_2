@@ -76,7 +76,7 @@ class AdminController {
   }
   // banner
   banner(req, res) {
-    res.render("admin/sites/banner", { layout: "admin" });
+    res.render("admin/sites/banner", { layout: "admin", js: "admin/banner" });
   }
   // get /product/detail
   detail(req, res, next) {

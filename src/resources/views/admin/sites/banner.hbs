@@ -1,35 +1,83 @@
-<div class="container">
-  <h2 class="text-center my-4">Quản Lý Banner</h2>
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>STT</th>
-        <th>Tên Banner</th>
-        <th>Banner</th>
-        <th>Trạng thái</th>
-        <th>Hành động</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td>Cellphones</td>
-        <td>
-          <img
-            src="https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/Sliding-690x300_KT%20BP_B%C4%90%20(1).jpg"
-            alt="Banner 1"
-            height="100"
-            width="200"
-          />
-        </td>
-        <td>Hoạt động</td>
-        <td>
-          <button type="button" class="btn btn-success">Thêm</button>
-          <button type="button" class="btn btn-warning">Sửa</button>
-          <button type="button" class="btn btn-danger">Xóa</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div class="container py-5">
+  <div class="row">
+    <div class="col-sm-12">
+      <h2 class="text-center my-4">Quản Lý Banner</h2>
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-toggle="modal"
+        data-target="#bannerModal"
+      >Thêm Banner</button>
 
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="bannerModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="bannerModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="bannerModalLabel">Thêm Banner</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Form thêm banner ở đây
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >Đóng</button>
+              <button type="button" class="btn btn-primary">Lưu</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Tên Banner</th>
+            <th>Banner</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Cellphones</td>
+            <td>
+              <img
+                src="https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/Sliding-690x300_KT%20BP_B%C4%90%20(1).jpg"
+                alt="Banner 1"
+                height="100"
+                width="200"
+                class="img-fluid rounded"
+              />
+            </td>
+            <td>Hoạt động</td>
+            <td>
+              <button type="button" class="btn btn-success">Sửa</button>
+              <button type="button" class="btn btn-dark">Xóa</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
 </div>

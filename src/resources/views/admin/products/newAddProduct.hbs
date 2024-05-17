@@ -49,19 +49,22 @@
         <div class="col-md-6 my-3" id="inputAttribute1Div">
           <button
             type="button"
-            class="btn btn-success form-control addAttribute1-btn"
-          >Thêm Thuộc Tính</button>
-          <div class="row my-2 attri1-box">
-            <input
-              type="text"
-              placeholder="Giá trị"
-              class="valueAttr1 form-control col mx-2 variations"
-            />
-            <button
-              type="button"
-              class="btn btn-danger col-2"
-              onclick="deleteAttribute(event)"
-            >Xóa</button>
+            class="btn btn-success form-control btnAddValue1"
+          >Thêm giá trị</button>
+          <div class="areaInpValue1">
+            <div class="row my-2 attri1-box">
+              <input
+                type="text"
+                placeholder="Giá trị"
+                class="valueAttr1 form-control col mx-2 variations"
+                oninput="handleInpValue(1,event)"
+              />
+              <button
+                type="button"
+                class="btn btn-danger col-2"
+                onclick="deleteValue(event)"
+              >Xóa</button>
+            </div>
           </div>
         </div>
       </div>
@@ -86,19 +89,22 @@
         <div class="col-md-6 my-3" id="inputAttribute2Div">
           <button
             type="button"
-            class="btn btn-success form-control addAttribute2-btn"
-          >Thêm Thuộc Tính</button>
-          <div class="row my-2">
-            <input
-              type="text"
-              placeholder="Giá trị"
-              class="valueAttr2 form-control col mx-2 variations"
-            />
-            <button
-              type="button"
-              onclick="deleteAttribute(event)"
-              class="btn btn-danger col-2"
-            >Xóa</button>
+            class="btn btn-success form-control btnAddValue2"
+          >Thêm giá trị</button>
+          <div class="areaInpValue2">
+            <div class="row my-2">
+              <input
+                type="text"
+                placeholder="Giá trị"
+                class="valueAttr2 form-control col mx-2 variations"
+                oninput="handleInpValue(2,event)"
+              />
+              <button
+                type="button"
+                onclick="deleteValue(event)"
+                class="btn btn-danger col-2"
+              >Xóa</button>
+            </div>
           </div>
         </div>
       </div>
@@ -111,9 +117,11 @@
           <th class="th2"></th>
           <th>Giá</th>
           <th>Số lượng</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
+
       </tbody>
     </table>
 

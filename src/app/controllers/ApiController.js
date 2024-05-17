@@ -3,6 +3,7 @@ const Warranty = require("../models/Warranty");
 const Product = require("../models/Product");
 const UserLogin = require("../models/UserLogin");
 const User = require("../models/User");
+const Banner = require("../models/Banner");
 const Cart = require("../models/Cart");
 const Order = require("../models/Order");
 const fs = require("fs");
@@ -744,6 +745,12 @@ class ApiController {
       return res.redirect(urlPayment);
     });
   }
+  //quan ly banner
+  storeBanner(req, res) {
+    res.send(req.body);
+  }
+
+  // trang order
   changeStatus(req, res) {
     Order.findOne({ _id: req.params.id }).then((order) => {
       order.status = req.body.status;
