@@ -8,6 +8,9 @@ router.get("/accessProviders", adminController.accessProviders);
 
 //get category
 router.get("/category", adminController.category);
+// banner
+router.get("/banner", adminController.banner);
+
 //get order
 router.get("/order", adminController.order);
 router.get("/order/:id/detail", adminController.orderDetail);

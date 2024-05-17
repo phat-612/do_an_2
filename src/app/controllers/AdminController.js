@@ -74,6 +74,10 @@ class AdminController {
       });
     });
   }
+  // banner
+  banner(req, res) {
+    res.render("admin/sites/banner", { layout: "admin" });
+  }
   // get /product/detail
   detail(req, res, next) {
     Product.findById(req.params.id)
