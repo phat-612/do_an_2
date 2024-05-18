@@ -7,7 +7,7 @@ function deleteAttribute(event) {
 }
 
 // ===================================== ảnh
-let historyImages;
+let historyImages = [];
 document
   .getElementById("multiImageUpload")
   .addEventListener("change", function (event) {
