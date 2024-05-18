@@ -1,83 +1,131 @@
-<div class="container py-5">
+<div class="container  py-5">
   <div class="row">
     <div class="col-sm-12">
       <h2 class="text-center my-4">Quản Lý Banner</h2>
+      <div class="one-quarter text-end" id="switch">
+          <input type="checkbox" class="checkbox" id="chk" />
+          <label class="label" for="chk">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+            <div class="ball"></div>
+          </label>
+        </div>
       <button
         type="button"
-        class="btn btn-primary"
-        data-toggle="modal"
-        data-target="#bannerModal"
+        class="btn btn-success"
+        data-bs-toggle="modal"
+        data-bs-target="#addBannerModal"
       >Thêm Banner</button>
 
-      <!-- Modal -->
-      <div
-        class="modal fade"
-        id="bannerModal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="bannerModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="bannerModalLabel">Thêm Banner</h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              Form thêm banner ở đây
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-dismiss="modal"
-              >Đóng</button>
-              <button type="button" class="btn btn-primary">Lưu</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <table class="table table-bordered table-striped">
+      <table class="table table-bordered table-striped mt-4">
         <thead>
           <tr>
             <th>STT</th>
             <th>Tên Banner</th>
             <th>Banner</th>
+            <th>Thời gian tạo</th>
             <th>Trạng thái</th>
             <th>Hành động</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Cellphones</td>
-            <td>
-              <img
-                src="https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/Sliding-690x300_KT%20BP_B%C4%90%20(1).jpg"
-                alt="Banner 1"
-                height="100"
-                width="200"
-                class="img-fluid rounded"
-              />
-            </td>
-            <td>Hoạt động</td>
-            <td>
-              <button type="button" class="btn btn-success">Sửa</button>
-              <button type="button" class="btn btn-dark">Xóa</button>
-            </td>
-          </tr>
+          {{#each banners}}
+          <form id="changeStatus-{{this._id}}" action="/api/changeBanner/{{this._id}}">
+            <tr>
+              <th scope="row">{{sum @index 1}}</th>
+              <td>{{this.name}}</td>
+              <td>
+                <img src="/img/uploads/{{this.image}}" alt="" class="w-25" />
+              </td>
+              <td>{{formatDate this.createdAt "DD/MM/YYYY"}}</td>
+              <td>
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input changeStatus"
+                    data-formid="changeStatus-{{this._id}}"
+                    name="status"
+                    type="checkbox"
+                    role="switch"
+                    id="flexSwitchCheckDefault"
+                    value="{{this.status}}"
+                    {{#if this.status}}checked{{/if}}
+                  />
+                  <label
+                    class="form-check-label"
+                    for="flexSwitchCheckDefault"
+                  ></label>
+                </div>
+
+              </td>
+
+              <td>
+                <button type="button" class="btn btn-success">Sửa</button>
+                <button type="button" class="btn btn-dark">Xóa</button>
+              </td>
+            </tr>
+          </form>
+          {{/each}}
         </tbody>
       </table>
-    </div>
+      <!-- Add Banner Modal -->
+      <div
+        class="modal fade"
+        id="addBannerModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="addBannerModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addBannerModalLabel">Thêm Banner</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
 
+            <form
+              id="addBanner"
+              method="post"
+              action="/api/storeBanner"
+              enctype="multipart/form-data"
+            >
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="banner-name" class="col-form-label">Tên Banner:</label>
+                  <input
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    id="banner-name"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="banner-image" class="col-form-label">Ảnh Banner:</label>
+                  <input
+                    type="file"
+                    name="image"
+                    class="form-control"
+                    id="banner-image"
+                  />
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >Đóng</button>
+                <input type="submit" class="btn btn-primary" value="Lưu" />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

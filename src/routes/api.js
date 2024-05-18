@@ -8,6 +8,7 @@ const {
   userLogin,
   isLoggedIn,
 } = require("../app/middlewares/authMiddleware");
+const multer = require("multer");
 // account
 router.post("/signUp", apiController.signUp);
 router.post("/login", apiController.login);
@@ -38,7 +39,7 @@ router.post(
   upload.array("images"),
   apiController.updateProduct
 );
-///////////////////
+///////////////////phân quyền
 router.put("/accessProviders/:id", apiController.changeHierarchy);
 // warranty
 router.post(
@@ -49,7 +50,8 @@ router.post(
 router.delete("/warranty/:slugWarranty", apiController.deleteWarranty);
 router.put("/warranty/:id", apiController.updateWarranty);
 //banner
-router.post("/storeBanner", upload.array("images"), apiController.storeBanner);
+router.post("/storeBanner", upload.array("image"), apiController.storeBanner);
+router.post("changeBanner/:id", apiController.changeBanner);
 // category
 router.delete("/category/:slugCategory", apiController.deleteCategory);
 router.post("/storeCategory", apiController.storeCategory);
@@ -57,5 +59,6 @@ router.put("/category/:id", apiController.updateCategory);
 
 // dành cho test
 router.post("/testAddProduct", apiController.testAddProduct);
+router.post("/testSeeBody", upload.array("images"), apiController.testSeeBody);
 
 module.exports = router;

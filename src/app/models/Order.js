@@ -49,4 +49,11 @@ Order.query.filterable = function (req) {
   }
   return this;
 };
+// page navigation
+Order.query.paginate = function (req) {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 16;
+  const skip = (page - 1) * limit;
+  return this.skip(skip).limit(limit);
+};
 module.exports = mongoose.model("Order", Order);

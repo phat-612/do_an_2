@@ -81,6 +81,22 @@ module.exports = {
         return status;
     }
   },
+  showStatusWarranty: (status) => {
+    switch (status) {
+      case "pending":
+        return "Chờ xác nhận";
+      case "success":
+        return "Thành công";
+      case "cancel":
+        return "Đã hủy";
+      case "shipping":
+        return "Đang vận chuyển";
+      case "failed":
+        return "Thất bại";
+      default:
+        return status;
+    }
+  },
   showTagDiscount: (discount) => {
     if (typeof discount == "object") {
       discount = getDiscount(discount);

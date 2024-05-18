@@ -27,44 +27,52 @@
       {{/each}}
     </select>
 
-
     {{! -------------------------------- }}
     <label for="brandDataList" class="form-label fs-4 mt-3">Thuộc Tính</label>
+    <p class="text-danger">
+      * Vui lòng nhập thuộc tính 1 trước
+      <br />
+      * Sản phẩm không kinh doanh sẽ có giá và số lượng là 0
+      <br />
+    </p>
+
     <div class="w-75 container-sm py-4 my-4 border rounded">
       <div class="row">
         <div class="col-md-6">
-          <label for="ipNameAttributePro1" class="form-label fs-5">Nhập Tên
-            Thuộc tính</label>
+          <label for="ipNameAttributePro1" class="form-label fs-5">Thuộc tính 1</label>
         </div>
         <div class="col-md-6">
           <input
             type="text"
             id="inpNameAttributePro1"
             class="form-control variations"
-            placeholder=" Nhập Tên Thuộc tính"
+            placeholder=" Tên Thuộc tính"
             required
           />
         </div>
         <div class="col-md-6 my-3">
-          <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
+          <label for="" class="form-label fs-5">Giá trị</label>
         </div>
         <div class="col-md-6 my-3" id="inputAttribute1Div">
           <button
             type="button"
-            class="btn btn-success form-control addAttribute1-btn"
-          >Thêm Thuộc Tính</button>
-          <div class="row my-2 attri1-box">
-            <input
-              type="text"
-              placeholder="Nhập Thuộc Tính"
-              class="thuocTinh1 form-control col mx-2 variations"
-              required
-            />
-            <button
-              type="button"
-              class="btn btn-danger col-2"
-              onclick="deleteAttribute(event)"
-            >Xóa</button>
+            class="btn btn-success form-control btnAddValue1"
+          >Thêm giá trị</button>
+          <div class="areaInpValue1">
+            <div class="row my-2 attri1-box">
+              <input
+                type="text"
+                placeholder="Giá trị"
+                class="valueAttr1 form-control col mx-2 variations"
+                oninput="handleInpValue(1,event)"
+              />
+              <button
+                type="button"
+                class="btn btn-danger col-2"
+                onclick="deleteValue(1,event)"
+                disabled
+              >Xóa</button>
+            </div>
           </div>
         </div>
       </div>
@@ -73,36 +81,39 @@
     <div class="w-75 container-sm py-4 my-4 border rounded Attribute2div">
       <div class="row">
         <div class="col-md-6">
-          <label for="inpNameAttributePro2" class="form-label fs-5">Nhập Tên
-            Thuộc Tính</label>
+          <label for="inpNameAttributePro2" class="form-label fs-5">Thuộc tính 2</label>
         </div>
         <div class="col-md-6">
           <input
             type="text"
             id="inpNameAttributePro2"
             class="form-control variations"
-            placeholder=" Nhập Tên Thuộc Tính"
+            placeholder="Thuộc tính"
           />
         </div>
         <div class="col-md-6 my-3">
-          <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
+          <label for="" class="form-label fs-5">Giá trị</label>
         </div>
         <div class="col-md-6 my-3" id="inputAttribute2Div">
           <button
             type="button"
-            class="btn btn-success form-control addAttribute2-btn"
-          >Thêm Thuộc Tính</button>
-          <div class="row my-2">
-            <input
-              type="text"
-              placeholder="Nhập Thuộc Tính"
-              class="thuocTinh2 form-control col mx-2 variations"
-            />
-            <button
-              type="button"
-              onclick="deleteAttribute(event)"
-              class="btn btn-danger col-2"
-            >Xóa</button>
+            class="btn btn-success form-control btnAddValue2"
+          >Thêm giá trị</button>
+          <div class="areaInpValue2">
+            <div class="row my-2">
+              <input
+                type="text"
+                placeholder="Giá trị"
+                class="valueAttr2 form-control col mx-2 variations"
+                oninput="handleInpValue(2,event)"
+              />
+              <button
+                type="button"
+                onclick="deleteValue(2,event)"
+                class="btn btn-danger col-2"
+                disabled
+              >Xóa</button>
+            </div>
           </div>
         </div>
       </div>
@@ -115,6 +126,7 @@
           <th class="th2"></th>
           <th>Giá</th>
           <th>Số lượng</th>
+          <th class="col-2">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -150,7 +162,13 @@
       </div>
       <div class="col">
         <label for="" class="form-label fs-5">Ngày kết thúc :</label>
-        <input type="date" name="discount[endDay]" id="discountEnd" class="form-control" disabled="true" />
+        <input
+          type="date"
+          name="discount[endDay]"
+          id="discountEnd"
+          class="form-control"
+          disabled="true"
+        />
       </div>
     </div>
 

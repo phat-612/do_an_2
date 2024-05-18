@@ -52,106 +52,236 @@ document
   });
 //   ================================
 
-// nút them thuoc tinh 1
+// xử lý phân loại
 
-var addAttribute1Btn = document.querySelector(".addAttribute1-btn");
-var Attribute1HTML = `<div class="row my-2">
-               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="thuocTinh1 form-control col mx-2 variations">
-               <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
-            </div>`;
-
-addAttribute1Btn.addEventListener("click", () => {
-  var inputAttribute1Div = document.getElementById("inputAttribute1Div");
-  var secondChild = inputAttribute1Div.children[0]; // Lấy phần tử con thứ hai trong inputdiv
-  secondChild.insertAdjacentHTML("afterend", Attribute1HTML);
-  document.querySelectorAll(".variations").forEach(function (input) {
-    // bat dau
-    // input.addEventListener("input", createAttri1Row);
-    // ket thuc
-  });
+$("#inpNameAttributePro1").on("input", (e) => {
+  let value = e.target.value.trim();
+  $(".th1").text(value);
+});
+$("#inpNameAttributePro2").on("input", (e) => {
+  if ($("#inpNameAttributePro1").val() == "") {
+    e.target.value = "";
+    return;
+  }
+  let value = e.target.value.trim();
+  $(".th2").text(value);
 });
 
-// nút them thuoc tinh 2
-
-var addAttribute2Btn = document.querySelector(".addAttribute2-btn");
-var Attribute2HTML = `<div class="row my-2">
-               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="thuocTinh2 form-control col mx-2 variations">
-               <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
-            </div>`;
-
-addAttribute2Btn.addEventListener("click", () => {
-  var inputAttribute2Div = document.getElementById("inputAttribute2Div");
-  var secondChild = inputAttribute2Div.children[0]; // Lấy phần tử con thứ hai trong inputdiv
-  secondChild.insertAdjacentHTML("afterend", Attribute2HTML);
-
-  document.querySelectorAll(".variations").forEach(function (input) {
-    // bat dau
-    // input.addEventListener("input", createAttri1Row);
-    // ket thuc
-  });
+// Nút thêm giá trị
+$(".btnAddValue1").on("click", function () {
+  let html = `
+  <div class="row my-2 attri1-box">
+    <input
+      type="text"
+      placeholder="Giá trị"
+      class="valueAttr1 form-control col mx-2 variations"
+      oninput="handleInpValue(1,event)"
+    />
+    <button
+      type="button"
+      class="btn btn-danger col-2"
+      onclick="deleteValue(1,event)"
+    >Xóa</button>
+  </div>`;
+  $(".areaInpValue1").prepend(html);
 });
-//  ====================================================
-
-function createAttri1Row() {
-  var nameAttr1 = document.getElementById("inpNameAttributePro1").value;
-  var nameAttr2 = document.getElementById("inpNameAttributePro2").value;
-  var attr1Values = Array.from(document.querySelectorAll(".thuocTinh1")).map(
-    (input) => input.value
-  );
-  var attr2Values = Array.from(document.querySelectorAll(".thuocTinh2")).map(
-    (input) => input.value
-  );
-
-  var numberRow1 = attr1Values.length;
-  var numberRow2 = attr2Values.length;
-
-  document.querySelector(".th1").textContent = nameAttr1;
-  document.querySelector(".th2").textContent = nameAttr2;
-  console.log(attr1Values, attr2Values);
-
-  let tbody = document.querySelector("tbody");
-  let tbodyHTML = "";
-
-  let currentRow = 0;
-
-  attr1Values.forEach((val1, ind1) => {
-    attr2Values.forEach((val2, ind2) => {
-      if (ind2 === 0) {
-        tbodyHTML += `
-          <tr>
-            <td class="td1" rowspan="${numberRow2}">${val1}</td>
-            <td>${val2}</td>
-            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][price]" required></td>
-            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][quantity]"></td>
-            <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
-            <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
-          </tr>
-        `;
-        currentRow++;
-      } else {
-        if (val2) {
-          tbodyHTML += `
-          <tr>
-            <td>${val2}</td>
-            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][price]" required></td>
-            <td><input type="number" class="form-control w-50 variations" name="variations[${currentRow}][quantity]" required></td>
-            <input type="text" value="${val1}" name="variations[${currentRow}][attributes][${nameAttr1}]" hidden />
-            <input type="text" value="${val2}" name="variations[${currentRow}][attributes][${nameAttr2}]" hidden />
-          </tr>
-        `;
-          currentRow++;
+$(".btnAddValue2").on("click", function () {
+  let html = `
+  <div class="row my-2 attri1-box">
+    <input
+      type="text"
+      placeholder="Giá trị"
+      class="valueAttr2 form-control col mx-2 variations"
+      oninput="handleInpValue(2,event)"
+    />
+    <button
+      type="button"
+      class="btn btn-danger col-2"
+      onclick="deleteValue(2,event)"
+    >Xóa</button>
+  </div>`;
+  $(".areaInpValue2").prepend(html);
+});
+// thêm giá trị vào bảng
+function handleInpValue(valAttr, event) {
+  let attr = valAttr;
+  let row = $(event.target.closest(".row"));
+  let indInp = $(row.parent()).find(".row").length - $(row).index() - 1;
+  let arrValueAttr1 = $(".valueAttr1")
+    .map(function () {
+      return $(this).val().trim();
+    })
+    .get()
+    .reverse();
+  let arrValueAttr2 = $(".valueAttr2")
+    .map(function () {
+      return $(this).val();
+    })
+    .get()
+    .reverse();
+  let countCurValue = $(row.parent()).find(".row").length;
+  let countAttr1Value = $(".areaInpValue1 .row").length;
+  let countAttr2Value = $(".areaInpValue2 .row").length;
+  let countRowTable = $("tbody").children().length;
+  let checkEnoughRow = countAttr1Value * countAttr2Value == countRowTable;
+  let valueInp = event.target.value.trim();
+  if (attr == 1) {
+    // input attrValue1
+    // if (valueInp == "") return;
+    if ($("#inpNameAttributePro1").val() == "") {
+      event.target.value = "";
+      return;
+    }
+    let arrIndRow = [];
+    for (let i = 0; i < countAttr2Value; i++) {
+      let numberRow = indInp * countAttr2Value + i;
+      arrIndRow.push(numberRow);
+    }
+    if (!checkEnoughRow) {
+      // không đủ hàng thì thêm hàng mới
+      arrIndRow.forEach((indRow, ind) => {
+        if (countRowTable == 0) {
+          let html = genRowTable(valueInp, arrValueAttr2[0]);
+          $("tbody").append(html);
+          countRowTable++;
+        } else {
+          let rowTable = $("tbody")
+            .children()
+            .eq(indRow - 1);
+          let html = genRowTable(valueInp, arrValueAttr2[ind]);
+          rowTable.after(html);
         }
-      }
-    });
+      });
+    } else {
+      // đủ hàng thì chỉ cần thay đổi giá trị
+      arrIndRow.forEach((indRow) => {
+        let rowTable = $("tbody").children().eq(indRow);
+        rowTable.find("td").eq(0).text(valueInp);
+      });
+    }
+  } else {
+    // input attrValue2
+    // nếu chưa nhập attr1 thì không thêm
+    if (countRowTable == 0) {
+      event.target.value = "";
+      return;
+    }
+    let arrIndRow = [];
+    for (let i = 0; i < countAttr1Value; i++) {
+      let numberRow = indInp + countAttr2Value * i;
+      arrIndRow.push(numberRow);
+    }
+    if (!checkEnoughRow) {
+      // không đủ hàng thì thêm hàng mới
+      arrIndRow.forEach((indRow, ind) => {
+        let rowTable = $("tbody")
+          .children()
+          .eq(indRow - 1);
+        let html = genRowTable(arrValueAttr1[ind], valueInp);
+        rowTable.after(html);
+      });
+    } else {
+      // đủ hàng thì chỉ cần thay đổi giá trị
+      arrIndRow.forEach((indRow) => {
+        let rowTable = $("tbody").children().eq(indRow);
+        rowTable.find("td").eq(1).text(valueInp);
+      });
+    }
+  }
+  renameNameValueTable();
+}
+function deleteValue(valAttr, event) {
+  let attr = valAttr;
+  let row = $(event.target.closest(".row"));
+  let indInp = $(row.parent()).find(".row").length - $(row).index() - 1;
+  let countCurValue = $(row.parent()).find(".row").length;
+  let countAttr1Value = $(".areaInpValue1 .row").length;
+  let countAttr2Value = $(".areaInpValue2 .row").length;
+  let countRowTable = $("tbody").children().length;
+  let checkEnoughRow = countAttr1Value * countAttr2Value == countRowTable;
+  let arrIndRow = [];
+  if (attr == 1) {
+    for (let i = 0; i < countAttr2Value; i++) {
+      let numberRow = indInp * countAttr2Value + i;
+      arrIndRow.push(numberRow);
+    }
+  } else {
+    for (let i = 0; i < countAttr1Value; i++) {
+      let numberRow = indInp + countAttr2Value * i;
+      arrIndRow.push(numberRow);
+    }
+  }
+  arrIndRow.forEach((indRow, ind) => {
+    let rowTable = $("tbody")
+      .children()
+      .eq(indRow - ind);
+    rowTable.remove();
   });
-  tbody.innerHTML = tbodyHTML;
+  row.remove();
+  renameNameValueTable();
+}
+function deleteVariation(event) {
+  let row = $(event.target.closest("tr"));
+  row.find("td>input").val(0);
+}
+function genRowTable(td1, td2) {
+  return `
+  <tr>
+  
+    <td>${td1}</td>
+    <td>${td2}</td>
+    <td><input type="number" class="form-control" name="" /></td>
+    <td><input type="number" class="form-control" name="" /></td>
+    <td>
+      <div class="areaInpHidden"></div>
+      <button
+        type="button"
+        onclick="deleteVariation(event)"
+        class="btn btn-danger"
+      >Xóa phân loại</button></td>
+  </tr>
+  `;
+}
+function renameNameValueTable() {
+  let nameAttr1 = $("#inpNameAttributePro1").val().trim();
+  let nameAttr2 = $("#inpNameAttributePro2").val().trim();
+
+  $("tbody tr").each((ind, tr) => {
+    let value1 = $(tr).find("td").eq(0).text();
+    let value2 = $(tr).find("td").eq(1).text();
+    let htmlInpHidden = `
+      <input
+        type="text"
+        name="variations[${ind}][attributes][${nameAttr1}]"
+        value="${value1}"
+        hidden
+      />
+      `;
+    if (nameAttr2 != "" && value2 != "") {
+      htmlInpHidden += `
+        <input
+          type="text"
+          name="variations[${ind}][attributes][${nameAttr2}]"
+          value="${value2}"
+          hidden
+        />
+      `;
+    }
+    $(tr)
+      .find("td")
+      .eq(2)
+      .find("input")
+      .attr("name", `variations[${ind}][price]`);
+    $(tr)
+      .find("td")
+      .eq(3)
+      .find("input")
+      .attr("name", `variations[${ind}][quantity]`);
+    $(tr).find("td .areaInpHidden").html(htmlInpHidden);
+  });
 }
 
-// batdau
-// document.querySelectorAll(".variations").forEach(function (input) {
-//   input.addEventListener("input", createAttri1Row);
-// });
-// ketthuc
+// discount
 const percentInput = document.getElementById("percentInput");
 const discountStart = document.getElementById("discountStart");
 const discountEnd = document.getElementById("discountEnd");

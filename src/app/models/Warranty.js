@@ -8,7 +8,10 @@ const Warranty = new Schema(
     address: { type: String },
     images: [String],
     note: { type: String },
-    status: { type: String },
+    status: {
+      type: String,
+      enum: ["pending", "success", "cancel", "failed", "shipping"],
+    },
     total: { type: Number },
     details: [
       {
@@ -28,4 +31,20 @@ const Warranty = new Schema(
   },
   { timestamps: true }
 );
+// filterable
+Warranty.query.filterable = function (req) {
+  if (req.query.hasOwnProperty("_filter")) {
+    return this.find({
+      [req.query.column]: req.query.value,
+    });
+  }
+  return this;
+};
+// page navigation
+Warranty.query.paginate = function (req) {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 16;
+  const skip = (page - 1) * limit;
+  return this.skip(skip).limit(limit);
+};
 module.exports = mongoose.model("Warranty", Warranty);

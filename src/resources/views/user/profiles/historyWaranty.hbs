@@ -14,19 +14,23 @@
     <li class="me-2 border btn-light px-3 py-1 rounded">Đã sửa xong</li>
     <li class="me-2 border btn-light px-3 py-1 rounded">Đã hoàn thành</li>
   </ul>
-  <div class="row mt-3">
-    <div class="col-2">
-      <img
-        class="w-100"
-        src="https://down-vn.img.susercontent.com/file/sg-11134201-7rbl5-lom78yxb86e4f1"
-        alt=""
-      />
-    </div>
-    <div class="col-10">
-      <p class="fs-4">Jinf Móc Khóa Bàn Phím Cơ Học + 1 Ngón Tay Hình Cá Dạ Quang Sáng Tạo Làm Quà Tặng</p>
-      <div class="d-flex justify-content-between ">
-        <button class="btn btn-primary">Đã hoàn thành</button>
-        <button class="btn btn-danger ">Xem chi tiết</button>
+  {{#each warranties}}
+    <div class="row mt-3">
+      <div class="col-2">
+        <img
+          class="w-100"
+          src="{{showImgUpload this.image}}"
+          alt="{{this.image}}"
+        />
       </div>
-  </div>
+      <div class="col-10">
+        <p class="fs-4">{{name}}</p>
+        <div class="d-flex justify-content-between">
+          <button class="btn btn-primary">{{showStatusWarranty status}}</button>
+          <a href="/me/detailWarranty/{{_id}}" class="btn btn-danger">Xem chi
+            tiết</a>
+        </div>
+      </div>
+    </div>
+  {{/each}}
 </div>

@@ -3,13 +3,14 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
-
+const Order = require("../models/Order");
+const Warranty = require("../models/Warranty");
 const {
   multipleMongooseToObject,
   mongooseToObject,
 } = require("../../util/mongoose");
 const { getDiscount } = require("../../util/function");
-const Order = require("../models/Order");
+
 class MeController {
   profile(req, res, next) {
     User.findOne({ _id: req.session.idUser }).then((user) => {
@@ -144,10 +145,96 @@ class MeController {
     });
   }
   historyWaranty(req, res, next) {
-    res.render("user/profiles/historyWaranty", { layout: "userProfile" });
+    // tên ảnh giá của một sản phẩm đầu tiên
+    const email = req.session.email;
+    console.log(email);
+    Warranty.aggregate([
+      {
+        $match: { email: email },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "details.idProduct",
+          foreignField: "_id",
+          as: "products",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          status: 1,
+          createdAt: 1,
+          name: { $arrayElemAt: ["$products.name", 0] },
+          image: {
+            $arrayElemAt: [
+              {
+                $arrayElemAt: ["$products.images", 0],
+              },
+              0,
+            ],
+          },
+          countProduct: { $size: "$details" },
+        },
+      },
+    ]).then((warranties) => {
+      if (req.query.hasOwnProperty("_filter")) {
+        warranties = warranties.filter(
+          (warranty) => warranty[req.query.column] == req.query.value
+        );
+      }
+      // return res.send({
+      //   warranties,
+      // });
+      res.render("user/profiles/historyWaranty", {
+        layout: "userProfile",
+        warranties,
+      });
+    });
   }
   detailWaranty(req, res, next) {
-    res.render("user/profiles/detailWaranty", { layout: "userProfile" });
+    const idWarranty = req.params.idWarranty;
+    const email = req.session.email;
+    Warranty.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(idWarranty),
+          email: email,
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "details.idProduct",
+          foreignField: "_id",
+          as: "products",
+        },
+      },
+    ]).then((warranties) => {
+      if (warranties.length == 0) {
+        return res.render("404");
+      }
+      const warranty = warranties[0];
+      warranty.details = warranty.details.map((detail) => {
+        let tempProduct = warranty.products.find((product) => {
+          return product._id.toString() == detail.idProduct.toString();
+        });
+        return {
+          ...detail,
+          name: tempProduct.name,
+          image: tempProduct.images[0],
+          slugProduct: tempProduct.slug,
+        };
+      });
+      // return res.send(warranty);
+      res.render("user/profiles/detailWaranty", {
+        layout: "userProfile",
+        warranty: warranty,
+      });
+    });
   }
   changePassword(req, res, next) {
     res.render("user/profiles/changePassword", { layout: "userProfile" });

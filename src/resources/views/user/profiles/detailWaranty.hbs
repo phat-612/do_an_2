@@ -1,36 +1,38 @@
 <div class="container">
   <h1 class="fs-1 text-center">Chi tiết bảo hành</h1>
-  <h5>Tên khách hàng: <strong>Nguyễn Văn Phát</strong></h5>
-  <h5>Số điện thoại: <strong>0382909902</strong></h5>
-  <h5>Email: <strong>ngphat@gmail.com</strong></h5>
-  <h5>Thời gian tạo: <strong>18/03/2024</strong></h5>
-  <h5>Trạng thái: <strong>Đã hoàn thành</strong></h5>
-  <div class="row mt-2">
-    <div class="col-2 text-center"><img
-        class="w-100"
-        src="https://down-vn.img.susercontent.com/file/sg-11134201-7rbl5-lom78yxb86e4f1"
-        alt=""
-      />
-    </div>
-    <div class="col-10">
-      <p class="fs-4">Hình Móc Khóa Bàn Phím Cơ Học + 1 Ngón Tay Hình Cá Dạ
-        Quang Sáng Tạo Làm Quà Tặng</p>
-      <div class="">
-        <ul class="fs-5">
-          <li class="d-flex justify-content-between"><span>Thay màn hình
-            </span><span>900.000đ</span></li>
-          <li class="d-flex justify-content-between"><span>Thay màn hình
-            </span><span>900.000đ</span></li>
-          <li><hr class="border border-1 w-100" /></li>
-          <li class="d-flex justify-content-between"><strong>Tổng cộng
-            </strong><span>1.800.000đ</span></li>
-        </ul>
+  <h5>Tên khách hàng: <strong>{{warranty.name}}</strong></h5>
+  <h5>Số điện thoại: <strong>{{warranty.phone}}</strong></h5>
+  <h5>Email: <strong>{{warranty.email}}</strong></h5>
+  <h5>Thời gian tạo:
+    <strong>{{formatDate warranty.createdAt "HH:ss DD/MM/YYYY"}}</strong></h5>
+  <h5>Ghi chú:</h5>
+  <p>{{warranty.note}}</p>
+  <h5>Trạng thái: <strong>{{showStatusWarranty warranty.status}}</strong></h5>
+  {{!-- {{consoleHbs this}} --}}
+  {{#each warranty.details}}
+    <div class="row mt-2">
+      <div class="col-2 text-center"><img
+          class="w-100"
+          src="{{showImgUpload image}}"
+          alt="{{image}}"
+        />
+      </div>
+      <div class="col-10">
+        <p class="fs-4">{{name}}</p>
+        <div class="">
+          <ul class="fs-5">
+            {{#each reasonAndPrice}}
+              <li class="d-flex justify-content-between"><span>1{{reason}}
+                </span><span>{{showPrice price}}</span></li>
+            {{/each}}
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
+  {{/each}}
   <div class="row">
     <div class="col-2"></div>
     <div class="col-10 fs-4 d-flex justify-content-between"><strong>Tổng thanh
-        toán</strong><strong>1.800.000đ</strong></div>
+        toán</strong><strong>tính tiền</strong></div>
   </div>
 </div>

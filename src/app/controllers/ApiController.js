@@ -56,6 +56,7 @@ class ApiController {
       });
     }
     formData.images = images;
+    return res.json(req.body);
     product.save().then(() => {
       req.flash("message", {
         type: "success",
@@ -73,9 +74,21 @@ class ApiController {
     Product.findOne(req.body).then((product) => {
       const hasNonZeroSold = product.variations.some(
         (variation) => variation.sold !== 0
-      ); // kiểm tra xem có ít nhất một phần tử trong mảng thỏa mãn một điều kiện nào đó hay không.
+      ); // kiểm tra xem có ít nhất một phần tử trong mảng thỏa mãn một điều kiện ""variation.sold !== 0" hay không.
       // Nó trả về true nếu có ít nhất một phần tử thỏa mãn điều kiện và false nếu không có phần tử nào thỏa mãn điều kiện.
       if (!hasNonZeroSold) {
+        const filePath = path.join(
+          __dirname,
+          "..",
+          "..",
+          "public",
+          "img",
+          "uploads"
+        );
+        product.images.forEach((image) => {
+          const fullPath = path.join(filePath, image);
+          fs.unlinkSync(fullPath);
+        });
         // Nếu tất cả các biến thể đều có sold là 0, xóa sản phẩm
         product.deleteOne({ _id: req.body }).then(() => {
           req.flash("message", {
@@ -316,6 +329,7 @@ class ApiController {
         req.session.role = user.role;
         req.session.name = user.name;
         req.session.idUser = userLogin.idUser;
+        req.session.email = user.email;
         return res.redirect("/me");
       });
     });
@@ -769,6 +783,25 @@ class ApiController {
   }
   //quan ly banner
   storeBanner(req, res) {
+    const formData = req.body;
+    let image = "";
+    if (!req.files) {
+      res.send("Không tìm thấy ảnh");
+    } else {
+      image = req.files[0].filename;
+    }
+    // console.log(image);
+    formData.image = image;
+    const newBanner = new Banner(formData);
+    newBanner.save().then(() => {
+      req.flash("message", {
+        type: "success",
+        message: "Thêm Banner thành công",
+      });
+      res.redirect("back");
+    });
+  }
+  changeBanner(req, res) {
     res.send(req.body);
   }
 
@@ -850,6 +883,9 @@ class ApiController {
     product.save().then(() => {
       res.json({ status: "success" });
     });
+  }
+  testSeeBody(req, res, next) {
+    res.json(req.body);
   }
 }
 module.exports = new ApiController();

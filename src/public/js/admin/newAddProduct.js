@@ -65,11 +65,15 @@ percentInput.addEventListener("input", checkExistValue);
 // xử lý phân loại
 
 $("#inpNameAttributePro1").on("input", (e) => {
-  let value = e.target.value;
+  let value = e.target.value.trim();
   $(".th1").text(value);
 });
 $("#inpNameAttributePro2").on("input", (e) => {
-  let value = e.target.value;
+  if ($("#inpNameAttributePro1").val() == "") {
+    e.target.value = "";
+    return;
+  }
+  let value = e.target.value.trim();
   $(".th2").text(value);
 });
 
@@ -86,7 +90,7 @@ $(".btnAddValue1").on("click", function () {
     <button
       type="button"
       class="btn btn-danger col-2"
-      onclick="deleteValue(event)"
+      onclick="deleteValue(1,event)"
     >Xóa</button>
   </div>`;
   $(".areaInpValue1").prepend(html);
@@ -103,7 +107,7 @@ $(".btnAddValue2").on("click", function () {
     <button
       type="button"
       class="btn btn-danger col-2"
-      onclick="deleteValue(event)"
+      onclick="deleteValue(2,event)"
     >Xóa</button>
   </div>`;
   $(".areaInpValue2").prepend(html);
@@ -113,41 +117,176 @@ function handleInpValue(valAttr, event) {
   let attr = valAttr;
   let row = $(event.target.closest(".row"));
   let indInp = $(row.parent()).find(".row").length - $(row).index() - 1;
-  let valueInp = event.target.value;
-  console.log(attr, indInp);
-  if ((attr = 1)) {
-    let rowTable = $("tbody").children().eq(indInp);
-    console.log(rowTable.length);
-    if (rowTable.length == 0) {
-      let html = genRowTable(
-        valueInp,
-        "",
-        `quantity1[${indInp}]`,
-        `price1[${indInp}]`
-      );
-      $("tbody").children().eq(indInp).append(html);
+  let arrValueAttr1 = $(".valueAttr1")
+    .map(function () {
+      return $(this).val().trim();
+    })
+    .get()
+    .reverse();
+  let arrValueAttr2 = $(".valueAttr2")
+    .map(function () {
+      return $(this).val();
+    })
+    .get()
+    .reverse();
+  let countCurValue = $(row.parent()).find(".row").length;
+  let countAttr1Value = $(".areaInpValue1 .row").length;
+  let countAttr2Value = $(".areaInpValue2 .row").length;
+  let countRowTable = $("tbody").children().length;
+  let checkEnoughRow = countAttr1Value * countAttr2Value == countRowTable;
+  let valueInp = event.target.value.trim();
+  if (attr == 1) {
+    // input attrValue1
+    // if (valueInp == "") return;
+    if ($("#inpNameAttributePro1").val() == "") {
+      event.target.value = "";
+      return;
+    }
+    let arrIndRow = [];
+    for (let i = 0; i < countAttr2Value; i++) {
+      let numberRow = indInp * countAttr2Value + i;
+      arrIndRow.push(numberRow);
+    }
+    if (!checkEnoughRow) {
+      // không đủ hàng thì thêm hàng mới
+      arrIndRow.forEach((indRow, ind) => {
+        if (countRowTable == 0) {
+          let html = genRowTable(valueInp, arrValueAttr2[0]);
+          $("tbody").append(html);
+          countRowTable++;
+        } else {
+          let rowTable = $("tbody")
+            .children()
+            .eq(indRow - 1);
+          let html = genRowTable(valueInp, arrValueAttr2[ind]);
+          rowTable.after(html);
+        }
+      });
+    } else {
+      // đủ hàng thì chỉ cần thay đổi giá trị
+      arrIndRow.forEach((indRow) => {
+        let rowTable = $("tbody").children().eq(indRow);
+        rowTable.find("td").eq(0).text(valueInp);
+      });
+    }
+  } else {
+    // input attrValue2
+    // nếu chưa nhập attr1 thì không thêm
+    if (countRowTable == 0) {
+      event.target.value = "";
+      return;
+    }
+    let arrIndRow = [];
+    for (let i = 0; i < countAttr1Value; i++) {
+      let numberRow = indInp + countAttr2Value * i;
+      arrIndRow.push(numberRow);
+    }
+    if (!checkEnoughRow) {
+      // không đủ hàng thì thêm hàng mới
+      arrIndRow.forEach((indRow, ind) => {
+        let rowTable = $("tbody")
+          .children()
+          .eq(indRow - 1);
+        let html = genRowTable(arrValueAttr1[ind], valueInp);
+        rowTable.after(html);
+      });
+    } else {
+      // đủ hàng thì chỉ cần thay đổi giá trị
+      arrIndRow.forEach((indRow) => {
+        let rowTable = $("tbody").children().eq(indRow);
+        rowTable.find("td").eq(1).text(valueInp);
+      });
     }
   }
+  renameNameValueTable();
 }
-function deleteValue(event) {
-  event.target.closest(".row").remove();
+function deleteValue(valAttr, event) {
+  let attr = valAttr;
+  let row = $(event.target.closest(".row"));
+  let indInp = $(row.parent()).find(".row").length - $(row).index() - 1;
+  let countCurValue = $(row.parent()).find(".row").length;
+  let countAttr1Value = $(".areaInpValue1 .row").length;
+  let countAttr2Value = $(".areaInpValue2 .row").length;
+  let countRowTable = $("tbody").children().length;
+  let checkEnoughRow = countAttr1Value * countAttr2Value == countRowTable;
+  let arrIndRow = [];
+  if (attr == 1) {
+    for (let i = 0; i < countAttr2Value; i++) {
+      let numberRow = indInp * countAttr2Value + i;
+      arrIndRow.push(numberRow);
+    }
+  } else {
+    for (let i = 0; i < countAttr1Value; i++) {
+      let numberRow = indInp + countAttr2Value * i;
+      arrIndRow.push(numberRow);
+    }
+  }
+  arrIndRow.forEach((indRow, ind) => {
+    let rowTable = $("tbody")
+      .children()
+      .eq(indRow - ind);
+    rowTable.remove();
+  });
+  row.remove();
+  renameNameValueTable();
 }
 function deleteVariation(event) {
-  let row = $(event.target.closest(".row"));
-  row.find("input").val(0);
+  let row = $(event.target.closest("tr"));
+  row.find("td>input").val(0);
 }
-function genRowTable(td1, td2, nameInpQuantity, nameInpPrice) {
+function genRowTable(td1, td2) {
   return `
   <tr>
+  
     <td>${td1}</td>
     <td>${td2}</td>
-    <td><input type="number" name="${nameInpQuantity}" /></td>
-    <td><input type="number" name="${nameInpPrice}" /></td>
-    <td><button
+    <td><input type="number" class="form-control" name="" /></td>
+    <td><input type="number" class="form-control" name="" /></td>
+    <td>
+      <div class="areaInpHidden"></div>
+      <button
         type="button"
         onclick="deleteVariation(event)"
         class="btn btn-danger"
       >Xóa phân loại</button></td>
   </tr>
   `;
+}
+function renameNameValueTable() {
+  let nameAttr1 = $("#inpNameAttributePro1").val().trim();
+  let nameAttr2 = $("#inpNameAttributePro2").val().trim();
+
+  $("tbody tr").each((ind, tr) => {
+    let value1 = $(tr).find("td").eq(0).text();
+    let value2 = $(tr).find("td").eq(1).text();
+    let htmlInpHidden = `
+      <input
+        type="text"
+        name="variations[${ind}][attributes][${nameAttr1}]"
+        value="${value1}"
+        hidden
+      />
+      `;
+    if (nameAttr2 != "" && value2 != "") {
+      htmlInpHidden += `
+        <input
+          type="text"
+          name="variations[${ind}][attributes][${nameAttr2}]"
+          value="${value2}"
+          hidden
+        />
+      `;
+    }
+    $(tr)
+      .find("td")
+      .eq(2)
+      .find("input")
+      .attr("name", `variations[${ind}][price]`);
+    $(tr)
+      .find("td")
+      .eq(3)
+      .find("input")
+      .attr("name", `variations[${ind}][quantity]`);
+    $(tr).find("td .areaInpHidden").html(htmlInpHidden);
+  });
 }

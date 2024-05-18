@@ -3,6 +3,7 @@ const Product = require("../models/Product");
 const User = require("../models/User");
 const Order = require("../models/Order");
 const Category = require("../models/Category");
+const Banner = require("../models/Banner");
 const {
   multipleMongooseToObject,
   mongooseToObject,
@@ -76,7 +77,14 @@ class AdminController {
   }
   // banner
   banner(req, res) {
-    res.render("admin/sites/banner", { layout: "admin", js: "admin/banner" });
+    Banner.find({}).then((banners) => {
+      res.render("admin/sites/banner", {
+        layout: "admin",
+        js: "admin/banner",
+        css: "admin/banner",
+        banners: multipleMongooseToObject(banners),
+      });
+    });
   }
   // get /product/detail
   detail(req, res, next) {
@@ -406,9 +414,12 @@ class AdminController {
   }
   // --------------------------------------------------newAddProduct----------------------
   newAddProduct(req, res, next) {
-    res.render("admin/products/newAddProduct", {
-      layout: "admin",
-      js: "admin/newAddProduct",
+    Category.find().then((categorys) => {
+      res.render("admin/products/newAddProduct", {
+        layout: "admin",
+        js: "admin/newAddProduct",
+        categorys: multipleMongooseToObject(categorys),
+      });
     });
   }
   // --------------------------------------------------newAddProduct----------------------

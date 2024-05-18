@@ -8,7 +8,7 @@ router.get("/changePassword", meController.changePassword);
 router.get("/historyOrder", meController.historyOrder);
 router.get("/detailOrder/:idOrder", meController.detailOrder);
 router.get("/historyWaranty", meController.historyWaranty);
-router.get("/detailWaranty", meController.detailWaranty);
+router.get("/detailWarranty/:idWarranty", meController.detailWaranty);
 router.get("/cart", meController.cart);
 router.get("/order", meController.order);
 router.get("/", meController.profile);
