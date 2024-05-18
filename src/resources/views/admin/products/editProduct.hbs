@@ -1,14 +1,11 @@
 <form action="/api/updateProduct" method="post">
    <input type="text" value="{{product._id}}" name="id" hidden>
   <div class="container">
-   {{!-- {{#each variations}}
-   <h2>{{this.price}}</h2>
-   {{/each}} --}}
     <label for="name-Product" class="form-label fs-4">Tên Sản phẩm</label>
    
     <input type="text" class="form-control" id="name-Product" value="{{product.name}}" name="name" />
     <label for="description-Product" class="col-form-label fs-4">Mô Tả Sản Phẩm</label>
-    <textarea class="form-control h-50 " id="description-Product" name="description">{{product.description}}</textarea>
+    <textarea class="form-control h-25 " id="description-Product" name="description">{{product.description}}</textarea>
     <label for="categoryDataList" class="form-label fs-4">Danh Mục</label>
     <select class="form-control" name="idCategory" id="">
       <option value="">Chọn Danh Mục</option>
@@ -18,29 +15,32 @@
     </select>
    {{!-- -------------------------------- --}}
       <label for="brandDataList" class="form-label fs-4 mt-3">Thuộc Tính</label>
+
       <div class="w-75 container-sm py-4 my-4 border rounded">
          <div class="row">
             <div class="col-md-6">
-               <label for="ipNameAttributePro1" class="form-label fs-5">Nhập Tên Thuộc tính</label>
+               <label for="ipNameAttributePro1" class="form-label fs-5">Nhập Tên Thuộc tính 1</label>
             </div>
             <div class="col-md-6">
                <input type="text" id="inpNameAttributePro1" class="form-control variations" value="{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}">
             </div>
             <div class="col-md-6 my-3">
-               <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
+               <label for="" class="form-label fs-5">Giá trị</label>
             </div>
             <div class="col-md-6 my-3" id="inputAttribute1Div">
-               <button type="button" class="btn btn-success form-control addAttribute1-btn">Thêm Thuộc Tính</button>
-               {{#each attributes1}}
+               <button type="button" class="btn btn-success form-control addAttribute1-btn btnAddValue1">Thêm Giá Trị</button>
+               <div class="areaInpValue1">
+                  {{#each attributes1}}
                   {{#if @first}}
                      {{#each this}}
-                        <div class="row">
-                           <input type="text" id="thuocTinh1" class="form-control my-2 col variations thuocTinh1" value="{{this}}">
-                           <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
+                        <div class="row attri1-box">
+                           <input type="text" id="thuocTinh1" class="form-control my-2 col variations thuocTinh1 valueAttr1" value="{{this}}" oninput="handleInpValue(1,event)" >
+                           <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteValue(1,event)">Xóa</button>
                         </div>
                      {{/each}}
                   {{/if}}
                {{/each}}
+               </div>
             </div>
          </div>
      </div>
@@ -48,26 +48,28 @@
      <div class="w-75 container-sm py-4 my-4 border rounded Attribute2div">
       <div class="row">
          <div class="col-md-6">
-            <label for="inpNameAttributePro2" class="form-label fs-5">Nhập Tên Thuộc Tính</label>
+            <label for="inpNameAttributePro2" class="form-label fs-5">Nhập Tên Thuộc Tính 2</label>
          </div>
          <div class="col-md-6">
             <input type="text" id="inpNameAttributePro2" class="form-control variations" value="{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}">
          </div>
          <div class="col-md-6 my-3">
-            <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
+            <label for="" class="form-label fs-5">Nhập Giá Trị</label>
          </div>
          <div class="col-md-6 my-3" id="inputAttribute2Div">
-            <button type="button" class="btn btn-success form-control addAttribute2-btn">Thêm Thuộc Tính</button>
-               {{#each attributes2}}
+            <button type="button" class="btn btn-success form-control btnAddValue2">Thêm Giá Trị</button>
+               <div class="areaInpValue2">
+                  {{#each attributes2}}
                   {{#if @first}}
                      {{#each this}}
                         <div class="row"> 
-                           <input type="text" id="thuocTinh1" class="form-control my-2 col variations thuocTinh2" value="{{this}}">
-                           <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
+                           <input type="text" id="thuocTinh1" class="valueAttr2 form-control my-2 col variations thuocTinh2" value="{{this}}" oninput="handleInpValue(2,event)">
+                           <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteValue(2,event)">Xóa</button>
                         </div>
                      {{/each}}
                   {{/if}}
                {{/each}}
+               </div>
          </div>
       </div>
      </div>
@@ -75,27 +77,28 @@
     <table id="custom-varriant" class="table-based table">
          <thead>
             <tr>
-               <th class="col-3 th1">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
-               <th class="col-3 th2">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
-               <th class="col-3">Giá</th>
-               <th class="col-3">Số lượng</th>
+               <th class="th1">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
+               <th class="th2">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
+               <th class="col-2">Giá</th>
+               <th class="col-2">Số lượng</th>
+               <th class="col-2">Action</th>
             </tr>
          </thead>
          <tbody>
             {{#each product.variations}}
                <tr data-bs-id="{{this._id}}" data-bs-sold="{{this.sold}}">
-                  <td class="td1">{{#each this.attributes}}{{#if
-                        @first
-                     }}{{this}}{{/if}}{{/each}}<input type="text" class="tdAttribute1" value="{{#each this.attributes}}{{#if
-                        @first
-                     }}{{this}}{{/if}}{{/each}}" required hidden></td>
+                  <td class="td1">{{#each this.attributes}}{{#if @first}}{{this}}{{/if}}{{/each}}<input type="text" class="tdAttribute1" value="{{#each this.attributes}}{{#if @first}}{{this}}{{/if}}{{/each}}" required hidden></td>
                   <td class="td2">{{#each this.attributes}}{{#if
                         @last
                      }}{{this}}{{/if}}{{/each}}<input type="text" class="tdAttribute2" value="{{#each this.attributes}}{{#if
                         @last
                      }}{{this}}{{/if}}{{/each}}" required hidden></td>
-                  <td><input type="number" class="form-control tdPrice" value="{{this.price}}" ></td>
-                  <td><input type="number" class="form-control tdQuantity" value="{{this.quantity}}"></td>
+                  <td><input type="number" class="form-control tdPrice" value="{{this.price}}" name="variations[{{@index}}][price]" ></td>
+                  <td><input type="number" class="form-control tdQuantity" value="{{this.quantity}}" name="variations[{{@index}}][quantity]"></td>
+                  <td>
+                     <div class="areaInpHidden"></div>
+                     <button type="button" onclick="deleteVariation(event)" class="btn btn-danger">Xóa phân loại</button>
+                  </td>
                </tr>
             {{/each}}
          </tbody>

@@ -12,45 +12,41 @@ const {
 class AdminController {
   // get /
   index(req, res, next) {
-    Product.find({}).then((products) => {
-      // Lấy tất cả đơn hàng
-      return Order.find({}).then((orders) => {
-        // Sử dụng aggregation framework của MongoDB để lấy sản phẩm có sold lớn nhất
-        return Product.aggregate([
-          { $unwind: "$variations" }, // Giải nén mảng variations
-          { $sort: { "variations.sold": -1 } }, // Sắp xếp theo số lượng sold giảm dần
-          { $limit: 3 }, // Giới hạn kết quả để chỉ lấy sản phẩm có sold lớn nhất
-        ]).then((productWithMaxSold) => {
-          res.render("admin/sites/home", {
-            layout: "admin",
-            js: "admin/home",
-            css: "admin/home",
-            orders: multipleMongooseToObject(orders),
-            products: multipleMongooseToObject(products),
-            productWithMaxSold: productWithMaxSold,
+    Product.find({})
+      .then(function (products) {
+        Order.find({}).then(function (orders) {
+          Product.aggregate([
+            { $unwind: "$variations" }, // Unwind the variations array
+            {
+              $group: {
+                _id: "$_id",
+                name: { $first: "$name" },
+                description: { $first: "$description" },
+                images: { $first: "$images" },
+                view: { $first: "$view" },
+                slug: { $first: "$slug" },
+                idCategory: { $first: "$idCategory" },
+                discount: { $first: "$discount" },
+                totalSold: { $sum: "$variations.sold" },
+                variations: { $push: "$variations" },
+              },
+            },
+            { $sort: { totalSold: -1 } }, // Sort by total sold in descending order
+            { $limit: 3 }, // Limit to top 3 products
+          ]).then((topProducts) => {
+            res.render("admin/sites/home", {
+              layout: "admin",
+              js: "admin/home",
+              css: "admin/home",
+              orders: multipleMongooseToObject(orders),
+              products: multipleMongooseToObject(products),
+              topProducts: topProducts,
+            });
           });
         });
-      });
-    });
-    // Product.find({}).then((products) => {
-    //   Order.find({}).then((orders) => {
-    //     const productWithMaxSold = Product.aggregate([
-    //       { $unwind: "$variations" },
-    //       { $sort: { "variations.sold": -1 } },
-    //       { $limit: 1 },
-    //     ]);
-    //     res.render("admin/sites/home", {
-    //       layout: "admin",
-    //       js: "admin/home",
-    //       css: "admin/home",
-    //       orders: multipleMongooseToObject(orders),
-    //       products: multipleMongooseToObject(products),
-    //       productWithMaxSold: productWithMaxSold[0],
-    //     });
-    //   });
-    // });
+      })
+      .catch(next);
   }
-
   // get /product
   product(req, res, next) {
     Product.find({})
@@ -75,17 +71,72 @@ class AdminController {
       });
     });
   }
-  // banner
-  banner(req, res) {
-    Banner.find({}).then((banners) => {
-      res.render("admin/sites/banner", {
-        layout: "admin",
-        js: "admin/banner",
-        css: "admin/banner",
-        banners: multipleMongooseToObject(banners),
+  //get /product/edit/:id
+  editProduct(req, res, next) {
+    Category.find().then((categorys) => {
+      Product.findById(req.params.id).then((product) => {
+        const productAttrs = product.variations.map((detail) => {
+          return detail.attributes;
+        });
+        let attributes1 = {};
+        let attributes2 = {};
+        productAttrs.forEach((attr) => {
+          for (let key in attr) {
+            let target =
+              key === Object.keys(attr)[0] ? attributes1 : attributes2;
+            if (!target[key]) {
+              target[key] = [attr[key]];
+            } else if (!target[key].includes(attr[key])) {
+              target[key].push(attr[key]);
+            }
+          }
+        });
+        res.render("admin/products/editProduct", {
+          product: mongooseToObject(product),
+          layout: "admin",
+          js: "admin/editProduct",
+          css: "admin/editProduct",
+          categorys: multipleMongooseToObject(categorys),
+          attributes1: attributes1,
+          attributes2: attributes2,
+        });
       });
     });
   }
+  // fat pan phước
+  // return res.json({
+  //   categorys: multipleMongooseToObject(categorys),
+  //   attributes1: attributes1,
+  //   attributes2: attributes2,
+  //   variations: JSON.stringify(variations),
+  // });
+  // Minh Luân đã từng ghé qua
+  // Product.findById(req.params.id).then((product) => {
+  //   if (!product) {
+  //     return res.json({ message: "Không tìm thấy sản phẩm" });
+  //   }
+  //   let productAttributes = product.variations.map((detail) => {
+  //     return detail.attributes;
+  //   });
+  //   // console.log(productAttributes);
+  //   let attributes = productAttributes.reduce((result, attr) => {
+  //     for (let key in attr) {
+  //       if (!result[key]) result[key] = [attr[key]];
+  //       else if (!result[key].includes(attr[key]))
+  //         result[key].push(attr[key]);
+  //     }
+  //     return result;
+  //   }, {});
+  //   res.render("admin/products/editProduct", {
+  //     layout: "admin",
+  //     js: "admin/editProduct",
+  //     css: "admin/editProduct",
+  //     product: mongooseToObject(product),
+  //     productAttributes: attributes,
+  //   });
+  //   console.log(attributes);
+  // });
+
   // get /product/detail
   detail(req, res, next) {
     Product.findById(req.params.id)
@@ -142,75 +193,17 @@ class AdminController {
       })
       .catch(next);
   }
-  //get /product/edit/:id
-  editProduct(req, res, next) {
-    Category.find().then((categorys) => {
-      Product.findById(req.params.id).then((product) => {
-        // const variations = product.variations.map((variations) => {
-        //   return variations;
-        // });
-        const productAttrs = product.variations.map((detail) => {
-          return detail.attributes;
-        });
-        let attributes1 = {};
-        let attributes2 = {};
-        productAttrs.forEach((attr) => {
-          for (let key in attr) {
-            let target =
-              key === Object.keys(attr)[0] ? attributes1 : attributes2;
-            if (!target[key]) {
-              target[key] = [attr[key]];
-            } else if (!target[key].includes(attr[key])) {
-              target[key].push(attr[key]);
-            }
-          }
-        });
-        res.render("admin/products/editProduct", {
-          product: mongooseToObject(product),
-          layout: "admin",
-          js: "admin/editProduct",
-          css: "admin/editProduct",
-          categorys: multipleMongooseToObject(categorys),
-          attributes1: attributes1,
-          attributes2: attributes2,
-          // variations: JSON.stringify(variations),
-        });
+  // banner
+  banner(req, res) {
+    Banner.find({}).then((banners) => {
+      res.render("admin/sites/banner", {
+        layout: "admin",
+        js: "admin/banner",
+        css: "admin/banner",
+        banners: multipleMongooseToObject(banners),
       });
     });
   }
-  // fat pan phước
-  // return res.json({
-  //   categorys: multipleMongooseToObject(categorys),
-  //   attributes1: attributes1,
-  //   attributes2: attributes2,
-  //   variations: JSON.stringify(variations),
-  // });
-  // Minh Luân đã từng ghé qua
-  // Product.findById(req.params.id).then((product) => {
-  //   if (!product) {
-  //     return res.json({ message: "Không tìm thấy sản phẩm" });
-  //   }
-  //   let productAttributes = product.variations.map((detail) => {
-  //     return detail.attributes;
-  //   });
-  //   // console.log(productAttributes);
-  //   let attributes = productAttributes.reduce((result, attr) => {
-  //     for (let key in attr) {
-  //       if (!result[key]) result[key] = [attr[key]];
-  //       else if (!result[key].includes(attr[key]))
-  //         result[key].push(attr[key]);
-  //     }
-  //     return result;
-  //   }, {});
-  //   res.render("admin/products/editProduct", {
-  //     layout: "admin",
-  //     js: "admin/editProduct",
-  //     css: "admin/editProduct",
-  //     product: mongooseToObject(product),
-  //     productAttributes: attributes,
-  //   });
-  //   console.log(attributes);
-  // });
 
   // get /orderproducts
   order(req, res, next) {

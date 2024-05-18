@@ -11,6 +11,7 @@ const Warranty = new Schema(
     status: {
       type: String,
       enum: ["pending", "success", "cancel", "failed", "shipping"],
+      default: "pending",
     },
     total: { type: Number },
     details: [

@@ -190,6 +190,15 @@ module.exports = {
       return acc + (detail.price * detail.quantity * detail.discount) / 100;
     }, 0);
   },
+  totalPriceWarranty: (details) => {
+    let totalPrice = 0;
+    details.map((detail) => {
+      totalPrice += detail.reasonAndPrice.reduce((acc, item) => {
+        return acc + item.price;
+      }, 0);
+    });
+    return totalPrice;
+  },
   getBrands: (categories, rootCategory) => {
     const brands = categories.find((category) => category.slug == rootCategory);
     if (brands) {

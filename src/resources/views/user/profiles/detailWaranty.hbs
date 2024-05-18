@@ -22,7 +22,7 @@
         <div class="">
           <ul class="fs-5">
             {{#each reasonAndPrice}}
-              <li class="d-flex justify-content-between"><span>1{{reason}}
+              <li class="d-flex justify-content-between"><span>{{reason}}
                 </span><span>{{showPrice price}}</span></li>
             {{/each}}
           </ul>
@@ -33,6 +33,6 @@
   <div class="row">
     <div class="col-2"></div>
     <div class="col-10 fs-4 d-flex justify-content-between"><strong>Tổng thanh
-        toán</strong><strong>tính tiền</strong></div>
+        toán</strong><strong>{{showPrice (totalPriceWarranty warranty.details)}}</strong></div>
   </div>
 </div>

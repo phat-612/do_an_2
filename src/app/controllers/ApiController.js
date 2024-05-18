@@ -35,36 +35,36 @@ class ApiController {
       });
     }
     formData.images = images;
-    const product = new Product(req.body);
-    if (req.files && Array.isArray(req.files)) {
-      images = req.files.map((file) => {
-        return file.filename;
-      });
-    }
+
     // Kiểm tra và xử lý các biến thể (variations)
     if (Array.isArray(formData.variations)) {
-      formData.variations = formData.variations.map((variation) => {
-        // Xóa các trường attributes rỗng
-        if (variation.attributes) {
-          for (let key in variation.attributes) {
-            if (variation.attributes[key] === "") {
-              delete variation.attributes[key];
+      formData.variations = formData.variations
+        .filter((variation) => variation.quantity !== "0") // Lọc các variations có quantity bằng 0
+        .map((variation) => {
+          // Xóa các trường attributes rỗng
+          if (variation.attributes) {
+            for (let key in variation.attributes) {
+              if (variation.attributes[key] === "") {
+                delete variation.attributes[key];
+              }
             }
           }
-        }
-        return variation;
-      });
+          return variation;
+        });
     }
-    formData.images = images;
-    return res.json(req.body);
-    product.save().then(() => {
-      req.flash("message", {
-        type: "success",
-        message: "lưu sản phẩm thành công",
-      });
-      res.redirect("/admin/product");
-    });
+    const product = new Product(formData);
+    product
+      .save()
+      .then(() => {
+        req.flash("message", {
+          type: "success",
+          message: "Lưu sản phẩm thành công",
+        });
+        res.redirect("/admin/product");
+      })
+      .catch(next);
   }
+
   //cập nhật sản phẩm
   updateProduct(req, res, next) {
     res.json(req.body);
@@ -802,7 +802,22 @@ class ApiController {
     });
   }
   changeBanner(req, res) {
-    res.send(req.body);
+    let status;
+    if (req.body.status) {
+      status = true;
+    } else {
+      status = false;
+    }
+    Banner.findById(req.params.id).then((banner) => {
+      banner.status = status;
+      banner.save().then(() => {
+        req.flash("message", {
+          type: "success",
+          message: "Đổi trạng thái thành công",
+        });
+        res.redirect("back");
+      });
+    });
   }
 
   // trang order
@@ -864,6 +879,7 @@ class ApiController {
   }
   // phân quyền
   changeHierarchy(req, res) {
+    // return res.send(req.body);
     User.findById(req.params.id).then((user) => {
       user.role = req.body.role;
       user.save().then(() => {

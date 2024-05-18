@@ -48,14 +48,14 @@
     </div>
     <div class="col">
       <div class="row mt-4">
-        <h3>Phân Loại Sản Phẩm Bán Chạy:</h3>
-        {{#each productWithMaxSold}}
+        <h3>Top Sản Phẩm Bán Chạy:</h3>
+        {{#each topProducts}}
           <div class="col-4">
             <div class="card" style="width: 15rem;">
               <img src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}" class="card-img-top">
               <div class="card-body">
                 <h5 class="card-title">{{this.name}}</h5>
-                <p class="card-text">Phân Loại: {{#each this.variations.attributes}}{{this}} {{/each}}</p>
+                <p class="card-text">Tổng Số lượt bán: {{this.totalSold}}</p>
               </div>
             </div>
           </div>

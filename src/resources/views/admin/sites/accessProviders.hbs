@@ -26,7 +26,7 @@
             <td>{{this.email}}</td> 
             <td>{{this.name}}</td>  
             <td>
-              <select class="changeHierarchy" name="role" class="form-select" aria-label="Default select example" data-formid="hierarchy-{{this._id}}">
+              <select class="changeHierarchy form-select" name="role" aria-label="Default select example" data-formid="hierarchy-{{this._id}}">
                 <option  value="user" {{#if (compare this.role "user")}}selected{{/if}}>Khách Hàng</option>
                 <option  value="admin" {{#if (compare this.role "admin")}}selected{{/if}}>Admin</option>
               </select>

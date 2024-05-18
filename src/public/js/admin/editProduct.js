@@ -24,124 +24,232 @@ function showImg() {}
 
 //   ==========================================================================================================================================================
 
-// Nút thêm thuộc tính 1
-var addAttribute1Btn = document.querySelector(".addAttribute1-btn");
-var Attribute1HTML = `<div class="row my-2">
-               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="thuocTinh1 thuocTinh1moi form-control col mx-2 variations variationsmoi" required>
-               <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
-            </div>`;
+// xử lý phân loại
 
-addAttribute1Btn.addEventListener("click", () => {
-  var inputAttribute1Div = document.getElementById("inputAttribute1Div");
-  var secondChild = inputAttribute1Div.children[0]; // Lấy phần tử con thứ hai trong inputdiv
-  secondChild.insertAdjacentHTML("afterend", Attribute1HTML);
-  addAttributeName();
+$("#inpNameAttributePro1").on("input", (e) => {
+  let value = e.target.value.trim();
+  $(".th1").text(value);
 });
-// Nút thêm thuộc tính 2
-var addAttribute2Btn = document.querySelector(".addAttribute2-btn");
-var Attribute2HTML = `<div class="row my-2">
-               <input type="text" id="" placeholder="Nhập Thuộc Tính" class="thuocTinh2 thuocTinh2moi form-control col mx-2 variations variationsmoi" required>
-               <button type="button" onclick="deleteAttribute(event)" class="btn btn-danger col-2">Xóa</button>
-            </div>`;
-
-addAttribute2Btn.addEventListener("click", () => {
-  var inputAttribute2Div = document.getElementById("inputAttribute2Div");
-  var secondChild = inputAttribute2Div.children[0]; // Lấy phần tử con thứ hai trong inputdiv
-  secondChild.insertAdjacentHTML("afterend", Attribute2HTML);
-  addAttributeName();
-  innerHTMLtd();
+$("#inpNameAttributePro2").on("input", (e) => {
+  if ($("#inpNameAttributePro1").val() == "") {
+    e.target.value = "";
+    return;
+  }
+  let value = e.target.value.trim();
+  $(".th2").text(value);
 });
-// // ==================================== create Table ================================================================================================ create Table
-document
-  .getElementById("inpNameAttributePro1")
-  .addEventListener("input", () => {
-    document.querySelector(".th1").textContent = document.getElementById(
-      "inpNameAttributePro1"
-    ).value;
-  });
 
-document
-  .getElementById("inpNameAttributePro2")
-  .addEventListener("input", () => {
-    document.querySelector(".th2").textContent = document.getElementById(
-      "inpNameAttributePro2"
-    ).value;
-  });
-// ==================================================================
-function getArrayAttr() {
-  let attribute1Array = [];
-  let attribute2Array = [];
-
-  $(".thuocTinh1").each(function () {
-    attribute1Array.push($(this).val());
-    // console.log(attribute1Array);
-  });
-  $(".thuocTinh2").each(function () {
-    attribute2Array.push($(this).val());
-    // console.log(attribute2Array);
-  });
+// Nút thêm giá trị
+$(".btnAddValue1").on("click", function () {
+  let html = `
+  <div class="row my-2 attri1-box">
+    <input
+      type="text"
+      placeholder="Giá trị"
+      class="valueAttr1 form-control col mx-2 variations"
+      oninput="handleInpValue(1,event)"
+    />
+    <button
+      type="button"
+      class="btn btn-danger col-2"
+      onclick="deleteValue(1,event)"
+    >Xóa</button>
+  </div>`;
+  $(".areaInpValue1").prepend(html);
+});
+$(".btnAddValue2").on("click", function () {
+  let html = `
+  <div class="row my-2 attri1-box">
+    <input
+      type="text"
+      placeholder="Giá trị"
+      class="valueAttr2 form-control col mx-2 variations"
+      oninput="handleInpValue(2,event)"
+    />
+    <button
+      type="button"
+      class="btn btn-danger col-2"
+      onclick="deleteValue(2,event)"
+    >Xóa</button>
+  </div>`;
+  $(".areaInpValue2").prepend(html);
+});
+// thêm giá trị vào bảng
+function handleInpValue(valAttr, event) {
+  let attr = valAttr;
+  let row = $(event.target.closest(".row"));
+  let indInp = $(row.parent()).find(".row").length - $(row).index() - 1;
+  let arrValueAttr1 = $(".valueAttr1")
+    .map(function () {
+      return $(this).val().trim();
+    })
+    .get()
+    .reverse();
+  let arrValueAttr2 = $(".valueAttr2")
+    .map(function () {
+      return $(this).val();
+    })
+    .get()
+    .reverse();
+  let countCurValue = $(row.parent()).find(".row").length;
+  let countAttr1Value = $(".areaInpValue1 .row").length;
+  let countAttr2Value = $(".areaInpValue2 .row").length;
+  let countRowTable = $("tbody").children().length;
+  let checkEnoughRow = countAttr1Value * countAttr2Value == countRowTable;
+  let valueInp = event.target.value.trim();
+  if (attr == 1) {
+    // input attrValue1
+    // if (valueInp == "") return;
+    if ($("#inpNameAttributePro1").val() == "") {
+      event.target.value = "";
+      return;
+    }
+    let arrIndRow = [];
+    for (let i = 0; i < countAttr2Value; i++) {
+      let numberRow = indInp * countAttr2Value + i;
+      arrIndRow.push(numberRow);
+    }
+    if (!checkEnoughRow) {
+      // không đủ hàng thì thêm hàng mới
+      arrIndRow.forEach((indRow, ind) => {
+        if (countRowTable == 0) {
+          let html = genRowTable(valueInp, arrValueAttr2[0]);
+          $("tbody").append(html);
+          countRowTable++;
+        } else {
+          let rowTable = $("tbody")
+            .children()
+            .eq(indRow - 1);
+          let html = genRowTable(valueInp, arrValueAttr2[ind]);
+          rowTable.after(html);
+        }
+      });
+    } else {
+      // đủ hàng thì chỉ cần thay đổi giá trị
+      arrIndRow.forEach((indRow) => {
+        let rowTable = $("tbody").children().eq(indRow);
+        rowTable.find("td").eq(0).text(valueInp);
+      });
+    }
+  } else {
+    // input attrValue2
+    // nếu chưa nhập attr1 thì không thêm
+    if (countRowTable == 0) {
+      event.target.value = "";
+      return;
+    }
+    let arrIndRow = [];
+    for (let i = 0; i < countAttr1Value; i++) {
+      let numberRow = indInp + countAttr2Value * i;
+      arrIndRow.push(numberRow);
+    }
+    if (!checkEnoughRow) {
+      // không đủ hàng thì thêm hàng mới
+      arrIndRow.forEach((indRow, ind) => {
+        let rowTable = $("tbody")
+          .children()
+          .eq(indRow - 1);
+        let html = genRowTable(arrValueAttr1[ind], valueInp);
+        rowTable.after(html);
+      });
+    } else {
+      // đủ hàng thì chỉ cần thay đổi giá trị
+      arrIndRow.forEach((indRow) => {
+        let rowTable = $("tbody").children().eq(indRow);
+        rowTable.find("td").eq(1).text(valueInp);
+      });
+    }
+  }
+  renameNameValueTable();
 }
-// ===================================================================
-function innerHTMLtd() {
-  let attribute1Array = [];
-  let attribute2Array = [];
-  $(".thuocTinh1").each(function () {
-    attribute1Array.push($(this).val());
-    console.log(attribute1Array);
+function deleteValue(valAttr, event) {
+  let attr = valAttr;
+  let row = $(event.target.closest(".row"));
+  let indInp = $(row.parent()).find(".row").length - $(row).index() - 1;
+  let countCurValue = $(row.parent()).find(".row").length;
+  let countAttr1Value = $(".areaInpValue1 .row").length;
+  let countAttr2Value = $(".areaInpValue2 .row").length;
+  let countRowTable = $("tbody").children().length;
+  let checkEnoughRow = countAttr1Value * countAttr2Value == countRowTable;
+  let arrIndRow = [];
+  if (attr == 1) {
+    for (let i = 0; i < countAttr2Value; i++) {
+      let numberRow = indInp * countAttr2Value + i;
+      arrIndRow.push(numberRow);
+    }
+  } else {
+    for (let i = 0; i < countAttr1Value; i++) {
+      let numberRow = indInp + countAttr2Value * i;
+      arrIndRow.push(numberRow);
+    }
+  }
+  arrIndRow.forEach((indRow, ind) => {
+    let rowTable = $("tbody")
+      .children()
+      .eq(indRow - ind);
+    rowTable.remove();
   });
-  $(".thuocTinh2").each(function () {
-    attribute2Array.push($(this).val());
-    console.log(attribute2Array);
-  });
-  let tdHTML2 = "";
-  attribute1Array.forEach(function (e) {
-    tdHTML2 +=
-      `
-    <tr>
-      <td class="td1">` +
-      e +
-      `<input type="text" class="tdAttribute1" value="" hidden name=""></td>
-      <td class="td2"><input type="text" class="tdAttribute2" value="" hidden name=""></td>
-      <td><input type="number" class="form-control tdPrice" value=""></td>
-      <td><input type="number" class="form-control tdQuantity" value=""></td>
-    </tr>
+  row.remove();
+  renameNameValueTable();
+}
+function deleteVariation(event) {
+  let row = $(event.target.closest("tr"));
+  row.find("td>input").val(0);
+}
+function genRowTable(td1, td2) {
+  return `
+  <tr>
+  
+    <td>${td1}</td>
+    <td>${td2}</td>
+    <td><input type="number" class="form-control" name="" /></td>
+    <td><input type="number" class="form-control" name="" /></td>
+    <td>
+      <div class="areaInpHidden"></div>
+      <button
+        type="button"
+        onclick="deleteVariation(event)"
+        class="btn btn-danger"
+      >Xóa phân loại</button></td>
+  </tr>
   `;
-  });
-
-  tbody.innerHTML = tdHTML2;
 }
+function renameNameValueTable() {
+  let nameAttr1 = $("#inpNameAttributePro1").val().trim();
+  let nameAttr2 = $("#inpNameAttributePro2").val().trim();
 
-function addAttributeName() {
-  let nameAttr1 = document.getElementById("inpNameAttributePro1").value;
-  let nameAttr2 = document.getElementById("inpNameAttributePro2").value;
-
-  let count = 0;
-
-  $(".tdAttribute1").each(function () {
-    $(this).attr(
-      "name",
-      "variations[" + count + "][attributes][" + nameAttr1 + "]"
-    );
-    count++;
-  });
-  count = 0;
-  $(".tdAttribute2").each(function () {
-    $(this).attr(
-      "name",
-      "variations[" + count + "][attributes][" + nameAttr2 + "]"
-    );
-    count++;
-  });
-  count = 0;
-  $(".tdPrice").each(function () {
-    $(this).attr("name", "variations[" + count + "][price]");
-    count++;
-  });
-
-  count = 0;
-  $(".tdQuantity").each(function () {
-    $(this).attr("name", "variations[" + count + "][quantity]");
-    count++;
+  $("tbody tr").each((ind, tr) => {
+    let value1 = $(tr).find("td").eq(0).text();
+    let value2 = $(tr).find("td").eq(1).text();
+    let htmlInpHidden = `
+      <input
+        type="text"
+        name="variations[${ind}][attributes][${nameAttr1}]"
+        value="${value1}"
+        hidden
+      />
+      `;
+    if (nameAttr2 != "" && value2 != "") {
+      htmlInpHidden += `
+        <input
+          type="text"
+          name="variations[${ind}][attributes][${nameAttr2}]"
+          value="${value2}"
+          hidden
+        />
+      `;
+    }
+    $(tr)
+      .find("td")
+      .eq(2)
+      .find("input")
+      .attr("name", `variations[${ind}][price]`);
+    $(tr)
+      .find("td")
+      .eq(3)
+      .find("input")
+      .attr("name", `variations[${ind}][quantity]`);
+    $(tr).find("td .areaInpHidden").html(htmlInpHidden);
   });
 }
 

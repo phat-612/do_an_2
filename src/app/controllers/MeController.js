@@ -147,7 +147,6 @@ class MeController {
   historyWaranty(req, res, next) {
     // tên ảnh giá của một sản phẩm đầu tiên
     const email = req.session.email;
-    console.log(email);
     Warranty.aggregate([
       {
         $match: { email: email },

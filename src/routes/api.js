@@ -51,7 +51,7 @@ router.delete("/warranty/:slugWarranty", apiController.deleteWarranty);
 router.put("/warranty/:id", apiController.updateWarranty);
 //banner
 router.post("/storeBanner", upload.array("image"), apiController.storeBanner);
-router.post("changeBanner/:id", apiController.changeBanner);
+router.put("/changeBanner/:id", apiController.changeBanner);
 // category
 router.delete("/category/:slugCategory", apiController.deleteCategory);
 router.post("/storeCategory", apiController.storeCategory);
