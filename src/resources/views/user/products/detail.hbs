@@ -10,7 +10,7 @@
       >
         <div class="carousel-inner">
           {{#each product.images}}
-            <div class="carousel-item active">
+            <div class="carousel-item {{#if (compare @index 0)}}active{{/if}}">
               <img
                 src="{{showImgUpload this}}"
                 class="d-block w-100"

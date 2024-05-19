@@ -7,7 +7,6 @@ function countStatus() {
   let countCancel = $(".cancel").length;
   let countPending = $(".pending").length;
   let countSuccess = $(".success").length;
-
   const data = {
     labels: [
       "Đơn Đã Giao Hàng",

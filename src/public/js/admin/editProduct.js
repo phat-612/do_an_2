@@ -6,20 +6,110 @@ function deleteAttribute(event) {
 }
 
 // ===================================== ảnh
+document.addEventListener("DOMContentLoaded", function () {
+  let multiImageUpload = document.getElementById("multiImageUpload");
+  let multiImagePreview = document.getElementById("multiImagePreview");
+  let countOnDiv = multiImagePreview.getElementsByClassName("col-3").length;
+  const maxFiles = 8;
 
-let historyImg = [];
+  // tạo ảnh
+  function createPreviewImage(src, index) {
+    const preview = document.createElement("img");
+    preview.src = src;
+    preview.classList.add("img-fluid");
+    preview.dataset.index = index;
+    return preview;
+  }
 
-const oldImg = document.querySelectorAll(".oldimg");
-
-oldImg.forEach(function (img) {
-  historyImg.push(img);
+  multiImageUpload.addEventListener("change", function (event) {
+    let files = multiImageUpload.files;
+    if (files.length + countOnDiv > maxFiles) {
+      alert("Vui lòng chọn không quá " + (maxFiles - countOnDiv) + " tệp.");
+      multiImageUpload.value = ""; // Reset input
+      return;
+    } else {
+      Array.from(files).forEach(function (file, index) {
+        const preview = createPreviewImage(URL.createObjectURL(file), index);
+        const colDiv = document.createElement("div");
+        colDiv.classList.add("col-3");
+        let colDivchild = colDiv.appendChild(preview);
+        multiImagePreview.appendChild(colDivchild);
+      });
+    }
+  });
 });
 
-const inputAddImg = document.getElementById("multiImageUpload");
+// document.addEventListener("DOMContentLoaded", function () {
+//   const multiImageUpload = document.getElementById("multiImageUpload");
+//   const multiImagePreview = document.getElementById("multiImagePreview");
+//   let historyImages = []; // Store previously uploaded images
 
-inputAddImg.addEventListener("change", function () {});
+//   // Function to create an image preview element
+//   function createPreviewImage(src, index) {
+//     const preview = document.createElement("img");
+//     preview.src = src;
+//     preview.classList.add("img-fluid", "col-md-4", "mb-3", "w-25");
+//     preview.dataset.index = index;
+//     return preview;
+//   }
 
-function showImg() {}
+//   // Function to display images
+//   function displayImages() {
+//     multiImagePreview.innerHTML = ""; // Clear existing previews
+//     historyImages.forEach((src, index) => {
+//       const preview = createPreviewImage(src, index);
+//       multiImagePreview.appendChild(preview);
+//     });
+//     Array.from(multiImageUpload.files).forEach((file, index) => {
+//       const preview = createPreviewImage(
+//         URL.createObjectURL(file),
+//         historyImages.length + index
+//       );
+//       multiImagePreview.appendChild(preview);
+//     });
+//   }
+
+//   // Handle image file input change
+//   multiImageUpload.addEventListener("change", function () {
+//     const files = multiImageUpload.files;
+//     const maxFiles = 8;
+
+//     if (files.length > maxFiles) {
+//       alert("Vui lòng chọn không quá " + maxFiles + " tệp.");
+//       multiImageUpload.value = ""; // Reset input
+//       return;
+//     }
+
+//     displayImages(); // Display selected images
+//   });
+
+//   // Handle image deletion
+//   multiImagePreview.addEventListener("click", function (event) {
+//     if (event.target.tagName === "IMG") {
+//       const isDelete = confirm("Bạn có chắc chắn muốn xóa ảnh này không?");
+//       if (!isDelete) return;
+
+//       const index = parseInt(event.target.dataset.index);
+//       if (index < historyImages.length) {
+//         historyImages.splice(index, 1); // Remove from history
+//       } else {
+//         const fileIndex = index - historyImages.length;
+//         const fileArray = Array.from(multiImageUpload.files);
+//         fileArray.splice(fileIndex, 1);
+//         const dataTransfer = new DataTransfer();
+//         fileArray.forEach((file) => dataTransfer.items.add(file));
+//         multiImageUpload.files = dataTransfer.files; // Update file input
+//       }
+//       displayImages(); // Refresh previews
+//     }
+//   });
+
+//   // Initialize by displaying existing history images
+//   historyImages = Array.from(document.querySelectorAll(".oldimg")).map(
+//     (img) => img.src
+//   );
+//   displayImages();
+// });
 
 //   ==========================================================================================================================================================
 
@@ -276,97 +366,6 @@ window.onload = function () {
 };
 
 // ghichu ================================================================= ghi chu =================================================================
-
-// document.addEventListener("DOMContentLoaded", function () {
-//   const multiImageUpload = document.getElementById("multiImageUpload");
-//   const multiImagePreview = document.getElementById("multiImagePreview");
-
-//   let historyImages = []; // Lưu trữ các ảnh đã được tải lên trước đó
-
-//   // Hàm tạo một thẻ <img> để xem trước ảnh
-//   function createPreviewImage(src, index) {
-//     var preview = document.createElement("img");
-//     preview.src = src;
-//     preview.classList.add("img-fluid", "col-md-4", "mb-3", "w-25", index);
-//     return preview;
-//   }
-
-//   // Sự kiện xóa ảnh
-//   multiImagePreview.addEventListener("click", function (event) {
-//     if (event.target.tagName === "IMG") {
-//       let isDelete = confirm("Bạn có chắc chắn muốn xóa ảnh này không ?");
-//       if (!isDelete) return;
-//       let indDelete = parseInt(
-//         event.target.classList[event.target.classList.length - 1]
-//       );
-//       if (indDelete >= historyImages.length) {
-//         // Nếu ảnh được click không thuộc danh sách ảnh đã tải lên trước đó
-//         let fileArray = Array.from(multiImageUpload.files);
-//         fileArray.splice(indDelete - historyImages.length, 1); // Xóa file khỏi mảng files
-//         let dataTransfer = new DataTransfer();
-//         fileArray.forEach((file) => {
-//           dataTransfer.items.add(file);
-//         });
-//         multiImageUpload.files = dataTransfer.files;
-//       } else {
-//         // Xóa ảnh khỏi danh sách ảnh đã tải lên trước đó
-//         historyImages.splice(indDelete, 1);
-//       }
-
-//       // Xóa toàn bộ nội dung hiện tại của multiImagePreview
-//       multiImagePreview.innerHTML = "";
-
-//       // Hiển thị lại danh sách ảnh
-//       displayImages();
-//     }
-//   });
-
-//   // Sự kiện change của input
-//   multiImageUpload.addEventListener("change", function (event) {
-//     var fileInput = document.getElementById("multiImageUpload");
-//     var files = fileInput.files;
-//     var maxFiles = 8;
-
-//     if (files.length > maxFiles) {
-//       alert("Vui lòng chọn không quá " + maxFiles + " tệp.");
-//       // Reset input
-//       multiImageUpload.value = "";
-//       return;
-//     }
-
-//     // Xóa danh sách ảnh cũ
-//     historyImages = [];
-
-//     // Lấy ra các ảnh mới được chọn và thêm vào danh sách lịch sử
-//     Array.from(files).forEach((file) => {
-//       historyImages.push(URL.createObjectURL(file));
-//     });
-
-//     // Hiển thị lại danh sách ảnh
-//     displayImages();
-//   });
-
-//   // Hàm hiển thị danh sách ảnh
-//   function displayImages() {
-//     // Hiển thị các ảnh đã được tải lên trước đó
-//     historyImages.forEach(function (imageSrc, index) {
-//       var preview = createPreviewImage(imageSrc, index);
-//       multiImagePreview.appendChild(preview); // Thêm ảnh vào cuối danh sách
-//     });
-
-//     // Hiển thị các ảnh mới được chọn
-//     Array.from(multiImageUpload.files).forEach((file, index) => {
-//       // Kiểm tra xem ảnh đã được hiển thị trước đó chưa
-//       if (!historyImages.includes(URL.createObjectURL(file))) {
-//         var preview = createPreviewImage(
-//           URL.createObjectURL(file),
-//           historyImages.length + index
-//         );
-//         multiImagePreview.appendChild(preview); // Thêm ảnh vào cuối danh sách
-//       }
-//     });
-//   }
-// });
 
 // let historyImages = [];
 // document

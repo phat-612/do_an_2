@@ -1,11 +1,23 @@
 <div class="container mt-3">
   <div class="row">
     <div class="col mx-2 rounded">
-      <img
-        src="https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/s24-sliding-pha-gia.png"
-        class="card-img-top rounded"
-        alt="sd"
-      />
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner h-25">
+          {{#each banners}}
+            <div class="carousel-item {{#if (compare @index 0)}}active{{/if}}">
+              <img src="{{showImgUpload this.image}}" class="d-block w-100 owl-lazy custom-fit-img-400px" alt="{{this.img}}">
+            </div>
+          {{/each}}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
     </div>
     <div class="col-3 bg-dark rounded">sdfsd</div>
   </div>
@@ -39,7 +51,7 @@
         </div>
         <div class="owl-carousel owl-theme">
           {{#each this.products}}
-            <div class="item card h-100 shadow-sm position-relative flex-column justify-content-between mx-1">
+            <a href="/product/{{this.slug}}/" class="item card h-100 shadow-sm position-relative flex-column justify-content-between mx-1">
               {{{showTagDiscount this.discount}}}
               <img
                 src="{{showImgUpload this.images}}"
@@ -64,7 +76,7 @@
                   <i class="bi bi-star"></i>
                 </div>
               </div>
-            </div>
+            </a>
           {{/each}}
         </div>
       </div>

@@ -77,8 +77,7 @@
     <table id="custom-varriant" class="table-based table">
          <thead>
             <tr>
-               <th class="th1">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
-               <th class="th2">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
+               {{{showThTableProduct dataVariation.dataTable}}}
                <th class="col-2">Giá</th>
                <th class="col-2">Số lượng</th>
                <th class="col-2">Action</th>
@@ -92,9 +91,9 @@
                   <td><input type="number" class="form-control tdQuantity" value="{{this.quantity}}" name="variations[{{@index}}][quantity]"></td>
                   <td>
                      <div class="areaInpHidden">
-                        <input type="text" class="tdAttribute1" value="" required hidden>
-                        <input type="text" class="tdAttribute2" value="" required hidden>
                      </div>
+                     <input type="text" class="tdAttribute1" name="variations[{{@index}}][_id]" value="{{this._id}}"  hidden>
+                     <input type="text" class="tdAttribute2" name="variations[{{@index}}][sold]" value="{{this.sold}}"  hidden>
                      <button type="button" onclick="deleteVariation(event)" class="btn btn-danger">Xóa phân loại</button>
                   </td>
                </tr>
@@ -134,12 +133,12 @@
             />
       </div>
       <div class="mb-3">
-         <p>Danh sách Ảnh :</p>
+         <p>Danh sách Ảnh :</p> 
          <div id="multiImagePreview" class="row">
             {{#each product.images}}
                <div class="col-3">
                   <img src="/img/uploads/{{this}}" class="img-fluid oldimg" />
-                  <input type="text" value="{{this}}" name="images[]" hidden>
+                  <input type="text" value="{{this}}" name="images" hidden>
                </div>
             {{/each}}
          </div>

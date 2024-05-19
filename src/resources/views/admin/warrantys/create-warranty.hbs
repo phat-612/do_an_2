@@ -3,9 +3,8 @@
     id="form"
     method="post"
     action="/api/storeWarranty"
-    enctype="multipart/form-data"
   >
-    <div class="row mt-4">
+    <div class="row mt-4">  
       <div class="col-6">
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
@@ -13,10 +12,10 @@
             required
             type="email"
             class="form-control"
-            id="email"
+            id="email"  
             name="email"
           />
-        </div>
+        </div>  
         <div class="mb-3">
           <label for="name" class="form-label">HoVaTen</label>
           <input
@@ -49,17 +48,6 @@
             id="address"
           />
         </div>
-      </div>
-      <div class="input-group mb-3">
-        <label class="input-group-text" for="images">Tải ảnh</label>
-        <input
-          required
-          type="file"
-          name="images"
-          class="form-control"
-          id="images"
-          multiple
-        />
       </div>
       <div class="mb-3">
         <label for="note" class="form-label">Ghi chú</label>

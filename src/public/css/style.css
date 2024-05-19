@@ -43,3 +43,7 @@ input::-webkit-inner-spin-button {
 .custom-none-scroll::-webkit-scrollbar {
   display: none;
 }
+.custom-fit-img-400px {
+  height: 400px;
+  object-fit: cover;
+}

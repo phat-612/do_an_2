@@ -42,11 +42,7 @@ router.post(
 ///////////////////phân quyền
 router.put("/accessProviders/:id", apiController.changeHierarchy);
 // warranty
-router.post(
-  "/storeWarranty",
-  upload.array("images"),
-  apiController.storeWarranty
-);
+router.post("/storeWarranty", apiController.storeWarranty);
 router.delete("/warranty/:slugWarranty", apiController.deleteWarranty);
 router.put("/warranty/:id", apiController.updateWarranty);
 //banner
@@ -63,5 +59,6 @@ router.put("/category/:id", apiController.updateCategory);
 // dành cho test
 router.post("/testAddProduct", apiController.testAddProduct);
 router.post("/testSeeBody", upload.array("images"), apiController.testSeeBody);
+router.get("/exportWarranty", apiController.exportWarranty);
 
 module.exports = router;

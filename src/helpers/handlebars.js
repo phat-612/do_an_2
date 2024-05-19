@@ -121,7 +121,21 @@ module.exports = {
     }
     return html;
   },
-  showThTableProduct: (attributes) => {},
+  showThTableProduct: (dataTable) => {
+    let html = "";
+    let attributes = dataTable[0].attributes;
+    Object.keys(attributes).forEach((key, index) => {
+      html += `
+      <th class="th${index + 1} col-3">${key}</th>
+      `;
+    });
+    if (Object.keys(attributes).length == 1) {
+      html += `
+      <th class="th2"></th>
+      `;
+    }
+    return html;
+  },
   showTagSoldout: (quantity) => {
     if (quantity == 0) {
       return `<p

@@ -1,6 +1,6 @@
 const Category = require("../models/Category");
 const Product = require("../models/Product");
-
+const Banner = require("../models/Banner");
 const { getDiscount, getDataPagination } = require("../../util/function");
 
 class SiteController {
@@ -25,9 +25,12 @@ class SiteController {
       });
       Promise.all(promises)
         .then((data) => {
-          res.render("user/sites/home", {
-            js: "user/home",
-            categories: data,
+          Banner.find({ status: true }).then((banners) => {
+            res.render("user/sites/home", {
+              js: "user/home",
+              categories: data,
+              banners: banners.map((banner) => banner.toObject()),
+            });
           });
         })
         .catch((error) => {

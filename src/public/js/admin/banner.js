@@ -45,11 +45,13 @@ document.addEventListener("DOMContentLoaded", function () {
       bannerModal.querySelector("#name").value = nameBanner;
       bannerModal.querySelector("#link").value = linkBanner;
       bannerModal.querySelector("#preview-image").src = imageBanner;
+      bannerModal.querySelector("#preview-image").classList.remove("d-none"); //nếu đang sửa, hiện ảnh
     } else {
       // đang thêm banner mới
       bannerModal.querySelector("#name").value = "";
       bannerModal.querySelector("#link").value = "";
       bannerModal.querySelector("#preview-image").src = "";
+      bannerModal.querySelector("#preview-image").classList.add("d-none"); //nếu đang thêm, ẩn ảnh
     }
   });
 
@@ -65,6 +67,13 @@ document.addEventListener("DOMContentLoaded", function () {
       bannerModal.querySelector("#link").value = link;
       bannerModal.querySelector("#preview-image").src = linkimage;
     });
+  });
+});
+//view
+document.querySelectorAll(".btn-view").forEach(function (button) {
+  button.addEventListener("click", function (event) {
+    const image = event.currentTarget.getAttribute("data-image");
+    document.querySelector("#viewImg").setAttribute("src", image);
   });
 });
 //xóa

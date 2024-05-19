@@ -1,13 +1,13 @@
+<div class="container">
 <div class="m-4">
-  <a href="/admin/warranty/create" class="btn btn-secondary btn-sm">Tạo đơn bảo
+  <a href="/admin/warranty/create" class="btn btn-secondary btn-sm float-end">Tạo đơn bảo
     hành</a>
-  <table class="table mt-4">
+  <table class="table mt-4">  
     <thead>
-      <tr>
+      <tr>    
         <th scope="col">STT</th>
         <th scope="col">Email</th>
         <th scope="col">HovaTen</th>
-        <th scope="col" class="col-1">HinhAnh</th>
         <th scope="col">Diachi</th>
         <th scope="col">Sodienthoai</th>
       </tr>
@@ -18,13 +18,6 @@
           <th scope="row">{{sum @index 1}}</th>
           <td>{{this.email}}</td>
           <td>{{this.name}}</td>
-          <td>
-            {{#each images}}
-              {{#if @first}}
-                <img src="/img/uploads/{{this}}" alt="" class="w-75" />
-              {{/if}}
-            {{/each}}
-          </td>
           <td>{{this.address}}</td>
           <td>{{this.phone}}</td>
           <td>
@@ -77,4 +70,5 @@
   </div>
 </div>
 {{! delete }}
-<form name="warrantyDelete" method="POST" action=""></form>
+<form name="warrantyDelete" method="POST" action=""></form>     
+</div>

@@ -76,6 +76,22 @@ class AdminController {
     Category.find().then((categorys) => {
       Product.findById(req.params.id).then((product) => {
         const productVariations = product.variations;
+        const productAttrs = product.variations.map((detail) => {
+          return detail.attributes;
+        });
+        let attributes1 = {};
+        let attributes2 = {};
+        productAttrs.forEach((attr) => {
+          for (let key in attr) {
+            let target =
+              key === Object.keys(attr)[0] ? attributes1 : attributes2;
+            if (!target[key]) {
+              target[key] = [attr[key]];
+            } else if (!target[key].includes(attr[key])) {
+              target[key].push(attr[key]);
+            }
+          }
+        });
         let dataVariation = {
           dataTable: [],
         };
@@ -114,10 +130,6 @@ class AdminController {
             });
           });
         }
-        // return res.send({
-        //   product,
-        //   dataVariation,
-        // });
         res.render("admin/products/editProduct", {
           product: mongooseToObject(product),
           layout: "admin",
@@ -125,6 +137,8 @@ class AdminController {
           css: "admin/editProduct",
           categorys: multipleMongooseToObject(categorys),
           dataVariation: dataVariation,
+          attributes1: attributes1,
+          attributes2: attributes2,
         });
       });
     });
@@ -223,6 +237,7 @@ class AdminController {
   banner(req, res) {
     Banner.find({}).then((banners) => {
       res.render("admin/sites/banner", {
+        title: "Quản Lý Banner",
         layout: "admin",
         js: "admin/banner",
         css: "admin/banner",

@@ -9,7 +9,6 @@ const methodOverride = require("method-override");
 const path = require("path");
 const MongoStore = require("connect-mongo");
 const cookieParser = require("cookie-parser");
-
 // import user
 const db = require("./config/db");
 const route = require("./routes");
@@ -33,6 +32,7 @@ app.engine(
     layoutsDir: path.join(__dirname, "resources/views/layouts"),
   })
 );
+
 // Cấu hình multer
 const storage = multer.diskStorage({
   destination: "./public/img/product",

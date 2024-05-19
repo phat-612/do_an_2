@@ -13,6 +13,7 @@ const crypto = require("crypto");
 const querystring = require("qs");
 const bcrypt = require("bcrypt");
 const validator = require("email-validator");
+const PDFDocument = require("pdfkit");
 
 // ------------------------
 require("dotenv").config();
@@ -185,16 +186,8 @@ class ApiController {
   }
   storeWarranty(req, res, next) {
     const formData = req.body;
-    let images = [];
-    if (req.files && Array.isArray(req.files)) {
-      images = req.files.map((file) => {
-        return file.filename;
-      });
-    }
-    formData.images = images;
     const warranty = new Warranty(formData);
-    warranty.save();
-    res.redirect("/admin/warranty/show");
+    warranty.save().then(res.redirect("/admin/warranty/show"));
   }
   updateWarranty(req, res, next) {
     Warranty.findOne({ _id: req.params.id }).then((warranty) => {
@@ -236,25 +229,29 @@ class ApiController {
   }
   deleteWarranty(req, res) {
     const warrantyId = req.params.slugWarranty;
-    const filePath = path.join(
-      __dirname,
-      "..",
-      "..",
-      "public",
-      "img",
-      "uploads"
-    );
-
     Warranty.findOne({ _id: warrantyId }).then((warranty) => {
-      warranty.images.forEach((image) => {
-        const fullPath = path.join(filePath, image);
-        fs.unlinkSync(fullPath); // try to delete the file
-      });
-
       Warranty.deleteOne({ _id: warrantyId }).then(() => {
         res.redirect("back");
       });
     });
+  }
+  exportWarranty(req, res) {
+    const doc = new PDFDocument();
+    const outputFilePath = path.join(
+      __dirname,
+      "../..",
+      "file_download",
+      "output.pdf"
+    );
+    doc.pipe(fs.createWriteStream(outputFilePath));
+    doc
+      .font(
+        path.join(__dirname, "../..", "public", "fonts", "times_new_roman.ttf")
+      )
+      .fontSize(25)
+      .text("Some text with an embedded font!", 100, 100);
+    doc.end();
+    res.send("tao file");
   }
 
   // api account
