@@ -3,7 +3,6 @@ let tbody = document.querySelector("tbody");
 // =============================================
 function deleteAttribute(event) {
   event.target.closest(".row").remove();
-  addAttributeName();
 }
 
 // ===================================== ảnh
@@ -26,6 +25,7 @@ function showImg() {}
 
 // xử lý phân loại
 
+// xử lý 2 cái tiêu đề tên
 $("#inpNameAttributePro1").on("input", (e) => {
   let value = e.target.value.trim();
   $(".th1").text(value);
@@ -85,12 +85,14 @@ function handleInpValue(valAttr, event) {
     })
     .get()
     .reverse();
+  console.log(arrValueAttr1);
   let arrValueAttr2 = $(".valueAttr2")
     .map(function () {
       return $(this).val();
     })
     .get()
     .reverse();
+  console.log(arrValueAttr2);
   let countCurValue = $(row.parent()).find(".row").length;
   let countAttr1Value = $(".areaInpValue1 .row").length;
   let countAttr2Value = $(".areaInpValue2 .row").length;
@@ -270,8 +272,6 @@ function checkExistValue() {
 percentInput.addEventListener("input", checkExistValue);
 // ==========================================================================
 window.onload = function () {
-  addAttributeName();
-  getArrayAttr();
   checkExistValue();
 };
 
