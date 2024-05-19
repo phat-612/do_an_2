@@ -103,10 +103,25 @@ module.exports = {
     }
     if (discount > 0) {
       return `<p
-                class="position-absolute bg-danger p-1 text-white rounded-end-5"
+                class="position-absolute bg-danger p-1 text-white rounded-end-5 z-3  "
               >Giảm ${discount} %</p>`;
     }
   },
+  showTdTableProduct: (attributes) => {
+    let html = "";
+    Object.keys(attributes).forEach((key, index) => {
+      html += `
+      <td class="td${index + 1}">${attributes[key]}</td>
+      `;
+    });
+    if (Object.keys(attributes).length == 1) {
+      html += `
+      <td class="td2"></td>
+      `;
+    }
+    return html;
+  },
+  showThTableProduct: (attributes) => {},
   showTagSoldout: (quantity) => {
     if (quantity == 0) {
       return `<p
@@ -241,6 +256,7 @@ module.exports = {
     }
     return false;
   },
+
   disabledQuantityZero: (quantity) => {
     if (quantity == 0) {
       return "disabled";

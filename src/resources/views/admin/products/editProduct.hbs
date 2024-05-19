@@ -85,18 +85,16 @@
             </tr>
          </thead>
          <tbody>
-            {{#each product.variations}}
-               <tr data-bs-id="{{this._id}}" data-bs-sold="{{this.sold}}">
-                  <td class="td1">{{#each this.attributes}}{{#if @first}}{{this}}{{/if}}{{/each}}<input type="text" class="tdAttribute1" value="{{#each this.attributes}}{{#if @first}}{{this}}{{/if}}{{/each}}" required hidden></td>
-                  <td class="td2">{{#each this.attributes}}{{#if
-                        @last
-                     }}{{this}}{{/if}}{{/each}}<input type="text" class="tdAttribute2" value="{{#each this.attributes}}{{#if
-                        @last
-                     }}{{this}}{{/if}}{{/each}}" required hidden></td>
+            {{#each dataVariation.dataTable}}
+            <tr data-bs-id="{{this._id}}" data-bs-sold="{{this.sold}}">
+                  {{{showTdTableProduct this.attributes}}}
                   <td><input type="number" class="form-control tdPrice" value="{{this.price}}" name="variations[{{@index}}][price]" ></td>
                   <td><input type="number" class="form-control tdQuantity" value="{{this.quantity}}" name="variations[{{@index}}][quantity]"></td>
                   <td>
-                     <div class="areaInpHidden"></div>
+                     <div class="areaInpHidden">
+                        <input type="text" class="tdAttribute1" value="" required hidden>
+                        <input type="text" class="tdAttribute2" value="" required hidden>
+                     </div>
                      <button type="button" onclick="deleteVariation(event)" class="btn btn-danger">Xóa phân loại</button>
                   </td>
                </tr>

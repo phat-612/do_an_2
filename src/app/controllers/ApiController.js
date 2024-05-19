@@ -122,6 +122,7 @@ class ApiController {
     });
   }
   updateCategory(req, res, next) {
+    // return res.send(req.body);
     const idParent = req.body.idParent || null;
     req.body.idParent = idParent;
 
@@ -820,6 +821,82 @@ class ApiController {
     });
   }
 
+  editBanner(req, res) {
+    Banner.findById(req.params.id).then((banner) => {
+      let oldImageFilename = banner.image;
+
+      // Nếu có ảnh mới được tải lên
+      if (req.files) {
+        // Xóa ảnh cũ nếu có
+        if (oldImageFilename) {
+          let oldImagePath = path.join(
+            __dirname,
+            "..",
+            "..",
+            "public",
+            "img",
+            "uploads",
+            oldImageFilename
+          );
+          //kiểm tra có hay khộng
+          if (fs.existsSync(oldImagePath)) {
+            fs.unlinkSync(oldImagePath);
+          }
+        }
+        // console.log(oldImageFilename);
+
+        // Cập nhật đường dẫn ảnh mới
+        req.body.image = req.files[0].filename;
+        // console.log(req.body.image);
+      } else {
+        // Nếu không có ảnh mới, giữ nguyên ảnh cũ
+        req.body.image = oldImageFilename;
+      }
+
+      // Cập nhật banner sau cùng
+      Banner.updateOne({ _id: req.params.id }, { $set: req.body })
+        .then(() => {
+          res.redirect("back");
+        })
+        .catch((error) => {
+          console.error(error);
+          res.status(500).send({
+            message: "Đã xảy ra lỗi trong quá trình cập nhật banner.",
+          });
+        });
+    });
+  }
+  deleteBanner(req, res) {
+    const Id = req.params.id;
+    const filePath = path.join(
+      __dirname,
+      "..",
+      "..",
+      "public",
+      "img",
+      "uploads"
+    );
+
+    Banner.findOne({ _id: Id }).then((banner) => {
+      if (!banner) {
+        res.send("không tìm thấy");
+      } else {
+        const fullPath = path.join(filePath, banner.image);
+
+        if (fs.existsSync(fullPath)) {
+          fs.unlinkSync(fullPath); // delete the file
+        }
+
+        Banner.deleteOne({ _id: Id }).then(() => {
+          req.flash("message", {
+            type: "danger",
+            message: "Xóa thành công",
+          });
+          res.redirect("back");
+        });
+      }
+    });
+  }
   // trang order
   changeStatus(req, res) {
     Order.findOne({ _id: req.params.id }).then((order) => {

@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let button = event.relatedTarget;
     // console.log(button);
     let linkAction = button.getAttribute("data-linkAction");
-    categoryModal.querySelector("form").action = linkAction;
+    categoryModal.querySelector("#form").action = linkAction;
     let idCategory = button.getAttribute("data-id");
     if (idCategory) {
       let nameCategory = button.getAttribute("data-name");
@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
     button.addEventListener("click", function () {
       const name = button.getAttribute("data-name");
       const idParent = button.getAttribute("data-idParent");
-      // const id = button.getAttribute("data-id");
 
       // Điền thông tin vào modal
       categoryModal.querySelector("#name").value = name;

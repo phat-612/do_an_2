@@ -11,10 +11,12 @@
           </label>
         </div>
       <button
+        data-linkAction="/api/storeBanner"
         type="button"
         class="btn btn-success"
         data-bs-toggle="modal"
         data-bs-target="#addBannerModal"
+        id="addBanner"
       >Thêm Banner</button>
 
       <table class="table table-bordered table-striped mt-4">
@@ -30,14 +32,12 @@
         </thead>
         <tbody>
           {{#each banners}}
-          {{!-- http://localhost:3000/api/accessProviders/6600f792f664fbdbe6967bd1?_method=PUT 
-          http://localhost:3000/api/changeBanner/66483db3582904128e72d9d8?_method=PUT  --}}
           <form id="changeStatus-{{this._id}}" method="POST" action="/api/changeBanner/{{this._id}}?_method=PUT">
             <tr>
               <th scope="row">{{sum @index 1}}</th>
               <td>{{this.name}}</td>
               <td>
-                <img src="/img/uploads/{{this.image}}" alt="" class="w-25" />
+                <img src="{{showImgUpload this.image}}" alt="" class="w-25" />
               </td>
               <td>{{formatDate this.createdAt "DD/MM/YYYY"}}</td>
               <td>
@@ -51,13 +51,30 @@
                     role="switch"
                     id="flexSwitchCheckDefault"
                     value="{{this.status}}"
-                    {{#if this.status}}checked{{/if}} 
+                    {{#if this.status}}
+                        checked{{/if}} 
                   />
                 </div>  
               </td>
               <td>
-                <button type="button" class="btn btn-success">Sửa</button>
-                <button type="button" class="btn btn-dark">Xóa</button> 
+                <button 
+                data-linkAction="/api/editBanner/{{this._id}}?_method=PUT"
+                data-name="{{this.name}}" 
+                data-id="{{this._id}}" 
+                id="editBanner" 
+                data-link="{{this.link}}" 
+                data-image="{{this.image}}"
+                data-linkImage="{{showImgUpload this.image}}"
+                type="button" 
+                class="btn btn-success edit-banner-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#addBannerModal">Sửa</button>
+                <button 
+                data-bs-toggle="modal"
+                data-bs-target="#delete-banner-modal" 
+                data-delete="{{this._id}}" 
+                type="button"
+                class="btn btn-dark btn-delete ">Xóa</button> 
               </td>
             </tr>
           </form>
@@ -86,28 +103,37 @@
             </div>
 
             <form
-              id="addBanner"
+              id="editBanner"
               method="post"
-              action="/api/storeBanner"
+              action=""
               enctype="multipart/form-data"
             >
               <div class="modal-body">
                 <div class="form-group">
                   <label for="banner-name" class="col-form-label">Tên Banner:</label>
                   <input
+                    id="name"
                     type="text"
                     name="name"
                     class="form-control"
-                    id="banner-name"
                   />
                 </div>
                 <div class="form-group">
+                    <label for="banner-link" class="col-form-label">Link :</label>
+                    <input
+                          type="text" 
+                          name="link" 
+                          class="form-control" 
+                          id="link"/>
+                  </div>
+                <div class="form-group">
                   <label for="banner-image" class="col-form-label">Ảnh Banner:</label>
+                   <img class="w-25" id="preview-image" src="" alt="Preview Image">
                   <input
                     type="file"
                     name="image"
                     class="form-control"
-                    id="banner-image"
+                    id="image"
                   />
                 </div>
               </div>
@@ -117,7 +143,7 @@
                   class="btn btn-secondary"
                   data-bs-dismiss="modal"
                 >Đóng</button>
-                <input type="submit" class="btn btn-primary" value="Lưu" />
+                <input type="submit" class="btn btn-primary" value="Lưu"  />
               </div>
             </form>
           </div>
@@ -126,3 +152,32 @@
     </div>
   </div>
 </div>
+{{! delete }}
+<div id="delete-banner-modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Bộ bạn muốn xóa lắm à ?</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn chắc chắn muốn xóa ?</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          id="btn-delete"
+          type="button"
+          class="btn btn-secondary"
+        >Xóa</button>
+        <button type="button" data-bs-dismiss="modal" class="btn btn-danger">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>
+{{! delete }}
+<form name="bannerDelete" method="POST" action=""></form>

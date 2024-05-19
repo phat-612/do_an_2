@@ -26,6 +26,7 @@ class SiteController {
       Promise.all(promises)
         .then((data) => {
           res.render("user/sites/home", {
+            js: "user/home",
             categories: data,
           });
         })
@@ -90,16 +91,7 @@ class SiteController {
             slug: category.slug,
           }));
           products = products.map((product) => product.toObject());
-          return res.send({
-            products,
-            subCategories,
-            rootCategory,
-            path: req.originalUrl,
-            pathName: req._parsedUrl.pathname,
-            currentPage,
-            totalPage,
-            url,
-          });
+
           res.render("user/products/show", {
             js: "user/showProducts",
             products,
