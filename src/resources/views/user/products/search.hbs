@@ -30,7 +30,7 @@
       {{! bắt đầu card }}
       <div class="col">
         <div class="card h-100 shadow-sm position-relative">
-          <a href="/product/{{this.slug}}/" class="">
+          <a href="/product/{{this.slug}}/{{this.variations.slug}}" class="">
             {{{showTagDiscount this.discount}}}
             <img
               src="{{showImgUpload this.images}}"
@@ -38,7 +38,7 @@
               alt="sd"
             />
             <div class="card-body">
-              <p class="card-text fw-bold fs-5">
+              <p class="card-text fw-bold fs-5 text-capitalize ">
                 {{this.name}}
               </p>
               {{{showPriceInCard this.variations.price this.discount}}}

@@ -126,16 +126,14 @@ class SiteController {
             },
             { $unwind: "$variations" },
             {
-              $project: {
-                attrToString: "$variations.attributes",
+              $set: {
                 name: {
-                  $concat: ["$name", " "],
+                  $reduce: {
+                    input: { $objectToArray: "$variations.attributes" },
+                    initialValue: "$name",
+                    in: { $concat: ["$$value", " ", "$$this.v"] },
+                  },
                 },
-                slug: 1,
-                description: 1,
-                images: 1,
-                discount: 1,
-                variations: "$variations",
               },
             },
             ...sortAndFilter,
@@ -155,12 +153,23 @@ class SiteController {
               },
             },
             { $unwind: "$variations" },
+            {
+              $set: {
+                name: {
+                  $reduce: {
+                    input: { $objectToArray: "$variations.attributes" },
+                    initialValue: "$name",
+                    in: { $concat: ["$$value", " ", "$$this.v"] },
+                  },
+                },
+              },
+            },
             ...sortAndFilter,
           ]),
         ]).then(([categories, products, dataPagi]) => {
-          return res.send({
-            products,
-          });
+          // return res.send({
+          //   products,
+          // });
           let [currentPage, totalPage, countChild] = getDataPagination(
             dataPagi,
             req
@@ -344,7 +353,19 @@ class SiteController {
     Promise.all([
       Product.aggregate([
         { $unwind: "$variations" },
+        {
+          $set: {
+            name: {
+              $reduce: {
+                input: { $objectToArray: "$variations.attributes" },
+                initialValue: "$name",
+                in: { $concat: ["$$value", " ", "$$this.v"] },
+              },
+            },
+          },
+        },
         ...sortAndFilter,
+
         {
           $skip: skip,
         },
@@ -352,7 +373,21 @@ class SiteController {
           $limit: limit,
         },
       ]),
-      Product.aggregate([{ $unwind: "$variations" }, ...sortAndFilter]),
+      Product.aggregate([
+        { $unwind: "$variations" },
+        {
+          $set: {
+            name: {
+              $reduce: {
+                input: { $objectToArray: "$variations.attributes" },
+                initialValue: "$name",
+                in: { $concat: ["$$value", " ", "$$this.v"] },
+              },
+            },
+          },
+        },
+        ...sortAndFilter,
+      ]),
     ]).then(([products, dataPagi]) => {
       let [currentPage, totalPage, countChild] = getDataPagination(
         dataPagi,
