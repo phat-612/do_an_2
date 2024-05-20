@@ -143,29 +143,28 @@ module.exports = {
               >Hết hàng</p>`;
     }
   },
-  showDefaultPrice: (variations) => {
-    const defaultPrizes = variations.map((variation) => variation.price);
-    const minPrice = Math.min(...defaultPrizes);
-    const maxPrice = Math.max(...defaultPrizes);
-    if (minPrice == maxPrice) {
-      return minPrice.toLocaleString("vi-VN");
-    } else {
-      return `${minPrice.toLocaleString("vi-VN")} - ${maxPrice.toLocaleString(
-        "vi-VN"
-      )}`;
+  showPriceInCard: (price, discount) => {
+    let percentDiscount = getDiscount(discount);
+    let a = `<p class="card-text text-decoration-line-through">
+                  {{showPrice this.variation.price}}
+                </p>
+                <p class="card-text text-danger fs-4 fw-medium">
+                  {{}}
+                </p>`;
+    if (percentDiscount > 0) {
+      return `
+        <p class="card-text text-decoration-line-through">
+          ${price.toLocaleString("vi-VN")}
+        </p>
+        <p class="card-text text-danger fs-4 fw-medium">
+          ${((price * (100 - percentDiscount)) / 100).toLocaleString("vi-VN")}
+        </p>
+      `;
     }
-  },
-  showDiscountPrice: (variations, discount) => {
-    const defaultPrizes = variations.map((variation) => variation.price);
-    const minPrice = Math.min(...defaultPrizes) * (1 - discount.percent / 100);
-    const maxPrice = Math.max(...defaultPrizes) * (1 - discount.percent / 100);
-    if (minPrice == maxPrice) {
-      return minPrice.toLocaleString("vi-VN");
-    } else {
-      return `${minPrice.toLocaleString("vi-VN")} - ${maxPrice.toLocaleString(
-        "vi-VN"
-      )}`;
-    }
+    return `
+      <p class="card-text text-danger fs-4 fw-medium">
+        ${price.toLocaleString("vi-VN")}
+      </p>`;
   },
   showVariations: (variations, curVariationSlug, discount) => {
     let outputHtml = "";
@@ -246,6 +245,10 @@ module.exports = {
       return "bg-success";
     }
     return "bg-danger";
+  },
+  isDiscount: (discount) => {
+    const discountPercent = getDiscount(discount);
+    return discountPercent > 0;
   },
   isDisabled: (isDisabled) => {
     if (isDisabled) {

@@ -62,12 +62,7 @@
                 <p class="card-text fw-bold fs-5">
                   {{this.name}}
                 </p>
-                <p class="card-text text-decoration-line-through">
-                  {{showDefaultPrice this.variations}}
-                </p>
-                <p class="card-text text-danger fs-4 fw-medium">
-                  {{showDiscountPrice this.variations this.discount}}
-                </p>
+                {{{showPriceInCard this.variation.price this.discount}}}
                 <div class="ratings">
                   <i class="bi bi-star"></i>
                   <i class="bi bi-star"></i>

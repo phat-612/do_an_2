@@ -16,6 +16,10 @@ class SiteController {
             .sort({ view: -1 })
             .limit(10)
             .then((products) => {
+              products = products.map((product) => ({
+                ...product.toObject(),
+                variation: product.variations[0],
+              }));
               return {
                 ...category,
                 products,
@@ -26,6 +30,10 @@ class SiteController {
       Promise.all(promises)
         .then((data) => {
           Banner.find({ status: true }).then((banners) => {
+            // return res.send({
+            //   categories: data,
+            //   banners: banners.map((banner) => banner.toObject()),
+            // });
             res.render("user/sites/home", {
               js: "user/home",
               categories: data,

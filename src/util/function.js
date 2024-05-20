@@ -21,13 +21,20 @@ module.exports = {
    * @return {Number}
    */
   getDiscount: (objDiscount) => {
-    let discount;
-    if (Date.now() > objDiscount.startDay && Date.now() < objDiscount.endDay) {
-      discount = objDiscount.percent;
+    if (typeof objDiscount == "object") {
+      let discount;
+      if (
+        Date.now() > objDiscount.startDay &&
+        Date.now() < objDiscount.endDay
+      ) {
+        discount = objDiscount.percent;
+      } else {
+        discount = 0;
+      }
+      return discount;
     } else {
-      discount = 0;
+      return objDiscount;
     }
-    return discount;
   },
   /**
    * dùng để lấy ra currentPage và totalPage của sản phẩm
