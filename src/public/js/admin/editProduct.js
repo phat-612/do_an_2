@@ -32,85 +32,35 @@ document.addEventListener("DOMContentLoaded", function () {
         const preview = createPreviewImage(URL.createObjectURL(file), index);
         const colDiv = document.createElement("div");
         colDiv.classList.add("col-3");
-        let colDivchild = colDiv.appendChild(preview);
-        multiImagePreview.appendChild(colDivchild);
+        colDiv.appendChild(preview);
+        multiImagePreview.appendChild(colDiv);
       });
+      countOnDiv = multiImagePreview.getElementsByClassName("col-3").length;
     }
+    $(document).ready(function () {
+      $("img").on("click", function (img) {
+        const isDelete = confirm("Bạn có chắc chắn muốn xóa ảnh này không?");
+        if (!isDelete) {
+          return;
+        } else {
+          $(this).closest("div.col-3").remove();
+          countOnDiv = multiImagePreview.getElementsByClassName("col-3").length;
+        }
+      });
+    });
+  });
+  $(document).ready(function () {
+    $("img").on("click", function (img) {
+      const isDelete = confirm("Bạn có chắc chắn muốn xóa ảnh này không?");
+      if (!isDelete) {
+        return;
+      } else {
+        $(this).closest("div.col-3").remove();
+        countOnDiv = multiImagePreview.getElementsByClassName("col-3").length;
+      }
+    });
   });
 });
-
-// document.addEventListener("DOMContentLoaded", function () {
-//   const multiImageUpload = document.getElementById("multiImageUpload");
-//   const multiImagePreview = document.getElementById("multiImagePreview");
-//   let historyImages = []; // Store previously uploaded images
-
-//   // Function to create an image preview element
-//   function createPreviewImage(src, index) {
-//     const preview = document.createElement("img");
-//     preview.src = src;
-//     preview.classList.add("img-fluid", "col-md-4", "mb-3", "w-25");
-//     preview.dataset.index = index;
-//     return preview;
-//   }
-
-//   // Function to display images
-//   function displayImages() {
-//     multiImagePreview.innerHTML = ""; // Clear existing previews
-//     historyImages.forEach((src, index) => {
-//       const preview = createPreviewImage(src, index);
-//       multiImagePreview.appendChild(preview);
-//     });
-//     Array.from(multiImageUpload.files).forEach((file, index) => {
-//       const preview = createPreviewImage(
-//         URL.createObjectURL(file),
-//         historyImages.length + index
-//       );
-//       multiImagePreview.appendChild(preview);
-//     });
-//   }
-
-//   // Handle image file input change
-//   multiImageUpload.addEventListener("change", function () {
-//     const files = multiImageUpload.files;
-//     const maxFiles = 8;
-
-//     if (files.length > maxFiles) {
-//       alert("Vui lòng chọn không quá " + maxFiles + " tệp.");
-//       multiImageUpload.value = ""; // Reset input
-//       return;
-//     }
-
-//     displayImages(); // Display selected images
-//   });
-
-//   // Handle image deletion
-//   multiImagePreview.addEventListener("click", function (event) {
-//     if (event.target.tagName === "IMG") {
-//       const isDelete = confirm("Bạn có chắc chắn muốn xóa ảnh này không?");
-//       if (!isDelete) return;
-
-//       const index = parseInt(event.target.dataset.index);
-//       if (index < historyImages.length) {
-//         historyImages.splice(index, 1); // Remove from history
-//       } else {
-//         const fileIndex = index - historyImages.length;
-//         const fileArray = Array.from(multiImageUpload.files);
-//         fileArray.splice(fileIndex, 1);
-//         const dataTransfer = new DataTransfer();
-//         fileArray.forEach((file) => dataTransfer.items.add(file));
-//         multiImageUpload.files = dataTransfer.files; // Update file input
-//       }
-//       displayImages(); // Refresh previews
-//     }
-//   });
-
-//   // Initialize by displaying existing history images
-//   historyImages = Array.from(document.querySelectorAll(".oldimg")).map(
-//     (img) => img.src
-//   );
-//   displayImages();
-// });
-
 //   ==========================================================================================================================================================
 
 // xử lý phân loại
