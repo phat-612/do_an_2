@@ -1,4 +1,4 @@
-<form action="/api/updateProduct" method="post">
+<form action="/api/updateProduct" method="post" enctype="multipart/form-data">
    <input type="text" value="{{product._id}}" name="id" hidden>
   <div class="container">
     <label for="name-Product" class="form-label fs-4">Tên Sản phẩm</label>
@@ -127,8 +127,6 @@
             id="multiImageUpload"
             accept="image/*"
             multiple
-            name="images"
-            value=""
             data-bs-datas="{{#each product.images}}{{this}} {{/each}}"
             />
       </div>
@@ -138,7 +136,7 @@
             {{#each product.images}}
                <div class="col-3">
                   <img src="/img/uploads/{{this}}" class="img-fluid oldimg" />
-                  <input type="text" value="{{this}}" name="images" hidden>
+                  <input type="text" value="{{this}}" name="oldImgs[]" hidden>
                </div>
             {{/each}}
          </div>

@@ -68,7 +68,7 @@ class ApiController {
 
   //cập nhật sản phẩm
   updateProduct(req, res, next) {
-    res.json(req.body);
+    res.send({ clientdata: req.body, multer: req.files });
   }
 
   removeProduct(req, res, next) {

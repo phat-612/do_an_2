@@ -36,7 +36,7 @@ router.post(
 );
 router.post(
   "/updateProduct",
-  upload.array("images"),
+  upload.array("images1"),
   apiController.updateProduct
 );
 ///////////////////phân quyền

@@ -5,12 +5,19 @@ function deleteAttribute(event) {
   event.target.closest(".row").remove();
 }
 
-// ===================================== ảnh
+// ===================================== ảnh ================================================================================================
 document.addEventListener("DOMContentLoaded", function () {
   let multiImageUpload = document.getElementById("multiImageUpload");
   let multiImagePreview = document.getElementById("multiImagePreview");
   let countOnDiv = multiImagePreview.getElementsByClassName("col-3").length;
   const maxFiles = 8;
+
+  // để tạo một FileList chứa file đơn lẻ và gán nó cho thẻ input mới.
+  function createFileList(file) {
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+    return dataTransfer.files;
+  }
 
   // tạo ảnh
   function createPreviewImage(src, index) {
@@ -21,46 +28,76 @@ document.addEventListener("DOMContentLoaded", function () {
     return preview;
   }
 
+  // tạo input file ẩn để lưu file
+  function createPreviewHiddenInput(file, index) {
+    const newFileInput = document.createElement("input");
+    newFileInput.type = "file";
+    // newFileInput.setAttribute("hidden", "true");
+    newFileInput.setAttribute("name", "images1");
+    newFileInput.files = createFileList(file);
+    newFileInput.dataset.index = index;
+    return newFileInput;
+  }
+
   multiImageUpload.addEventListener("change", function (event) {
-    let files = multiImageUpload.files;
+    let files = Array.from(multiImageUpload.files);
     if (files.length + countOnDiv > maxFiles) {
       alert("Vui lòng chọn không quá " + (maxFiles - countOnDiv) + " tệp.");
       multiImageUpload.value = ""; // Reset input
       return;
     } else {
-      Array.from(files).forEach(function (file, index) {
+      files.forEach(function (file, index) {
         const preview = createPreviewImage(URL.createObjectURL(file), index);
+        const newFileInput = createPreviewHiddenInput(file, index);
         const colDiv = document.createElement("div");
         colDiv.classList.add("col-3");
         colDiv.appendChild(preview);
+        colDiv.appendChild(newFileInput);
         multiImagePreview.appendChild(colDiv);
       });
       countOnDiv = multiImagePreview.getElementsByClassName("col-3").length;
+      multiImageUpload.value = ""; // Reset input
     }
-    $(document).ready(function () {
-      $("img").on("click", function (img) {
-        const isDelete = confirm("Bạn có chắc chắn muốn xóa ảnh này không?");
-        if (!isDelete) {
-          return;
-        } else {
-          $(this).closest("div.col-3").remove();
-          countOnDiv = multiImagePreview.getElementsByClassName("col-3").length;
-        }
-      });
-    });
-  });
-  $(document).ready(function () {
-    $("img").on("click", function (img) {
+
+    // sự kiện xóa
+    $("img").on("click", function (event) {
       const isDelete = confirm("Bạn có chắc chắn muốn xóa ảnh này không?");
       if (!isDelete) {
         return;
       } else {
         $(this).closest("div.col-3").remove();
+        const indDelete = event.target.dataset.index;
+        const fileArray = Array.from(multiImageUpload.files);
+        fileArray.splice(indDelete, 1);
+        const dataTransfer = new DataTransfer();
+        fileArray.forEach((file) => {
+          dataTransfer.items.add(file);
+        });
+        multiImageUpload.files = dataTransfer.files;
         countOnDiv = multiImagePreview.getElementsByClassName("col-3").length;
       }
     });
   });
+  // sự kiện xóa
+  $("img").on("click", function (event) {
+    const isDelete = confirm("Bạn có chắc chắn muốn xóa ảnh này không?");
+    if (!isDelete) {
+      return;
+    } else {
+      $(this).closest("div.col-3").remove();
+      const indDelete = event.target.dataset.index;
+      const fileArray = Array.from(multiImageUpload.files);
+      fileArray.splice(indDelete, 1);
+      const dataTransfer = new DataTransfer();
+      fileArray.forEach((file) => {
+        dataTransfer.items.add(file);
+      });
+      multiImageUpload.files = dataTransfer.files;
+      countOnDiv = multiImagePreview.getElementsByClassName("col-3").length;
+    }
+  });
 });
+
 //   ==========================================================================================================================================================
 
 // xử lý phân loại
@@ -360,3 +397,86 @@ window.onload = function () {
 //         .dispatchEvent(new Event("change"));
 //     });
 //   });
+// code xử lý ảnh mới nhất 11:20PM 20/05/2024 =====================================================================================================
+// document.addEventListener("DOMContentLoaded", function () {
+//   let multiImageUpload = document.getElementById("multiImageUpload");
+//   let multiImagePreview = document.getElementById("multiImagePreview");
+//   let countOnDiv = multiImagePreview.getElementsByClassName("col-3").length;
+//   const maxFiles = 8;
+
+//   // tạo ảnh
+//   function createFileList(file) {
+//     const dataTransfer = new DataTransfer();
+//     dataTransfer.items.add(file);
+//     return dataTransfer.files;
+//   }
+//   function createPreviewImage(src, index) {
+//     const preview = document.createElement("img");
+//     preview.src = src;
+//     preview.classList.add("img-fluid");
+//     preview.dataset.index = index;
+//     return preview;
+//   }
+//   function createPreviewHiddenInput(file, index) {
+//     const newFileInput = document.createElement("input");
+//     newFileInput.type = "file";
+//     newFileInput.setAttribute("hidden", "true");
+//     newFileInput.files = createFileList(file);
+//     newFileInput.dataset.index = index;
+//     return newFileInput;
+//   }
+
+//   multiImageUpload.addEventListener("change", function (event) {
+//     let files = multiImageUpload.files;
+//     if (files.length + countOnDiv > maxFiles) {
+//       alert("Vui lòng chọn không quá " + (maxFiles - countOnDiv) + " tệp.");
+//       multiImageUpload.value = ""; // Reset input
+//       return;
+//     } else {
+//       Array.from(files).forEach(function (file, index) {
+//         const preview = createPreviewImage(URL.createObjectURL(file), index);
+//         const newFileInput = createPreviewHiddenInput(file, index);
+//         const colDiv = document.createElement("div");
+//         colDiv.classList.add("col-3");
+//         colDiv.appendChild(preview, newFileInput);
+//         multiImagePreview.appendChild(colDiv);
+//       });
+//       countOnDiv = multiImagePreview.getElementsByClassName("col-3").length;
+//     }
+//     $(document).ready(function () {
+//       $("img").on("click", function (event) {
+//         const isDelete = confirm("Bạn có chắc chắn muốn xóa ảnh này không?");
+//         if (!isDelete) {
+//           return;
+//         } else {
+//           $(this).closest("div.col-3").remove();
+//           let indDelete =
+//             event.target.classList[event.target.classList.length - 1];
+//           let fileArray = Array.from(
+//             document.getElementById("multiImageUpload").files
+//           );
+//           fileArray.splice(indDelete, 1);
+//           let dataTransfer = new DataTransfer();
+//           fileArray.forEach((file) => {
+//             dataTransfer.items.add(file);
+//           });
+//           document.getElementById("multiImageUpload").files =
+//             dataTransfer.files;
+//           countOnDiv = multiImagePreview.getElementsByClassName("col-3").length;
+//           multiImageUpload.value = ""; // Reset input
+//         }
+//       });
+//     });
+//   });
+//   $(document).ready(function () {
+//     $("img").on("click", function (img) {
+//       const isDelete = confirm("Bạn có chắc chắn muốn xóa ảnh này không?");
+//       if (!isDelete) {
+//         return;
+//       } else {
+//         $(this).closest("div.col-3").remove();
+//         countOnDiv = multiImagePreview.getElementsByClassName("col-3").length;
+//       }
+//     });
+//   });
+// });
