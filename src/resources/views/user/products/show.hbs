@@ -56,7 +56,6 @@
           </form>
         </div>
       </div>
-
     </div>
   </div>
   <ul class="nav my-3">
@@ -70,7 +69,7 @@
 
   {{! sắp xếp }}
   <div class="sort d-flex justify-content-between">
-    <div class="title fs-4 fw-bold text-uppercase"><a href="/{{rootCategory}}">Điện thoại</a></div>
+    <div class="title fs-4 fw-bold text-uppercase"><a href="/{{rootCategory.slug}}">{{rootCategory.name}} có {{countProduct}}</a></div>
     <ul class="nav">
       <li><a
           class="btn rounded border ms-2"
@@ -109,12 +108,7 @@
               <p class="card-text fw-bold fs-5">
                 {{this.name}}
               </p>
-              <p class="card-text text-decoration-line-through">
-                {{showDefaultPrice this.variations}}
-              </p>
-              <p class="card-text text-danger fs-4 fw-medium">
-                {{showDiscountPrice this.variations this.discount}}
-              </p>
+              {{{showPriceInCard this.variations.price this.discount}}}
               <div class="ratings">
                 <i class="bi bi-star"></i>
                 <i class="bi bi-star"></i>

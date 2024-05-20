@@ -23,7 +23,9 @@
     <select class="form-control" name="idCategory" id="">
       <option value="">Chọn Danh Mục</option>
       {{#each categorys}}
-        <option value="{{this._id}}">{{this.name}}</option>
+        <option value="{{this._id}}">{{this.idParent.name}}
+          &gt
+          {{this.name}}</option>
       {{/each}}
     </select>
 

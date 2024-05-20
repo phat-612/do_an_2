@@ -359,8 +359,8 @@ module.exports = {
   },
   // code phân trang https://gist.github.com/trantorLiu/5924389
   pagination: (currentPage, totalPage, size, options) => {
-    if (totalPage == 1) {
-      return;
+    if (totalPage == 1 || totalPage == 0) {
+      return "";
     }
     var startPage, endPage, context;
     if (arguments.length === 3) {

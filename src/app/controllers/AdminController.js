@@ -62,14 +62,28 @@ class AdminController {
   }
   // get /product/addproduct
   addPro(req, res, next) {
-    Category.find().then((categorys) => {
-      res.render("admin/products/addProduct", {
-        layout: "admin",
-        js: "admin/addProduct",
-        css: "admin/addProduct",
-        categorys: multipleMongooseToObject(categorys),
+    Category.find()
+      .populate("idParent", "name")
+      .then((categorys) => {
+        const categoryIdParent = [];
+        const categoryNotIdParent = [];
+
+        categorys.forEach((category) => {
+          if (category.idParent) {
+            categoryIdParent.push(category);
+          } else {
+            categoryNotIdParent.push(category);
+          }
+        });
+
+        const storeCategory = categoryNotIdParent.concat(categoryIdParent);
+        res.render("admin/products/addProduct", {
+          layout: "admin",
+          js: "admin/addProduct",
+          css: "admin/addProduct",
+          categorys: multipleMongooseToObject(storeCategory),
+        });
       });
-    });
   }
   //get /product/edit/:id
   editProduct(req, res, next) {
@@ -328,7 +342,6 @@ class AdminController {
         });
 
         const storeCategory = categoryNotIdParent.concat(categoryIdParent);
-
         res.render("admin/sites/category", {
           layout: "admin",
           js: "admin/category",

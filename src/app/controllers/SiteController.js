@@ -63,7 +63,7 @@ class SiteController {
   category(req, res, next) {
     let slugCategory;
     const url = req.url;
-    const rootCategory = req.params.slugCategory;
+
     if (req.params[0]) {
       slugCategory = req.params[0]
         .split("/")
@@ -77,22 +77,90 @@ class SiteController {
       if (!category || category == null) {
         return next();
       }
+      const rootCategory = category.toObject();
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 16;
+      const skip = (page - 1) * limit;
+      let sortAndFilter = [];
+      if (req.query.hasOwnProperty("_find")) {
+        let searchQuery = req.query.q;
+        let words = searchQuery.split(" ");
+
+        let regexWords = words.map((word) => ({
+          name: { $regex: word, $options: "i" },
+        }));
+        sortAndFilter.push({
+          $match: {
+            $and: regexWords,
+          },
+        });
+      }
+      if (req.query.hasOwnProperty("_sort")) {
+        let collum = req.query.column;
+        let type = req.query.type;
+        if (collum != "price") {
+          sortAndFilter.push({
+            $sort: {
+              [collum]: type === "asc" ? 1 : -1,
+            },
+          });
+        } else {
+          sortAndFilter.push({
+            $sort: {
+              "variations.price": type === "asc" ? 1 : -1,
+            },
+          });
+        }
+      }
+
       Category.getArrayChidrendIds(category._id).then((ids) => {
         Promise.all([
           Category.getCategoryChildren(category._id),
-          Product.find({
-            idCategory: {
-              $in: ids,
+          Product.aggregate([
+            {
+              $match: {
+                idCategory: {
+                  $in: ids,
+                },
+              },
             },
-          })
-            .findable(req)
-            .paginate(req),
-          Product.find({
-            idCategory: {
-              $in: ids,
+            { $unwind: "$variations" },
+            {
+              $project: {
+                attrToString: "$variations.attributes",
+                name: {
+                  $concat: ["$name", " "],
+                },
+                slug: 1,
+                description: 1,
+                images: 1,
+                discount: 1,
+                variations: "$variations",
+              },
             },
-          }).findable(req),
+            ...sortAndFilter,
+            {
+              $skip: skip,
+            },
+            {
+              $limit: limit,
+            },
+          ]),
+          Product.aggregate([
+            {
+              $match: {
+                idCategory: {
+                  $in: ids,
+                },
+              },
+            },
+            { $unwind: "$variations" },
+            ...sortAndFilter,
+          ]),
         ]).then(([categories, products, dataPagi]) => {
+          return res.send({
+            products,
+          });
           let [currentPage, totalPage, countChild] = getDataPagination(
             dataPagi,
             req
@@ -101,10 +169,15 @@ class SiteController {
             name: category.name,
             slug: category.slug,
           }));
-          products = products.map((product) => product.toObject());
+          products = products.map((product) => ({
+            ...product,
+            variation: product.variations[0],
+          }));
 
           res.render("user/products/show", {
             js: "user/showProducts",
+            countProduct: countChild,
+            rootCategory,
             products,
             subCategories,
             rootCategory,
@@ -234,16 +307,64 @@ class SiteController {
   }
   search(req, res, next) {
     const url = req.url;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 16;
+    const skip = (page - 1) * limit;
+    let sortAndFilter = [];
+    if (req.query.hasOwnProperty("_find")) {
+      let searchQuery = req.query.q;
+      let words = searchQuery.split(" ");
+
+      let regexWords = words.map((word) => ({
+        name: { $regex: word, $options: "i" },
+      }));
+      sortAndFilter.push({
+        $match: {
+          $and: regexWords,
+        },
+      });
+    }
+    if (req.query.hasOwnProperty("_sort")) {
+      let collum = req.query.column;
+      let type = req.query.type;
+      if (collum != "price") {
+        sortAndFilter.push({
+          $sort: {
+            [collum]: type === "asc" ? 1 : -1,
+          },
+        });
+      } else {
+        sortAndFilter.push({
+          $sort: {
+            "variations.price": type === "asc" ? 1 : -1,
+          },
+        });
+      }
+    }
     Promise.all([
-      Product.find({}).findable(req).paginate(req).exec(),
-      Product.find({}).findable(req).exec(),
+      Product.aggregate([
+        { $unwind: "$variations" },
+        ...sortAndFilter,
+        {
+          $skip: skip,
+        },
+        {
+          $limit: limit,
+        },
+      ]),
+      Product.aggregate([{ $unwind: "$variations" }, ...sortAndFilter]),
     ]).then(([products, dataPagi]) => {
       let [currentPage, totalPage, countChild] = getDataPagination(
         dataPagi,
         req
       );
+      products = products.map((product) => ({
+        ...product,
+        variation: product.variations[0],
+      }));
       return res.render("user/products/search", {
-        products: products.map((product) => product.toObject()),
+        products,
+        keySearch: req.query.q,
         countProduct: countChild,
         currentPage,
         totalPage,

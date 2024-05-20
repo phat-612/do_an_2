@@ -66,7 +66,7 @@
           class="w-100 fs-4 border-top-0 border-start-0 border-end-0 border-bottom-1 border-2"
           name="birthday"
           type="date"
-          value="{{showDate user.birthday}}"
+          value="{{formatDate user.birthday "YYYY-MM-DD"}}"
           disabled
         />
       </div>
@@ -81,7 +81,7 @@
           class="w-100 fs-4 border-top-0 border-start-0 border-end-0 border-bottom-1 border-2"
           name="dateJoin"
           type="date"
-          value="{{showDate user.createdAt}}"
+          value="{{formatDate user.createdAt "YYYY-MM-DD"}}"
           disabled
         />
       </div>
