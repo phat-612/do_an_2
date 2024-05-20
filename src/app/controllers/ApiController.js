@@ -68,7 +68,25 @@ class ApiController {
 
   //cập nhật sản phẩm
   updateProduct(req, res, next) {
-    res.send({ clientdata: req.body, multer: req.files });
+    Product.findById(req.body.id).then((product) => {
+      let arrDatabaseImgList = [];
+      product.images.forEach((image) => {
+        arrDatabaseImgList.push(image);
+      });
+      let oldImgs = req.body.oldImgs;
+      let newImgs = [];
+      req.files.forEach((opject) => {
+        newImgs.push(opject.filename);
+      });
+
+      res.send({
+        clientdata: req.body,
+        multer: req.files,
+        arrDatabaseImgList: arrDatabaseImgList,
+        oldImgs: oldImgs,
+        newImgs: newImgs,
+      });
+    });
   }
 
   removeProduct(req, res, next) {
