@@ -78,19 +78,17 @@ class ApiController {
       req.files.forEach((opject) => {
         newImgs.push(opject.filename);
       });
-      console.log(typeof oldImgs);
-      return;
-      if (oldImgs.length() !== arrDatabaseImgList.length()) {
-        let difference1 = oldImgs.filter(
+      const oldImgsArray = Object.values(oldImgs);
+      if (oldImgsArray.length !== arrDatabaseImgList.length) {
+        let difference1 = oldImgsArray.filter(
           (x) => !arrDatabaseImgList.includes(x)
         );
         let difference2 = arrDatabaseImgList.filter(
-          (x) => !oldImgs.includes(x)
+          (x) => !oldImgsArray.includes(x)
         );
         let differences = difference1.concat(difference2);
         console.log(differences);
       }
-
       res.send({
         clientdata: req.body,
         multer: req.files,
