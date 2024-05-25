@@ -126,7 +126,7 @@ class ApiController {
         formData.images = images;
       }
     });
-    // return res.send(req.body);
+    return res.send(req.body);
     Product.updateOne(
       { _id: req.body.id },
       {
