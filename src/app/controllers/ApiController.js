@@ -68,6 +68,8 @@ class ApiController {
 
   //cập nhật sản phẩm
   updateProduct(req, res, next) {
+    const formData = req.body;
+
     Product.findById(req.body.id).then((product) => {
       let arrDatabaseImgList = [];
       product.images.forEach((image) => {
@@ -87,15 +89,60 @@ class ApiController {
           (x) => !oldImgsArray.includes(x)
         );
         let differences = difference1.concat(difference2);
-        console.log(differences);
+        // console.log(differences);
+        const filePath = path.join(
+          __dirname,
+          "..",
+          "..",
+          "public",
+          "img",
+          "uploads"
+        );
+        differences.forEach((image) => {
+          const fullPath = path.join(filePath, image);
+          fs.unlinkSync(fullPath);
+        });
+        let images = [];
+        if (Array.isArray(formData.variations)) {
+          formData.variations = formData.variations
+            .filter((variation) => variation.quantity !== "0") // Lọc các variations có quantity bằng 0
+            .map((variation) => {
+              // Xóa các trường attributes rỗng
+              if (variation.attributes) {
+                for (let key in variation.attributes) {
+                  if (variation.attributes[key] === "") {
+                    delete variation.attributes[key];
+                  }
+                }
+              }
+              return variation;
+            });
+        }
+        if (req.files && Array.isArray(req.files)) {
+          images = req.files.map((file) => {
+            return file.filename;
+          });
+        }
+        formData.images = images;
       }
-      res.send({
-        clientdata: req.body,
-        multer: req.files,
-        arrDatabaseImgList: arrDatabaseImgList,
-        oldImgs: oldImgs,
-        newImgs: newImgs,
+    });
+    // return res.send(req.body);
+    Product.updateOne(
+      { _id: req.body.id },
+      {
+        name: formData.name,
+        description: formData.description,
+        idCategory: formData.idCategory,
+        variations: formData.variations,
+        discount: formData.discount,
+        images: formData.images,
+      }
+    ).then(() => {
+      req.flash("message", {
+        type: "success",
+        message: "cập nhật sản phẩm thành công",
       });
+      res.redirect("back");
     });
   }
 
@@ -163,7 +210,8 @@ class ApiController {
           message: "Danh mục đã được cập nhật thành công!",
         });
         res.redirect("back");
-      });
+      })
+      .catch(next);
   }
 
   deleteCategory(req, res, next) {

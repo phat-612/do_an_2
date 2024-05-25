@@ -91,6 +91,8 @@
                   <td><input type="number" class="form-control tdQuantity" value="{{this.quantity}}" name="variations[{{@index}}][quantity]"></td>
                   <td>
                      <div class="areaInpHidden">
+                        <input type="text" name="variations[{{@index}}][attributes][{{#each ../product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}]" value="{{#each this.attributes}}{{#if @first}}{{this}}{{/if}}{{/each}}" hidden="">
+                        <input type="text" name="variations[{{@index}}][attributes][{{#each ../product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}]" value="{{#each this.attributes}}{{#if @last}}{{this}}{{/if}}{{/each}}" hidden="">
                      </div>
                      <input type="text" class="tdAttribute1" name="variations[{{@index}}][_id]" value="{{this._id}}"  hidden>
                      <input type="text" class="tdAttribute2" name="variations[{{@index}}][sold]" value="{{this.sold}}"  hidden>
