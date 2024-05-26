@@ -152,7 +152,7 @@ class ApiController {
         console.error(error);
         req.flash("message", {
           type: "error",
-          message: "An error occurred while updating the product",
+          message: "loi",
         });
         res.redirect("back");
       });
