@@ -9,6 +9,7 @@ const Order = require("../models/Order");
 const fs = require("fs");
 const path = require("path");
 const moment = require("moment");
+const mongoose = require("mongoose");
 const crypto = require("crypto");
 const querystring = require("qs");
 const bcrypt = require("bcrypt");
@@ -116,6 +117,10 @@ class ApiController {
             formData.variations = formData.variations
               .filter((variation) => variation.quantity !== "0")
               .map((variation) => {
+                if (!variation._id || variation._id === "") {
+                  // Tạo một ObjectId mới nếu _id không hợp lệ hoặc rỗng
+                  variation._id = new mongoose.Types.ObjectId();
+                }
                 if (variation.attributes) {
                   for (const key in variation.attributes) {
                     if (variation.attributes[key] === "") {
