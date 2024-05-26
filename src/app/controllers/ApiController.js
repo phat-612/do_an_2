@@ -70,26 +70,27 @@ class ApiController {
   updateProduct(req, res, next) {
     const formData = req.body;
 
-    Product.findById(req.body.id).then((product) => {
-      let arrDatabaseImgList = [];
-      product.images.forEach((image) => {
-        arrDatabaseImgList.push(image);
-      });
-      let oldImgs = req.body.oldImgs;
-      let newImgs = [];
-      req.files.forEach((opject) => {
-        newImgs.push(opject.filename);
-      });
-      const oldImgsArray = Object.values(oldImgs);
-      if (oldImgsArray.length !== arrDatabaseImgList.length) {
-        let difference1 = oldImgsArray.filter(
-          (x) => !arrDatabaseImgList.includes(x)
+    Product.findById(req.body.id)
+      .then((product) => {
+        if (!product) {
+          req.flash("message", {
+            type: "error",
+            message: "khong ton tai dan pham",
+          });
+          return res.redirect("back");
+        }
+
+        const arrDatabaseImgList = product.images || [];
+        const oldImgs = req.body.oldImgs || [];
+        const oldImgsArray = Array.isArray(oldImgs)
+          ? oldImgs
+          : Object.values(oldImgs);
+        const newImgs = req.files ? req.files.map((file) => file.filename) : [];
+
+        const imagesToRemove = arrDatabaseImgList.filter(
+          (image) => !oldImgsArray.includes(image)
         );
-        let difference2 = arrDatabaseImgList.filter(
-          (x) => !oldImgsArray.includes(x)
-        );
-        let differences = difference1.concat(difference2);
-        // console.log(differences);
+
         const filePath = path.join(
           __dirname,
           "..",
@@ -98,53 +99,142 @@ class ApiController {
           "img",
           "uploads"
         );
-        differences.forEach((image) => {
+        const deletePromises = imagesToRemove.map((image) => {
           const fullPath = path.join(filePath, image);
-          fs.unlinkSync(fullPath);
+          return new Promise((resolve, reject) => {
+            fs.unlink(fullPath, (err) => {
+              if (err) reject(err);
+              else resolve();
+            });
+          });
         });
-        let images = [];
-        if (Array.isArray(formData.variations)) {
-          formData.variations = formData.variations
-            .filter((variation) => variation.quantity !== "0") // Lọc các variations có quantity bằng 0
-            .map((variation) => {
-              // Xóa các trường attributes rỗng
-              if (variation.attributes) {
-                for (let key in variation.attributes) {
-                  if (variation.attributes[key] === "") {
-                    delete variation.attributes[key];
+
+        return Promise.all(deletePromises).then(() => {
+          const updatedImages = oldImgsArray.concat(newImgs);
+
+          if (Array.isArray(formData.variations)) {
+            formData.variations = formData.variations
+              .filter((variation) => variation.quantity !== "0")
+              .map((variation) => {
+                if (variation.attributes) {
+                  for (const key in variation.attributes) {
+                    if (variation.attributes[key] === "") {
+                      delete variation.attributes[key];
+                    }
                   }
                 }
-              }
-              return variation;
-            });
-        }
-        if (req.files && Array.isArray(req.files)) {
-          images = req.files.map((file) => {
-            return file.filename;
-          });
-        }
-        formData.images = images;
-      }
-    });
-    return res.send(req.body);
-    Product.updateOne(
-      { _id: req.body.id },
-      {
-        name: formData.name,
-        description: formData.description,
-        idCategory: formData.idCategory,
-        variations: formData.variations,
-        discount: formData.discount,
-        images: formData.images,
-      }
-    ).then(() => {
-      req.flash("message", {
-        type: "success",
-        message: "cập nhật sản phẩm thành công",
+                return variation;
+              });
+          }
+
+          // Update the product
+          return Product.updateOne(
+            { _id: req.body.id },
+            {
+              name: formData.name,
+              description: formData.description,
+              idCategory: formData.idCategory,
+              variations: formData.variations,
+              discount: formData.discount,
+              images: updatedImages,
+            }
+          );
+        });
+      })
+      .then(() => {
+        req.flash("message", {
+          type: "success",
+          message: "cap nhat san pham thanh cong",
+        });
+        res.redirect("back");
+      })
+      .catch((error) => {
+        console.error(error);
+        req.flash("message", {
+          type: "error",
+          message: "An error occurred while updating the product",
+        });
+        res.redirect("back");
       });
-      res.redirect("back");
-    });
   }
+  // updateProduct(req, res, next) {
+  //   const formData = req.body;
+
+  //   Product.findById(req.body.id).then((product) => {
+  //     let arrDatabaseImgList = [];
+  //     product.images.forEach((image) => {
+  //       arrDatabaseImgList.push(image);
+  //     });
+  //     let oldImgs = req.body.oldImgs;
+  //     let newImgs = [];
+  //     req.files.forEach((opject) => {
+  //       newImgs.push(opject.filename);
+  //     });
+  //     const oldImgsArray = Object.values(oldImgs);
+  //     if (oldImgsArray.length !== arrDatabaseImgList.length) {
+  //       let difference1 = oldImgsArray.filter(
+  //         (x) => !arrDatabaseImgList.includes(x)
+  //       );
+  //       let difference2 = arrDatabaseImgList.filter(
+  //         (x) => !oldImgsArray.includes(x)
+  //       );
+  //       let differences = difference1.concat(difference2);
+  //       // console.log(differences);
+  //       const filePath = path.join(
+  //         __dirname,
+  //         "..",
+  //         "..",
+  //         "public",
+  //         "img",
+  //         "uploads"
+  //       );
+  //       differences.forEach((image) => {
+  //         const fullPath = path.join(filePath, image);
+  //         fs.unlinkSync(fullPath);
+  //       });
+  //       let images = [];
+  //       if (Array.isArray(formData.variations)) {
+  //         formData.variations = formData.variations
+  //           .filter((variation) => variation.quantity !== "0") // Lọc các variations có quantity bằng 0
+  //           .map((variation) => {
+  //             // Xóa các trường attributes rỗng
+  //             if (variation.attributes) {
+  //               for (let key in variation.attributes) {
+  //                 if (variation.attributes[key] === "") {
+  //                   delete variation.attributes[key];
+  //                 }
+  //               }
+  //             }
+  //             return variation;
+  //           });
+  //       }
+  //       if (req.files && Array.isArray(req.files)) {
+  //         images = req.files.map((file) => {
+  //           return file.filename;
+  //         });
+  //       }
+  //       formData.images = images;
+  //     }
+  //   });
+  //   // return res.send(req.body);
+  //   Product.updateOne(
+  //     { _id: req.body.id },
+  //     {
+  //       name: formData.name,
+  //       description: formData.description,
+  //       idCategory: formData.idCategory,
+  //       variations: formData.variations,
+  //       discount: formData.discount,
+  //       images: newImgs,
+  //     }
+  //   ).then(() => {
+  //     req.flash("message", {
+  //       type: "success",
+  //       message: "cập nhật sản phẩm thành công",
+  //     });
+  //     res.redirect("back");
+  //   });
+  // }
 
   removeProduct(req, res, next) {
     Product.findOne(req.body).then((product) => {
