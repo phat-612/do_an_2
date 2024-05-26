@@ -4,6 +4,7 @@ const User = require("../models/User");
 const Order = require("../models/Order");
 const Category = require("../models/Category");
 const Banner = require("../models/Banner");
+const { getDataPagination } = require("../../util/function");
 const {
   multipleMongooseToObject,
   mongooseToObject,
@@ -49,16 +50,23 @@ class AdminController {
   }
   // get /product
   product(req, res, next) {
-    Product.find({})
-      .then((products) => {
-        res.render("admin/products/showProduct", {
-          layout: "admin",
-          js: "admin/showProduct",
-          css: "admin/showProduct",
-          products: multipleMongooseToObject(products),
-        });
-      })
-      .catch(next);
+    const url = req.originalUrl;
+    Promise.all([
+      Product.find({}).populate("idCategory", "name").paginate(req),
+      Product.find({}),
+    ]).then(([products, datapagi]) => {
+      // return res.send(products);
+      let [currentPage, totalPage] = getDataPagination(datapagi, req);
+      res.render("admin/products/showProduct", {
+        layout: "admin",
+        js: "admin/showProduct",
+        css: "admin/showProduct",
+        products: multipleMongooseToObject(products),
+        currentPage,
+        totalPage,
+        url,
+      });
+    });
   }
   // get /product/addproduct
   addPro(req, res, next) {
