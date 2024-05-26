@@ -9,6 +9,7 @@ const Product = new Schema(
     images: [String],
     view: { type: Number, default: 0 },
     slug: { type: String },
+    isbusiness: { type: Boolean, default: true },
     idCategory: { type: Schema.Types.ObjectId, ref: "Category" },
     variations: [
       {

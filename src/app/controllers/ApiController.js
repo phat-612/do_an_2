@@ -70,7 +70,12 @@ class ApiController {
   //cập nhật sản phẩm
   updateProduct(req, res, next) {
     const formData = req.body;
-
+    let isbusiness;
+    if (formData.isbusiness) {
+      isbusiness = true;
+    } else {
+      isbusiness = false;
+    }
     Product.findById(req.body.id)
       .then((product) => {
         if (!product) {
@@ -80,7 +85,7 @@ class ApiController {
           });
           return res.redirect("back");
         }
-
+        // product.isbusiness = isbusiness;
         const arrDatabaseImgList = product.images || [];
         const oldImgs = req.body.oldImgs || [];
         const oldImgsArray = Array.isArray(oldImgs)
@@ -131,7 +136,7 @@ class ApiController {
                 return variation;
               });
           }
-
+          // return res.send(formData);
           // Update the product
           return Product.updateOne(
             { _id: req.body.id },
@@ -141,6 +146,7 @@ class ApiController {
               idCategory: formData.idCategory,
               variations: formData.variations,
               discount: formData.discount,
+              isbusiness: isbusiness,
               images: updatedImages,
             }
           );
