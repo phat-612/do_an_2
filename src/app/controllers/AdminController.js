@@ -103,6 +103,7 @@ class AdminController {
         });
         let attributes1 = {};
         let attributes2 = {};
+
         productAttrs.forEach((attr) => {
           for (let key in attr) {
             let target =
@@ -114,6 +115,9 @@ class AdminController {
             }
           }
         });
+        const attributes1Val = Object.values(attributes1).flat();
+        const attributes2Val = Object.values(attributes2).flat();
+
         let dataVariation = {
           dataTable: [],
         };
@@ -152,6 +156,7 @@ class AdminController {
             });
           });
         }
+
         res.render("admin/products/editProduct", {
           product: mongooseToObject(product),
           layout: "admin",
@@ -159,8 +164,8 @@ class AdminController {
           css: "admin/editProduct",
           categorys: multipleMongooseToObject(categorys),
           dataVariation: dataVariation,
-          attributes1: attributes1,
-          attributes2: attributes2,
+          attributes1: attributes1Val.reverse(),
+          attributes2: attributes2Val.reverse(),
         });
       });
     });

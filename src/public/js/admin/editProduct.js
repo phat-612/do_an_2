@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function createPreviewHiddenInput(file, index) {
     const newFileInput = document.createElement("input");
     newFileInput.type = "file";
-    // newFileInput.setAttribute("hidden", "true");
+    newFileInput.setAttribute("hidden", "true");
     newFileInput.setAttribute("name", "images1");
     newFileInput.files = createFileList(file);
     newFileInput.dataset.index = index;

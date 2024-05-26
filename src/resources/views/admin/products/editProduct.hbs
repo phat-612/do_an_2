@@ -1,9 +1,10 @@
 <form action="/api/updateProduct" method="post" enctype="multipart/form-data">
    <input type="text" value="{{product._id}}" name="id" hidden>
-   
+
    <div class="container">
       <div class="form-check my-4">
-         <input class="form-check-input" name="isbusiness" type="checkbox" value="{{product.isbusiness}}" id="flexCheckChecked" {{isRadio product.isbusiness true}}>
+         <input class="form-check-input" name="isbusiness" type="checkbox" value="{{product.isbusiness}}"
+            id="flexCheckChecked" {{isRadio product.isbusiness true}}>
          <label class="form-check-label " for="flexCheckChecked">
             Đang Kinh Doanh
          </label>
@@ -17,7 +18,7 @@
       <select class="form-control" name="idCategory" id="">
          <option value="">Chọn Danh Mục</option>
          {{#each categorys}}
-            <option value="{{this._id}}" {{isSelectedObejctId ../product.idCategory this._id}}>{{this.name}}</option>
+         <option value="{{this._id}}" {{isSelectedObejctId ../product.idCategory this._id}}>{{this.name}}</option>
          {{/each}}
       </select>
       {{!-- -------------------------------- --}}
@@ -40,17 +41,11 @@
                   Trị</button>
                <div class="areaInpValue1">
                   {{#each attributes1}}
-                     {{#if @first}}
-                        {{#each this}}
-                           <div class="row attri1-box">
-                              <input type="text" id="thuocTinh1"
-                                 class="form-control my-2 col variations thuocTinh1 valueAttr1" value="{{this}}"
-                                 oninput="handleInpValue(1,event)">
-                              <button type="button" class="btn btn-danger col-2 my-2"
-                                 onclick="deleteValue(1,event)">Xóa</button>
-                           </div>
-                        {{/each}}
-                     {{/if}}
+                  <div class="row attri1-box">
+                     <input type="text" id="thuocTinh1" class="form-control my-2 col variations thuocTinh1 valueAttr1"
+                        value="{{this}}" oninput="handleInpValue(1,event)">
+                     <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteValue(1,event)">Xóa</button>
+                  </div>
                   {{/each}}
                </div>
             </div>
@@ -64,7 +59,7 @@
             </div>
             <div class="col-md-6">
                <input type="text" id="inpNameAttributePro2" class="form-control variations"
-                  value="{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}">
+                  value="{{#each product.variations}}{{#if @first}}{{getAttri2name this.attributes}}{{/if}}{{/each}}">
             </div>
             <div class="col-md-6 my-3">
                <label for="" class="form-label fs-5">Nhập Giá Trị</label>
@@ -72,19 +67,21 @@
             <div class="col-md-6 my-3" id="inputAttribute2Div">
                <button type="button" class="btn btn-success form-control btnAddValue2">Thêm Giá Trị</button>
                <div class="areaInpValue2">
+                  {{#if attributes2}}
                   {{#each attributes2}}
-                     {{#if @first}}
-                        {{#each this}}
-                           <div class="row">
-                              <input type="text" id="thuocTinh1"
-                                 class="valueAttr2 form-control my-2 col variations thuocTinh2" value="{{this}}"
-                                 oninput="handleInpValue(2,event)">
-                              <button type="button" class="btn btn-danger col-2 my-2"
-                                 onclick="deleteValue(2,event)">Xóa</button>
-                           </div>
-                        {{/each}}
-                     {{/if}}
+                     <div class="row">
+                        <input type="text" id="thuocTinh1" class="valueAttr2 form-control my-2 col variations thuocTinh2"
+                           value="{{this}}" oninput="handleInpValue(2,event)">
+                        <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteValue(2,event)" >Xóa</button>
+                     </div>
                   {{/each}}
+                  {{else}}
+                  <div class="row">
+                     <input type="text" id="thuocTinh1" class="valueAttr2 form-control my-2 col variations thuocTinh2" value=""
+                        oninput="handleInpValue(2,event)">
+                     <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteValue(2,event)" disabled>Xóa</button>
+                  </div>
+                  {{/if}}
                </div>
             </div>
          </div>
@@ -101,30 +98,26 @@
          </thead>
          <tbody>
             {{#each dataVariation.dataTable}}
-               <tr data-bs-id="{{this._id}}" data-bs-sold="{{this.sold}}">
-                  {{{showTdTableProduct this.attributes}}}
-                  <td><input type="number" class="form-control tdPrice" value="{{this.price}}"
-                        name="variations[{{@index}}][price]"></td>
-                  <td><input type="number" class="form-control tdQuantity" value="{{this.quantity}}"
-                        name="variations[{{@index}}][quantity]"></td>
-                  <td>
-                     <div class="areaInpHidden">
-                        <input type="text"
-                           name="variations[{{@index}}][attributes][{{#each ../product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}]"
-                           value="{{#each this.attributes}}{{#if @first}}{{this}}{{/if}}{{/each}}" hidden="">
-                        <input type="text"
-                           name="variations[{{@index}}][attributes][{{#each ../product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}]"
-                           value="{{#each this.attributes}}{{#if @last}}{{this}}{{/if}}{{/each}}" hidden="">
-                     </div>
-                     <input type="text" class="tdAttribute1" name="variations[{{@index}}][_id]" value="{{this._id}}"
-                        hidden>
-                     <input type="text" class="tdAttribute2" name="variations[{{@index}}][sold]" value="{{this.sold}}"
-                        hidden>
-                     <button type="button" onclick="deleteVariation(event)" class="btn btn-danger">Xóa phân
-                        loại</button>
-                  </td>
-               </tr>
+            <tr data-bs-id="{{this._id}}" data-bs-sold="{{this.sold}}">
+               {{{showTdTableProduct this.attributes}}}
+               <td><input type="number" class="form-control tdPrice" value="{{this.price}}"
+                     name="variations[{{@index}}][price]"></td>
+               <td><input type="number" class="form-control tdQuantity" value="{{this.quantity}}"
+                     name="variations[{{@index}}][quantity]"></td>
+               <td>
+                  <div class="areaInpHidden">
+                        {{{createHiddenInput this.attributes @index}}}
+                  </div>
+                  <input type="text" class="tdAttribute1" name="variations[{{@index}}][_id]" value="{{this._id}}"
+                     hidden>
+                  <input type="text" class="tdAttribute2" name="variations[{{@index}}][sold]" value="{{this.sold}}"
+                     hidden>
+                  <button type="button" onclick="deleteVariation(event)" class="btn btn-danger">Xóa phân
+                     loại</button>
+               </td>
+            </tr>
             {{/each}}
+
          </tbody>
       </table>
       {{!-- ------------------------- --}}
@@ -140,12 +133,12 @@
          <div class="col">
             <label for="discountStart" class="form-label fs-5">Ngày bắt đầu :</label>
             <input type="date" name="discount[startDay]" id="discountStart" class="form-control"
-               value="{{formatDate product.discount.startDay "YYYY-MM-DD"}}" disabled>
+               value="{{formatDate product.discount.startDay " YYYY-MM-DD"}}" disabled>
          </div>
          <div class="col">
             <label for="discountEnd" class="form-label fs-5">Ngày kết thúc :</label>
             <input type="date" name="discount[endDay]" id="discountEnd" class="form-control"
-               value="{{formatDate product.discount.endDay "YYYY-MM-DD"}}" disabled>
+               value="{{formatDate product.discount.endDay " YYYY-MM-DD"}}" disabled>
          </div>
       </div>
       {{!-- ------------------------- --}}
@@ -158,10 +151,10 @@
          <p>Danh sách Ảnh :</p>
          <div id="multiImagePreview" class="row">
             {{#each product.images}}
-               <div class="col-3">
-                  <img src="/img/uploads/{{this}}" class="img-fluid oldimg" />
-                  <input type="text" value="{{this}}" name="oldImgs[]" hidden>
-               </div>
+            <div class="col-3">
+               <img src="/img/uploads/{{this}}" class="img-fluid oldimg" />
+               <input type="text" value="{{this}}" name="oldImgs[]" hidden>
+            </div>
             {{/each}}
          </div>
       </div>

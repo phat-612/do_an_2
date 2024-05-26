@@ -428,4 +428,30 @@ module.exports = {
     let urlSort = url.format(parseUrl);
     return urlSort;
   },
+
+  createHiddenInput: (attributes, index) => {
+    let htmlinputHidden = ``;
+    Object.keys(attributes).forEach((key, ind) => {
+      htmlinputHidden += `
+      <input type="text"
+      name="variations[${index}][attributes][${key}]"
+      value="${attributes[key]}" hidden>
+      `;
+    });
+
+    return htmlinputHidden;
+  },
+  getAttri2name: (attributes) => {
+    let count = 0;
+    let name = [];
+    Object.keys(attributes).forEach((key, ind) => {
+      count++;
+      name.push(key);
+    });
+    if (count == 1) {
+      return "";
+    } else {
+      return name[1];
+    }
+  },
 };

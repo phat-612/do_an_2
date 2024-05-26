@@ -20,7 +20,7 @@
     ></textarea>
     <label for="categoryDataList" class="form-label fs-4">Danh Mục</label>
 
-    <select class="form-control" name="idCategory" id="">
+    <select class="form-control" name="idCategory" id="" required>
       <option value="">Chọn Danh Mục</option>
       {{#each categorys}}
         <option value="{{this._id}}">{{this.idParent.name}}

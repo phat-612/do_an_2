@@ -120,7 +120,10 @@ class ApiController {
 
           if (Array.isArray(formData.variations)) {
             formData.variations = formData.variations
-              .filter((variation) => variation.quantity !== "0")
+              .filter(
+                (variation) =>
+                  variation.quantity != "0" || variation.sold != "0"
+              )
               .map((variation) => {
                 if (!variation._id || variation._id === "") {
                   // Tạo một ObjectId mới nếu _id không hợp lệ hoặc rỗng
