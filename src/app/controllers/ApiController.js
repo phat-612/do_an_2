@@ -229,10 +229,20 @@ class ApiController {
           "img",
           "uploads"
         );
-        product.images.forEach((image) => {
-          const fullPath = path.join(filePath, image);
-          fs.unlinkSync(fullPath);
+        // product.images.forEach((image) => {
+        //   const fullPath = path.join(filePath, image);
+        //   fs.unlinkSync(fullPath);
+        // });
+
+        let arrIdvar = [];
+
+        product.variations.forEach((variation) => {
+          arrIdvar.push(variation._id);
         });
+
+        return res.send(arrIdvar);
+        // xóa thuộc tính trong giỏ hàng
+
         // Nếu tất cả các biến thể đều có sold là 0, xóa sản phẩm
         product.deleteOne({ _id: req.body }).then(() => {
           req.flash("message", {
@@ -916,7 +926,6 @@ class ApiController {
         return res.redirect("/me/historyOrder");
       });
     }
-
     console.log("Thanh toán thành công");
     Order.updateOne(
       { _id: orderId },
