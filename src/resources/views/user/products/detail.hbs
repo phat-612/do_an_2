@@ -3,47 +3,29 @@
   <hr />
   <div class="row">
     <div class="col-6">
-      <div
-        id="carouselExampleControls"
-        class="carousel slide border rounded"
-        data-bs-ride="carousel"
-      >
+      {{!-- ảnh --}}
+      <div id="carouselExampleControls" class="carousel slide border rounded" data-bs-ride="carousel">
         <div class="carousel-inner">
           {{#each product.images}}
-            <div class="carousel-item {{#if (compare @index 0)}}active{{/if}}">
-              <img
-                src="{{showImgUpload this}}"
-                class="d-block w-100"
-                alt="..."
-              />
-            </div>
+          <div class="carousel-item {{#if (compare @index 0)}}active{{/if}}">
+            <img src="{{showImgUpload this}}" class="d-block w-100" alt="..." />
+          </div>
           {{/each}}
         </div>
-        <button
-          class="carousel-control-prev justify-content-start"
-          type="button"
-          data-bs-target="#carouselExampleControls"
-          data-bs-slide="prev"
-        >
-          <span
-            class="bg-black bg-opacity-50 rounded px-2 py-3 rounded-end-circle"
-            aria-hidden="true"
-          ><span class="carousel-control-prev-icon"></span></span>
+        <button class="carousel-control-prev justify-content-start" type="button"
+          data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+          <span class="bg-black bg-opacity-50 rounded px-2 py-3 rounded-end-circle" aria-hidden="true"><span
+              class="carousel-control-prev-icon"></span></span>
           <span class="visually-hidden">Previous</span>
         </button>
-        <button
-          class="carousel-control-next justify-content-end"
-          type="button"
-          data-bs-target="#carouselExampleControls"
-          data-bs-slide="next"
-        >
-          <span
-            class="bg-black bg-opacity-50 rounded px-2 py-3 rounded-start-circle"
-            aria-hidden="true"
-          > <span class="carousel-control-next-icon"></span></span>
+        <button class="carousel-control-next justify-content-end" type="button"
+          data-bs-target="#carouselExampleControls" data-bs-slide="next">
+          <span class="bg-black bg-opacity-50 rounded px-2 py-3 rounded-start-circle" aria-hidden="true"> <span
+              class="carousel-control-next-icon"></span></span>
           <span class="visually-hidden">Next</span>
         </button>
       </div>
+      {{!-- mô tả --}}
       <div class="description">
         <div class="title">Mô tả</div>
         <div class="body">
@@ -52,79 +34,167 @@
           </p>
         </div>
       </div>
+
     </div>
 
     <div class="col-6">
-      {{#if (compareMore product.discount 0)}}
+      <div>
+        {{#if (compareMore product.discount 0)}}
         <div class="text-decoration-line-through">{{showPrice
-            product.price
+          product.price
           }}</div>
         <div class="fs-1 text-danger">
           {{showPrice (discountPrice product.price product.discount)}}
         </div>
-      {{else}}
+        {{else}}
         <div class="fs-1 text-danger">
           {{showPrice product.price}}
         </div>
-      {{/if}}
+        {{/if}}
 
-      {{{showVariations
+        {{{showVariations
         product.arrVariation
         product.curVariation.slug
         product.discount
-      }}}
-      {{! <ul class="nav text-center">
-        <li class="py-1 px-3 me-3 bg-light border rounded" role="button"><strong
-          >8GB-128GB</strong><div>14.000.000 đ</div></li>
-        <li class="py-1 px-3 me-3 bg-light border rounded" role="button"><strong
-          >8GB-256GB</strong><div>14.000.000 đ</div></li>
-        <li class="py-1 px-3 me-3 bg-light border rounded" role="button"><strong
-          >12GB-256GB</strong><div>14.000.000 đ</div></li>
-        <li class="py-1 px-3 me-3 bg-light border rounded" role="button"><strong
-          >12GB-512GB</strong><div>14.000.000 đ</div></li>
-      </ul>
-      <div class="chose-color">
-        <div class="title fs-4 my-3">Chọn màu sắc</div>
-        <div class="body">
-          <ul class="nav text-center">
-            <li
-              class="py-1 px-3 me-3 bg-light border rounded"
-              role="button"
-            ><strong>Đen</strong><div>13.000.000 đ</div></li>
-            <li
-              class="py-1 px-3 me-3 bg-light border rounded"
-              role="button"
-            ><strong>Trắng</strong><div>13.000.000 đ</div></li>
-            <li
-              class="py-1 px-3 me-3 bg-light border rounded"
-              role="button"
-            ><strong>Xanh</strong><div>13.000.000 đ</div></li>
-            <li
-              class="py-1 px-3 me-3 bg-light border rounded"
-              role="button"
-            ><strong>Vàng</strong><div>13.000.000 đ</div></li>
-          </ul>
+        }}}
+        <div class="action my-3 row">
+          <div class="col-8"><a href="/me/order"
+              class="btn w-100 py-3 rounded border bg-danger fs-4 text-white fw-bold">Mua Ngay</a></div>
+          <div class="col-4">
+            <form action="/api/cart" method="post">
+              <input type="hidden" name="idVariation" value="{{product.curVariation._id}}" hidden />
+              <input type="hidden" name="quantity" value="1" hidden />
+              <button type="submit" class="w-100 py-3 rounded border bg-light fs-5 fw-bold">Thêm vào giỏ hàng</button>
+            </form>
+          </div>
         </div>
-      </div> }}
-      <div class="action my-3 row">
-        <div class="col-8"><a
-            href="/me/order"
-            class="btn w-100 py-3 rounded border bg-danger fs-4 text-white fw-bold"
-          >Mua Ngay</a></div>
-        <div class="col-4">
-          <form action="/api/cart" method="post">
-            <input
-              type="hidden"
-              name="idVariation"
-              value="{{product.curVariation._id}}"
-              hidden
-            />
-            <input type="hidden" name="quantity" value="1" hidden />
-            <button
-              type="submit"
-              class="w-100 py-3 rounded border bg-light fs-5 fw-bold"
-            >Thêm vào giỏ hàng</button>
-          </form>
+      </div>
+      {{!-- đánh giá --}}
+      <div class="mt-5">
+        <h3>Đánh giá & nhận xét {{product.name}}</h3>
+        <div class="row align-content-center">
+          <div class="col-4">
+            <p>
+              4.8/5
+            </p>
+            <p>10 đánh giá</p>
+          </div>
+          <div class="col-8">
+            <div class="row">
+              <span class="col-3">5<span class="fa fa-star text-warning"></span></span>
+              <div class="progress col">
+                <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0"
+                  aria-valuemax="100"></div>
+              </div>
+              <span class="col">8 đánh giá</span>
+            </div>
+
+          </div>
+        </div>
+        <div class="text-center my-3">
+          <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#sendReviewModal">Gửi đánh giá</button>
+        </div>
+        <div>
+          {{!-- đánh giá --}}
+          <div>
+            <button class="rounded-circle bg-danger">M</button>
+            Nguyễn Bình Minh <span>27/5/2024 13:35</span>
+            <div class="ms-5">
+              <div><span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+              </div>
+              <div>sản phẩm dùng tốt lắm</div>
+            </div>
+          </div>
+          {{!-- đánh giá --}}
+          <div>
+            <button class="rounded-circle bg-danger">M</button>
+            Nguyễn Bình Minh <span>27/5/2024 13:35</span>
+            <div class="ms-5">
+              <div><span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+              </div>
+              <div>sản phẩm dùng tốt lắm</div>
+            </div>
+          </div>
+          {{!-- đánh giá --}}
+          <div>
+            <button class="rounded-circle bg-danger">M</button>
+            Nguyễn Bình Minh <span>27/5/2024 13:35</span>
+            <div class="ms-5">
+              <div><span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+              </div>
+              <div>sản phẩm dùng tốt lắm</div>
+            </div>
+          </div>
+          {{!-- đánh giá --}}
+          <div>
+            <button class="rounded-circle bg-danger">M</button>
+            Nguyễn Bình Minh <span>27/5/2024 13:35</span>
+            <div class="ms-5">
+              <div>
+                <span class="fa fa-star text-warning"></span>
+                <span class="fa fa-star "></span>
+                <span class="fa fa-star "></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+              </div>
+              <div>sản phẩm dùng tốt lắm</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- modal đánh gửi đánh giá --}}
+<div class="modal fade" id="sendReviewModal" tabindex="-1" aria-labelledby="sendReviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sendReviewModalLabel">Đánh giá và nhận xét</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div>
+            <img src="{{showImgUpload product.images}}" style="width: 60px;" alt="">
+            <span>sản phẩm samsung galaxy s24</span>
+          </div>
+          <div>
+            <p>Đánh giá chung</p>
+            <div class="rating d-flex justify-content-around">
+              <input hidden type="radio" name="rating" value="5" id="5">
+              <label for="5"><span class="fs-2 fa fa-star text-warning"></span></label>
+              <input hidden type="radio" name="rating" value="4" id="4">
+              <label for="4"><span class="fs-2 fa fa-star text-warning"></span></label>
+              <input hidden type="radio" name="rating" value="3" id="3">
+              <label for="3"><span class="fs-2 fa fa-star text-warning"></span></label>
+              <input hidden type="radio" name="rating" value="2" id="2">
+              <label for="2"><span class="fs-2 fa fa-star text-warning"></span></label>
+              <input hidden type="radio" name="rating" value="1" id="1">
+              <label for="1"><span class="fs-2 fa fa-star text-warning"></span></label>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Chia sẻ cảm nhận</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+        </form>
+        <div class="d-flex justify-content-end gap-3">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Gửi đánh giá</button>
         </div>
       </div>
     </div>

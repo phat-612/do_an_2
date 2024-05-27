@@ -6,7 +6,6 @@ const User = require("../models/User");
 const Banner = require("../models/Banner");
 const Cart = require("../models/Cart");
 const Order = require("../models/Order");
-const fs = require("fs");
 const path = require("path");
 const moment = require("moment");
 const mongoose = require("mongoose");
@@ -15,6 +14,10 @@ const querystring = require("qs");
 const bcrypt = require("bcrypt");
 const validator = require("email-validator");
 const PDFDocument = require("pdfkit");
+const diacritics = require("diacritics");
+const slugify = require("slugify");
+var pdf = require("pdf-creator-node");
+var fs = require("fs");
 
 // ------------------------
 require("dotenv").config();
@@ -28,8 +31,28 @@ class ApiController {
   // aip admin
 
   // tạo sản phẩm
-  createProduct(req, res, next) {
+  async createProduct(req, res, next) {
     const formData = req.body;
+
+    const nameWithoutAccent = diacritics.remove(req.body.name).trim();
+    let slug = nameWithoutAccent.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const slugRegEx = new RegExp(`^(${slug})((-[0-9]*$)?)$`, "i");
+    await Product.find({ slug: slugRegEx }).then((categoriesWithSlug) => {
+      if (categoriesWithSlug.length) {
+        req.body.slug = `${slug}-${categoriesWithSlug.length + 1}`;
+      } else {
+        req.body.slug = slug;
+      }
+    });
+    req.body.variations.forEach((variation) => {
+      let attributesString = Object.values(variation.attributes).join(" ");
+      const nameWithoutAccent = diacritics.remove(attributesString).trim();
+      variation.slug = slugify(nameWithoutAccent, {
+        lower: true,
+        strict: true,
+      });
+    });
+
     let images = [];
     if (req.files && Array.isArray(req.files)) {
       images = req.files.map((file) => {
@@ -68,7 +91,7 @@ class ApiController {
   }
 
   //cập nhật sản phẩm
-  updateProduct(req, res, next) {
+  async updateProduct(req, res, next) {
     const formData = req.body;
     let isbusiness;
     if (formData.isbusiness) {
@@ -76,6 +99,26 @@ class ApiController {
     } else {
       isbusiness = false;
     }
+
+    const nameWithoutAccent = diacritics.remove(req.body.name).trim();
+    let slug = nameWithoutAccent.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const slugRegEx = new RegExp(`^(${slug})((-[0-9]*$)?)$`, "i");
+    await Product.find({ slug: slugRegEx }).then((categoriesWithSlug) => {
+      if (categoriesWithSlug.length) {
+        req.body.slug = `${slug}-${categoriesWithSlug.length + 1}`;
+      } else {
+        req.body.slug = slug;
+      }
+    });
+    req.body.variations.forEach((variation) => {
+      let attributesString = Object.values(variation.attributes).join(" ");
+      const nameWithoutAccent = diacritics.remove(attributesString).trim();
+      variation.slug = slugify(nameWithoutAccent, {
+        lower: true,
+        strict: true,
+      });
+    });
+
     Product.findById(req.body.id)
       .then((product) => {
         if (!product) {
@@ -289,6 +332,16 @@ class ApiController {
     const formData = req.body;
     const warranty = new Warranty(formData);
     warranty.save().then(res.redirect("/admin/warranty/show"));
+  }
+  statusWarranty(req, res) {
+    Warranty.updateOne({
+      $set: { status: req.body.status },
+    }).then(() => {
+      res.json({
+        status: "success",
+        message: "Cập nhật thành công",
+      });
+    });
   }
   updateWarranty(req, res, next) {
     Warranty.findOne({ _id: req.params.id }).then((warranty) => {

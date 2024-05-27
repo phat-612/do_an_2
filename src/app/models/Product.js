@@ -25,6 +25,15 @@ const Product = new Schema(
       startDay: { type: Date },
       endDay: { type: Date },
     },
+    reviews: [
+      {
+        idUser: { type: Schema.Types.ObjectId, ref: "User" },
+        star: { type: Number },
+        desc: { type: String },
+        time: { type: Date, default: Date.now },
+        like: { type: Number, default: 0 },
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -52,27 +61,27 @@ Product.query.findable = function (req) {
   }
   return this;
 };
-Product.pre("save", function (next) {
-  this.variations.forEach((variation) => {
-    let attributesString = Object.values(variation.attributes).join(" ");
-    const nameWithoutAccent = diacritics.remove(attributesString).trim();
-    variation.slug = slugify(nameWithoutAccent, { lower: true, strict: true });
-  });
-  next();
-});
-Product.pre("validate", function (next) {
-  if (this.name) {
-    const nameWithoutAccent = diacritics.remove(this.name).trim();
-    let slug = nameWithoutAccent.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    const slugRegEx = new RegExp(`^(${slug})((-[0-9]*$)?)$`, "i");
-    this.constructor.find({ slug: slugRegEx }).then((categoriesWithSlug) => {
-      if (categoriesWithSlug.length) {
-        this.slug = `${slug}-${categoriesWithSlug.length + 1}`;
-      } else {
-        this.slug = slug;
-      }
-      next();
-    });
-  }
-});
+// Product.pre("save", function (next) {
+//   this.variations.forEach((variation) => {
+//     let attributesString = Object.values(variation.attributes).join(" ");
+//     const nameWithoutAccent = diacritics.remove(attributesString).trim();
+//     variation.slug = slugify(nameWithoutAccent, { lower: true, strict: true });
+//   });
+//   next();
+// });
+// Product.pre("validate", function (next) {
+//   if (this.name) {
+//     const nameWithoutAccent = diacritics.remove(this.name).trim();
+//     let slug = nameWithoutAccent.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+//     const slugRegEx = new RegExp(`^(${slug})((-[0-9]*$)?)$`, "i");
+//     this.constructor.find({ slug: slugRegEx }).then((categoriesWithSlug) => {
+//       if (categoriesWithSlug.length) {
+//         this.slug = `${slug}-${categoriesWithSlug.length + 1}`;
+//       } else {
+//         this.slug = slug;
+//       }
+//       next();
+//     });
+//   }
+// });
 module.exports = mongoose.model("Product", Product);

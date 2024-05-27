@@ -243,8 +243,10 @@ module.exports = {
   statusToast: (type) => {
     if (type == "success") {
       return "bg-success";
+    } else if (type == "danger") {
+      return "bg-danger";
     }
-    return "bg-danger";
+    return "";
   },
   isDiscount: (discount) => {
     const discountPercent = getDiscount(discount);
@@ -311,6 +313,9 @@ module.exports = {
       default:
         return status;
     }
+  },
+  statusWarranty: (currentStatus, compareStatus) => {
+    return currentStatus === compareStatus;
   },
   salePriceProduct: (price, salePrice) => {
     return price - salePrice;

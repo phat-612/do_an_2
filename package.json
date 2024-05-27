@@ -34,6 +34,7 @@
     "nouislider": "^15.7.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
+    "pdf-creator-node": "^2.3.5",
     "pdfkit": "^0.15.0",
     "qs": "^6.12.1",
     "sharp": "^0.33.2",

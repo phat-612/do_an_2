@@ -1,4 +1,6 @@
-<div class="container">
+<div class="container mt-4">
+  <h1 class="text-center mb-4">Chi Tiết Bảo Hành</h1>
+
   <div class="mt-4 row">
     <div class="col-md-6">
       <div class="form-group my-4">
@@ -68,35 +70,46 @@
         >Chỉnh Sửa</a>
       </div>
     </div>
-      <div class="col-md-6">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="form-group my-4">
-        <div class="accordion accordion-flush" id="productAccordion">
-          {{#each productsAndReasons}}
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="heading{{@index}}">
-              <button class="accordion-button collapsed bg-primary text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{@index}}" aria-expanded="false">
-                <strong>Tên sản phẩm:</strong> {{this.productName}}
-              </button>
-            </h2>
-            <div id="collapse{{@index}}" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
-              <div class="accordion-body">
-                <strong>Lý do bảo hành:</strong>
-                <ul>
-                  {{#each this.reasonsAndPrices}}
-                  <li><span class="text-primary">{{this.reason}}</span>: <span class="text-danger">{{this.price}}</span></li>
-                  {{/each}}
-                </ul>
-              </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group my-4">
+            <div class="accordion accordion-flush" id="productAccordion">
+              {{#each productsAndReasons}}
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="heading{{@index}}">
+                    <button
+                      class="accordion-button collapsed bg-primary text-white"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapse{{@index}}"
+                      aria-expanded="false"
+                    >
+                      <strong>Tên sản phẩm:</strong>
+                      {{this.productName}}
+                    </button>
+                  </h2>
+                  <div
+                    id="collapse{{@index}}"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#productAccordion"
+                  >
+                    <div class="accordion-body">
+                      <strong>Lý do bảo hành:</strong>
+                      <ul>
+                        {{#each this.reasonsAndPrices}}
+                          <li><span class="text-primary">{{this.reason}}</span>:
+                            <span class="text-danger">{{this.price}}</span></li>
+                        {{/each}}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              {{/each}}
             </div>
           </div>
-          {{/each}}
         </div>
       </div>
     </div>
-  </div>  
+  </div>
 </div>
-</div>
-</div>
-

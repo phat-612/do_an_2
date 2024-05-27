@@ -6,11 +6,10 @@ const Warranty = new Schema(
     name: { type: String },
     phone: { type: String },
     address: { type: String },
-    images: [String],
     note: { type: String },
     status: {
       type: String,
-      enum: ["pending", "success", "cancel", "failed", "shipping"],
+      enum: ["pending", "fixing", "success", "paid"],
       default: "pending",
     },
     total: { type: Number },

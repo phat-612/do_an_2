@@ -1,74 +1,66 @@
-<div class="container">
-<div class="m-4">
-  <a href="/admin/warranty/create" class="btn btn-secondary btn-sm float-end">Tạo đơn bảo
-    hành</a>
-  <table class="table mt-4">  
-    <thead>
-      <tr>    
-        <th scope="col">STT</th>
-        <th scope="col">Email</th>
-        <th scope="col">HovaTen</th>
-        <th scope="col">Diachi</th>
-        <th scope="col">Sodienthoai</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each warrantys}}
+<div class="container mt-4">
+  <h1 class="text-center mb-4">Đơn bảo hành</h1>
+  <div class="m-4">
+    <a href="/admin/warranty/create" class="btn btn-secondary btn-sm float-end">Tạo đơn bảo hành</a>
+    <table class="table mt-4">
+      <thead>
+        <tr>
+          <th scope="col">STT</th>
+          <th scope="col">Email</th>
+          <th scope="col">Họ Và Tên</th>
+          <th scope="col">Trạng Thái</th>
+          <th scope="col">Địa Chỉ</th>
+          <th scope="col">Số Điện Thoại</th>
+          <th scope="col">Hoạt Động</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        {{#each warrantys}}
         <tr>
           <th scope="row">{{sum @index 1}}</th>
           <td>{{this.email}}</td>
           <td>{{this.name}}</td>
+          <form id="status">
+            <td><select name="status" class="status-select" id="status{{@index}}">
+                <option value="pending" {{#if (statusWarranty this.status 'pending' )}}selected{{/if}}>Chờ xác nhận
+                </option>
+                <option value="fixing" {{#if (statusWarranty this.status 'fixing' )}}selected{{/if}}>Đang Sửa</option>
+                <option value="success" {{#if (statusWarranty this.status 'success' )}}selected{{/if}}>Đã Sửa</option>
+                <option value="paid" {{#if (statusWarranty this.status 'paid' )}}selected{{/if}}>Đã Trả</option>
+              </select>
+          </form>
+          </td>
           <td>{{this.address}}</td>
           <td>{{this.phone}}</td>
           <td>
-            <a
-              href="/admin/warranty/{{this._id}}/deltail"
-              class="btn btn-link"
-            >Chi tiết</a>
-            <a
-              class="btn btn-link"
-              href=""
-              data-bs-toggle="modal"
-              data-id="{{this._id}}"
-              data-bs-target="#delete-warranty-modal"
-            >Xóa</a>
+            <a type="button" href="/admin/warranty/{{this._id}}/deltail" class="btn btn-primary">Chi tiết</a>
+            <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-id="{{this._id}}"
+              data-bs-target="#delete-warranty-modal">Xóa</a>
           </td>
         </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
-{{! delete }}
-<div id="delete-warranty-modal" class="modal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Bộ bạn muốn xóa lắm à ?</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <p>Bạn chắc chắn muốn xóa ?</p>
-      </div>
-      <div class="modal-footer">
-        <button
-          id="btn-delete"
-          type="button"
-          class="btn btn-secondary"
-        >Xóa</button>
-        <button
-          type="button"
-          data-bs-dismiss="modal"
-          class="btn btn-danger"
-        >Hủy</button>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  {{! delete }}
+  <div id="delete-warranty-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Bộ bạn muốn xóa lắm à ?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Bạn chắc chắn muốn xóa ?</p>
+        </div>
+        <div class="modal-footer">
+          <button id="btn-delete" type="button" class="btn btn-secondary">Xóa</button>
+          <button type="button" data-bs-dismiss="modal" class="btn btn-danger">Hủy</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-{{! delete }}
-<form name="warrantyDelete" method="POST" action=""></form>     
+  {{! delete }}
+  <form name="warrantyDelete" method="POST" action=""></form>
 </div>
