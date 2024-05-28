@@ -21,12 +21,7 @@
   </ul>
 
   <div class="d-flex w-25">
-    <input
-      class="form-control me-2"
-      type="search"
-      placeholder="Tìm kiếm đơn hàng"
-      aria-label="Search"
-    />
+    <input class="form-control me-2" type="search" placeholder="Tìm kiếm đơn hàng" aria-label="Search" />
     <button class="btn btn-outline-success" type="submit">Tìm</button>
   </div>
   <div>
@@ -37,21 +32,19 @@
           <th scope="col">Trạng Thái</th>
           <th scope="col">Tổng</th>
           <th scope="col">Ngày</th>
-          <th scope="col">Hành Động</th>
+          <th scope="col" class="col-2">Hành Động</th>
         </tr>
       </thead>
       <tbody>
         {{#each orders}}
-          <tr>
-            <td>{{this.idUser.name}}</td>
-            <td>{{formatStatus this.status}}</td>
-            <td>{{showPrice this.total}}</td>
-            <td>{{formatDate this.createdAt "DD/MM/YYYY"}}</td>
-            <td><a
-                href="/admin/order/{{this._id}}/detail"
-                class="btn btn-primary"
-              ><i class="bi bi-eye"></i></a></td>
-          </tr>
+        <tr>
+          <td>{{this.idUser.name}}</td>
+          <td>{{formatStatus this.status}}</td>
+          <td>{{showPrice this.total}}</td>
+          <td>{{formatDate this.createdAt "DD/MM/YYYY"}}</td>
+          <td><a href="/admin/order/{{this._id}}/detail" class="btn btn-primary">Xem</a>
+          </td>
+        </tr>
         {{/each}}
       </tbody>
     </table>

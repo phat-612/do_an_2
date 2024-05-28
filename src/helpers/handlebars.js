@@ -205,6 +205,81 @@ module.exports = {
     const res = numbers.reduce((a, b) => a * b, 1);
     return res.toLocaleString("vi-VN");
   },
+  showOverviewReivews: (reviews) => {
+    let avageRating =
+      reviews.reduce((acc, review) => {
+        return acc + review.rating;
+      }, 0) / reviews.length;
+    let starReivews = {};
+    for (let i = 1; i <= 5; i++) {
+      starReivews[i] = reviews.filter((review) => review.rating == i).length;
+    }
+    let details = "";
+    Object.keys(starReivews).forEach((key) => {
+      details += `
+              <div class="row px-0 align-items-center">
+                <span class="col-2">${key}<span class="fa fa-star text-warning"></span></span>
+                <div class="progress col px-0">
+                  <div class="progress-bar" role="progressbar" style="width: ${
+                    (starReivews[key] / reviews.length) * 100
+                  }%" aria-valuenow="" aria-valuemin="0"
+                    aria-valuemax="100"></div>
+                </div>
+                <span class="col-3 px-0 text-end">${
+                  starReivews[key]
+                } đánh giá</span>
+              </div>
+      `;
+    });
+    return `
+      <div class="col-4 justify-content-center align-items-center d-flex flex-column">
+              <p class="fw-bold fs-4">
+                ${avageRating.toFixed(1)}/5
+              </p>
+              <div>
+                <span class="fa fa-star text-warning"></span>
+                <span class="fa fa-star text-warning"></span>
+                <span class="fa fa-star text-warning"></span>
+                <span class="fa fa-star text-warning"></span>
+                <span class="fa fa-star text-warning"></span>
+              </div>
+              <p>${reviews.length} đánh giá</p>
+            </div>
+            <div class="col-8 ">
+              ${details}
+            </div>
+    `;
+  },
+  showReviews: (reviews) => {
+    let outputHtml = "";
+    reviews.forEach((review) => {
+      let star = "";
+      for (let i = 0; i < 5; i++) {
+        star += `<span class="fa fa-star ${
+          i < review.rating ? "text-warning" : ""
+        }"></span>`;
+      }
+      outputHtml += `<div>
+                      <div class="text-capitalize">
+                      <button class="rounded-circle bg-danger text-white border-0 py-2 px-3 text-uppercase">${
+                        review.idUser.name[0]
+                      }</button>
+                     <span class="fw-bold"> ${
+                       review.idUser.name
+                     }</span> <span class="opacity-50">   ${moment(
+        review.time
+      ).format("DD/MM/YYYY HH:mm")}</span>
+                      </div>
+                      <div class="ms-5">
+                        <div>
+                          ${star}
+                        </div>
+                        <div class=" text-break">${review.comment}</div>
+                      </div>
+                    </div>`;
+    });
+    return outputHtml;
+  },
   discountPrice: (price, discount) => {
     return price * (1 - discount / 100);
   },

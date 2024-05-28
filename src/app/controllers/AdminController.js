@@ -472,6 +472,65 @@ class AdminController {
         });
       });
   }
+  exportOrder(req, res) {
+    const idOrder = req.query.idOrder;
+    Order.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(idOrder),
+        },
+      },
+      {
+        $lookup: {
+          from: "User",
+          localField: "idUser",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $unwind: "$user",
+      },
+      {
+        $lookup: {
+          from: "orderdetails",
+          localField: "_id",
+          foreignField: "idOrder",
+          as: "details",
+        },
+      },
+      {
+        $unwind: "$details",
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "details.idProduct",
+          foreignField: "_id",
+          as: "product",
+        },
+      },
+      {
+        $unwind: "$product",
+      },
+      {
+        $project: {
+          _id: 1,
+          "user.name": 1,
+          "user.email": 1,
+          "user.phone": 1,
+          "user.address": 1,
+          "user.avatar": 1,
+        },
+      },
+    ]);
+    // Order.findOne({ _id: idOrder })
+    //   .populate("idUser")
+    //   .aggregate()
+    //   .then((order) => {
+    //     return res.send(order);
+    //   });
+  }
   // --------------------------------------------------newAddProduct----------------------
   newAddProduct(req, res, next) {
     Category.find().then((categorys) => {

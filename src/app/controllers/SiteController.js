@@ -207,112 +207,122 @@ class SiteController {
       slugVariation = req.params.slugVariation;
     }
 
-    Product.findOne({ slug: slugProduct }).then((product) => {
-      if (!product || product == null) {
-        return next();
-      }
-      Product.updateOne({ slug: slugProduct }, { $inc: { view: 1 } }).exec();
-      let curVariationSlug = slugVariation
-        ? slugVariation
-        : product.variations[0].slug;
-      let curVariation = product.variations.find(
-        (variation) => variation.slug === curVariationSlug
-      );
-
-      let attribute = curVariation.attributes;
-      let discount = getDiscount(product.discount);
-      let resProduct = {
-        name: product.name,
-        price: curVariation.price,
-        slug: product.slug,
-        curVariation,
-        attribute,
-        description: product.description,
-        images: product.images,
-        discount,
-      };
-      let arrVariation;
-      if (Object.keys(attribute).length === 1) {
-        arrVariation = product.variations.reduce(
-          (acc, cur) => {
-            acc[cur.attributes[Object.keys(attribute)[0]]] = {
-              slug: cur.slug,
-              price: cur.price,
-            };
-            return acc;
-          },
-          {
-            nameProperty: Object.keys(attribute)[0],
-          }
+    Product.findOne({ slug: slugProduct })
+      .populate("reviews.idUser", "name")
+      .then((product) => {
+        if (!product || product == null) {
+          return next();
+        }
+        Product.updateOne({ slug: slugProduct }, { $inc: { view: 1 } }).exec();
+        let curVariationSlug = slugVariation
+          ? slugVariation
+          : product.variations[0].slug;
+        let curVariation = product.variations.find(
+          (variation) => variation.slug === curVariationSlug
         );
-        arrVariation = [arrVariation];
-      } else {
-        arrVariation = Object.keys(resProduct.attribute).map((key) => {
-          return product.variations.reduce(
+
+        let attribute = curVariation.attributes;
+        let discount = getDiscount(product.discount);
+        let resProduct = {
+          _id: product._id,
+          name: product.name,
+          price: curVariation.price,
+          slug: product.slug,
+          curVariation,
+          attribute,
+          description: product.description,
+          images: product.images,
+          discount,
+          reviews: product.reviews,
+        };
+        let arrVariation;
+        if (Object.keys(attribute).length === 1) {
+          arrVariation = product.variations.reduce(
             (acc, cur) => {
-              if (cur.attributes[key] === resProduct.attribute[key]) {
-                Object.keys(cur.attributes).forEach((variationKey) => {
-                  if (variationKey !== key) {
-                    acc[cur.attributes[variationKey]] = {
-                      slug: cur.slug,
-                      price: cur.price,
-                    };
-                    const arrValueVariation = [
-                      ...new Set(
-                        product.variations.map(
-                          (item) => item.attributes[variationKey]
-                        )
-                      ),
-                    ];
-                    arrValueVariation.forEach((value) => {
-                      if (!acc.hasOwnProperty(value)) {
-                        let tempVariation = product.variations.find((item) =>
-                          Object.values(item.attributes).includes(value)
-                        );
-                        acc[value] = {
-                          slug: tempVariation.slug,
-                          price: tempVariation.price,
-                        };
-                      }
-                    });
-                  }
-                });
-              }
+              acc[cur.attributes[Object.keys(attribute)[0]]] = {
+                slug: cur.slug,
+                price: cur.price,
+              };
               return acc;
             },
             {
-              nameProperty: "Phân loại",
+              nameProperty: Object.keys(attribute)[0],
             }
           );
+          arrVariation = [arrVariation];
+        } else {
+          arrVariation = Object.keys(resProduct.attribute).map((key) => {
+            return product.variations.reduce(
+              (acc, cur) => {
+                if (cur.attributes[key] === resProduct.attribute[key]) {
+                  Object.keys(cur.attributes).forEach((variationKey) => {
+                    if (variationKey !== key) {
+                      acc[cur.attributes[variationKey]] = {
+                        slug: cur.slug,
+                        price: cur.price,
+                      };
+                      const arrValueVariation = [
+                        ...new Set(
+                          product.variations.map(
+                            (item) => item.attributes[variationKey]
+                          )
+                        ),
+                      ];
+                      arrValueVariation.forEach((value) => {
+                        if (!acc.hasOwnProperty(value)) {
+                          let tempVariation = product.variations.find((item) =>
+                            Object.values(item.attributes).includes(value)
+                          );
+                          acc[value] = {
+                            slug: tempVariation.slug,
+                            price: tempVariation.price,
+                          };
+                        }
+                      });
+                    }
+                  });
+                }
+                return acc;
+              },
+              {
+                nameProperty: "Phân loại",
+              }
+            );
+          });
+        }
+        resProduct.arrVariation = arrVariation.map((obj) => {
+          return Object.keys(obj)
+            .sort()
+            .reduce(
+              (result, key) => {
+                if (key !== "nameProperty") result[key] = obj[key];
+                return result;
+              },
+              {
+                nameProperty: obj.nameProperty,
+              }
+            );
         });
-      }
-      resProduct.arrVariation = arrVariation.map((obj) => {
-        return Object.keys(obj)
-          .sort()
-          .reduce(
-            (result, key) => {
-              if (key !== "nameProperty") result[key] = obj[key];
-              return result;
-            },
-            {
-              nameProperty: obj.nameProperty,
-            }
-          );
+        // return res.json(resProduct);
+        // thêm dữ liệu vào cookie để mua ngay
+        let dataBuyNow = {
+          idVariation: curVariation._id,
+          quantity: 1,
+        };
+        res.cookie("cart", JSON.stringify([dataBuyNow]), {
+          maxAge: 1000 * 60 * 60 * 24,
+          path: "/me",
+        });
+        Product.findOne({ slug: slugProduct })
+          .findSimilar()
+          .then((products) => {
+            return res.send(products);
+            res.render("user/products/detail", {
+              product: resProduct,
+              js: "user/detailProduct",
+            });
+          });
       });
-      // return res.json(resProduct);
-      // thêm dữ liệu vào cookie để mua ngay
-      let dataBuyNow = {
-        idVariation: curVariation._id,
-        quantity: 1,
-      };
-      res.cookie("cart", JSON.stringify([dataBuyNow]), {
-        maxAge: 1000 * 60 * 60 * 24,
-        path: "/me",
-      });
-      res.render("user/products/detail", {
-        product: resProduct,
-      });
-    });
   }
   search(req, res, next) {
     const url = req.url;

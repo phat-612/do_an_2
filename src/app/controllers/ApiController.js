@@ -229,18 +229,25 @@ class ApiController {
           "img",
           "uploads"
         );
-        // product.images.forEach((image) => {
-        //   const fullPath = path.join(filePath, image);
-        //   fs.unlinkSync(fullPath);
-        // });
+        product.images.forEach((image) => {
+          const fullPath = path.join(filePath, image);
+          fs.unlinkSync(fullPath);
+        });
 
         let arrIdvar = [];
 
         product.variations.forEach((variation) => {
           arrIdvar.push(variation._id);
         });
-
-        return res.send(arrIdvar);
+        Cart.updateOne(
+          {
+            "items.idVariation": { $in: arrIdvar },
+          },
+          {
+            $pull: { items: { idVariation: { $in: arrIdvar } } },
+          }
+        );
+        // return res.send(arrIdvar);
         // xóa thuộc tính trong giỏ hàng
 
         // Nếu tất cả các biến thể đều có sold là 0, xóa sản phẩm
@@ -940,6 +947,24 @@ class ApiController {
       const total = order.total;
       const urlPayment = `/api/createPaymentUrl?idOrder=${idOrder}&amount=${total}`;
       return res.redirect(urlPayment);
+    });
+  }
+  ratingProduct(req, res, next) {
+    const formData = req.body;
+    const idUser = req.session.idUser;
+    const idProduct = formData.idProduct;
+    Product.findOne({ _id: idProduct }).then((product) => {
+      if (!product) {
+        return res.redirect("back");
+      }
+      product.reviews.push({
+        idUser,
+        rating: formData.rating,
+        comment: formData.comment,
+      });
+      product.save().then(() => {
+        return res.redirect("back");
+      });
     });
   }
   //quan ly banner

@@ -27,6 +27,7 @@ router.put("/order/:id", isLoggedIn, apiController.changeStatus);
 router.get("/createPaymentUrl", apiController.creatPaymentUrl);
 router.get("/returnPayment", apiController.returnPayment);
 router.post("/rePayment", isLoggedIn, apiController.rePayment);
+router.post("/export");
 // product
 router.post("/product", upload.array("images"), apiController.createProduct);
 router.post(
@@ -39,6 +40,7 @@ router.post(
   upload.array("images1"),
   apiController.updateProduct
 );
+router.post("/ratingProduct", isLoggedIn, apiController.ratingProduct);
 ///////////////////phân quyền
 router.put("/accessProviders/:id", apiController.changeHierarchy);
 // warranty

@@ -28,8 +28,8 @@ const Product = new Schema(
     reviews: [
       {
         idUser: { type: Schema.Types.ObjectId, ref: "User" },
-        star: { type: Number },
-        desc: { type: String },
+        rating: { type: Number },
+        comment: { type: String },
         time: { type: Date, default: Date.now },
         like: { type: Number, default: 0 },
       },
@@ -61,6 +61,14 @@ Product.query.findable = function (req) {
   }
   return this;
 };
+// tìm sản phẩm cùng danh mục
+Product.query.findSimilar = function () {
+  return this.model("Product").find({
+    idCategory: this.idCategory,
+    _id: { $ne: this._id },
+  });
+};
+
 // Product.pre("save", function (next) {
 //   this.variations.forEach((variation) => {
 //     let attributesString = Object.values(variation.attributes).join(" ");

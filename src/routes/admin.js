@@ -14,6 +14,8 @@ router.get("/banner", adminController.banner);
 //get order
 router.get("/order", adminController.order);
 router.get("/order/:id/detail", adminController.orderDetail);
+router.get("/exportOrder", adminController.exportOrder);
+
 //get warranty
 router.get("/warranty/create", adminController.createWarranty);
 router.get("/warranty/show", adminController.showWarranty);

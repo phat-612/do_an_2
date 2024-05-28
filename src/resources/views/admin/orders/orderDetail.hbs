@@ -1,11 +1,14 @@
 <div class="container">
-   <div class="row text-center py-3 mb-3">
+  <div class="row py-3 mb-3">
     <div class="col-md-6">
       <div class="card border-0 bg-light">
         <div class="card-body">
           <h5 class="card-title m-0">ID đơn hàng: <span class="text-info">{{order._id}}</span></h5>
         </div>
       </div>
+    </div>
+    <div class="col-6 text-end">
+      <a href="/admin/exportOrder?idOrder={{order._id}}" class="btn btn-primary mt-2">Xuất Hóa Đơn</a>
     </div>
   </div>
   <div class="row">
@@ -14,7 +17,7 @@
         <thead>
           <tr>
             <th scope="col">STT</th>
-            <th scope="col">Sản Phẩm</th>   
+            <th scope="col">Sản Phẩm</th>
             <th scope="col">Phân loại</th>
             <th scope="col">Giảm giá</th>
             <th scope="col">Số Lượng</th>
@@ -23,34 +26,33 @@
           </tr>
         </thead>
         <tbody>
-        {{#each orders}}
-            <tr>
-              <th scope="row">{{sum @index 1}}</th>
-              <td>{{this.productName}}</td>
-              <td>
+          {{#each orders}}
+          <tr>
+            <th scope="row">{{sum @index 1}}</th>
+            <td>{{this.productName}}</td>
+            <td>
               {{#each this.variationAttributes}}
-                <span class="text-capitalize" style="display: inline-block; margin-right: 10px;">{{@key}} : {{this}}</span>
+              <span class="text-capitalize" style="display: inline-block; margin-right: 10px;">{{@key}} :
+                {{this}}</span>
               {{/each}}
-              </td>
-              <td>{{this.discount}}%</td>
-              <td>{{this.quantity}}</td>
-              <td>{{showPrice this.price}}</td>
-              <td>
-                  {{showPrice this.totalPrice}}
-              </td>
-            </tr>
+            </td>
+            <td>{{this.discount}}%</td>
+            <td>{{this.quantity}}</td>
+            <td>{{showPrice this.price}}</td>
+            <td>
+              {{showPrice this.totalPrice}}
+            </td>
+          </tr>
           {{/each}}
         </tbody>
       </table>
-      <div
-        class="d-flex justify-content-between py-3 border-bottom border-translucent mb-6"
-      >
+      <div class="d-flex justify-content-between py-3 border-bottom border-translucent mb-6">
         <p class="text-body-emphasis fw-semibold">Tổng :</p>
-    
+
         <p class="text-body-emphasis fw-bold me-5">{{showPrice order.total}}</p>
 
       </div>
-      <div class="row"> 
+      <div class="row">
         <div class="col-4">
           <h5>Chi Tiết Khách Hàng</h5>
           <h6><i class="bi bi-person-circle"></i> {{order.idUser.name}}</h6>
@@ -59,9 +61,7 @@
         </div>
         <div class="col-4">
           <h5>Thông Tin Giao Hàng</h5>
-          <h6><i
-              class="bi bi-person-circle"
-            ></i>{{order.shipmentDetail.name}}</h6>
+          <h6><i class="bi bi-person-circle"></i>{{order.shipmentDetail.name}}</h6>
           <h6><i class="bi bi-telephone"></i>
             {{order.shipmentDetail.phone}}</h6>
           <h6><i class="bi bi-house"></i>
@@ -76,18 +76,16 @@
             <div>
               <div class="d-flex justify-content-between">
                 <p class="text-body fw-semibold">Tổng tiền hàng :</p>
-       
+
                 <p class="text-body-emphasis fw-semibold">{{showPrice totalNotSale}}</p>
-    
-              
+
+
               </div>
               <div class="d-flex justify-content-between">
                 <p class="text-body fw-semibold">Giảm giá :</p>
-                 <p class="text-body-emphasis fw-semibold">{{showPrice (salePriceProduct order.total totalNotSale)}}</p>
+                <p class="text-body-emphasis fw-semibold">{{showPrice (salePriceProduct order.total totalNotSale)}}</p>
               </div>
-              <div
-                class="d-flex justify-content-between border-top border-translucent border-dashed pt-4"
-              >
+              <div class="d-flex justify-content-between border-top border-translucent border-dashed pt-4">
                 <h4 class="mb-0">Thành tiền</h4>
                 <h4 class="mb-0">{{showPrice order.total}}</h4>
               </div>
@@ -96,35 +94,47 @@
         </div>
         {{! ================================================================ }}
         <div class="col-12 card w-100 mt-3">
-           <h4>Phương thức thanh toán</h4>
-              <div class="form-check">
-                <input class="form-check-input custom-disabled" type="radio" name="paymentMethod" id="bankTransfer" value="bankTransfer" {{#if (changeStatus order.paymentDetail.method 'online')}}checked{{/if}} disabled >
-                <label class="form-check-label custom-disabled" for="bankTransfer">
-                  Chuyển khoản ngân hàng 
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input custom-disabled" type="radio" name="paymentMethod" id="cashOnDelivery" value="cashOnDelivery"{{#if (changeStatus order.paymentDetail.method 'cod')}}checked{{/if}} disabled> 
-                <label class="form-check-label custom-disabled" for="cashOnDelivery">
-                  Thanh toán khi nhận hàng (COD)
-                </label>
-              </div>
+          <h4>Phương thức thanh toán</h4>
+          <div class="form-check">
+            <input class="form-check-input custom-disabled" type="radio" name="paymentMethod" id="bankTransfer"
+              value="bankTransfer" {{#if (changeStatus order.paymentDetail.method 'online' )}}checked{{/if}} disabled>
+            <label class="form-check-label custom-disabled" for="bankTransfer">
+              Chuyển khoản ngân hàng
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input custom-disabled" type="radio" name="paymentMethod" id="cashOnDelivery"
+              value="cashOnDelivery" {{#if (changeStatus order.paymentDetail.method 'cod' )}}checked{{/if}} disabled>
+            <label class="form-check-label custom-disabled" for="cashOnDelivery">
+              Thanh toán khi nhận hàng (COD)
+            </label>
+          </div>
           <form id="chaneStatus" method="POST" action="/api/order/{{order._id}}?_method=PUT">
-          <div class="card-body">
-            <h5>Trạng thái thanh toán </h5>
-            <select id="paymentDetail" class="form-select" name="paymentDetail[status]" aria-label="Default select example" disabled>
-              <option value="pending"{{#if (changeStatus order.paymentDetail.status 'pending')}}selected{{/if}}>Chờ thanh toán</option> 
-              <option value="success"{{#if (changeStatus order.paymentDetail.status 'success')}}selected{{/if}}>Thành công</option>
-              <option value="failed"{{#if (changeStatus order.paymentDetail.status 'failed')}}selected{{/if}}>Thất bại</option>
-              <option value="cancel"{{#if (changeStatus order.paymentDetail.status 'cancel')}}selected{{/if}}>Đơn hàng đã bị hủy</option>
-            </select>
-            <h5 class="mt-3">Trạng thái đơn hàng</h5>
-              <select id="orderStatus" name="status" class="form-select" aria-label="Default select example" {{#if (changeStatus order.status 'cancel')}}disabled{{/if}}>
-                  <option value="pending" {{#if (changeStatus order.status 'pending')}}selected{{/if}}>Chờ xác nhận</option>
-                  <option value="shipping" {{#if (changeStatus order.status 'shipping')}}selected{{/if}}>Đang Vận chuyển</option>
-                  <option value="success" {{#if (changeStatus order.status 'success')}}selected{{/if}}>Đã giao hàng</option>
-                  <option value="failed" {{#if (changeStatus order.status 'failed')}}selected{{/if}}>Đã hủy</option>
-                  <option hidden value="cancel" {{#if (changeStatus order.status 'cancel')}}selected{{/if}}>Đơn hàng đã bị hủy</option>
+            <div class="card-body">
+              <h5>Trạng thái thanh toán </h5>
+              <select id="paymentDetail" class="form-select" name="paymentDetail[status]"
+                aria-label="Default select example" disabled>
+                <option value="pending" {{#if (changeStatus order.paymentDetail.status 'pending' )}}selected{{/if}}>Chờ
+                  thanh toán</option>
+                <option value="success" {{#if (changeStatus order.paymentDetail.status 'success' )}}selected{{/if}}>
+                  Thành công</option>
+                <option value="failed" {{#if (changeStatus order.paymentDetail.status 'failed' )}}selected{{/if}}>Thất
+                  bại</option>
+                <option value="cancel" {{#if (changeStatus order.paymentDetail.status 'cancel' )}}selected{{/if}}>Đơn
+                  hàng đã bị hủy</option>
+              </select>
+              <h5 class="mt-3">Trạng thái đơn hàng</h5>
+              <select id="orderStatus" name="status" class="form-select" aria-label="Default select example" {{#if
+                (changeStatus order.status 'cancel' )}}disabled{{/if}}>
+                <option value="pending" {{#if (changeStatus order.status 'pending' )}}selected{{/if}}>Chờ xác nhận
+                </option>
+                <option value="shipping" {{#if (changeStatus order.status 'shipping' )}}selected{{/if}}>Đang Vận chuyển
+                </option>
+                <option value="success" {{#if (changeStatus order.status 'success' )}}selected{{/if}}>Đã giao hàng
+                </option>
+                <option value="failed" {{#if (changeStatus order.status 'failed' )}}selected{{/if}}>Đã hủy</option>
+                <option hidden value="cancel" {{#if (changeStatus order.status 'cancel' )}}selected{{/if}}>Đơn hàng đã
+                  bị hủy</option>
               </select>
             </div>
           </form>
