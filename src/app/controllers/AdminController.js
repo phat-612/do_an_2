@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const Warranty = require("../models/Warranty");
 const Product = require("../models/Product");
 const User = require("../models/User");
@@ -482,7 +484,7 @@ class AdminController {
       },
       {
         $lookup: {
-          from: "User",
+          from: "users",
           localField: "idUser",
           foreignField: "_id",
           as: "user",
@@ -492,21 +494,13 @@ class AdminController {
         $unwind: "$user",
       },
       {
-        $lookup: {
-          from: "orderdetails",
-          localField: "_id",
-          foreignField: "idOrder",
-          as: "details",
-        },
-      },
-      {
         $unwind: "$details",
       },
       {
         $lookup: {
           from: "products",
-          localField: "details.idProduct",
-          foreignField: "_id",
+          localField: "details.idVariation",
+          foreignField: "variations._id",
           as: "product",
         },
       },
@@ -514,16 +508,24 @@ class AdminController {
         $unwind: "$product",
       },
       {
-        $project: {
-          _id: 1,
-          "user.name": 1,
-          "user.email": 1,
-          "user.phone": 1,
-          "user.address": 1,
-          "user.avatar": 1,
+        $group: {
+          _id: "$_id",
+          user: { $first: "$user" },
+          details: {
+            $push: {
+              price: "$details.price",
+              quantity: "$details.quantity",
+              idVariation: "$details.idVariation",
+              discount: "$details.discount",
+              productName: "$product.name",
+            },
+          },
+          shipmentDetail: { $first: "$shipmentDetail" },
         },
       },
-    ]);
+    ]).then((order) => {
+      return res.send(order);
+    });
     // Order.findOne({ _id: idOrder })
     //   .populate("idUser")
     //   .aggregate()

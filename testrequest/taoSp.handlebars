@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="owl-carousel owl-theme">
+    {{#each products}}
+    <a href="/product/{{this.slug}}/"
+      class="item card h-100 shadow-sm position-relative flex-column justify-content-between mx-1">
+      {{{showTagDiscount this.discount}}}
+      <img src="{{showImgUpload this.images}}" class="rounded" alt="sd" />
+      <div class="p-2">
+        <p class="card-text fw-bold fs-5">
+          {{this.name}}
+        </p>
+        {{!-- {{consoleHbs this}} --}}
+        {{{showPriceInCard this.variations[0].price this.discount}}}
+        <div class="ratings">
+          <i class="bi bi-star"></i>
+          <i class="bi bi-star"></i>
+          <i class="bi bi-star"></i>
+          <i class="bi bi-star"></i>
+          <i class="bi bi-star"></i>
+        </div>
+      </div>
+    </a>
+    {{/each}}
+  </div>
+</div>

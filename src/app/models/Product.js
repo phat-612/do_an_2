@@ -9,7 +9,7 @@ const Product = new Schema(
     images: [String],
     view: { type: Number, default: 0 },
     slug: { type: String },
-    isbusiness: { type: Boolean, default: true },
+    isBusiness: { type: Boolean, default: true },
     idCategory: { type: Schema.Types.ObjectId, ref: "Category" },
     variations: [
       {
@@ -62,12 +62,6 @@ Product.query.findable = function (req) {
   return this;
 };
 // tìm sản phẩm cùng danh mục
-Product.query.findSimilar = function () {
-  return this.model("Product").find({
-    idCategory: this.idCategory,
-    _id: { $ne: this._id },
-  });
-};
 
 // Product.pre("save", function (next) {
 //   this.variations.forEach((variation) => {

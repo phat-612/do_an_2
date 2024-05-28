@@ -4,16 +4,19 @@
       <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner h-25">
           {{#each banners}}
-            <div class="carousel-item {{#if (compare @index 0)}}active{{/if}}">
-              <a href="{{this.link}}"><img src="{{showImgUpload this.image}}" class="d-block w-100 owl-lazy custom-fit-img-400px" alt="{{this.img}}"></a>
-            </div>
+          <div class="carousel-item {{#if (compare @index 0)}}active{{/if}}">
+            <a href="{{this.link}}"><img src="{{showImgUpload this.image}}"
+                class="d-block w-100 owl-lazy custom-fit-img-400px" alt="{{this.img}}"></a>
+          </div>
           {{/each}}
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+          data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+          data-bs-slide="next">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
@@ -23,58 +26,47 @@
   </div>
   {{! sản phẩm nổi bậc cho từng danh mục, mỗi mục 10 sản phẩm được xem nhiều nhất }}
   {{#each categories}}
-    {{#if this.products}}
-      <div class="mt-3">
-        <div class="row d-flex align-items-center">
-          <a
-            href="/{{this.slug}}"
-            class="col-auto fs-4 text-uppercase text-black"
-          >{{this.name}}</a>
-          <div class="col">
-            <ul class="nav">
-              {{#each this.children}}
-                <li>
-                  <a
-                    href="/{{../this.slug}}/{{this.slug}}"
-                    class="btn btn-outline-light px-2 ms-2 custom-bg-gray text-black"
-                  >{{this.name}}</a>
-                </li>
-              {{/each}}
-              <li>
-                <a
-                  href="/{{this.slug}}"
-                  class="btn btn-outline-light px-2 ms-2 custom-bg-gray text-black"
-                >Xem tất cả</a>
-              </li>
-            </ul>
+  {{#if this.products}}
+  <div class="mt-3">
+    <div class="row d-flex align-items-center">
+      <a href="/{{this.slug}}" class="col-auto fs-4 text-uppercase text-black">{{this.name}}</a>
+      <div class="col">
+        <ul class="nav">
+          {{#each this.children}}
+          <li>
+            <a href="/{{../this.slug}}/{{this.slug}}"
+              class="btn btn-outline-light px-2 ms-2 custom-bg-gray text-black">{{this.name}}</a>
+          </li>
+          {{/each}}
+          <li>
+            <a href="/{{this.slug}}" class="btn btn-outline-light px-2 ms-2 custom-bg-gray text-black">Xem tất cả</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="owl-carousel owl-theme">
+      {{#each this.products}}
+      <a href="/product/{{this.slug}}/"
+        class="item card h-100 shadow-sm position-relative flex-column justify-content-between mx-1">
+        {{{showTagDiscount this.discount}}}
+        <img src="{{showImgUpload this.images}}" class="rounded" alt="sd" />
+        <div class="p-2">
+          <p class="card-text fw-bold fs-6">
+            {{this.name}}
+          </p>
+          {{{showPriceInCard this.variation.price this.discount}}}
+          <div class="ratings">
+            <i class="bi bi-star"></i>
+            <i class="bi bi-star"></i>
+            <i class="bi bi-star"></i>
+            <i class="bi bi-star"></i>
+            <i class="bi bi-star"></i>
           </div>
         </div>
-        <div class="owl-carousel owl-theme">
-          {{#each this.products}}
-            <a href="/product/{{this.slug}}/" class="item card h-100 shadow-sm position-relative flex-column justify-content-between mx-1">
-              {{{showTagDiscount this.discount}}}
-              <img
-                src="{{showImgUpload this.images}}"
-                class="rounded"
-                alt="sd"
-              />
-              <div class="p-2">
-                <p class="card-text fw-bold fs-5">
-                  {{this.name}}
-                </p>
-                {{{showPriceInCard this.variation.price this.discount}}}
-                <div class="ratings">
-                  <i class="bi bi-star"></i>
-                  <i class="bi bi-star"></i>
-                  <i class="bi bi-star"></i>
-                  <i class="bi bi-star"></i>
-                  <i class="bi bi-star"></i>
-                </div>
-              </div>
-            </a>
-          {{/each}}
-        </div>
-      </div>
-    {{/if}}
+      </a>
+      {{/each}}
+    </div>
+  </div>
+  {{/if}}
   {{/each}}
 </div>

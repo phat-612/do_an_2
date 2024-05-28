@@ -2,22 +2,24 @@
   <div class="row mt-3">
     <div class="col-5">
       <div class="header-admin-container">
-    <ul class="nav">
-      <li class="nav-item">
-        <h3>{{countOrdersPending orders}} Đơn Mới</h3>
-        <div id="emailHelp" class="form-text">Đang chờ xử lý</div>
-      </li>
-      <li class="nav-item ms-5">
-        <h3>{{countOrdersSuccess orders}} Đơn</h3>
-        <div id="emailHelp" class="form-text">Thành công</div>
-      </li>
-      <li class="nav-item ms-5">
-        <h3>{{checkOutOfStock products}} Sản Phẩm</h3>
-        <div id="emailHelp" class="form-text">Hết Hàng</div>
-      </li>
-    </ul>
-  </div>
-      <div><hr /></div>
+        <ul class="nav">
+          <li class="nav-item">
+            <h3>{{countOrdersPending orders}} Đơn Mới</h3>
+            <div id="emailHelp" class="form-text">Đang chờ xử lý</div>
+          </li>
+          <li class="nav-item ms-5">
+            <h3>{{countOrdersSuccess orders}} Đơn</h3>
+            <div id="emailHelp" class="form-text">Thành công</div>
+          </li>
+          <li class="nav-item ms-5">
+            <h3>{{checkOutOfStock products}} Sản Phẩm</h3>
+            <div id="emailHelp" class="form-text">Hết Hàng</div>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <hr />
+      </div>
       {{!-- <div class="row">
         <div class="col-5">
           <p>Từ Ngày :</p>
@@ -25,23 +27,13 @@
         </div>
         <div class="col-5">
           <p>Đến Ngày :</p>
-          <input
-            type="date"
-            name=""
-            id=""
-            class="form-control dateEnd"
-            disabled
-          />
+          <input type="date" name="" id="" class="form-control dateEnd" disabled />
         </div>
         <div class="col-2 position-relative">
-          <button
-            type="button"
-            class="btn btn-success position-absolute bottom-0 btn-gotoDate"
-            disabled
-          >Đi</button>
+          <button type="button" class="btn btn-success position-absolute bottom-0 btn-gotoDate" disabled>Đi</button>
         </div>
       </div> --}}
-      <div  style="scale: 0.85;">
+      <div style="scale: 0.85;">
         <canvas id="chart"></canvas>
       </div>
       {{#each orders}}<p hidden class="{{this.status}}">{{this.status}}</p>{{/each}}
@@ -50,19 +42,20 @@
       <div class="row mt-4">
         <h3>Top Sản Phẩm Bán Chạy:</h3>
         {{#each topProducts}}
-          <div class="col-4">
-            <div class="card" style="width: 15rem;">
-              <img src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}" class="card-img-top">
-              <div class="card-body">
-                <h5 class="card-title">{{this.name}}</h5>
-                <p class="card-text">Tổng Số lượt bán: {{this.totalSold}}</p>
-              </div>
+        <div class="col-4">
+          <div class="card" style="width: 15rem;">
+            <img style="width: 215px;" src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}"
+              class="card-img-top">
+            <div class="card-body">
+              <h5 class="card-title">{{this.name}}</h5>
+              <p class="card-text">Tổng Số lượt bán: {{this.totalSold}}</p>
             </div>
           </div>
-          {{/each}}
+        </div>
+        {{/each}}
       </div>
-      
-      
+
+
     </div>
   </div>
 </div>

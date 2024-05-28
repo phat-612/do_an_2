@@ -210,6 +210,11 @@ module.exports = {
       reviews.reduce((acc, review) => {
         return acc + review.rating;
       }, 0) / reviews.length;
+    if (isNaN(avageRating)) {
+      avageRating = 0;
+    } else {
+      avageRating = avageRating.toFixed(1);
+    }
     let starReivews = {};
     for (let i = 1; i <= 5; i++) {
       starReivews[i] = reviews.filter((review) => review.rating == i).length;
@@ -234,7 +239,7 @@ module.exports = {
     return `
       <div class="col-4 justify-content-center align-items-center d-flex flex-column">
               <p class="fw-bold fs-4">
-                ${avageRating.toFixed(1)}/5
+                ${avageRating}/5
               </p>
               <div>
                 <span class="fa fa-star text-warning"></span>

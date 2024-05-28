@@ -1,7 +1,8 @@
 $(".owl-carousel").owlCarousel({
-  loop: true,
+  loop: false,
   margin: 10,
   lazyLoad: true,
+  nav: false,
   stageClass: "owl-stage d-flex my-3",
   responsive: {
     0: {
@@ -10,8 +11,11 @@ $(".owl-carousel").owlCarousel({
     600: {
       items: 3,
     },
-    1000: {
+    800: {
       items: 4,
+    },
+    1000: {
+      items: 5,
     },
   },
 });

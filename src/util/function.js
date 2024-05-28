@@ -52,4 +52,16 @@ module.exports = {
         : Math.floor(countChild / limit) + 1;
     return [currentPage, totalPage, countChild];
   },
+  findSimilarProduct: (Product, product) => {
+    return Product.find({
+      $or: [
+        { category: product.category },
+        {
+          "variations.attributes": product.variations[0].attributes,
+        },
+      ],
+    })
+      .limit(10)
+      .exec();
+  },
 };

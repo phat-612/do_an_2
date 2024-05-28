@@ -1,7 +1,11 @@
 const Category = require("../models/Category");
 const Product = require("../models/Product");
 const Banner = require("../models/Banner");
-const { getDiscount, getDataPagination } = require("../../util/function");
+const {
+  getDiscount,
+  getDataPagination,
+  findSimilarProduct,
+} = require("../../util/function");
 
 class SiteController {
   index(req, res, next) {
@@ -313,13 +317,20 @@ class SiteController {
           maxAge: 1000 * 60 * 60 * 24,
           path: "/me",
         });
+
         Product.findOne({ slug: slugProduct })
-          .findSimilar()
+          .then((product) => {
+            return findSimilarProduct(Product, product);
+          })
           .then((products) => {
-            return res.send(products);
+            // return res.send(resProduct);
             res.render("user/products/detail", {
               product: resProduct,
               js: "user/detailProduct",
+              products: products.map((product) => ({
+                ...product.toObject(),
+                price: product.variations[0].price,
+              })),
             });
           });
       });

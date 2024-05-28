@@ -4,29 +4,19 @@
   <div class="filter nav my-4 align-items-center">
     <div class="title fs-5 me-4">Bộ lọc</div>
     <div class="filter-item">
-      <div
-        class="title dropdown-toggle border fs-5 px-2 py-1 rounded me-2"
-        role="button"
-        data-bs-toggle="dropdown"
-        data-bs-auto-close="outside"
-        aria-expanded="false"
-      >Hãng</div>
+      <div class="title dropdown-toggle border fs-5 px-2 py-1 rounded me-2" role="button" data-bs-toggle="dropdown"
+        data-bs-auto-close="outside" aria-expanded="false">Hãng</div>
       <div class="body dropdown-menu">
         <ul class="list nav">
           {{#each (getBrands categories rootCategory)}}
-            <li > <a class="bg-light p-1 m-2 rounded" href="/{{../rootCategory}}/{{this.slug}}">{{this.name}}</a></li>
+          <li> <a class="bg-light p-1 m-2 rounded" href="/{{../rootCategory}}/{{this.slug}}">{{this.name}}</a></li>
           {{/each}}
         </ul>
       </div>
     </div>
     <div class="filter-item">
-      <div
-        class="title dropdown-toggle border fs-5 px-2 py-1 rounded me-2"
-        role="button"
-        data-bs-toggle="dropdown"
-        data-bs-auto-close="outside"
-        aria-expanded="false"
-      >Mức giá</div>
+      <div class="title dropdown-toggle border fs-5 px-2 py-1 rounded me-2" role="button" data-bs-toggle="dropdown"
+        data-bs-auto-close="outside" aria-expanded="false">Mức giá</div>
       <div class="body dropdown-menu w-25">
 
         <div class="position-relative row justify-content-center">
@@ -37,20 +27,8 @@
         <hr class="dropdown-divider" />
         <div class="action justify-content-center d-flex g-4">
           <form action="">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Từ"
-              name="start-price"
-              hidden
-            />
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Đến"
-              name="end-price"
-              hidden
-            />
+            <input type="text" class="form-control" placeholder="Từ" name="start-price" hidden />
+            <input type="text" class="form-control" placeholder="Đến" name="end-price" hidden />
             <a class="btn btn-light mx-2" href="{{pathName}}">Bỏ chọn</a>
             <button type="submit" class="btn btn-primary mx-2">Lọc</button>
           </form>
@@ -60,95 +38,71 @@
   </div>
   <ul class="nav my-3">
     {{#each subCategories}}
-      <li class=""><a
-          class="bg-light py-1 px-3 me-2 rounded"
-          href="{{../pathName}}/{{this.slug}}"
-        >{{this.name}}</a></li>
+    <li class=""><a class="bg-light py-1 px-3 me-2 rounded" href="{{../pathName}}/{{this.slug}}">{{this.name}}</a></li>
     {{/each}}
   </ul>
 
   {{! sắp xếp }}
   <div class="sort d-flex justify-content-between">
-    <div class="title fs-4 fw-bold text-uppercase"><a href="/{{rootCategory.slug}}">{{rootCategory.name}} có {{countProduct}} sản phẩm</a></div>
+    <div class="title fs-4 fw-bold text-uppercase"><a href="/{{rootCategory.slug}}">{{rootCategory.name}} có
+        {{countProduct}} sản phẩm</a></div>
     <ul class="nav">
-      <li><a
-          class="btn rounded border ms-2"
-          href="{{getSortUrl url}}&column=price&type=asc"
-        >Giá thấp đến cao</a></li>
-      <li><a
-          class="btn rounded border ms-2"
-          href="{{getSortUrl url}}&column=price&type=desc"
-        >Giá cao đến thấp</a></li>
-      <li><a
-          class="btn rounded border ms-2"
-          href="{{getSortUrl url}}&column=createdAt&type=desc"
-        >Mới nhất</a></li>
-      <li><a
-          class="btn rounded border ms-2"
-          href="{{getSortUrl url}}&column=createdAt&type=asc"
-        >Cũ nhất</a></li>
+      <li><a class="btn rounded border ms-2" href="{{getSortUrl url}}&column=price&type=asc">Giá thấp đến cao</a></li>
+      <li><a class="btn rounded border ms-2" href="{{getSortUrl url}}&column=price&type=desc">Giá cao đến thấp</a></li>
+      <li><a class="btn rounded border ms-2" href="{{getSortUrl url}}&column=createdAt&type=desc">Mới nhất</a></li>
+      <li><a class="btn rounded border ms-2" href="{{getSortUrl url}}&column=createdAt&type=asc">Cũ nhất</a></li>
     </ul>
   </div>
-  <div
-    class="align-items-stretch my-3 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3"
-  >
+  <div class="align-items-stretch my-3 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
     {{#each products}}
-      {{! bắt đầu card }}
+    {{! bắt đầu card }}
 
-      <div class="col">
-        <div class="card h-100 shadow-sm position-relative">
-          <a href="/product/{{this.slug}}/{{this.variations.slug}}" class="">
-            {{{showTagDiscount this.discount}}}
-            <img
-              src="{{showImgUpload this.images}}"
-              class="card-img-top rounded"
-              alt="sd"
-            />
-            <div class="card-body">
-              <p class="card-text fw-bold fs-5 text-capitalize ">
-                {{this.name}}
-              </p>
-              {{{showPriceInCard this.variations.price this.discount}}}
-              <div class="ratings">
-                <i class="bi bi-star"></i>
-                <i class="bi bi-star"></i>
-                <i class="bi bi-star"></i>
-                <i class="bi bi-star"></i>
-                <i class="bi bi-star"></i>
-              </div>
+    <div class="col">
+      <div class="card h-100 shadow-sm position-relative">
+        <a href="/product/{{this.slug}}/{{this.variations.slug}}" class="">
+          {{{showTagDiscount this.discount}}}
+          <img src="{{showImgUpload this.images}}" class="card-img-top rounded" alt="sd" />
+          <div class="card-body">
+            <p class="card-text fw-bold fs-6 text-capitalize ">
+              {{this.name}}
+            </p>
+            {{{showPriceInCard this.variations.price this.discount}}}
+            <div class="ratings">
+              <i class="bi bi-star"></i>
+              <i class="bi bi-star"></i>
+              <i class="bi bi-star"></i>
+              <i class="bi bi-star"></i>
+              <i class="bi bi-star"></i>
             </div>
-          </a>
-        </div>
+          </div>
+        </a>
       </div>
-      {{! kêt thúc card }}
+    </div>
+    {{! kêt thúc card }}
     {{/each}}
   </div>
   <div>
     {{#pagination currentPage totalPage 5}}
-      <nav aria-label="...">
-        <ul class="pagination justify-content-center">
-          {{#if notFirstPage}}
-            <li class="page-item">
-              <a
-                class="page-link fs-5"
-                href="{{getPagiUrl ../url}}&page={{minus currentPage 1}}"
-                tabindex="-1"
-                aria-disabled="true"
-              >Previous</a>
-            </li>
-          {{/if}}
-          {{#each pages}}
-            <li class="page-item {{#if this.isCurrent}}active{{/if}}">
-              <a class="page-link fs-5" href="{{getPagiUrl ../../url}}&page={{this.page}}">{{this.page}}</a>
-            </li>
-          {{/each}}
-          {{#if notLastPage}}
-            <li class="page-item">
-              <a class="page-link fs-5" href="{{getPagiUrl ../url}}&page={{sum currentPage 1}}">Next</a>
-            </li>
-          {{/if}}
-        </ul>
-      </nav>
+    <nav aria-label="...">
+      <ul class="pagination justify-content-center">
+        {{#if notFirstPage}}
+        <li class="page-item">
+          <a class="page-link fs-5" href="{{getPagiUrl ../url}}&page={{minus currentPage 1}}" tabindex="-1"
+            aria-disabled="true">Previous</a>
+        </li>
+        {{/if}}
+        {{#each pages}}
+        <li class="page-item {{#if this.isCurrent}}active{{/if}}">
+          <a class="page-link fs-5" href="{{getPagiUrl ../../url}}&page={{this.page}}">{{this.page}}</a>
+        </li>
+        {{/each}}
+        {{#if notLastPage}}
+        <li class="page-item">
+          <a class="page-link fs-5" href="{{getPagiUrl ../url}}&page={{sum currentPage 1}}">Next</a>
+        </li>
+        {{/if}}
+      </ul>
+    </nav>
     {{/pagination}}
   </div>
 </div>

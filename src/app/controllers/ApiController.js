@@ -1011,7 +1011,7 @@ class ApiController {
       let oldImageFilename = banner.image;
 
       // Nếu có ảnh mới được tải lên
-      if (req.files) {
+      if (req.files && req.files.length > 0) {
         // Xóa ảnh cũ nếu có
         if (oldImageFilename) {
           let oldImagePath = path.join(
@@ -1023,16 +1023,14 @@ class ApiController {
             "uploads",
             oldImageFilename
           );
-          //kiểm tra có hay khộng
+          //kiểm tra có hay không
           if (fs.existsSync(oldImagePath)) {
             fs.unlinkSync(oldImagePath);
           }
         }
-        // console.log(oldImageFilename);
 
         // Cập nhật đường dẫn ảnh mới
         req.body.image = req.files[0].filename;
-        // console.log(req.body.image);
       } else {
         // Nếu không có ảnh mới, giữ nguyên ảnh cũ
         req.body.image = oldImageFilename;
