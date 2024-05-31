@@ -1,22 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
       * {
         margin: 0;
         padding: 0;
       }
+      .h-100 {
+        max-height: 100%;
+      }
+      .w-100 {
+        max-width: 100%;
+      }
+      .text-center {
+        text-align: center;
+      }
+      .position-absolute {
+        position: absolute;
+      }
+      .position-relative {
+        position: relative;
+      }
+      .py-20 {
+        padding: 20px 0 20px 0;
+      }
+      .mb-10 {
+        margin-bottom: 10px;
+      }
+      .mb-5 {
+        margin-bottom: 5px;
+      }
+      .mt-0 {
+        margin-top: 0;
+      }
+      .mt-10 {
+        margin-top: 10px;
+      }
+      .mt-5 {
+        margin-top: 5px;
+      }
       .left {
         float: left;
+        margin-left: 2px;
       }
       .right {
         float: right;
+        margin-right: 2px;
+      }
+      .row {
+        --bs-gutter-x: 1.5rem;
+        --bs-gutter-y: 0;
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: calc(var(--bs-gutter-y) * -1);
+        margin-right: calc(var(--bs-gutter-x) * -0.5);
+        margin-left: calc(var(--bs-gutter-x) * -0.5);
+      }
+      .col {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        flex: 1 0 0%;
       }
       hr {
         margin: 10px 0 0;
@@ -24,9 +70,91 @@
       h3 {
         margin: 10px 0 0;
       }
+      table,
+      td,
+      th {
+        border: 1px solid;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 5px;
+      }
     </style>
   </head>
   <body>
-    <h1 style="align-items: center">Hóa Đơn Mua Hàng</h1>
+    <h1 class="text-center">Hóa Đơn Mua Hàng</h1>
+    <p class="text-center mb-5">
+      (Mã đơn hàng: {{id}} - Ngày: {{dateOfInvoice}})
+    </p>
+    <hr />
+    <div>
+      <p class="mt-10 mb-10"><strong>Khách Hàng:&emsp;</strong>{{nameUser}}</p>
+      <p class="mb-10"><strong>Số Điện Thoại:&emsp;</strong>{{phoneUser}}</p>
+    </div>
+    <table class="mb-10">
+      <thead>
+        <td>STT</td>
+        <td>Tên Hàng Hóa</td>
+        <td>SL</td>
+        <td>Đơn Giá</td>
+        <td>Thành Tiền</td>
+      </thead>
+      <tbody>
+        {{#each details}}
+        <tr>
+          <td>{{@index}}</td>
+          <td>{{this.productName}}</td>
+          <td>{{this.quantity}}</td>
+          <td>{{this.price}}</td>
+          <td>{{this.totalPrice}}</td>
+        </tr>
+        {{/each}}
+        <tr>
+          <td class="position-relative" colspan="2" rowspan="3">
+            <strong style="top: 10px" class="position-absolute"
+              >Ghi Chú:</strong
+            >
+          </td>
+          <td class="py-20" colspan="3">
+            <div>
+              <strong class="left">Tổng Tiền:</strong>
+              <p class="right">9999999999</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="py-20" colspan="3">
+            <div>
+              <strong class="left">Giảm giá:</strong>
+              <p class="right">999999</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="py-20" colspan="3">
+            <div>
+              <strong class="left">Tổng Thanh Toán:</strong>
+              <p class="right">9999999</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <hr />
+    <div>
+      <h4 class="mt-10">Thông tin giao hàng:</h4>
+      <p class="mt-5 mb-5"><strong>Tên:&emsp;</strong>{{nameShip}}</p>
+      <p class="mb-5"><strong>Số Điện Thoại:&emsp;</strong>{{phoneShip}}</p>
+      <p class="mb-5"><strong>Địa chỉ:&emsp;</strong>{{addressShip}}</p>
+    </div>
+    <hr />
+
+    <p class="text-center position-relative" style="bottom: 10px">
+      <i>Cảm ơn quý khách đã ủng hộ của hàng CellphoneZ</i>
+    </p>
   </body>
 </html>

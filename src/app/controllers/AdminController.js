@@ -582,8 +582,6 @@ class AdminController {
           user: { $first: "$user" },
           note: { $first: "$note" },
           total: { $first: "$total" },
-          // note: "$note",
-          // total: "$total",
           details: {
             $push: {
               price: "$details.price",
@@ -591,6 +589,9 @@ class AdminController {
               idVariation: "$details.idVariation",
               discount: "$details.discount",
               productName: "$product.name",
+              totalPrice: {
+                $multiply: ["$details.price", "$details.quantity"],
+              },
             },
           },
           dateOfInvoice: {
@@ -606,7 +607,7 @@ class AdminController {
         },
       },
     ]).then((order) => {
-      return res.send(order);
+      const timeNow = new Date().getTime();
       var html = fs.readFileSync(
         path.join(__dirname, "../../public/templates", "order.html"),
         "utf8"
@@ -614,40 +615,50 @@ class AdminController {
       var options = {
         format: "A5",
         orientation: "portrait",
-        border: "10mm",
+        border: "5mm",
       };
-      let data = {};
+      order = order[0];
+      // return res.send(order);
+      let data = {
+        id: order._id,
+        dateOfInvoice: order.dateOfInvoice,
+        nameUser: order.user.name,
+        phoneUser: order.user.phone,
+        note: order.note,
+        total: order.total,
+        nameShip: order.shipmentDetail.name,
+        phoneShip: order.shipmentDetail.phone,
+        addressShip: order.shipmentDetail.address,
+        details: order.details,
+      };
+      Object.keys(data).forEach((key) => {
+        if (typeof data[key] == "number") {
+          data[key] = data[key].toLocaleString("vi-VN");
+        }
+      });
+      var document = {
+        html: html,
+        data,
+        path: path.join(__dirname, "../../public/.download", `${timeNow}.pdf`),
+        type: "",
+      };
+      pdf
+        .create(document, options)
+        .then((resPdf) => {
+          res.download(resPdf.filename, (err) => {
+            if (err) {
+              console.error(err);
+            } else {
+              fs.unlink(resPdf.filename, (err) => {
+                if (err) throw err;
+              });
+            }
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     });
-
-    // var document = {
-    //   html: html,
-    //   data,
-    //   path: path.join(__dirname, "../../public/.download", `${timeNow}.pdf`),
-    //   type: "",
-    // };
-    //   pdf
-    //     .create(document, options)
-    //     .then((resPdf) => {
-    //       res.download(resPdf.filename, (err) => {
-    //         if (err) {
-    //           console.error(err);
-    //         } else {
-    //           fs.unlink(resPdf.filename, (err) => {
-    //             if (err) throw err;
-    //           });
-    //         }
-    //       });
-    //     })
-    //     .catch((error) => {
-    //       console.error(error);
-    //     });
-    // });
-    // Order.findOne({ _id: idOrder })
-    //   .populate("idUser")
-    //   .aggregate()
-    //   .then((order) => {
-    //     return res.send(order);
-    //   });
   }
   // --------------------------------------------------newAddProduct----------------------
   newAddProduct(req, res, next) {
