@@ -1,24 +1,21 @@
 <div class="container">
   <div class="row fw-bold">
-    <a class="col-1 fs-3" href="/me/historyOrder"><i
-        class="bi bi-arrow-left"
-      ></i></a>
+    <a class="col-1 fs-3" href="/me/historyOrder"><i class="bi bi-arrow-left"></i></a>
     <div class="col text-center fs-4">Chi tiết đơn hàng</div>
   </div>
   <div class="row mt-2 align-items-center">
     <p class="col mb-0">Mã đơn hàng:
-      <span class="fw-bold">{{order._id}}</span></p>
-    <div
-      class="col-2 p-2 text-success bg-success bg-opacity-25 custom-w-fitcontent"
-    >{{showStatusOrder order.status}}</div>
-    {{#if (compare order.status "pending")}}
-      <div class="col-2 p-2 text-success"><form
-          action="/api/cancelOrder?_method=PUT"
-          method="post"
-        >
-          <input type="text" value="{{order._id}}" name="idOrder" hidden />
-          <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
-        </form></div>
+      <span class="fw-bold">{{order._id}}</span>
+    </p>
+    <div class="col-2 p-2 text-success bg-success bg-opacity-25 custom-w-fitcontent">{{showStatusOrder order.status}}
+    </div>
+    {{#if (isBtnCancelOrder order.status order.paymentDetail.status)}}
+    <div class="col-2 p-2 text-success">
+      <form action="/api/cancelOrder?_method=PUT" method="post">
+        <input type="text" value="{{order._id}}" name="idOrder" hidden />
+        <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
+      </form>
+    </div>
     {{/if}}
   </div>
   <div class="row">
@@ -28,37 +25,32 @@
   </div>
   <div class="row card tag_product mb-2">
     {{#each order.details}}
-      <div class="d-flex flex-row py-2">
-        <div class="col-2 py-1">
-          <img
-            class="w-75"
-            src="{{showImgUpload this.image}}"
-            alt="{{this.image}}"
-          />
-        </div>
-        <div class="col-8">
-          <a class="fs-5" href="/product/{{slugProduct}}">{{name}}</a>
-          <ul
-            class="p-2 mt-2 text-dark custom-w-fitcontent custom-fs-12px"
-          >{{{objectToLi variationProduct.attributes}}}</ul>
-          {{#if (compareMore discount 0)}}
-            <div class="text-decoration-line-through">{{showPrice price}}</div>
-            <div class="fs-5 text-danger fw-bold">{{showPrice
-                (discountPrice price discount)
-              }}</div>
-          {{else}}
-            <div class="fs-5 text-danger fw-bold">{{showPrice price}}</div>
-          {{/if}}
-
-        </div>
-        <div class="col text-end">
-          <p class="">
-            Số lượng:
-            <span class="text-danger fw-bold">{{quantity}}</span>
-          </p>
-        </div>
+    <div class="d-flex flex-row py-2">
+      <div class="col-2 py-1">
+        <img class="w-75" src="{{showImgUpload this.image}}" alt="{{this.image}}" />
       </div>
-      <hr class="m-0 p-0" />
+      <div class="col-8">
+        <a class="fs-5" href="/product/{{slugProduct}}">{{name}}</a>
+        <ul class="p-2 mt-2 text-dark custom-w-fitcontent custom-fs-12px">{{{objectToLi variationProduct.attributes}}}
+        </ul>
+        {{#if (compareMore discount 0)}}
+        <div class="text-decoration-line-through">{{showPrice price}}</div>
+        <div class="fs-5 text-danger fw-bold">{{showPrice
+          (discountPrice price discount)
+          }}</div>
+        {{else}}
+        <div class="fs-5 text-danger fw-bold">{{showPrice price}}</div>
+        {{/if}}
+
+      </div>
+      <div class="col text-end">
+        <p class="">
+          Số lượng:
+          <span class="text-danger fw-bold">{{quantity}}</span>
+        </p>
+      </div>
+    </div>
+    <hr class="m-0 p-0" />
     {{/each}}
   </div>
 
@@ -74,10 +66,10 @@
         <p>Trạng thái thanh toán:</p>
         <span>{{showPaymentStatus order.paymentDetail.status}}</span>
         {{#if (isShowBtnRePayment order.paymentDetail)}}
-          <form action="/api/rePayment" method="post">
-            <input type="text" value="{{order._id}}" name="idOrder" hidden />
-            <button type="submit" class="btn btn-primary">Thanh toán</button>
-          </form>
+        <form action="/api/rePayment" method="post">
+          <input type="text" value="{{order._id}}" name="idOrder" hidden />
+          <button type="submit" class="btn btn-primary">Thanh toán</button>
+        </form>
         {{/if}}
       </div>
     </div>

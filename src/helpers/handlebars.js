@@ -107,6 +107,13 @@ module.exports = {
               >Giảm ${discount} %</p>`;
     }
   },
+  showTagBusiness: (isBusiness) => {
+    if (!isBusiness) {
+      return `<p
+                class="position-absolute bg-danger p-1 text-white rounded-end-5 z-3"
+              >Ngừng kinh doanh</p>`;
+    }
+  },
   showTdTableProduct: (attributes) => {
     let html = "";
     Object.keys(attributes).forEach((key, index) => {
@@ -308,7 +315,9 @@ module.exports = {
     return totalPrice;
   },
   getBrands: (categories, rootCategory) => {
-    const brands = categories.find((category) => category.slug == rootCategory);
+    const brands = categories.find(
+      (category) => category.slug == rootCategory.slug
+    );
     if (brands) {
       return brands.children.map((brand) => ({
         name: brand.name,
@@ -344,6 +353,12 @@ module.exports = {
     }
     return "";
   },
+  isBtnCancelOrder: (statusOrder, statusPayment) => {
+    if (statusOrder == "pending" && statusPayment != "success") {
+      return true;
+    }
+    return false;
+  },
   isShowBtnRePayment: (paymentDetail) => {
     if (paymentDetail.method == "cod") {
       return false;
@@ -355,7 +370,6 @@ module.exports = {
     }
     return false;
   },
-
   disabledQuantityZero: (quantity) => {
     if (quantity == 0) {
       return "disabled";

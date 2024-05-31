@@ -42,10 +42,10 @@ module.exports = {
    * @param {req:Object} req là object chứa thông tin request
    * @return {[currentPage:Number, totalPage:Number, countChild:Number]}
    */
-  getDataPagination: (dataPagi, req) => {
+  getDataPagination: (dataPagi, req, limit = 16) => {
     let countChild = dataPagi.length;
     let currentPage = parseInt(req.query.page) || 1;
-    let limit = parseInt(req.query.limit) || 16;
+    limit = parseInt(req.query.limit) || limit;
     let totalPage =
       countChild % limit === 0
         ? countChild / limit

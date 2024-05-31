@@ -7,15 +7,13 @@
             <select class="form-select" aria-label="Default select example">
               <option selected>THƯƠNG HIỆU</option>
               {{#each categories}}
-                <option value="{{this.id}}">{{this.name}}</option>
+              <option value="{{this.id}}">{{this.name}}</option>
               {{/each}}
             </select>
           </li>
           <li class="nav-item position-relative">
             <div class="position-absolute top-0 start-0 start-price">0</div>
-            <div
-              class="position-absolute top-0 end-0 end-price"
-            >51.000.000</div>
+            <div class="position-absolute top-0 end-0 end-price">51.000.000</div>
             <div class="position-absolute bottom-0 start-50 translate-middle">
               <div class="price-slider" id="slider"></div>
             </div>
@@ -28,12 +26,8 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 rightul">
         <li class="nav-item">
           <form class="d-flex">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="TÌM KIẾM"
-              aria-label="Search"
-            />
+            <input class="form-control me-2" name="q" required type="search" placeholder="TÌM KIẾM"
+              aria-label="Search" />
             <button class="btn btn-outline-success" type="submit">TÌM</button>
           </form>
         </li>
@@ -58,60 +52,56 @@
     </thead>
     <tbody>
       {{#each products}}
-          <tr>
-            <td>{{this.name}}</td>
-            <td><img src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}"/></td>
-            <td>{{this.idCategory.name}}</td>
-            <td>
-              <div class="row">
-                <div class="col-4">
-                  <a class="btn btn-primary" href="/admin/product/{{this._id}}/detail">
-                    <i class="bi bi-eye"></i>
-                  </a>
-                </div>
-                <div class="col-4">
-                  <a class="btn btn-warning" href="/admin/product/{{this._id}}/edit">
-                  <i class="bi bi-wrench"></i>
+      <tr>
+        <td>{{this.name}}</td>
+        <td><img src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}" /></td>
+        <td>{{this.idCategory.name}}</td>
+        <td>
+          <div class="row">
+            <div class="col-4">
+              <a class="btn btn-primary" href="/admin/product/{{this._id}}/detail">
+                <i class="bi bi-eye"></i>
               </a>
-              </div>
-                <div class="col-4"> 
-                  <form action="/api/removeProduct" method="post">
-                    <input type="text" name="_id" value="{{this._id}}" hidden>
-                    <Button type="submit" class="btn btn-danger "><i class="bi bi-trash"></i></Button>
-                  </form></div>
-              </div>
-            </td>
-          </tr>
+            </div>
+            <div class="col-4">
+              <a class="btn btn-warning" href="/admin/product/{{this._id}}/edit">
+                <i class="bi bi-wrench"></i>
+              </a>
+            </div>
+            <div class="col-4">
+              <form action="/api/removeProduct" method="post">
+                <input type="text" name="_id" value="{{this._id}}" hidden>
+                <Button type="submit" class="btn btn-danger "><i class="bi bi-trash"></i></Button>
+              </form>
+            </div>
+          </div>
+        </td>
+      </tr>
       {{/each}}
     </tbody>
   </table>
 </div>
-
 <div>
-    {{#pagination currentPage totalPage 5}}
-        <nav aria-label="...">
-            <ul class="pagination justify-content-center">
-                {{#if notFirstPage}}
-                <li class="page-item">
-                    <a
-                    class="page-link fs-5"
-                    href="{{getPagiUrl ../url}}&page={{minus currentPage 1}}"
-                    tabindex="-1"
-                    aria-disabled="true"
-                    >Previous</a>
-                </li>
-                {{/if}}
-                {{#each pages}}
-                <li class="page-item {{#if this.isCurrent}}active{{/if}}">
-                    <a class="page-link fs-5" href="{{getPagiUrl ../../url}}&page={{this.page}}">{{this.page}}</a>
-                </li>
-                {{/each}}
-                {{#if notLastPage}}
-                <li class="page-item">
-                    <a class="page-link fs-5" href="{{getPagiUrl ../url}}&page={{sum currentPage 1}}">Next</a>
-                </li>
-                {{/if}}
-            </ul>
-        </nav>
-    {{/pagination}}
+  {{#pagination currentPage totalPage 5}}
+  <nav aria-label="...">
+    <ul class="pagination justify-content-center">
+      {{#if notFirstPage}}
+      <li class="page-item">
+        <a class="page-link fs-5" href="{{getPagiUrl ../url}}&page={{minus currentPage 1}}" tabindex="-1"
+          aria-disabled="true">Previous</a>
+      </li>
+      {{/if}}
+      {{#each pages}}
+      <li class="page-item {{#if this.isCurrent}}active{{/if}}">
+        <a class="page-link fs-5" href="{{getPagiUrl ../../url}}&page={{this.page}}">{{this.page}}</a>
+      </li>
+      {{/each}}
+      {{#if notLastPage}}
+      <li class="page-item">
+        <a class="page-link fs-5" href="{{getPagiUrl ../url}}&page={{sum currentPage 1}}">Next</a>
+      </li>
+      {{/if}}
+    </ul>
+  </nav>
+  {{/pagination}}
 </div>

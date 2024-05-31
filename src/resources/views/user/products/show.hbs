@@ -9,7 +9,7 @@
       <div class="body dropdown-menu">
         <ul class="list nav">
           {{#each (getBrands categories rootCategory)}}
-          <li> <a class="bg-light p-1 m-2 rounded" href="/{{../rootCategory}}/{{this.slug}}">{{this.name}}</a></li>
+          <li> <a class="bg-light p-1 m-2 rounded" href="/{{../rootCategory.slug}}/{{this.slug}}">{{this.name}}</a></li>
           {{/each}}
         </ul>
       </div>
@@ -44,7 +44,8 @@
 
   {{! sắp xếp }}
   <div class="sort d-flex justify-content-between">
-    <div class="title fs-4 fw-bold text-uppercase"><a href="/{{rootCategory.slug}}">{{rootCategory.name}} có
+    <div class="title fs-4 fw-bold text-uppercase"><a href="/{{rootCategory.slug}}">{{rootCategory.name}}
+        {{#if (compareNot rootCategory.slug curCategory.slug)}} {{curCategory.name}} {{/if}}có
         {{countProduct}} sản phẩm</a></div>
     <ul class="nav">
       <li><a class="btn rounded border ms-2" href="{{getSortUrl url}}&column=price&type=asc">Giá thấp đến cao</a></li>
@@ -61,6 +62,7 @@
       <div class="card h-100 shadow-sm position-relative">
         <a href="/product/{{this.slug}}/{{this.variations.slug}}" class="">
           {{{showTagDiscount this.discount}}}
+          {{{showTagBusiness this.isBusiness}}}
           <img src="{{showImgUpload this.images}}" class="card-img-top rounded" alt="sd" />
           <div class="card-body">
             <p class="card-text fw-bold fs-6 text-capitalize ">

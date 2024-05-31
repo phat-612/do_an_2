@@ -27,7 +27,8 @@ router.put("/order/:id", isLoggedIn, apiController.changeStatus);
 router.get("/createPaymentUrl", apiController.creatPaymentUrl);
 router.get("/returnPayment", apiController.returnPayment);
 router.post("/rePayment", isLoggedIn, apiController.rePayment);
-router.post("/export");
+router.get("/searchOrder", apiController.searchOrder);
+
 // product
 router.post("/product", upload.array("images"), apiController.createProduct);
 router.post(

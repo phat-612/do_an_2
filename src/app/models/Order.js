@@ -49,6 +49,14 @@ Order.query.filterable = function (req) {
   }
   return this;
 };
+// Search by idUser
+Order.query.search = function (req) {
+  const name = req.query.name; // Truy cập từ khóa tìm kiếm từ URL. Ví dụ: /search?name=abc
+  if (name) {
+    return this.find({ "idUser.name": new RegExp(name, "i") });
+  }
+  return this;
+};
 // page navigation
 Order.query.paginate = function (req) {
   const page = parseInt(req.query.page) || 1;

@@ -56,9 +56,12 @@
         product.curVariation.slug
         product.discount
         }}}
+
+        {{#if product.isBusiness}}
         <div class="action my-3 row">
           <div class="col-8"><a href="/me/order"
-              class="btn w-100 py-3 rounded border bg-danger fs-4 text-white fw-bold">Mua Ngay</a></div>
+              class="btn w-100 py-3 rounded border bg-danger fs-4 text-white fw-bold">Mua
+              Ngay</a></div>
           <div class="col-4">
             <form action="/api/cart" method="post">
               <input type="hidden" name="idVariation" value="{{product.curVariation._id}}" hidden />
@@ -67,6 +70,10 @@
             </form>
           </div>
         </div>
+        {{else}}
+        <p class="text-center text-danger text-uppercase fs-3 bg-danger text-white rounded mt-2">Sản phẩm ngừng kinh
+          doanh</p>
+        {{/if}}
       </div>
       {{!-- đánh giá --}}
       <div class="mt-5 p-2 border-1 shadow rounded">

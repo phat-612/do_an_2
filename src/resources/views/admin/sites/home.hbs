@@ -39,23 +39,45 @@
       {{#each orders}}<p hidden class="{{this.status}}">{{this.status}}</p>{{/each}}
     </div>
     <div class="col">
-      <div class="row mt-4">
-        <h3>Top Sản Phẩm Bán Chạy:</h3>
-        {{#each topProducts}}
-        <div class="col-4">
-          <div class="card" style="width: 15rem;">
-            <img style="width: 215px;" src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}"
-              class="card-img-top">
-            <div class="card-body">
-              <h5 class="card-title">{{this.name}}</h5>
-              <p class="card-text">Tổng Số lượt bán: {{this.totalSold}}</p>
-            </div>
+    </div>
+  </div>
+  <div class="mt-4">
+    <h3>Doanh Thu: {{showPrice doanhThu}} VND</h3>
+  </div>
+  <div class="row mt-4">
+    <h3 class="bg-dark text-light">Top Sản Phẩm Bán Chạy</h3>
+    {{#each topProducts}}
+    <div class="col-3">
+      <div class="card" style="width: 300px; height: 470px;">
+        <img class="card-img-top w-100" src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}">
+        <div class="card-body row d-flex align-content-end flex-wrap">
+          <div class="col-12">
+            <h5 class="card-title">{{this.name}}</h5>
+          </div>
+          <div class="col-12">
+            <p class="card-text">Tổng Số lượt bán: {{this.totalSold}}</p>
           </div>
         </div>
-        {{/each}}
       </div>
-
-
     </div>
+    {{/each}}
+  </div>
+  <div class="row mt-4">
+    <h3 class="bg-dark text-light">Top Sản Phẩm Có Nhiều Lượt Đánh Giá Nhất</h3>
+    {{#each topReviewProduct}}
+    <div class="col-3">
+      <div class="card" style="width: 300px; height: 470px;">
+        <img class="card-img-top w-100" src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}">
+        <div class="card-body row d-flex align-content-end flex-wrap">
+          <div class="col-12">
+            <h5 class="card-title">{{this.name}}</h5>
+          </div>
+          <div class="col-12">
+            <p class="card-text">Tổng Số Lượt Đánh Giá: {{this.totalReviews}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/each}}
   </div>
 </div>

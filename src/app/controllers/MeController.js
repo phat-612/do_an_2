@@ -45,6 +45,17 @@ class MeController {
       },
       {
         $lookup: {
+          form: "users",
+          localField: "idUser",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $unwind: "$user",
+      },
+      {
+        $lookup: {
           from: "products",
           localField: "details.idVariation",
           foreignField: "variations._id",
@@ -57,6 +68,7 @@ class MeController {
       {
         $project: {
           _id: 1,
+          nameUser: "$user.name",
           total: 1,
           status: 1,
           createdAt: 1,
@@ -334,7 +346,7 @@ class MeController {
         } else {
           data.price = variation.price;
         }
-        if (variation.quantity < cart.quantity) {
+        if (variation.quantity < cookieCart.quantity) {
           data.error = "Số lượng sản phẩm không đủ";
           data.quantity = variation.quantity;
         } else {

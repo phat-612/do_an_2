@@ -3,8 +3,8 @@
 
    <div class="container">
       <div class="form-check my-4">
-         <input class="form-check-input" name="isbusiness" type="checkbox" value="{{product.isbusiness}}"
-            id="flexCheckChecked" {{isRadio product.isbusiness true}}>
+         <input class="form-check-input" name="isbusiness" type="checkbox" value="{{product.isBusiness}}"
+            id="flexCheckChecked" {{isRadio product.isBusiness true}}>
          <label class="form-check-label " for="flexCheckChecked">
             Đang Kinh Doanh
          </label>
@@ -69,17 +69,18 @@
                <div class="areaInpValue2">
                   {{#if attributes2}}
                   {{#each attributes2}}
-                     <div class="row">
-                        <input type="text" id="thuocTinh1" class="valueAttr2 form-control my-2 col variations thuocTinh2"
-                           value="{{this}}" oninput="handleInpValue(2,event)">
-                        <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteValue(2,event)" >Xóa</button>
-                     </div>
+                  <div class="row">
+                     <input type="text" id="thuocTinh1" class="valueAttr2 form-control my-2 col variations thuocTinh2"
+                        value="{{this}}" oninput="handleInpValue(2,event)">
+                     <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteValue(2,event)">Xóa</button>
+                  </div>
                   {{/each}}
                   {{else}}
                   <div class="row">
-                     <input type="text" id="thuocTinh1" class="valueAttr2 form-control my-2 col variations thuocTinh2" value=""
-                        oninput="handleInpValue(2,event)">
-                     <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteValue(2,event)" disabled>Xóa</button>
+                     <input type="text" id="thuocTinh1" class="valueAttr2 form-control my-2 col variations thuocTinh2"
+                        value="" oninput="handleInpValue(2,event)">
+                     <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteValue(2,event)"
+                        disabled>Xóa</button>
                   </div>
                   {{/if}}
                </div>
@@ -106,7 +107,7 @@
                      name="variations[{{@index}}][quantity]"></td>
                <td>
                   <div class="areaInpHidden">
-                        {{{createHiddenInput this.attributes @index}}}
+                     {{{createHiddenInput this.attributes @index}}}
                   </div>
                   <input type="text" class="tdAttribute1" name="variations[{{@index}}][_id]" value="{{this._id}}"
                      hidden>

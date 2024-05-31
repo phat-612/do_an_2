@@ -19,11 +19,12 @@
       <a class="nav-link" href="#">Đã hủy (###)</a>
     </li>
   </ul>
-
-  <div class="d-flex w-25">
-    <input class="form-control me-2" type="search" placeholder="Tìm kiếm đơn hàng" aria-label="Search" />
-    <button class="btn btn-outline-success" type="submit">Tìm</button>
-  </div>
+  <form action="/admin/order" method="get">
+    <div class="d-flex w-25">
+      <input class="form-control me-2" type="search" placeholder="Tìm kiếm đơn hàng" aria-label="Search" name="name" />
+      <button class="btn btn-outline-success" type="submit">Tìm</button>
+    </div>
+  </form>
   <div>
     <table class="table">
       <thead>
@@ -44,6 +45,10 @@
           <td>{{formatDate this.createdAt "DD/MM/YYYY"}}</td>
           <td><a href="/admin/order/{{this._id}}/detail" class="btn btn-primary">Xem</a>
           </td>
+        </tr>
+        {{else}}
+        <tr>
+          <td colspan="5" class="text-center">Không có đơn hàng nào.</td>
         </tr>
         {{/each}}
       </tbody>

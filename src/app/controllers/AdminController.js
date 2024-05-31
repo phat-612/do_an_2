@@ -6,6 +6,10 @@ const User = require("../models/User");
 const Order = require("../models/Order");
 const Category = require("../models/Category");
 const Banner = require("../models/Banner");
+var pdf = require("pdf-creator-node");
+var fs = require("fs");
+const path = require("path");
+
 const { getDataPagination } = require("../../util/function");
 const {
   multipleMongooseToObject,
@@ -18,25 +22,56 @@ class AdminController {
     Product.find({})
       .then(function (products) {
         Order.find({}).then(function (orders) {
-          Product.aggregate([
-            { $unwind: "$variations" }, // Unwind the variations array
-            {
-              $group: {
-                _id: "$_id",
-                name: { $first: "$name" },
-                description: { $first: "$description" },
-                images: { $first: "$images" },
-                view: { $first: "$view" },
-                slug: { $first: "$slug" },
-                idCategory: { $first: "$idCategory" },
-                discount: { $first: "$discount" },
-                totalSold: { $sum: "$variations.sold" },
-                variations: { $push: "$variations" },
+          Promise.all([
+            Order.aggregate([
+              {
+                $match: {
+                  "paymentDetail.status": "success",
+                },
               },
-            },
-            { $sort: { totalSold: -1 } }, // Sort by total sold in descending order
-            { $limit: 3 }, // Limit to top 3 products
-          ]).then((topProducts) => {
+              {
+                $group: {
+                  _id: null,
+                  totalAmount: {
+                    $sum: "$total",
+                  },
+                },
+              },
+            ]),
+            Product.aggregate([
+              {
+                $set: {
+                  totalReviews: { $size: "$reviews" },
+                },
+              },
+              { $sort: { totalReviews: -1 } }, // Sấp xếp
+              { $limit: 4 }, // Limit to top 4 products
+              {
+                $project: {
+                  name: 1,
+                  images: 1,
+                  totalReviews: 1,
+                },
+              },
+            ]),
+            Product.aggregate([
+              { $unwind: "$variations" }, // Unwind the variations array
+              {
+                $group: {
+                  _id: "$_id",
+                  name: { $first: "$name" },
+                  images: { $first: "$images" },
+                  view: { $first: "$view" },
+                  slug: { $first: "$slug" },
+                  totalSold: { $sum: "$variations.sold" },
+                  variations: { $push: "$variations" },
+                },
+              },
+              { $sort: { totalSold: -1 } }, // Sort by total sold in descending order
+              { $limit: 4 }, // Limit to top 4 products
+            ]),
+          ]).then(([doanhThu, topReviewProduct, topProducts]) => {
+            doanhThu = doanhThu[0] ? doanhThu[0].totalAmount : 0;
             res.render("admin/sites/home", {
               layout: "admin",
               js: "admin/home",
@@ -44,6 +79,8 @@ class AdminController {
               orders: multipleMongooseToObject(orders),
               products: multipleMongooseToObject(products),
               topProducts: topProducts,
+              topReviewProduct: topReviewProduct,
+              doanhThu: doanhThu,
             });
           });
         });
@@ -53,12 +90,23 @@ class AdminController {
   // get /product
   product(req, res, next) {
     const url = req.originalUrl;
+    const find = req.query.q;
+    let match = {};
+    if (find && find.trim() != "") {
+      let words = find.split(" ");
+
+      let regexWords = words.map((word) => ({
+        name: { $regex: word, $options: "i" },
+      }));
+      match = { $and: regexWords };
+    }
     Promise.all([
-      Product.find({}).populate("idCategory", "name").paginate(req),
-      Product.find({}),
+      Product.find(match).populate("idCategory", "name").paginate(req),
+      Product.find(match),
     ]).then(([products, datapagi]) => {
       // return res.send(products);
-      let [currentPage, totalPage] = getDataPagination(datapagi, req);
+      let [currentPage, totalPage] = getDataPagination(datapagi, req, 10);
+      // return res.send({ products, datapagi });
       res.render("admin/products/showProduct", {
         layout: "admin",
         js: "admin/showProduct",
@@ -277,17 +325,38 @@ class AdminController {
 
   // get /orderproducts
   order(req, res, next) {
-    Order.find({})
-      .populate("idUser", "name")
-      .then((orders) => {
-        // console.log(orders);
-        res.render("admin/orders/orderProduct", {
-          layout: "admin",
-          js: "admin/orderProduct",
-          css: "admin/orderProduct",
-          orders: multipleMongooseToObject(orders),
+    const name = req.query.name; // Truy cập từ khóa tìm kiếm từ URL
+
+    if (name) {
+      // Tìm người dùng theo tên, sử dụng regex để match các đối tượng chứa chữ "a"
+      User.find({ name: new RegExp(name, "i") })
+        .then((users) => {
+          let userIds = users.map((user) => user._id);
+          return Order.find({ idUser: { $in: userIds } })
+            .populate("idUser", "name")
+            .paginate(req);
+        })
+        .then((orders) => {
+          res.render("admin/orders/orderProduct", {
+            layout: "admin",
+            js: "admin/orderProduct",
+            css: "admin/orderProduct",
+            orders: multipleMongooseToObject(orders),
+          });
         });
-      });
+    } else {
+      // Nếu không có truy vấn tìm kiếm, thì chỉ cần lấy tất cả các đơn hàng
+      Order.find({})
+        .populate("idUser", "name")
+        .then((orders) => {
+          res.render("admin/orders/orderProduct", {
+            layout: "admin",
+            js: "admin/orderProduct",
+            css: "admin/orderProduct",
+            orders: multipleMongooseToObject(orders),
+          });
+        });
+    }
   }
   // get /order/detail
   orderDetail(req, res, next) {
@@ -511,6 +580,10 @@ class AdminController {
         $group: {
           _id: "$_id",
           user: { $first: "$user" },
+          note: { $first: "$note" },
+          total: { $first: "$total" },
+          // note: "$note",
+          // total: "$total",
           details: {
             $push: {
               price: "$details.price",
@@ -520,12 +593,55 @@ class AdminController {
               productName: "$product.name",
             },
           },
+          dateOfInvoice: {
+            $first: {
+              $dateToString: {
+                format: "%d-%m-%Y %H:%M",
+                date: new Date(),
+                timezone: "Asia/Ho_Chi_Minh",
+              },
+            },
+          }, // ngày xuất hóa đơn
           shipmentDetail: { $first: "$shipmentDetail" },
         },
       },
     ]).then((order) => {
       return res.send(order);
+      var html = fs.readFileSync(
+        path.join(__dirname, "../../public/templates", "order.html"),
+        "utf8"
+      );
+      var options = {
+        format: "A5",
+        orientation: "portrait",
+        border: "10mm",
+      };
+      let data = {};
     });
+
+    // var document = {
+    //   html: html,
+    //   data,
+    //   path: path.join(__dirname, "../../public/.download", `${timeNow}.pdf`),
+    //   type: "",
+    // };
+    //   pdf
+    //     .create(document, options)
+    //     .then((resPdf) => {
+    //       res.download(resPdf.filename, (err) => {
+    //         if (err) {
+    //           console.error(err);
+    //         } else {
+    //           fs.unlink(resPdf.filename, (err) => {
+    //             if (err) throw err;
+    //           });
+    //         }
+    //       });
+    //     })
+    //     .catch((error) => {
+    //       console.error(error);
+    //     });
+    // });
     // Order.findOne({ _id: idOrder })
     //   .populate("idUser")
     //   .aggregate()

@@ -65,6 +65,7 @@ class SiteController {
     });
   }
   category(req, res, next) {
+    let slugRootCategory = req.params.slugCategory;
     let slugCategory;
     const url = req.url;
 
@@ -81,7 +82,7 @@ class SiteController {
       if (!category || category == null) {
         return next();
       }
-      const rootCategory = category.toObject();
+      const curCategory = category.toObject();
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 16;
       const skip = (page - 1) * limit;
@@ -119,6 +120,7 @@ class SiteController {
 
       Category.getArrayChidrendIds(category._id).then((ids) => {
         Promise.all([
+          Category.findOne({ slug: slugRootCategory }),
           Category.getCategoryChildren(category._id),
           Product.aggregate([
             {
@@ -170,7 +172,7 @@ class SiteController {
             },
             ...sortAndFilter,
           ]),
-        ]).then(([categories, products, dataPagi]) => {
+        ]).then(([rootCategory, categories, products, dataPagi]) => {
           // return res.send({
           //   products,
           // });
@@ -187,13 +189,26 @@ class SiteController {
             variation: product.variations[0],
           }));
 
+          // return res.send({
+          //   countProduct: countChild,
+          //   rootCategory,
+          //   products,
+          //   subCategories,
+          //   rootCategory,
+          //   path: req.originalUrl,
+          //   pathName: req._parsedUrl.pathname,
+          //   currentPage,
+          //   totalPage,
+          //   url,
+          //   categories,
+          // });
           res.render("user/products/show", {
             js: "user/showProducts",
             countProduct: countChild,
-            rootCategory,
+            rootCategory: rootCategory,
+            curCategory: curCategory,
             products,
             subCategories,
-            rootCategory,
             path: req.originalUrl,
             pathName: req._parsedUrl.pathname,
             currentPage,
@@ -238,6 +253,7 @@ class SiteController {
           images: product.images,
           discount,
           reviews: product.reviews,
+          isBusiness: product.isBusiness,
         };
         let arrVariation;
         if (Object.keys(attribute).length === 1) {

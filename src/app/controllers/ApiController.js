@@ -618,6 +618,20 @@ class ApiController {
 
     Product.findOne({ "variations._id": formData.idVariation }).then(
       (product) => {
+        if (!product) {
+          req.flash("message", {
+            type: "danger",
+            message: "Sản phẩm không tồn tại",
+          });
+          return res.redirect("back");
+        }
+        if (product.isBusiness == false) {
+          req.flash("message", {
+            type: "danger",
+            message: "Sản phẩm ngừng kinh doanh",
+          });
+          return res.redirect("back");
+        }
         const variation = product.variations.id(formData.idVariation);
         if (variation.quantity < formData.quantity) {
           req.flash("message", {
@@ -770,7 +784,6 @@ class ApiController {
             { "variations._id": detail.idVariation },
             { $inc: { "variations.$.quantity": -detail.quantity } }
           ).exec();
-          console.log("idVariation", detail.idVariation);
           Cart.updateOne(
             { idUser },
             { $pull: { items: { idVariation: detail.idVariation } } }
@@ -1086,24 +1099,33 @@ class ApiController {
       order.status = req.body.status;
       if (req.body.status == "failed") {
         order.details.forEach((detail) => {
-          Product.findOne(
+          Product.updateOne(
             { "variations._id": detail.idVariation },
-            { "variations.$": 1 } //tìm bảng ghi
-          ).then((product) => {
-            if (!product) {
+            {
+              $inc: {
+                "variations.$.quantity": detail.quantity,
+                "variations.$.sold": -detail.quantity, // không tăng, mà giảm số lượng đã bán
+              },
+            }
+          ).then((result) => {
+            if (result.nModified == 0) {
               console.log("Product not found");
-            } else {
-              // Tìm variation được chỉ định dựa trên detail.idVariation
-              let variation = product.variations.id(detail.idVariation);
-              // Nếu tìm thấy variation, cập nhật số lượng
-              if (variation) {
-                variation.quantity += detail.quantity;
-                product.save();
-              }
+            }
+          });
+        });
+      } else if (req.body.status == "success") {
+        order.details.forEach((detail) => {
+          Product.updateOne(
+            { "variations._id": detail.idVariation },
+            { $inc: { "variations.$.sold": detail.quantity } }
+          ).then((result) => {
+            if (result.nModified == 0) {
+              console.log("Product not found");
             }
           });
         });
       }
+
       if (order.paymentDetail.method != "cod") {
         order.save();
         return res.redirect("back");
@@ -1136,6 +1158,36 @@ class ApiController {
         return res.redirect("back");
       });
     });
+  }
+  // order admin
+
+  searchOrder(req, res) {
+    // const inputName = req.query.name;
+    // console.log(inputName);
+    // if (!inputName) {
+    //   return res
+    //     .status(400)
+    //     .send(
+    //       "Yêu cầu không hợp lệ. Không có ID người dùng hoặc tên người dùng."
+    //     );
+    // }
+    // User.findOne({ name: inputName }).then((user) => {
+    //   if (!user) {
+    //     return res
+    //       .status(404)
+    //       .send(`Không có người dùng với tên: ${inputName}`);
+    //   }
+    //   Order.find({ idUser: user.id })
+    //     .populate("idUser", "name")
+    //     .then((orders) => {
+    //       if (!orders || orders.length === 0) {
+    //         return res
+    //           .status(404)
+    //           .send(`Không có đơn hàng liên quan đến người dùng: ${inputName}`);
+    //       }
+    //     })
+    //     .then(res.redirect("back"));
+    // });
   }
   // phân quyền
   changeHierarchy(req, res) {
