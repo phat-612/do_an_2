@@ -41,6 +41,7 @@ class SiteController {
             //   banners: banners.map((banner) => banner.toObject()),
             // });
             res.render("user/sites/home", {
+              title: "Trang chủ",
               js: "user/home",
               categories: data,
               banners: banners.map((banner) => banner.toObject()),
@@ -54,10 +55,13 @@ class SiteController {
     });
   }
   login(req, res, next) {
-    res.render("user/sites/login");
+    res.render("user/sites/login", {
+      title: "Đăng nhập",
+    });
   }
   signUp(req, res, next) {
     res.render("user/sites/signUp", {
+      title: "Đăng ký",
       js: "user/signUp",
     });
   }
@@ -85,7 +89,10 @@ class SiteController {
         return next();
       }
       const curCategory = category.toObject();
-      const page = parseInt(req.query.page) || 1;
+      const page =
+        (parseInt(req.query.page) || 1) <= 0
+          ? 1
+          : parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 15;
       const skip = (page - 1) * limit;
       let sortAndFilter = [];
@@ -206,6 +213,7 @@ class SiteController {
           //   categories,
           // });
           res.render("user/products/show", {
+            title: `${curCategory.name}`,
             js: "user/showProducts",
             countProduct: countChild,
             rootCategory: rootCategory,
@@ -340,16 +348,17 @@ class SiteController {
 
         Product.findOne({ slug: slugProduct })
           .then((product) => {
-            return findSimilarProduct(Product, product);
+            return findSimilarProduct(Product, product, Category);
           })
           .then((products) => {
             // return res.send(resProduct);
             res.render("user/products/detail", {
+              title: resProduct.name,
               product: resProduct,
               js: "user/detailProduct",
               products: products.map((product) => ({
                 ...product.toObject(),
-                price: product.variations[0].price,
+                variation: product.variations[0],
               })),
             });
           });
@@ -357,7 +366,8 @@ class SiteController {
   }
   search(req, res, next) {
     const url = req.url;
-    const page = parseInt(req.query.page) || 1;
+    const page =
+      (parseInt(req.query.page) || 1) <= 0 ? 1 : parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 15;
     const skip = (page - 1) * limit;
     let sortAndFilter = [];
@@ -440,6 +450,7 @@ class SiteController {
         variation: product.variations[0],
       }));
       return res.render("user/products/search", {
+        title: `Tìm kiếm: ${req.query.q}`,
         products,
         keySearch: req.query.q,
         countProduct: countChild,

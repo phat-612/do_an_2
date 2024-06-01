@@ -2,7 +2,10 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
     <title>Document</title>
     <style>
       * {
@@ -114,28 +117,43 @@
         </tr>
         {{/each}}
         <tr>
-          <td class="position-relative" colspan="2" rowspan="3">
-            <strong style="top: 10px" class="position-absolute"
+          <td
+            class="position-relative"
+            colspan="2"
+            rowspan="3"
+          >
+            <strong
+              style="top: 10px"
+              class="position-absolute"
               >Ghi Chú:</strong
             >
           </td>
-          <td class="py-20" colspan="3">
+          <td
+            class="py-20"
+            colspan="3"
+          >
             <div>
               <strong class="left">Tổng Tiền:</strong>
-              <p class="right">9999999999</p>
+              <p class="right">{{total}}</p>
             </div>
           </td>
         </tr>
         <tr>
-          <td class="py-20" colspan="3">
+          <td
+            class="py-20"
+            colspan="3"
+          >
             <div>
               <strong class="left">Giảm giá:</strong>
-              <p class="right">999999</p>
+              <p class="right">totalDiscount</p>
             </div>
           </td>
         </tr>
         <tr>
-          <td class="py-20" colspan="3">
+          <td
+            class="py-20"
+            colspan="3"
+          >
             <div>
               <strong class="left">Tổng Thanh Toán:</strong>
               <p class="right">9999999</p>
@@ -152,9 +170,5 @@
       <p class="mb-5"><strong>Địa chỉ:&emsp;</strong>{{addressShip}}</p>
     </div>
     <hr />
-
-    <p class="text-center position-relative" style="bottom: 10px">
-      <i>Cảm ơn quý khách đã ủng hộ của hàng CellphoneZ</i>
-    </p>
   </body>
 </html>

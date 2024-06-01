@@ -4,7 +4,8 @@
   <div class="row">
     <div class="col-6">
       {{!-- ảnh --}}
-      <div id="carouselExampleControls" class="carousel slide border rounded" data-bs-ride="carousel">
+      <div id="carouselExampleControls" class="carousel slide border rounded d-flex align-items-center"
+        data-bs-ride="carousel" style="height: 35vw;">
         <div class="carousel-inner">
           {{#each product.images}}
           <div class="carousel-item {{#if (compare @index 0)}}active{{/if}}">
@@ -102,24 +103,7 @@
     <div class="fs-4 fw-bold mt-4">Sản phẩm tương tự</div>
     <div class="owl-carousel owl-theme border shadow rounded-3">
       {{#each products}}
-      <a href="/product/{{this.slug}}/"
-        class="item card h-100 shadow-sm position-relative flex-column justify-content-between mx-1">
-        {{{showTagDiscount this.discount}}}
-        <img src="{{showImgUpload this.images}}" class="rounded" alt="sd" />
-        <div class="p-2">
-          <p class="card-text fw-bold fs-5">
-            {{this.name}}
-          </p>
-          {{{showPriceInCard this.price this.discount}}}
-          <div class="ratings">
-            <i class="bi bi-star"></i>
-            <i class="bi bi-star"></i>
-            <i class="bi bi-star"></i>
-            <i class="bi bi-star"></i>
-            <i class="bi bi-star"></i>
-          </div>
-        </div>
-      </a>
+      {{> cardProductHome}}
       {{/each}}
     </div>
   </div>

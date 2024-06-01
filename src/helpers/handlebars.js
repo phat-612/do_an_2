@@ -171,6 +171,7 @@ module.exports = {
       `;
     }
     return `
+    <p class="invisible">d</p>
       <p class="card-text text-danger fs-4 fw-medium">
         ${price.toLocaleString("vi-VN")}
       </p>`;
@@ -379,6 +380,7 @@ module.exports = {
     }
     return "";
   },
+  navActive: (currentPath, path) => {},
   isDiscount: (discount) => {
     const discountPercent = getDiscount(discount);
     return discountPercent > 0;

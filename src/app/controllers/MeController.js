@@ -21,6 +21,7 @@ class MeController {
       res.render("user/profiles/profile", {
         layout: "userProfile",
         js: "user/profile",
+        title: "Thông tin cá nhân",
         user: {
           name: user.name,
           email: user.email,
@@ -45,7 +46,7 @@ class MeController {
       },
       {
         $lookup: {
-          form: "users",
+          from: "users",
           localField: "idUser",
           foreignField: "_id",
           as: "user",
@@ -62,9 +63,6 @@ class MeController {
           as: "product",
         },
       },
-      // {
-      //   $unwind: "$product",
-      // },
       {
         $project: {
           _id: 1,
@@ -107,6 +105,7 @@ class MeController {
         }, 0);
         res.render("user/profiles/historyOrder", {
           layout: "userProfile",
+          title: "Lịch sử đơn hàng",
           orders,
           countOrder,
           totalMoneyPaid,
@@ -153,7 +152,11 @@ class MeController {
         };
       });
       // return res.json(order);
-      res.render("user/profiles/detailOrder", { layout: "userProfile", order });
+      res.render("user/profiles/detailOrder", {
+        layout: "userProfile",
+        title: "Chi tiết đơn hàng",
+        order,
+      });
     });
   }
   historyWaranty(req, res, next) {
@@ -202,6 +205,7 @@ class MeController {
       // });
       res.render("user/profiles/historyWaranty", {
         layout: "userProfile",
+        title: "Lịch sử bảo hành",
         warranties,
       });
     });
@@ -243,18 +247,23 @@ class MeController {
       // return res.send(warranty);
       res.render("user/profiles/detailWaranty", {
         layout: "userProfile",
+        title: "Chi tiết bảo hành",
         warranty: warranty,
       });
     });
   }
   changePassword(req, res, next) {
-    res.render("user/profiles/changePassword", { layout: "userProfile" });
+    res.render("user/profiles/changePassword", {
+      layout: "userProfile",
+      title: "Đổi mật khẩu",
+    });
   }
   address(req, res, next) {
     User.findOne({ _id: req.session.idUser }).then((user) => {
       res.render("user/profiles/address", {
         layout: "userProfile",
         js: "user/address",
+        title: "Quản lý địa chỉ",
         addresses: multipleMongooseToObject(user.shipmentDetail),
       });
     });
@@ -265,6 +274,7 @@ class MeController {
         return res.render("user/profiles/cart", {
           layout: "userProfile",
           js: "user/cart",
+          title: "Giỏ hàng",
           cart: [],
         });
       }
@@ -319,6 +329,7 @@ class MeController {
         res.render("user/profiles/cart", {
           layout: "userProfile",
           js: "user/cart",
+          title: "Giỏ hàng",
           cart: resCart,
         });
       });

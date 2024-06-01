@@ -40,7 +40,7 @@ const url = req.url;
 let [currentPage, totalPage, countChild] = getDataPagination(dataPagi,req);
 ```
 
-3. Dữ liệu render phải được: .paginate(req)
+3. Dữ liệu render phải được: .paginate(req) hoặc tự custom
 
 ```
 Product.find({}).paginate(req)

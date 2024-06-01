@@ -1,7 +1,8 @@
 <div class="container">
   <div class="d-flex justify-content-between my-3">
     <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" {{isRadio product.isbusiness true}} disabled>
+      <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" {{isRadio product.isBusiness true}}
+        disabled>
       <label class="form-check-label" for="flexCheckChecked">
         Đang Kinh Doanh
       </label>
@@ -16,7 +17,7 @@
       <h4>Danh mục</h4>
       <p>
         {{#each product.category}}
-          {{this}}/
+        {{this}}/
         {{/each}}
       </p>
 
@@ -35,27 +36,27 @@
       <thead>
         <tr>
           <th class="th1">{{#each product.variations}}{{#if @first}}{{#each
-                  this.attributes
-                }}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
+            this.attributes
+            }}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
           <th class="th2">{{#each product.variations}}{{#if @first}}{{#each
-                  this.attributes
-                }}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
+            this.attributes
+            }}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
           <th>Giá</th>
           <th>Số lượng</th>
         </tr>
       </thead>
       <tbody>
         {{#each product.variations}}
-          <tr>
-            <td class="td1">{{#each this.attributes}}{{#if
-                  @first
-                }}{{this}}{{/if}}{{/each}}</td>
-            <td class="td2">{{#each this.attributes}}{{#if
-                  @last
-                }}{{this}}{{/if}}{{/each}}</td>
-            <td>{{this.price}}</td>
-            <td>{{this.quantity}}</td>
-          </tr>
+        <tr>
+          <td class="td1">{{#each this.attributes}}{{#if
+            @first
+            }}{{this}}{{/if}}{{/each}}</td>
+          <td class="td2">{{#each this.attributes}}{{#if
+            @last
+            }}{{this}}{{/if}}{{/each}}</td>
+          <td>{{this.price}}</td>
+          <td>{{this.quantity}}</td>
+        </tr>
         {{/each}}
       </tbody>
     </table>
@@ -78,76 +79,80 @@
   <div class="row">
     <h4>Danh Sách Ảnh</h4>
     {{#each product.images}}
-      <img src="/img/uploads/{{this}}" alt="" class="col-3" />
+    <img src="/img/uploads/{{this}}" alt="" class="col-3" />
     {{/each}}
   </div>
 </div>
 
-{{!-- 
+{{!--
 <div hidden>
   <label for="brandDataList" class="form-label fs-4 mt-3">Thuộc Tính</label>
-      <div class="w-75 container-sm py-4 my-4 border rounded">
-         <div class="row">
-            <div class="col-md-6">
-               <label for="ipNameAttributePro1" class="form-label fs-5">Nhập Tên Thuộc tính</label>
-            </div>
-            <div class="col-md-6">
-               <input type="text" id="inpNameAttributePro1" class="form-control variations" value="{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}">
-            </div>
-            <div class="col-md-6 my-3">
-               <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
-            </div>
-            <div class="col-md-6 my-3" id="inputAttribute1Div">
-               <button type="button" class="btn btn-success form-control addAttribute1-btn">Thêm Thuộc Tính</button>
-               {{#each attributes1}}
-                  {{#if @first}}
-                     {{#each this}}
-                        <div class="row">
-                           <input type="text" id="thuocTinh1" class="form-control my-2 col variations thuocTinh1" value="{{this}}">
-                           <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
-                        </div>
-                     {{/each}}
-                  {{/if}}
-               {{/each}}
-            </div>
-         </div>
-     </div>
-     <div class="w-75 container-sm py-4 my-4 border rounded Attribute2div">
-      <div class="row">
-         <div class="col-md-6">
-            <label for="inpNameAttributePro2" class="form-label fs-5">Nhập Tên Thuộc Tính</label>
-         </div>
-         <div class="col-md-6">
-            <input type="text" id="inpNameAttributePro2" class="form-control variations" value="{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}">
-         </div>
-         <div class="col-md-6 my-3">
-            <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
-         </div>
-         <div class="col-md-6 my-3" id="inputAttribute2Div">
-            <button type="button" class="btn btn-success form-control addAttribute2-btn">Thêm Thuộc Tính</button>
-               {{#each attributes2}}
-                  {{#if @first}}
-                     {{#each this}}
-                        <div class="row">
-                           <input type="text" id="thuocTinh1" class="form-control my-2 col variations thuocTinh2" value="{{this}}">
-                           <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
-                        </div>
-                     {{/each}}
-                  {{/if}}
-               {{/each}}
-         </div>
+  <div class="w-75 container-sm py-4 my-4 border rounded">
+    <div class="row">
+      <div class="col-md-6">
+        <label for="ipNameAttributePro1" class="form-label fs-5">Nhập Tên Thuộc tính</label>
       </div>
-     </div>
-      <table id="custom-varriant" class="table-based table ">
-         <thead>
-            <tr>
-               <th class="th1">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
-               <th class="th2">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
-               <th>Giá</th>
-               <th>Số lượng</th>
-            </tr>
-         </thead>
-         <tbody>
-         </tbody>
-      </table>
+      <div class="col-md-6">
+        <input type="text" id="inpNameAttributePro1" class="form-control variations"
+          value="{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}">
+      </div>
+      <div class="col-md-6 my-3">
+        <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
+      </div>
+      <div class="col-md-6 my-3" id="inputAttribute1Div">
+        <button type="button" class="btn btn-success form-control addAttribute1-btn">Thêm Thuộc Tính</button>
+        {{#each attributes1}}
+        {{#if @first}}
+        {{#each this}}
+        <div class="row">
+          <input type="text" id="thuocTinh1" class="form-control my-2 col variations thuocTinh1" value="{{this}}">
+          <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
+        </div>
+        {{/each}}
+        {{/if}}
+        {{/each}}
+      </div>
+    </div>
+  </div>
+  <div class="w-75 container-sm py-4 my-4 border rounded Attribute2div">
+    <div class="row">
+      <div class="col-md-6">
+        <label for="inpNameAttributePro2" class="form-label fs-5">Nhập Tên Thuộc Tính</label>
+      </div>
+      <div class="col-md-6">
+        <input type="text" id="inpNameAttributePro2" class="form-control variations"
+          value="{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}">
+      </div>
+      <div class="col-md-6 my-3">
+        <label for="" class="form-label fs-5">Nhập Thuộc Tính</label>
+      </div>
+      <div class="col-md-6 my-3" id="inputAttribute2Div">
+        <button type="button" class="btn btn-success form-control addAttribute2-btn">Thêm Thuộc Tính</button>
+        {{#each attributes2}}
+        {{#if @first}}
+        {{#each this}}
+        <div class="row">
+          <input type="text" id="thuocTinh1" class="form-control my-2 col variations thuocTinh2" value="{{this}}">
+          <button type="button" class="btn btn-danger col-2 my-2" onclick="deleteAttribute(event)">Xóa</button>
+        </div>
+        {{/each}}
+        {{/if}}
+        {{/each}}
+      </div>
+    </div>
+  </div>
+  <table id="custom-varriant" class="table-based table ">
+    <thead>
+      <tr>
+        <th class="th1">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if
+          @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
+        <th class="th2">{{#each product.variations}}{{#if @first}}{{#each this.attributes}}{{#if
+          @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
+        <th>Giá</th>
+        <th>Số lượng</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
 </div> --}}

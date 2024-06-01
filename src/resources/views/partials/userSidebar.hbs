@@ -1,20 +1,22 @@
-<ul class="p-0">
-  <li class="fs-5"><a class="text-black py-2 d-block" href="/me">Thông tin cá
+<ul class="p-0 nav nav-pills nav-fill">
+  <li class="fs-5 nav-item "><a class="nav-link text-start" href="/me">Thông tin cá
       nhân</a></li>
-  <li class="fs-5"><a class="text-black py-2 d-block" href="/me/address">Địa chỉ
+  <li class="fs-5 nav-item"><a class="nav-link text-start" href="/me/address">Địa chỉ
       nhận hàng</a></li>
-  <li class="fs-5"><a
-      class="text-black py-2 d-block"
-      href="/me/changePassword"
-    >Đổi mật khẩu</a></li>
-  <li class="fs-5"><a
-      class="text-black py-2 d-block"
-      href="/me/historyOrder"
-    >Lịch sử đơn hàng</a></li>
-  <li class="fs-5"><a
-      class="text-black py-2 d-block"
-      href="/me/historyWaranty"
-    >Lịch sử bảo hành</a></li>
+  <li class="fs-5 nav-item"><a class="nav-link text-start" href="/me/changePassword">Đổi mật khẩu</a></li>
+  <li class="fs-5 nav-item"><a class="nav-link text-start" href="/me/historyOrder">Lịch sử đơn hàng</a></li>
+  <li class="fs-5 nav-item"><a class="nav-link text-start" href="/me/historyWaranty">Lịch sử bảo hành</a></li>
 
-  <li class="fs-5"><a class="text-black py-2 d-block" href="/logout">Đăng xuất</a></li>
+  <li class="fs-5 nav-item"><a class="nav-link text-start" href="/logout">Đăng xuất</a></li>
 </ul>
+
+<script>
+  let curHref = window.location.pathname;
+  let host = window.location.host;
+  $('a').each((ind, ele) => {
+
+    if (ele.href.split(host)[1] == curHref) {
+      $(ele).addClass('active');
+    }
+  })
+</script>

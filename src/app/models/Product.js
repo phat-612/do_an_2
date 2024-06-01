@@ -40,7 +40,8 @@ const Product = new Schema(
 // sortable
 // page navigation
 Product.query.paginate = function (req) {
-  const page = parseInt(req.query.page) || 1;
+  let page = parseInt(req.query.page) || 1;
+  page = page <= 0 ? 1 : page;
   const limit = parseInt(req.query.limit) || 10;
   const skip = (page - 1) * limit;
   return this.skip(skip).limit(limit);

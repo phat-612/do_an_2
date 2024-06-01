@@ -63,7 +63,12 @@ class ApiController {
     // Kiểm tra và xử lý các biến thể (variations)
     if (Array.isArray(formData.variations)) {
       formData.variations = formData.variations
-        .filter((variation) => variation.quantity !== "0") // Lọc các variations có quantity bằng 0
+        .filter(
+          (variation) =>
+            variation.quantity !== "0" &&
+            variation.price !== "0" &&
+            variation.sold != "0"
+        ) // Lọc các variations có quantity bằng 0
         .map((variation) => {
           // Xóa các trường attributes rỗng
           if (variation.attributes) {
@@ -92,11 +97,11 @@ class ApiController {
   //cập nhật sản phẩm
   async updateProduct(req, res, next) {
     const formData = req.body;
-    let isbusiness;
-    if (formData.isbusiness) {
-      isbusiness = true;
+    let isBusiness;
+    if (formData.isBusiness) {
+      isBusiness = true;
     } else {
-      isbusiness = false;
+      isBusiness = false;
     }
 
     const nameWithoutAccent = diacritics.remove(req.body.name).trim();
@@ -164,7 +169,7 @@ class ApiController {
             formData.variations = formData.variations
               .filter(
                 (variation) =>
-                  variation.quantity != "0" || variation.sold != "0"
+                  variation.quantity != "0" || variation.price != "0"
               )
               .map((variation) => {
                 if (!variation._id || variation._id === "") {
@@ -191,8 +196,9 @@ class ApiController {
               idCategory: formData.idCategory,
               variations: formData.variations,
               discount: formData.discount,
-              isbusiness: isbusiness,
+              isBusiness: isBusiness,
               images: updatedImages,
+              slug,
             }
           );
         });
@@ -828,7 +834,6 @@ class ApiController {
   }
   cancelOrder(req, res, next) {
     const idOrder = req.body.idOrder;
-    console.log("hủy đơn hàng");
     Order.findOne({ _id: idOrder }).then((order) => {
       if (order.status != "pending") {
         req.flash("message", {

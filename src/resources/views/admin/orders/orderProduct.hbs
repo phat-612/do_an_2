@@ -55,3 +55,27 @@
     </table>
   </div>
 </div>
+<div>
+  {{#pagination currentPage totalPage 5}}
+  <nav aria-label="...">
+    <ul class="pagination justify-content-center">
+      {{#if notFirstPage}}
+      <li class="page-item">
+        <a class="page-link fs-5" href="{{getPagiUrl ../url}}&page={{minus currentPage 1}}" tabindex="-1"
+          aria-disabled="true">Previous</a>
+      </li>
+      {{/if}}
+      {{#each pages}}
+      <li class="page-item {{#if this.isCurrent}}active{{/if}}">
+        <a class="page-link fs-5" href="{{getPagiUrl ../../url}}&page={{this.page}}">{{this.page}}</a>
+      </li>
+      {{/each}}
+      {{#if notLastPage}}
+      <li class="page-item">
+        <a class="page-link fs-5" href="{{getPagiUrl ../url}}&page={{sum currentPage 1}}">Next</a>
+      </li>
+      {{/if}}
+    </ul>
+  </nav>
+  {{/pagination}}
+</div>

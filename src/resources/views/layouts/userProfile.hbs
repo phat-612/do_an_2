@@ -2,59 +2,48 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CellPhoneS</title>
-    <link rel="stylesheet" href="/css/bootstrap.css">
-    <link rel="stylesheet" href="/css/bootstrap-icons.css">
-    <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/bootstrap-icons.css">
+  <link rel="stylesheet" href="/css/style.css">
 
-    {{#if css}}
-    <link rel="stylesheet" href="/css/{{css}}.css">
-    {{/if}}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  {{#if css}}
+  <link rel="stylesheet" href="/css/{{css}}.css">
+  {{/if}}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
-    {{> header-user}}
-    <div class="container">
-        <div class="row mt-3">
-            <div class="col-2">
-                {{> userSidebar}}
-            </div>
-            <div class="col">
-                {{{body}}}
-        </div>
+  {{> header-user}}
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-2">
+        {{> userSidebar}}
+      </div>
+      <div class="col">
+        {{{body}}}
+      </div>
     </div>
-    
+
     {{> footer-user}}
     <script src="https://kit.fontawesome.com/3505ae4a94.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="/js/bootstrap.js"></script>
     {{#if message}}
-      <div
-        id="liveToast"
-        class="toast align-items-center position-fixed top-0 end-0 p-3
-          {{statusToast message.type}}"
-        role="alert"
-        aria-live="assertive"
-        aria-atomic="true"
-      >
-        <div class="d-flex">
-          <div class="toast-body text-white">
-            {{message.message}}
-          </div>
-          <button
-            type="button"
-            class="btn-close me-2 m-auto"
-            data-bs-dismiss="toast"
-            aria-label="Close"
-          ></button>
+    <div id="liveToast" class="toast align-items-center position-fixed top-0 end-0 p-3
+          {{statusToast message.type}}" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body text-white">
+          {{message.message}}
         </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
-      <script>
-        $('document').ready(function () { $('#liveToast').toast('show'); })
-      </script>
+    </div>
+    <script>
+      $('document').ready(function () { $('#liveToast').toast('show'); })
+    </script>
     {{/if}}
     {{#if js}}
     <script src="/js/{{js}}.js"></script>

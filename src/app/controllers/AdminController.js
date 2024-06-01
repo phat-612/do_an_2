@@ -325,38 +325,39 @@ class AdminController {
 
   // get /orderproducts
   order(req, res, next) {
-    const name = req.query.name; // Truy cập từ khóa tìm kiếm từ URL
+    const name = req.query.name;
+    const url = req.originalUrl;
+    let match = {};
+    const findUsers = async () => {
+      if (name) {
+        const users = await User.find({ name: new RegExp(name, "i") });
+        let userIds = users.map((user) => user._id);
+        match = { idUser: { $in: userIds } };
+      }
+      return match;
+    };
 
-    if (name) {
-      // Tìm người dùng theo tên, sử dụng regex để match các đối tượng chứa chữ "a"
-      User.find({ name: new RegExp(name, "i") })
-        .then((users) => {
-          let userIds = users.map((user) => user._id);
-          return Order.find({ idUser: { $in: userIds } })
-            .populate("idUser", "name")
-            .paginate(req);
-        })
-        .then((orders) => {
-          res.render("admin/orders/orderProduct", {
-            layout: "admin",
-            js: "admin/orderProduct",
-            css: "admin/orderProduct",
-            orders: multipleMongooseToObject(orders),
-          });
+    findUsers()
+      .then((match) => {
+        return Promise.all([
+          Order.find(match).populate("idUser", "name").paginate(req),
+          Order.find(match),
+        ]);
+      })
+      .then(([orders, datapagi]) => {
+        let [currentPage, totalPage] = getDataPagination(datapagi, req, 10);
+        res.render("admin/orders/orderProduct", {
+          layout: "admin",
+          js: "admin/orderProduct",
+          css: "admin/orderProduct",
+          orders: multipleMongooseToObject(orders),
+          currentPage: currentPage,
+          totalPage: totalPage,
+          name,
+          url,
         });
-    } else {
-      // Nếu không có truy vấn tìm kiếm, thì chỉ cần lấy tất cả các đơn hàng
-      Order.find({})
-        .populate("idUser", "name")
-        .then((orders) => {
-          res.render("admin/orders/orderProduct", {
-            layout: "admin",
-            js: "admin/orderProduct",
-            css: "admin/orderProduct",
-            orders: multipleMongooseToObject(orders),
-          });
-        });
-    }
+        // console.log(currentPage, totalPage, name);
+      });
   }
   // get /order/detail
   orderDetail(req, res, next) {
@@ -594,6 +595,7 @@ class AdminController {
               },
             },
           },
+          // totalDiscount: { $multiply: ["$details.totalPrice"] },
           dateOfInvoice: {
             $first: {
               $dateToString: {
@@ -607,6 +609,7 @@ class AdminController {
         },
       },
     ]).then((order) => {
+      order = order[0];
       const timeNow = new Date().getTime();
       var html = fs.readFileSync(
         path.join(__dirname, "../../public/templates", "order.html"),
@@ -616,8 +619,19 @@ class AdminController {
         format: "A5",
         orientation: "portrait",
         border: "5mm",
+        footer: {
+          height: "10mm",
+          contents: {
+            default:
+              '<p style="text-align:center">Cảm ơn quý khách đã sử dụng dịch vụ của CellPhoneZ</p>', // fallback value
+          },
+        },
       };
-      order = order[0];
+      let totalDiscount = 0;
+      order.details.forEach(function (detail) {
+        totalDiscount +=
+          detail.price * detail.quantity * (detail.discount / 100);
+      });
       // return res.send(order);
       let data = {
         id: order._id,
@@ -630,6 +644,7 @@ class AdminController {
         phoneShip: order.shipmentDetail.phone,
         addressShip: order.shipmentDetail.address,
         details: order.details,
+        totalDiscount,
       };
       Object.keys(data).forEach((key) => {
         if (typeof data[key] == "number") {

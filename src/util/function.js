@@ -52,11 +52,30 @@ module.exports = {
         : Math.floor(countChild / limit) + 1;
     return [currentPage, totalPage, countChild];
   },
-  findSimilarProduct: (Product, product) => {
-    return Product.find({
+  findSimilarProduct: async (Product, product, Category) => {
+    let similarProductsChildren = [];
+    let similarProducts = await Product.find({
       idCategory: product.idCategory,
+      isBusiness: true,
     })
       .limit(10)
       .exec();
+    if (similarProducts.length < 10) {
+      let category = await Category.findOne({ _id: product.idCategory });
+      let categoryChildren = await Category.getArrayChidrendIds(
+        category.idParent
+      );
+
+      categoryChildren = categoryChildren.filter(
+        (id) => id.toString() !== product.idCategory.toString()
+      );
+      similarProductsChildren = await Product.find({
+        idCategory: { $in: categoryChildren },
+        isBusiness: true,
+      })
+        .limit(10 - similarProducts.length)
+        .exec();
+    }
+    return [...similarProducts, ...similarProductsChildren];
   },
 };
