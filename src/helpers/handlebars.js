@@ -23,6 +23,17 @@ module.exports = {
     });
     return outputString;
   },
+  mathHandle: (val1, operator, val2) => {
+    val1 = parseFloat(val1);
+    val2 = parseFloat(val2);
+    return {
+      "+": val1 + val2,
+      "-": val1 - val2,
+      "*": val1 * val2,
+      "/": val1 / val2,
+      "%": val1 % val2,
+    }[operator];
+  },
   showImgUpload: (img) => {
     if (typeof img == "object") {
       img = img[0];
