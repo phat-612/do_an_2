@@ -2,44 +2,26 @@
   <form id="formOrder" action="/api/order" method="post">
     <div class="custom-mw-720px m-auto">
       <div class="text-center">
-        <a class="float-start fs-2"><i class="bi bi-arrow-left"></i></a>
+        <a href="javascript:history.back()" class="float-start fs-2"><i class="bi bi-arrow-left"></i></a>
         <span class="fs-1">Thông tin</span>
       </div>
       <div class="gap-3 d-grid mt-3">
         {{#each cart.items}}
-          <div class="row">
-            <div class="col-3"><img
-                class="card-img"
-                src="{{showImgUpload this.image}}"
-                alt=""
-              /></div>
-            <div class="col-9">
-              <h4>{{this.name}}</h4>
-              <div class="d-flex justify-content-between">
-                <p class="text-danger fs-5">{{showPrice this.price}}</p>
-                <p>Số lượng:
-                  <span class="text-danger">{{this.quantity}}</span></p>
-              </div>
+        <div class="row">
+          <div class="col-3"><img class="card-img" src="{{showImgUpload this.image}}" alt="" /></div>
+          <div class="col-9">
+            <h4>{{this.name}}</h4>
+            <div class="d-flex justify-content-between">
+              <p class="text-danger fs-5">{{showPrice this.price}}</p>
+              <p>Số lượng:
+                <span class="text-danger">{{this.quantity}}</span>
+              </p>
             </div>
-            <input
-              type="text"
-              name="details[{{@index}}][idVariation]"
-              value="{{this.idVariation}}"
-              hidden
-            />
-            <input
-              type="text"
-              name="details[{{@index}}][quantity]"
-              value="{{this.quantity}}"
-              hidden
-            />
-            <input
-              type="text"
-              name="details[{{@index}}][price]"
-              value="{{this.price}}"
-              hidden
-            />
           </div>
+          <input type="text" name="details[{{@index}}][idVariation]" value="{{this.idVariation}}" hidden />
+          <input type="text" name="details[{{@index}}][quantity]" value="{{this.quantity}}" hidden />
+          <input type="text" name="details[{{@index}}][price]" value="{{this.price}}" hidden />
+        </div>
         {{/each}}
       </div>
       <div class="mt-3">
@@ -53,62 +35,40 @@
             địa chỉ giao hàng</p>
           <div id="listAddress" class="listAddress">
             {{#each shipmentDetail}}
-              <div class="row mt-2">
-                <div class="col-1">
-                  <input
-                    type="radio"
-                    name="listAddress"
-                    data-bs-name="{{name}}"
-                    data-bs-phone="{{phone}}"
-                    data-bs-address="{{address}}"
-                    {{isRadio defaultAddress true}}
-                  />
-                </div>
-                <div class="col-11">
-                  <div>{{alias}}</div>
-                  <div>{{name}} | {{phone}}</div>
-                  <div>{{address}}</div>
-                </div>
+            <div class="row mt-2">
+              <div class="col-1">
+                <input type="radio" name="listAddress" data-bs-name="{{name}}" data-bs-phone="{{phone}}"
+                  data-bs-address="{{address}}" {{isRadio defaultAddress true}} />
               </div>
+              <div class="col-11">
+                <div>{{alias}}</div>
+                <div>{{name}} | {{phone}}</div>
+                <div>{{address}}</div>
+              </div>
+            </div>
             {{/each}}
           </div>
           <div id="addAddress" class="newAddress d-none">
             <div>
               <label for="">Tên người nhận</label>
-              <input
-                type="text"
-                name="shipmentDetail[name]"
-                class="required form-control"
-              />
+              <input type="text" name="shipmentDetail[name]" class="required form-control" />
             </div>
             <div>
               <label for="">Số điện thoại</label>
-              <input
-                type="text"
-                name="shipmentDetail[phone]"
-                class="required form-control"
-              />
+              <input type="text" name="shipmentDetail[phone]" class="required form-control" />
             </div>
             <div>
               <label for="">Địa chỉ</label>
-              <input
-                type="text"
-                name="shipmentDetail[address]"
-                class="required form-control"
-              />
+              <input type="text" name="shipmentDetail[address]" class="required form-control" />
             </div>
           </div>
         </div>
         <div>
-          <label for="note"><h5>Ghi chú</h5></label>
-          <textarea
-            class="d-block w-100 form-control"
-            name="note"
-            id="note"
-            cols="30"
-            rows="3"
-            style="resize: none;"
-          ></textarea>
+          <label for="note">
+            <h5>Ghi chú</h5>
+          </label>
+          <textarea class="d-block w-100 form-control" name="note" id="note" cols="30" rows="3"
+            style="resize: none;"></textarea>
         </div>
         <div>
           <h5>Phương thức thanh toán</h5>
@@ -116,23 +76,11 @@
             *Vui lòng chọn phương thức thanh toán
           </p>
           <div class="">
-            <input
-              class="required"
-              type="text"
-              name="paymentMethod"
-              id="paymentMethod"
-              hidden
-            />
-            <button
-              type="button"
-              class="chosePaymentMethod py-1 px-3 rounded"
-              data-bs-method="0"
-            >Thanh toán khi nhân hàng</button>
-            <button
-              type="button"
-              class="chosePaymentMethod py-1 px-3 rounded"
-              data-bs-method="1"
-            >Thanh toán trực tuyến</button>
+            <input class="required" type="text" name="paymentMethod" id="paymentMethod" hidden />
+            <button type="button" class="chosePaymentMethod py-1 px-3 rounded" data-bs-method="0">Thanh toán khi nhân
+              hàng</button>
+            <button type="button" class="chosePaymentMethod py-1 px-3 rounded" data-bs-method="1">Thanh toán trực
+              tuyến</button>
           </div>
         </div>
         <div>
@@ -141,10 +89,7 @@
               <h3>Tổng tiền:</h3>
               <p class="text-danger fs-3">{{showPrice cart.totalPrice}}</p>
             </div>
-            <button
-              type="submit"
-              class="btnSubmit w-100 bg-danger text-white py-2 fs-4 rounded"
-            >Đặt hàng
+            <button type="submit" class="btnSubmit w-100 bg-danger text-white py-2 fs-4 rounded">Đặt hàng
             </button>
           </div>
         </div>

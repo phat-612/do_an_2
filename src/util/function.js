@@ -54,12 +54,7 @@ module.exports = {
   },
   findSimilarProduct: (Product, product) => {
     return Product.find({
-      $or: [
-        { category: product.category },
-        {
-          "variations.attributes": product.variations[0].attributes,
-        },
-      ],
+      idCategory: product.idCategory,
     })
       .limit(10)
       .exec();

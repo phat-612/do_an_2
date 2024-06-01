@@ -1,0 +1,16 @@
+<div class="col">
+    <div class="card h-100 shadow-sm position-relative">
+        <a href="/product/{{this.slug}}/{{this.variations.slug}}" class="text-black">
+            {{{showTagDiscount this.discount}}}
+            {{{showTagBusiness this.isBusiness}}}
+            <img src="{{showImgUpload this.images}}" class="card-img-top rounded" alt="sd" />
+            <div class="card-body">
+                <p class="card-text fw-bold fs-6 text-capitalize ">
+                    {{this.name}}
+                </p>
+                {{{showPriceInCard this.variations.price this.discount}}}
+                {{{showRatingStar this.reviews}}}
+            </div>
+        </a>
+    </div>
+</div>

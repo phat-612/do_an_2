@@ -46,25 +46,7 @@
     </div>
     <div class="owl-carousel owl-theme">
       {{#each this.products}}
-      <a href="/product/{{this.slug}}/"
-        class="item card h-100 shadow-sm position-relative flex-column justify-content-between mx-1">
-        {{{showTagDiscount this.discount}}}
-        {{{showTagBusiness this.isBusiness}}}
-        <img src="{{showImgUpload this.images}}" class="rounded" alt="sd" />
-        <div class="p-2">
-          <p class="card-text fw-bold fs-6">
-            {{this.name}}
-          </p>
-          {{{showPriceInCard this.variation.price this.discount}}}
-          <div class="ratings">
-            <i class="bi bi-star"></i>
-            <i class="bi bi-star"></i>
-            <i class="bi bi-star"></i>
-            <i class="bi bi-star"></i>
-            <i class="bi bi-star"></i>
-          </div>
-        </div>
-      </a>
+      {{> cardProductHome}}
       {{/each}}
     </div>
   </div>

@@ -33,7 +33,6 @@ class ApiController {
   // tạo sản phẩm
   async createProduct(req, res, next) {
     const formData = req.body;
-
     const nameWithoutAccent = diacritics.remove(req.body.name).trim();
     let slug = nameWithoutAccent.toLowerCase().replace(/[^a-z0-9]+/g, "-");
     const slugRegEx = new RegExp(`^(${slug})((-[0-9]*$)?)$`, "i");
@@ -1213,7 +1212,9 @@ class ApiController {
     });
   }
   testSeeBody(req, res, next) {
-    res.json(req.body);
+    console.log(req.files);
+    console.log(req.body);
+    res.send(req.body);
   }
 }
 module.exports = new ApiController();

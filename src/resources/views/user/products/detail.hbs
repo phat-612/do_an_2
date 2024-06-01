@@ -39,6 +39,7 @@
 
     <div class="col-6">
       <div>
+
         {{#if (compareMore product.discount 0)}}
         <div class="text-decoration-line-through">{{showPrice
           product.price
@@ -53,11 +54,11 @@
         {{/if}}
         {{{showVariations
         product.arrVariation
-        product.curVariation.slug
+        product.curVariation
         product.discount
         }}}
 
-        {{#if product.isBusiness}}
+        {{#if (and product.isBusiness (compareMore product.curVariation.quantity 0))}}
         <div class="action my-3 row">
           <div class="col-8"><a href="/me/order"
               class="btn w-100 py-3 rounded border bg-danger fs-4 text-white fw-bold">Mua
@@ -71,8 +72,9 @@
           </div>
         </div>
         {{else}}
-        <p class="text-center text-danger text-uppercase fs-3 bg-danger text-white rounded mt-2">Sản phẩm ngừng kinh
-          doanh</p>
+        <p class="text-center text-danger text-uppercase fs-3 bg-danger text-white rounded mt-2">
+          {{getSoldOutOrBusiness product.isBusiness product.curVariation.quantity}}
+        </p>
         {{/if}}
       </div>
       {{!-- đánh giá --}}
@@ -170,7 +172,7 @@
 
 <script>
   $(".owl-carousel").owlCarousel({
-    loop: true,
+    loop: false,
     margin: 10,
     lazyLoad: true,
     nav: false,

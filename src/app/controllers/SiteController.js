@@ -20,10 +20,12 @@ class SiteController {
             .sort({ view: -1 })
             .limit(10)
             .then((products) => {
-              products = products.map((product) => ({
-                ...product.toObject(),
-                variation: product.variations[0],
-              }));
+              products = products.map((product) => {
+                return {
+                  ...product.toObject(),
+                  variation: product.variations[0],
+                };
+              });
               return {
                 ...category,
                 products,
@@ -84,7 +86,7 @@ class SiteController {
       }
       const curCategory = category.toObject();
       const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 16;
+      const limit = parseInt(req.query.limit) || 15;
       const skip = (page - 1) * limit;
       let sortAndFilter = [];
       if (req.query.hasOwnProperty("_find")) {
@@ -178,7 +180,8 @@ class SiteController {
           // });
           let [currentPage, totalPage, countChild] = getDataPagination(
             dataPagi,
-            req
+            req,
+            limit
           );
           const subCategories = categories.map((category) => ({
             name: category.name,
@@ -280,6 +283,7 @@ class SiteController {
                       acc[cur.attributes[variationKey]] = {
                         slug: cur.slug,
                         price: cur.price,
+                        quantity: cur.quantity,
                       };
                       const arrValueVariation = [
                         ...new Set(
@@ -354,7 +358,7 @@ class SiteController {
   search(req, res, next) {
     const url = req.url;
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 16;
+    const limit = parseInt(req.query.limit) || 15;
     const skip = (page - 1) * limit;
     let sortAndFilter = [];
     if (req.query.hasOwnProperty("_find")) {
@@ -428,7 +432,8 @@ class SiteController {
     ]).then(([products, dataPagi]) => {
       let [currentPage, totalPage, countChild] = getDataPagination(
         dataPagi,
-        req
+        req,
+        limit
       );
       products = products.map((product) => ({
         ...product,

@@ -54,33 +54,9 @@
       <li><a class="btn rounded border ms-2" href="{{getSortUrl url}}&column=createdAt&type=asc">Cũ nhất</a></li>
     </ul>
   </div>
-  <div class="align-items-stretch my-3 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+  <div class="align-items-stretch my-3 row row-cols-1 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
     {{#each products}}
-    {{! bắt đầu card }}
-
-    <div class="col">
-      <div class="card h-100 shadow-sm position-relative">
-        <a href="/product/{{this.slug}}/{{this.variations.slug}}" class="">
-          {{{showTagDiscount this.discount}}}
-          {{{showTagBusiness this.isBusiness}}}
-          <img src="{{showImgUpload this.images}}" class="card-img-top rounded" alt="sd" />
-          <div class="card-body">
-            <p class="card-text fw-bold fs-6 text-capitalize ">
-              {{this.name}}
-            </p>
-            {{{showPriceInCard this.variations.price this.discount}}}
-            <div class="ratings">
-              <i class="bi bi-star"></i>
-              <i class="bi bi-star"></i>
-              <i class="bi bi-star"></i>
-              <i class="bi bi-star"></i>
-              <i class="bi bi-star"></i>
-            </div>
-          </div>
-        </a>
-      </div>
-    </div>
-    {{! kêt thúc card }}
+    {{> cardProductShow}}
     {{/each}}
   </div>
   <div>

@@ -14,6 +14,8 @@ module.exports = {
   compareNot: (a, b) => a != b,
   compareMore: (a, b) => a > b,
   compareLess: (a, b) => a < b,
+  or: (...args) => args.some((arg) => arg),
+  and: (...args) => args.every((arg) => arg),
   objectToLi: (object) => {
     let outputString = "";
     Object.keys(object).forEach((key, index) => {
@@ -173,9 +175,9 @@ module.exports = {
         ${price.toLocaleString("vi-VN")}
       </p>`;
   },
-  showVariations: (variations, curVariationSlug, discount) => {
+  showVariations: (variations, curVariation, discount) => {
     let outputHtml = "";
-    variations.forEach((variation) => {
+    variations.forEach((variation, ind) => {
       Object.keys(variation).forEach((key) => {
         if (key == "nameProperty") {
           outputHtml += `
@@ -194,10 +196,19 @@ module.exports = {
           outputHtml += `
             <li
               class="py-1 px-3 me-3 bg-light border ${
-                slug == curVariationSlug ? "border-danger" : ""
-              } rounded"
+                slug == curVariation.slug ? "border-danger" : ""
+              } rounded position-relative"
               role="button"
             >
+              ${
+                variation[key].quantity == 0 && ind == variations.length - 1
+                  ? `
+                  <p class="position-absolute bg-danger p-1 text-white rounded-end-5 z-3 start-0 top-0">
+                    Hết hàng
+                  </p>
+                `
+                  : ""
+              }
               <a href="${slug}"><strong>${key}</strong><div>${price}</div></a>
             </li>
           `;
@@ -292,6 +303,27 @@ module.exports = {
     });
     return outputHtml;
   },
+  showRatingStar: (reviews) => {
+    let aveRating =
+      reviews.reduce((acc, cur) => {
+        return acc + cur.rating;
+      }, 0) / reviews.length;
+
+    if (isNaN(aveRating)) {
+      aveRating = 0;
+    } else {
+      aveRating = Math.round(aveRating);
+    }
+    let outputHtml = `<div class="ratings">`;
+    for (let i = 0; i < 5; i++) {
+      outputHtml +=
+        i < aveRating
+          ? `<i class="fa fa-star text-warning"></i>`
+          : `<i class="fa fa-star"></i>`;
+    }
+    outputHtml += `</div>`;
+    return outputHtml;
+  },
   discountPrice: (price, discount) => {
     return price * (1 - discount / 100);
   },
@@ -324,6 +356,16 @@ module.exports = {
         slug: brand.slug,
       }));
     }
+  },
+  getSoldOutOrBusiness: (isBusiness, quantity) => {
+    let outputText = "";
+    if (quantity == 0) {
+      outputText = "Hết hàng";
+    }
+    if (!isBusiness) {
+      outputText = "Ngừng kinh doanh";
+    }
+    return outputText;
   },
   // chuyển đổi thành chuỗi
   printObject: (object) => {
