@@ -620,7 +620,7 @@ class AdminController {
         orientation: "portrait",
         border: "5mm",
         footer: {
-          height: "10mm",
+          height: "5mm",
           contents: {
             default:
               '<p style="text-align:center">Cảm ơn quý khách đã sử dụng dịch vụ của CellPhoneZ</p>', // fallback value
@@ -628,9 +628,14 @@ class AdminController {
         },
       };
       let totalDiscount = 0;
-      order.details.forEach(function (detail) {
-        totalDiscount +=
-          detail.price * detail.quantity * (detail.discount / 100);
+      let totalProductPrice = 0;
+      order.details.forEach(function (detail, index) {
+        if (detail.discount) {
+          totalDiscount +=
+            detail.price * detail.quantity * (detail.discount / 100);
+        }
+        detail.stt = index + 1;
+        totalProductPrice += detail.totalPrice;
       });
       // return res.send(order);
       let data = {
@@ -644,7 +649,8 @@ class AdminController {
         phoneShip: order.shipmentDetail.phone,
         addressShip: order.shipmentDetail.address,
         details: order.details,
-        totalDiscount,
+        totalDiscount: totalDiscount.toLocaleString("vi-VN"),
+        totalProductPrice: totalProductPrice.toLocaleString("vi-VN"),
       };
       Object.keys(data).forEach((key) => {
         if (typeof data[key] == "number") {
