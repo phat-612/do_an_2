@@ -326,13 +326,25 @@ class AdminController {
   // get /orderproducts
   order(req, res, next) {
     const name = req.query.name;
+    const status = req.query.status; // lấy trạng thái từ URL
     const url = req.originalUrl;
     let match = {};
+
+    if (
+      status === "success" ||
+      status === "pending" ||
+      status === "failed" ||
+      status === "shipping"
+    ) {
+      match.status = status;
+    }
+
+    // Khởi tạo hàm tìm Users theo tên
     const findUsers = async () => {
       if (name) {
-        const users = await User.find({ name: new RegExp(name, "i") });
+        let users = await User.find({ name: new RegExp(name, "i") });
         let userIds = users.map((user) => user._id);
-        match = { idUser: { $in: userIds } };
+        match.idUser = { $in: userIds };
       }
       return match;
     };
@@ -341,23 +353,47 @@ class AdminController {
       .then((match) => {
         return Promise.all([
           Order.find(match).populate("idUser", "name").paginate(req),
-          Order.find(match),
+          Order.find(match).countDocuments(),
+          Order.find({ status: "pending" }).countDocuments(),
+          Order.find({ status: "success" }).countDocuments(),
+          Order.find({ status: "failed" }).countDocuments(),
+          Order.find({ status: "shipping" }).countDocuments(),
         ]);
       })
-      .then(([orders, datapagi]) => {
-        let [currentPage, totalPage] = getDataPagination(datapagi, req, 10);
-        res.render("admin/orders/orderProduct", {
-          layout: "admin",
-          js: "admin/orderProduct",
-          css: "admin/orderProduct",
-          orders: multipleMongooseToObject(orders),
-          currentPage: currentPage,
-          totalPage: totalPage,
-          name,
-          url,
-        });
-        // console.log(currentPage, totalPage, name);
-      });
+      .then(
+        ([
+          orders,
+          totalOrders,
+          totalPending,
+          totalSuccess,
+          totalFailed,
+          totalShipping,
+        ]) => {
+          let [currentPage, totalPage] = getDataPagination(
+            totalOrders,
+            req,
+            10
+          );
+
+          res.render("admin/orders/orderProduct", {
+            title: "Quản lý đơn hàng",
+            layout: "admin",
+            js: "admin/orderProduct",
+            css: "admin/orderProduct",
+            orders: multipleMongooseToObject(orders),
+            currentPage: currentPage,
+            totalPage: totalPage,
+            totalOrders: totalOrders,
+            totalPending: totalPending,
+            totalSuccess: totalSuccess,
+            totalFailed: totalFailed,
+            totalShipping: totalShipping,
+            url,
+          });
+          // console.log(totalOrders);s
+        }
+      )
+      .catch(next);
   }
   // get /order/detail
   orderDetail(req, res, next) {
@@ -583,6 +619,8 @@ class AdminController {
           user: { $first: "$user" },
           note: { $first: "$note" },
           total: { $first: "$total" },
+          method: { $first: "$paymentDetail.method" },
+          status: { $first: "$paymentDetail.status" },
           details: {
             $push: {
               price: "$details.price",
@@ -637,6 +675,16 @@ class AdminController {
         detail.stt = index + 1;
         totalProductPrice += detail.totalPrice;
       });
+      if (order.method == "cod") {
+        order.method = "Thanh toán bằng tiền mặt khi nhận hàng";
+      } else {
+        order.method = "Thanh toán trực tuyến";
+      }
+      if (order.status == "success") {
+        order.status = "Đã Thanh Toán";
+      } else {
+        order.status = "Chưa Thanh Toán";
+      }
       // return res.send(order);
       let data = {
         id: order._id,
@@ -645,10 +693,13 @@ class AdminController {
         phoneUser: order.user.phone,
         note: order.note,
         total: order.total,
+        method: order.method,
+        status: order.status,
         nameShip: order.shipmentDetail.name,
         phoneShip: order.shipmentDetail.phone,
         addressShip: order.shipmentDetail.address,
         details: order.details,
+        paymentDetail: order.paymentDetail,
         totalDiscount: totalDiscount.toLocaleString("vi-VN"),
         totalProductPrice: totalProductPrice.toLocaleString("vi-VN"),
       };
@@ -680,6 +731,17 @@ class AdminController {
           console.error(error);
         });
     });
+  }
+
+  exportWarranty(req, res) {
+    const idWarranty = req.query.idWarranty;
+    Warranty.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(idWarranty),
+        },
+      },
+    ]);
   }
   // --------------------------------------------------newAddProduct----------------------
   newAddProduct(req, res, next) {

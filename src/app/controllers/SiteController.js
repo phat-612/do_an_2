@@ -96,6 +96,21 @@ class SiteController {
       const limit = parseInt(req.query.limit) || 15;
       const skip = (page - 1) * limit;
       let sortAndFilter = [];
+      if (
+        req.query.hasOwnProperty("startPrice") &&
+        req.query.hasOwnProperty("endPrice")
+      ) {
+        let startPrice = parseInt(req.query.startPrice);
+        let endPrice = parseInt(req.query.endPrice);
+        sortAndFilter.push({
+          $match: {
+            "variations.price": {
+              $gte: startPrice,
+              $lte: endPrice,
+            },
+          },
+        });
+      }
       if (req.query.hasOwnProperty("_find")) {
         let searchQuery = req.query.q;
         let words = searchQuery.split(" ");
@@ -182,9 +197,10 @@ class SiteController {
             ...sortAndFilter,
           ]),
         ]).then(([rootCategory, categories, products, dataPagi]) => {
-          // return res.send({
-          //   products,
-          // });
+          // get max price and min price
+          let maxPrice = Math.max(
+            ...dataPagi.map((product) => product.variations.price)
+          );
           let [currentPage, totalPage, countChild] = getDataPagination(
             dataPagi,
             req,
@@ -225,6 +241,9 @@ class SiteController {
             currentPage,
             totalPage,
             url,
+            maxPrice,
+            startPrice: req.query.startPrice || 0,
+            endPrice: req.query.endPrice || maxPrice,
           });
         });
       });

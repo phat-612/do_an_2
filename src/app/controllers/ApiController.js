@@ -801,7 +801,7 @@ class ApiController {
         }, 0);
         const newOrder = new Order({
           idUser,
-          note: formData.note,
+          note: formData.note.substring(0, 200),
           total,
           paymentDetail: {
             method: formData.paymentMethod,
@@ -977,7 +977,7 @@ class ApiController {
       product.reviews.push({
         idUser,
         rating: formData.rating,
-        comment: formData.comment,
+        comment: formData.comment.substring(0, 250),
       });
       product.save().then(() => {
         return res.redirect("back");

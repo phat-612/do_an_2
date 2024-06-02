@@ -27,8 +27,8 @@
         <hr class="dropdown-divider" />
         <div class="action justify-content-center d-flex g-4">
           <form action="">
-            <input type="text" class="form-control" placeholder="Từ" name="start-price" hidden />
-            <input type="text" class="form-control" placeholder="Đến" name="end-price" hidden />
+            <input type="text" class="form-control" placeholder="Từ" name="startPrice" hidden />
+            <input type="text" class="form-control" placeholder="Đến" name="endPrice" hidden />
             <a class="btn btn-light mx-2" href="{{pathName}}">Bỏ chọn</a>
             <button type="submit" class="btn btn-primary mx-2">Lọc</button>
           </form>
@@ -84,3 +84,10 @@
     {{/pagination}}
   </div>
 </div>
+
+
+<script>
+  let maxPrice = {{maxPrice}};
+  let startPrice = {{startPrice}} ||0;
+  let endPrice = {{endPrice}} || maxPrice;
+</script>

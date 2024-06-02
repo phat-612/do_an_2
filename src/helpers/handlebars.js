@@ -303,8 +303,7 @@ module.exports = {
                        review.idUser.name
                      }</span> <span class="opacity-50">   ${moment(
         review.time
-      ).format("DD/MM/YYYY HH:mm")}</span>
-                      </div>
+      ).format("DD/MM/YYYY HH:mm")}</span></div>
                       <div class="ms-5">
                         <div>
                           ${star}

@@ -21,6 +21,7 @@ router.get("/warranty/create", adminController.createWarranty);
 router.get("/warranty/show", adminController.showWarranty);
 router.get("/warranty/:id/deltail", adminController.detailWarranty);
 router.get("/warranty/:id/edit", adminController.editWarranty);
+router.get("/exportWarranty", adminController.exportWarranty);
 // get product
 router.get("/product/:id/detail", adminController.detail);
 router.get("/product/:id/edit", adminController.editProduct);

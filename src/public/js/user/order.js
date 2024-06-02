@@ -74,4 +74,14 @@ $(document).ready(function () {
     }
     event.target.submit();
   });
+  // handle note character count
+  $("textarea[name=note]").keyup((event) => {
+    const note = $("textarea[name=note]").val();
+    const count = note.length;
+    if (count > 200) {
+      $("textarea[name=note]").val(note.substring(0, 200));
+      return;
+    }
+    $("#countNote").text(count);
+  });
 });

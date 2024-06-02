@@ -12,9 +12,9 @@ $('input[name="rating"]').on("change", (e) => {
 $("#sendReviewModal textarea").on("input", (e) => {
   let text = $(e.target).val();
   let length = text.length;
-  if (length > 500) {
-    $(e.target).val(text.slice(0, 500));
-    length = 500;
+  if (length > 250) {
+    $(e.target).val(text.slice(0, 250));
+    length = 250;
   }
   $("#sendReviewModal .countCharacter").text(length);
 });

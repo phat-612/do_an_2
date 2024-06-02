@@ -11,6 +11,16 @@
       padding: 0;
     }
 
+
+    .text-ellipsis {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+    }
+
     .h-100 {
       height: 100%;
     }
@@ -41,6 +51,10 @@
 
     .py-20 {
       padding: 20px 0 20px 0;
+    }
+
+    .py-10 {
+      padding: 10px 0 10px 0;
     }
 
     .mb-10 {
@@ -121,13 +135,22 @@
   </p>
   <hr />
   <div>
-    <p class="mt-10 mb-10"><strong>Khách Hàng:&emsp;</strong>{{nameUser}}</p>
-    <p class="mb-10"><strong>Số Điện Thoại:&emsp;</strong>{{phoneUser}}</p>
+    <table style="border: hidden;" class="w-100">
+      <tr>
+        <td class="w-0">
+          <p class="mb-5"><strong><strong>Khách Hàng:&emsp;</strong>{{nameUser}}</p>
+        </td>
+        <td style="width: 50%;border: hidden;margin-left: 5px;" class="position-relative">
+          <p style="top: 5px" class="position-absolute w-100 mb-5"><strong><strong>Số Điện
+                Thoại:&emsp;</strong>{{phoneUser}}</p>
+        </td>
+      </tr>
+    </table>
   </div>
   <table class="mb-10 w-100">
     <thead>
       <td>STT</td>
-      <td>Tên Hàng Hóa</td>
+      <td style=" width: 55%; ">Tên Hàng Hóa</td>
       <td>SL</td>
       <td>Đơn Giá</td>
       <td>Thành Tiền</td>
@@ -136,7 +159,9 @@
       {{#each details}}
         <tr>
           <td>{{stt}}</td>
-          <td>{{this.productName}}</td>
+          <td class="text-ellipsis">
+            {{this.productName}}
+          </td>
           <td>{{this.quantity}}</td>
           <td>{{this.price}}</td>
           <td>{{this.totalPrice}}</td>
@@ -148,7 +173,7 @@
             <strong>Ghi Chú: </strong>
           </p>
         </td>
-        <td class="py-20" colspan="3">
+        <td class="py-10" colspan="3">
           <div>
             <strong class="left">Tổng Tiền:</strong>
             <p class="right">{{totalProductPrice}}</p>
@@ -156,7 +181,7 @@
         </td>
       </tr>
       <tr>
-        <td class="py-20" colspan="3">
+        <td class="py-10" colspan="3">
           <div>
             <strong class="left">Giảm giá:</strong>
             <p class="right">{{totalDiscount}}</p>
@@ -164,7 +189,7 @@
         </td>
       </tr>
       <tr>
-        <td class="py-20" colspan="3">
+        <td class="py-10" colspan="3">
           <div>
             <strong class="left">Tổng Thanh Toán:</strong>
             <p class="right">{{total}}</p>
@@ -173,9 +198,8 @@
       </tr>
     </tbody>
   </table>
-  <hr />
   <div>
-    <h4 class="mt-10">Thông tin giao hàng:</h4>
+    <h4 class="mt-10">Thông Tin giao hàng:</h4>
     <table style="border: hidden;" class="w-100">
       <tr>
         <td class="w-0">
@@ -192,6 +216,32 @@
     </table>
   </div>
   <hr />
+  <div>
+    <h4 class="mt-10">Thông Tin Thanh Toán:</h4>
+    <table style="border: hidden;" class="w-100">
+      <tr>
+        <td class="w-0">
+          <p class="mb-5"><strong>Hình thức:&emsp;</strong>{{method}}</p>
+        </td>
+        <td style="width: 50%;border: hidden;margin-left: 5px;" class="position-relative">
+          <p style="top: 5px" class="position-absolute w-100 mb-5"><strong>Trạng thái:&emsp;</strong>{{status}}</p>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <hr class="mt-10" />
+  <div>
+    <table style="border: hidden;" class="w-100">
+      <thead>
+        <td style="border: hidden;" class="text-center"><strong>Khách Hàng</strong>
+          <p>(Ký, Họ tên)</p>
+        </td>
+        <td style="border: hidden;" class="text-center"><strong>Bên bán</strong>
+          <p>(Ký, Họ tên)</p>
+        </td>
+      </thead>
+    </table>
+  </div>
 </body>
 
 </html>

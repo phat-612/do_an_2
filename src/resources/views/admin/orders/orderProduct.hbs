@@ -1,22 +1,19 @@
 <div class="container">
   <ul class="nav">
     <li class="nav-item">
-      <a class="nav-link active" aria-current="page" href="#">Tất cả (###)</a>
+    <h1>Tổng Đơn Hàng {{totalOrders}}</h1>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Chờ xác nhận (###)</a>
+      <a class="nav-link" href="?status=pending">Chờ xác nhận ({{totalPending}})</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Đã xác nhận (###)</a>
+     <a class="nav-link" href="?status=shipping">Đang vận chuyển ({{totalShipping}})</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Đang vận chuyển (###)</a>
+      <a class="nav-link" href="?status=success">Đã giao hàng ({{totalSuccess}})</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Đã giao hàng (###)</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">Đã hủy (###)</a>
+     <a class="nav-link" href="?status=failed">Đã hủy ({{totalFailed}})</a>
     </li>
   </ul>
   <form action="/admin/order" method="get">
