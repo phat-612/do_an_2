@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      .text-ellipsis {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+      }
+
+      .h-100 {
+        height: 100%;
+      }
+
+      .w-0 {
+        width: 0%;
+      }
+
+      .w-50 {
+        width: 50%;
+      }
+
+      .w-100 {
+        width: 100%;
+      }
+
+      .text-center {
+        text-align: center;
+      }
+
+      .position-absolute {
+        position: absolute;
+      }
+
+      .position-relative {
+        position: relative;
+      }
+
+      .py-20 {
+        padding: 20px 0 20px 0;
+      }
+
+      .py-10 {
+        padding: 10px 0 10px 0;
+      }
+
+      .mb-10 {
+        margin-bottom: 10px;
+      }
+
+      .mb-5 {
+        margin-bottom: 5px;
+      }
+
+      .mt-0 {
+        margin-top: 0;
+      }
+
+      .mt-10 {
+        margin-top: 10px;
+      }
+
+      .mt-5 {
+        margin-top: 5px;
+      }
+
+      .left {
+        float: left;
+        margin-left: 2px;
+      }
+
+      .right {
+        float: right;
+        margin-right: 2px;
+      }
+
+      hr {
+        margin: 10px 0 0;
+      }
+
+      h3 {
+        margin: 10px 0 0;
+      }
+
+      table {
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="text-center">Biên Nhận Sửa Chữa - Bảo Hành</h1>
+    <p class="text-center mb-5">
+      (Mã đơn hàng: {{id}} - Ngày: {{dateOfInvoice}})
+    </p>
+    <div>
+      <h4 class="mt-10">Thông Tin giao hàng:</h4>
+      <table style="border: hidden" class="w-100">
+        <tr>
+          <td class="w-0">
+            <p class="mt-5 mb-5"><strong>Tên:&emsp;</strong>{{name}}</p>
+            <p class="mb-5"><strong>SDT:&emsp;</strong>{{phone}}</p>
+            <p class="mb-5"><strong>Email:&emsp;</strong>{{email}}</p>
+          </td>
+          <td style="width: 50%; border: hidden" class="position-relative">
+            <p style="top: 10px" class="position-absolute w-100">
+              <strong>Ghi Chú:&emsp;</strong>{{note}}
+            </p>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <hr />
+  </body>
+</html>

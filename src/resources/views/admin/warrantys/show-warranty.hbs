@@ -21,15 +21,24 @@
           <th scope="row">{{sum @index 1}}</th>
           <td>{{this.email}}</td>
           <td>{{this.name}}</td>
-          <form id="status">
-            <td><select name="status" class="status-select" id="status{{@index}}">
-                <option value="pending" {{#if (statusWarranty this.status 'pending' )}}selected{{/if}}>Chờ xác nhận
-                </option>
-                <option value="fixing" {{#if (statusWarranty this.status 'fixing' )}}selected{{/if}}>Đang Sửa</option>
-                <option value="success" {{#if (statusWarranty this.status 'success' )}}selected{{/if}}>Đã Sửa</option>
-                <option value="paid" {{#if (statusWarranty this.status 'paid' )}}selected{{/if}}>Đã Trả</option>
-              </select>
-          </form>
+          <td>
+            <select name="status" class="status-select" id="statusSelect{{@index}}">
+              <option data-id="{{this._id}}" value="pending" {{#if (statusWarranty this.status 'pending'
+                )}}selected{{/if}}>
+                Chờ xác nhận
+              </option>
+              <option data-id="{{this._id}}" value="fixing" {{#if (statusWarranty this.status 'fixing'
+                )}}selected{{/if}}>
+                Đang sửa
+              </option>
+              <option data-id="{{this._id}}" value="success" {{#if (statusWarranty this.status 'success'
+                )}}selected{{/if}}>
+                Đã sửa
+              </option>
+              <option data-id="{{this._id}}" value="paid" {{#if (statusWarranty this.status 'paid' )}}selected{{/if}}>
+                Đã trả
+              </option>
+            </select>
           </td>
           <td>{{this.address}}</td>
           <td>{{this.phone}}</td>

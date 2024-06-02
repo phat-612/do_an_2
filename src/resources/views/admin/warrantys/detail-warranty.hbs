@@ -1,76 +1,43 @@
 <div class="container mt-4">
   <div class="position-relative">
-      <h1 class="text-center mb-4">Chi Tiết Bảo Hành</h1>
-      <a href="/admin/exportWarranty?idWarranty={{warranty._id}}" class="btn btn-success position-absolute top-0 end-0">Xuất Phiếu Bảo Hành</a>
+    <h1 class="text-center mb-4">Chi Tiết Bảo Hành</h1>
+    <a href="/admin/exportWarranty?idWarranty={{warranty._id}}"
+      class="btn btn-success position-absolute top-0 end-0">Xuất Phiếu Bảo Hành</a>
   </div>
 
   <div class="mt-4 row">
     <div class="col-md-6">
       <div class="form-group my-4">
         <label for="email">Email</label>
-        <input
-          type="email"
-          class="form-control"
-          id="email"
-          placeholder="Email"
-          name="email"
-          readonly
-          value="{{warranty.email}}"
-        />
+        <input type="email" class="form-control" id="email" placeholder="Email" name="email" readonly
+          value="{{warranty.email}}" />
       </div>
       <div class="form-group my-4">
         <label for="name">HoVaTen</label>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="HoVaTen"
-          id="name"
-          name="name"
-          readonly
-          value="{{warranty.name}}"
-        />
+        <input type="text" class="form-control" placeholder="HoVaTen" id="name" name="name" readonly
+          value="{{warranty.name}}" />
       </div>
       <div class="form-group my-4">
         <label for="phone">Số Điện Thoại</label>
-        <input
-          type="text"
-          class="form-control"
-          id="phone"
-          placeholder="Nhập số điện thoại"
-          name="phone"
-          readonly
-          value="{{warranty.phone}}"
-        />
+        <input type="text" class="form-control" id="phone" placeholder="Nhập số điện thoại" name="phone" readonly
+          value="{{warranty.phone}}" />
       </div>
       <div class="form-group my-4">
         <label for="address">Địa Chỉ</label>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Địa Chỉ"
-          name="address"
-          id="address"
-          value="{{warranty.address}}"
-          readonly
-        />
+        <input type="text" class="form-control" placeholder="Địa Chỉ" name="address" id="address"
+          value="{{warranty.address}}" readonly />
       </div>
       <div class="form-group my-4">
         <label for="note">Ghi Chú</label>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Địa Chỉ"
-          name="note"
-          id="note"
-          value="{{warranty.note}}"
-          readonly
-        />
+        <input type="text" class="form-control" placeholder="Địa Chỉ" name="note" id="note" value="{{warranty.note}}"
+          readonly />
+      </div>
+      <div class="form-group my-4">
+        <label for="note">Tổng tiền</label>
+        <input type="text" class="form-control" name="total" id="total" value="{{warranty.total}}" readonly />
       </div>
       <div class="form-group col-md-4 my-4">
-        <a
-          href="/admin/warranty/{{warranty._id}}/edit"
-          class="btn btn-primary"
-        >Chỉnh Sửa</a>
+        <a href="/admin/warranty/{{warranty._id}}/edit" class="btn btn-primary">Chỉnh Sửa</a>
       </div>
     </div>
     <div class="col-md-6">
@@ -79,35 +46,27 @@
           <div class="form-group my-4">
             <div class="accordion accordion-flush" id="productAccordion">
               {{#each productsAndReasons}}
-                <div class="accordion-item">
-                  <h2 class="accordion-header" id="heading{{@index}}">
-                    <button
-                      class="accordion-button collapsed bg-primary text-white"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapse{{@index}}"
-                      aria-expanded="false"
-                    >
-                      <strong>Tên sản phẩm:</strong>
-                      {{this.productName}}
-                    </button>
-                  </h2>
-                  <div
-                    id="collapse{{@index}}"
-                    class="accordion-collapse collapse"
-                    data-bs-parent="#productAccordion"
-                  >
-                    <div class="accordion-body">
-                      <strong>Lý do bảo hành:</strong>
-                      <ul>
-                        {{#each this.reasonsAndPrices}}
-                          <li><span class="text-primary">{{this.reason}}</span>:
-                            <span class="text-danger">{{this.price}}</span></li>
-                        {{/each}}
-                      </ul>
-                    </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="heading{{@index}}">
+                  <button class="accordion-button collapsed bg-primary text-white" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#collapse{{@index}}" aria-expanded="false">
+                    <strong>Tên sản phẩm:</strong>
+                    {{this.productName}}
+                  </button>
+                </h2>
+                <div id="collapse{{@index}}" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+                  <div class="accordion-body">
+                    <strong>Lý do bảo hành:</strong>
+                    <ul>
+                      {{#each this.reasonsAndPrices}}
+                      <li><span class="text-primary">{{this.reason}}</span>:
+                        <span class="text-danger">{{this.price}}</span>
+                      </li>
+                      {{/each}}
+                    </ul>
                   </div>
                 </div>
+              </div>
               {{/each}}
             </div>
           </div>

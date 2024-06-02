@@ -4,9 +4,12 @@
     <div class="col text-center fs-4">Chi tiết đơn hàng</div>
   </div>
   <div class="row mt-2 align-items-center">
-    <p class="col mb-0">Mã đơn hàng:
+    <h5 class="col mb-0">Mã đơn hàng:
       <span class="fw-bold">{{order._id}}</span>
-    </p>
+      <span class="opacity-75">
+        {{formatDate order.createdAt "HH:mm DD/MM/YYYY"}}
+      </span>
+    </h5>
     <div class="col-2 p-2 text-success bg-success bg-opacity-25 custom-w-fitcontent">{{showStatusOrder order.status}}
     </div>
     {{#if (isBtnCancelOrder order.status order.paymentDetail.status)}}
@@ -18,10 +21,22 @@
     </div>
     {{/if}}
   </div>
-  <div class="row">
-    <p class="opacity-75">
-      {{formatDate order.createdAt "HH:mm DD/MM/YYYY"}}
+  <div>
+    <h5>Thông tin nhận hàng</h5>
+    <p class="ms-2">Họ tên: {{order.shipmentDetail.name}}</p>
+    <p class="ms-2">Số điện thoại: {{order.shipmentDetail.phone}}</p>
+    <p class="ms-2">Địa chỉ: {{order.shipmentDetail.address}}</p>
+  </div>
+  <div>
+    <h5>Ghi chú</h5>
+    <p class="ms-2">
+      {{#if order.note}}
+      {{order.note}}
+      {{else}}
+      Không có ghi chú
+      {{/if}}
     </p>
+
   </div>
   <div class="row card tag_product mb-2">
     {{#each order.details}}

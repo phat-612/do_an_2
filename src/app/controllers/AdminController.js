@@ -326,7 +326,7 @@ class AdminController {
   // get /orderproducts
   order(req, res, next) {
     const name = req.query.name;
-    const status = req.query.status; // lấy trạng thái từ URL
+    const status = req.query.status;
     const url = req.originalUrl;
     let match = {};
 
@@ -334,12 +334,21 @@ class AdminController {
       status === "success" ||
       status === "pending" ||
       status === "failed" ||
-      status === "shipping"
+      status === "shipping" ||
+      status === "cancel"
     ) {
       match.status = status;
     }
 
-    // Khởi tạo hàm tìm Users theo tên
+    // grab the page if it exists (default is 1)
+    let page = parseInt(req.query.page) || 1;
+
+    // set the number of items per page
+    let perPage = 10;
+
+    // calculate the skip value
+    let skipValue = page * perPage - perPage;
+
     const findUsers = async () => {
       if (name) {
         let users = await User.find({ name: new RegExp(name, "i") });
@@ -352,48 +361,55 @@ class AdminController {
     findUsers()
       .then((match) => {
         return Promise.all([
-          Order.find(match).populate("idUser", "name").paginate(req),
-          Order.find(match).countDocuments(),
+          Order.countDocuments(match),
+          Order.find(match)
+            .populate("idUser", "name")
+            .skip(skipValue)
+            .limit(perPage),
+          Order.countDocuments(), // Already exists
           Order.find({ status: "pending" }).countDocuments(),
           Order.find({ status: "success" }).countDocuments(),
           Order.find({ status: "failed" }).countDocuments(),
           Order.find({ status: "shipping" }).countDocuments(),
+          Order.find({ status: "cancel" }).countDocuments(),
+
+          Order.countDocuments(), // Added just now
         ]);
       })
       .then(
         ([
-          orders,
           totalOrders,
+          orders,
+          allOrders,
           totalPending,
           totalSuccess,
           totalFailed,
           totalShipping,
+          toltalCancel,
+          totalUnchangedOrders, // The new variable
         ]) => {
-          let [currentPage, totalPage] = getDataPagination(
-            totalOrders,
-            req,
-            10
-          );
-
+          let totalPage = Math.ceil(totalOrders / perPage);
           res.render("admin/orders/orderProduct", {
             title: "Quản lý đơn hàng",
             layout: "admin",
             js: "admin/orderProduct",
             css: "admin/orderProduct",
             orders: multipleMongooseToObject(orders),
-            currentPage: currentPage,
+            allOrders: allOrders,
+            currentPage: page,
             totalPage: totalPage,
             totalOrders: totalOrders,
             totalPending: totalPending,
             totalSuccess: totalSuccess,
             totalFailed: totalFailed,
             totalShipping: totalShipping,
+            toltalCancel: toltalCancel,
+            totalUnchangedOrders: totalUnchangedOrders, // Include the new variable in the response
             url,
           });
-          // console.log(totalOrders);s
+          // console.log(toltalCancel);
         }
-      )
-      .catch(next);
+      );
   }
   // get /order/detail
   orderDetail(req, res, next) {
@@ -491,7 +507,30 @@ class AdminController {
       })
       .catch(next);
   }
-
+  accessReview(req, res, next) {
+    Product.aggregate([
+      {
+        $unwind: "$reviews",
+      },
+      {
+        $match: {
+          "reviews.status": false,
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          images: 1,
+          reviews: 1,
+        },
+      },
+    ]).then((products) => {
+      return res.render("admin/sites/accessReview", {
+        layout: "admin",
+        products,
+      });
+    });
+  }
   //minh luan
   async createWarranty(req, res, next) {
     const products = await Product.find({});
@@ -741,8 +780,108 @@ class AdminController {
           _id: new mongoose.Types.ObjectId(idWarranty),
         },
       },
-    ]);
+      {
+        $unwind: "$details",
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "details.idProduct",
+          foreignField: "_id",
+          as: "product",
+        },
+      },
+      {
+        $unwind: "$product",
+      },
+      {
+        $group: {
+          _id: "$_id",
+          email: { $first: "$email" },
+          name: { $first: "$name" },
+          phone: { $first: "$phone" },
+          address: { $first: "$address" },
+          note: { $first: "$note" },
+          status: { $first: "$status" },
+          total: { $first: "$total" },
+          details: {
+            $push: {
+              idProduct: "$details.idProduct",
+              reasonAndPrice: "$details.reasonAndPrice",
+              product: "$product",
+            },
+          },
+          dateOfInvoice: {
+            $first: {
+              $dateToString: {
+                format: "%d-%m-%Y %H:%M",
+                date: new Date(),
+                timezone: "Asia/Ho_Chi_Minh",
+              },
+            },
+          }, // ngày xuất hóa đơn
+        },
+      },
+    ]).then((warranty) => {
+      warranty = warranty[0];
+      const timeNow = new Date().getTime();
+      var html = fs.readFileSync(
+        path.join(__dirname, "../../public/templates", "warranty.html"),
+        "utf8"
+      );
+      var options = {
+        format: "A5",
+        orientation: "portrait",
+        border: "5mm",
+        footer: {
+          height: "5mm",
+          contents: {
+            default:
+              '<p style="text-align:center">Cảm ơn quý khách đã sử dụng dịch vụ của CellPhoneZ</p>', // fallback value
+          },
+        },
+      };
+
+      // return res.send(warranty);
+      let data = {
+        id: warranty._id,
+        dateOfInvoice: warranty.dateOfInvoice,
+        name: warranty.name,
+        phone: warranty.phone,
+        email: warranty.email,
+        note: warranty.note,
+        details: warranty.details,
+      };
+      Object.keys(data).forEach((key) => {
+        if (typeof data[key] == "number") {
+          data[key] = data[key].toLocaleString("vi-VN");
+        }
+      });
+      var document = {
+        html: html,
+        data,
+        path: path.join(__dirname, "../../public/.download", `${timeNow}.pdf`),
+        type: "",
+      };
+      pdf
+        .create(document, options)
+        .then((resPdf) => {
+          res.download(resPdf.filename, (err) => {
+            if (err) {
+              console.error(err);
+            } else {
+              fs.unlink(resPdf.filename, (err) => {
+                if (err) throw err;
+              });
+            }
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
   }
+
   // --------------------------------------------------newAddProduct----------------------
   newAddProduct(req, res, next) {
     Category.find().then((categorys) => {

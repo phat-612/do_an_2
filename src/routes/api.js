@@ -48,7 +48,7 @@ router.put("/accessProviders/:id", apiController.changeHierarchy);
 router.post("/storeWarranty", apiController.storeWarranty);
 router.delete("/warranty/:slugWarranty", apiController.deleteWarranty);
 router.put("/warranty/:id", apiController.updateWarranty);
-router.post("/statusWarranty", apiController.statusWarranty);
+router.post("/statusWarranty/:id", apiController.statusWarranty);
 
 //banner
 router.post("/storeBanner", upload.array("image"), apiController.storeBanner);

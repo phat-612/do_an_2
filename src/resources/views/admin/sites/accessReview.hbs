@@ -1,0 +1,30 @@
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">Tên sản phẩm</th>
+                <th scope="col">Tên người dùng</th>
+                <th scope="col">Đánh giá</th>
+                <th scope="col">Nội dung</th>
+                <th scope="col">Ngày tạo</th>
+                <th scope="col">Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each products}}
+            <tr>
+                <th scope="row">{{showSTT @index}}</th>
+                <td>{{this.product.name}}</td>
+                <td>{{this.user.name}}</td>
+                <td>{{this.reviews.rating}}</td>
+                <td>{{this.reviews.content}}</td>
+                <td>{{formatDate this.reviews.time "DD/MM/YYYY"}}</td>
+                <td>
+                    <button class="btn btn-primary">Duyệt</button>
+                    <button class="btn btn-danger">Xóa</button>
+                </td>
+                {{/each}}
+        </tbody>
+    </table>
+</div>

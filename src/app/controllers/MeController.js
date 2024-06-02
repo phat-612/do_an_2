@@ -94,11 +94,15 @@ class MeController {
           _id: 1,
           total: 1,
           paymentDetail: 1,
+          status: 1,
         }
       ).then((tempOrders) => {
         let countOrder = tempOrders.length;
         let totalMoneyPaid = tempOrders.reduce((total, order) => {
-          if (order.paymentDetail.status == "success") {
+          if (
+            order.paymentDetail.status == "success" &&
+            order.status == "success"
+          ) {
             return total + order.total;
           }
           return total;
@@ -159,7 +163,7 @@ class MeController {
       });
     });
   }
-  historyWaranty(req, res, next) {
+  historyWarranty(req, res, next) {
     // tên ảnh giá của một sản phẩm đầu tiên
     const email = req.session.email;
     Warranty.aggregate([

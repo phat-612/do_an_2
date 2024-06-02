@@ -1,19 +1,23 @@
 <div class="container">
   <ul class="nav">
     <li class="nav-item">
-    <h1>Tổng Đơn Hàng {{totalOrders}}</h1>
+      <a class="nav-link" href="?status=all">Tổng Đơn hàng ({{totalUnchangedOrders}})</a>
+
     </li>
     <li class="nav-item">
       <a class="nav-link" href="?status=pending">Chờ xác nhận ({{totalPending}})</a>
     </li>
     <li class="nav-item">
-     <a class="nav-link" href="?status=shipping">Đang vận chuyển ({{totalShipping}})</a>
+      <a class="nav-link" href="?status=shipping">Đang vận chuyển ({{totalShipping}})</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="?status=success">Đã giao hàng ({{totalSuccess}})</a>
     </li>
     <li class="nav-item">
-     <a class="nav-link" href="?status=failed">Đã hủy ({{totalFailed}})</a>
+      <a class="nav-link" href="?status=failed">Đã hủy ({{totalFailed}})</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="?status=cancel">Bị hủy ({{toltalCancel}})</a>
     </li>
   </ul>
   <form action="/admin/order" method="get">
@@ -53,6 +57,7 @@
   </div>
 </div>
 <div>
+  {{!-- --}}
   {{#pagination currentPage totalPage 5}}
   <nav aria-label="...">
     <ul class="pagination justify-content-center">

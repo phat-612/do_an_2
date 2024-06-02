@@ -14,13 +14,15 @@ document.addEventListener("DOMContentLoaded", function () {
 $(document).ready(function () {
   $(".status-select").change(function () {
     var newValue = this.value;
+    var selectedOption = $(this).children("option:selected");
+    var id = selectedOption.data("id");
 
-    fetch("/api/statusWarranty", {
+    fetch("/api/statusWarranty/" + id, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ status: newValue }),
+      body: JSON.stringify({ status: newValue, id: id }),
     })
       .then((response) => {
         if (!response.ok) {

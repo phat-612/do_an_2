@@ -47,4 +47,16 @@ Warranty.query.paginate = function (req) {
   const skip = (page - 1) * limit;
   return this.skip(skip).limit(limit);
 };
+Warranty.pre("save", function (next) {
+  let total = 0;
+
+  for (let detail of this.details) {
+    for (let reasonAndPrice of detail.reasonAndPrice) {
+      total += reasonAndPrice.price;
+    }
+  }
+
+  this.total = total;
+  next();
+});
 module.exports = mongoose.model("Warranty", Warranty);

@@ -7,30 +7,37 @@
       <span>19/03/2024</span>
     </div> }}
   </div>
-  <ul class="p-0 nav mt-3">
-    <li class="me-2 border btn-light px-3 py-1 rounded">Tất cả</li>
-    <li class="me-2 border btn-light px-3 py-1 rounded">Đã tiếp nhận</li>
-    <li class="me-2 border btn-light px-3 py-1 rounded">Đang sửa</li>
-    <li class="me-2 border btn-light px-3 py-1 rounded">Đã sửa xong</li>
-    <li class="me-2 border btn-light px-3 py-1 rounded">Đã hoàn thành</li>
+  <ul class="row nav gap-2">
+    <li class="custom-w-fitcontent"><a class="border border-1 rounded-2 px-3 py-2 bg-white col-2"
+        href="/me/historyWarranty">Tất cả</a></li>
+    <li class="custom-w-fitcontent"><a class="border border-1 rounded-2 px-3 py-2 bg-white col-2"
+        href="?_filter&column=status&value=pending">Chờ xác nhận</a></li>
+    <li class="custom-w-fitcontent"><a class="border border-1 rounded-2 px-3 py-2 bg-white col-2"
+        href="?_filter&column=status&value=fixing">Đang sửa chữa</a></li>
+    <li class="custom-w-fitcontent"><a class="border border-1 rounded-2 px-3 py-2 bg-white col-2"
+        href="?_filter&column=status&value=success">Đã sữa chữa</a></li>
+    <li class="custom-w-fitcontent"><a class="border border-1 rounded-2 px-3 py-2 bg-white col-2"
+        href="?_filter&column=status&value=paid">Đã trả hàng</a></li>
   </ul>
   {{#each warranties}}
-    <div class="row mt-3">
-      <div class="col-2">
-        <img
-          class="w-100"
-          src="{{showImgUpload this.image}}"
-          alt="{{this.image}}"
-        />
-      </div>
-      <div class="col-10">
-        <p class="fs-4">{{name}}</p>
-        <div class="d-flex justify-content-between">
-          <button class="btn btn-primary">{{showStatusWarranty status}}</button>
-          <a href="/me/detailWarranty/{{_id}}" class="btn btn-danger">Xem chi
-            tiết</a>
-        </div>
+  {{> cardInProfile link="/me/detailWarranty"}}
+  {{!-- <div class="row mt-3">
+    <div class="col-2">
+      <img class="w-100" src="{{showImgUpload this.image}}" alt="{{this.image}}" />
+    </div>
+    <div class="col-10">
+      <p class="fs-4 mb-0">{{name}}</p>
+      {{#if (compareMore this.countProduct 1)}}
+      <div class="fs-6 text-black-50">và
+        {{minus this.countProduct 1}}
+        sản phẩm khác</div>
+      {{/if}}
+      <div class="d-flex justify-content-between">
+        <button class="btn btn-primary">{{showStatusWarranty status}}</button>
+        <a href="/me/detailWarranty/{{_id}}" class="btn btn-danger">Xem chi
+          tiết</a>
       </div>
     </div>
+  </div> --}}
   {{/each}}
 </div>

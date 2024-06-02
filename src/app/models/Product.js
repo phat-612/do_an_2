@@ -32,6 +32,7 @@ const Product = new Schema(
         comment: { type: String },
         time: { type: Date, default: Date.now },
         like: { type: Number, default: 0 },
+        status: { type: Boolean, default: false },
       },
     ],
   },

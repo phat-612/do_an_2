@@ -354,6 +354,9 @@ class SiteController {
               }
             );
         });
+        resProduct.reviews = resProduct.reviews.filter(
+          (review) => review.status
+        );
         // return res.json(resProduct);
         // thêm dữ liệu vào cookie để mua ngay
         let dataBuyNow = {

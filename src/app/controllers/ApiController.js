@@ -356,14 +356,39 @@ class ApiController {
     warranty.save().then(res.redirect("/admin/warranty/show"));
   }
   statusWarranty(req, res) {
-    Warranty.updateOne({
-      $set: { status: req.body.status },
-    }).then(() => {
-      res.json({
-        status: "success",
-        message: "Cập nhật thành công",
+    let id = req.body.id;
+    let status = req.body.status;
+    const statusOrder = ["pending", "fixing", "success", "paid"];
+
+    Warranty.findById(id)
+      .then((warranty) => {
+        if (
+          statusOrder.indexOf(status) <= statusOrder.indexOf(warranty.status)
+        ) {
+          res.json({
+            status: "Thất bại",
+            message:
+              "Cập nhật không thành công. Thứ tự trạng thái không hợp lệ.",
+          });
+        } else {
+          return Warranty.updateOne({ _id: id }, { status: status }).then(
+            () => {
+              res.json({
+                status: "Thành công",
+                message: "Cập nhật thành công",
+              });
+            }
+          );
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        const status = err.status || 500;
+        res.status(status).json({
+          status: "Thất bại",
+          message: "Có lỗi xảy ra khi cập nhật trạng thái",
+        });
       });
-    });
   }
   updateWarranty(req, res, next) {
     Warranty.findOne({ _id: req.params.id }).then((warranty) => {

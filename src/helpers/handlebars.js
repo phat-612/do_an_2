@@ -64,6 +64,8 @@ module.exports = {
         return "Đã hủy";
       case "shipping":
         return "Đang vận chuyển";
+      case "fixing":
+        return "Đang sửa chữa";
       case "failed":
         return "Thất bại";
       default:

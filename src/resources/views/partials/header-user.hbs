@@ -1,67 +1,43 @@
-<header class="p-3 custom-bg-red text-white">
+<header class="p-3 custom-bg-red text-white sticky-top">
   <div class="container">
-    <div
-      class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
-    >
-      <a
-        href="/"
-        class="d-flex align-items-center fs-3 mb-2 mb-lg-0 text-white text-decoration-none"
-      >
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a href="/" class="d-flex align-items-center fs-3 mb-2 mb-lg-0 text-white text-decoration-none">
         CellPhoneZ
       </a>
       <div class="dropdown">
-        <button
-          type="button"
-          class="btn btn-warning ms-lg-3 text-white"
-          id="dropdownMenuButton1"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >Danh mục</button>
+        <button type="button" class="btn btn-warning ms-lg-3 text-white" id="dropdownMenuButton1"
+          data-bs-toggle="dropdown" aria-expanded="false">Danh mục</button>
 
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
           {{#each categories}}
-            <li><a
-                class="dropdown-item"
-                href="/{{this.slug}}"
-              >{{this.name}}</a></li>
+          <li><a class="dropdown-item" href="/{{this.slug}}">{{this.name}}</a></li>
           {{/each}}
         </ul>
       </div>
       <form action="/search" class="col-12 col-lg-4 mb-3 mb-lg-0 ms-lg-auto">
         <input type="text" name="_find" hidden />
-        <input
-          type="search"
-          class="form-control form-control-dark"
-          placeholder="Search..."
-          aria-label="Search"
-          name="q"
-        />
+        <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search"
+          name="q" />
         <input type="submit" class="" hidden />
       </form>
 
-      <ul
-        class="nav col-12 col-lg-auto ms-lg-auto me-lg-2 mb-2 justify-content-center mb-md-0"
-      >
+      <ul class="nav col-12 col-lg-auto ms-lg-auto me-lg-2 mb-2 justify-content-center mb-md-0">
         <li><a href="tel:0123456789" class="nav-link px-2 fs-5 text-white">Trung
             tâm tư vấn</a></li>
         <li><a href="/me/cart" class="nav-link px-2 fs-5 text-white">Giỏ hàng</a></li>
       </ul>
       {{#if name}}
-        <a class="navbar-brand fs-5" href="/me">
-          <span class="">{{name}}</span>
-          <img
-            src="https://www.w3schools.com/bootstrap5/img_avatar1.png"
-            alt="Avatar Logo"
-            style="width:40px;"
-            class="rounded-pill"
-          />
-        </a>
+      <a class="navbar-brand fs-5" href="/me">
+        <span class="">{{name}}</span>
+        <img src="https://www.w3schools.com/bootstrap5/img_avatar1.png" alt="Avatar Logo" style="width:40px;"
+          class="rounded-pill" />
+      </a>
 
       {{else}}
-        <div class="text-end">
-          <a href="/login" class="btn btn-outline-light me-2">Login</a>
-          <a href="/signUp" class="btn btn-warning">Sign-up</a>
-        </div>
+      <div class="text-end">
+        <a href="/login" class="btn btn-outline-light me-2">Login</a>
+        <a href="/signUp" class="btn btn-warning">Sign-up</a>
+      </div>
       {{/if}}
 
     </div>
