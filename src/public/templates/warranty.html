@@ -86,7 +86,7 @@
       }
 
       hr {
-        margin: 10px 0 0;
+        margin: 5px 0 5px 0;
       }
 
       h3 {
@@ -103,11 +103,13 @@
       }
     </style>
   </head>
+
   <body>
     <h1 class="text-center">Biên Nhận Sửa Chữa - Bảo Hành</h1>
     <p class="text-center mb-5">
       (Mã đơn hàng: {{id}} - Ngày: {{dateOfInvoice}})
     </p>
+    <hr />
     <div>
       <h4 class="mt-10">Thông Tin giao hàng:</h4>
       <table style="border: hidden" class="w-100">
@@ -116,6 +118,7 @@
             <p class="mt-5 mb-5"><strong>Tên:&emsp;</strong>{{name}}</p>
             <p class="mb-5"><strong>SDT:&emsp;</strong>{{phone}}</p>
             <p class="mb-5"><strong>Email:&emsp;</strong>{{email}}</p>
+            <p class="mb-5"><strong>Trạng thái:&emsp;</strong>{{status}}</p>
           </td>
           <td style="width: 50%; border: hidden" class="position-relative">
             <p style="top: 10px" class="position-absolute w-100">
@@ -126,5 +129,48 @@
       </table>
     </div>
     <hr />
+    <div>
+      <h4 class="mt-10">Thông Tin sản phẩm:</h4>
+      <table class="w-100">
+        {{#each details}}
+        <tr>
+          <td colspan="2">
+            <p><strong>Tên SP:</strong> {{this.product.name}}</p>
+          </td>
+        </tr>
+        {{#each this.reasonAndPrice}}
+        <tr>
+          <td>
+            <p><strong>- Lý do:</strong>{{this.reason}}</p>
+          </td>
+          <td>
+            <p><strong>- Giá:</strong>{{this.price}}</p>
+          </td>
+        </tr>
+        {{/each}} {{/each}}
+      </table>
+    </div>
+    <hr />
+    <h4>Tổng Tiền: {{total}}</h4>
+    <hr />
+    <div>
+      <h4 style="text-decoration: underline">Lưu Ý :</h4>
+      <h5>Không nhận dữ liệu khách hàng</h5>
+      <p>Mang biên nhận sửa chữa khi nhận thiết bị</p>
+      <p>Thời gian bảo hành từ 10-15 ngày không gồm các ngày nghỉ và lễ</p>
+      <p>( Biên nhận này có giá trị trong vòng 60 ngày )</p>
+    </div>
+    <table class="w-100">
+      <tr>
+        <td style="border: hidden" class="text-center">
+          <strong>Khách Hàng</strong>
+          <p>(Ký, Họ tên)</p>
+        </td>
+        <td style="border: hidden" class="text-center">
+          <strong>Kỹ Thuật Viên</strong>
+          <p>(Ký, Họ tên)</p>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>

@@ -1009,6 +1009,27 @@ class ApiController {
       });
     });
   }
+  accessReview(req, res, next) {
+    const idReview = req.body.idReview;
+    const action = req.body.action;
+    const arrAction = ["accept", "reject"];
+    if (!arrAction.includes(action)) {
+      return res.redirect("back");
+    }
+    Product.findOne({ "reviews._id": idReview }).then((product) => {
+      if (!product) {
+        return res.redirect("back");
+      }
+      if (action == "accept") {
+        product.reviews.id(idReview).status = true;
+      } else {
+        product.reviews.pull({ _id: idReview });
+      }
+      product.save().then(() => {
+        return res.redirect("back");
+      });
+    });
+  }
   //quan ly banner
   storeBanner(req, res) {
     const formData = req.body;

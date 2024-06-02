@@ -42,6 +42,7 @@ router.post(
   apiController.updateProduct
 );
 router.post("/ratingProduct", isLoggedIn, apiController.ratingProduct);
+router.post("/accessReview", apiController.accessReview);
 ///////////////////phân quyền
 router.put("/accessProviders/:id", apiController.changeHierarchy);
 // warranty

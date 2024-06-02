@@ -518,10 +518,24 @@ class AdminController {
         },
       },
       {
+        $lookup: {
+          from: "users",
+          localField: "reviews.idUser",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $unwind: "$user",
+      },
+      {
         $project: {
           name: 1,
           images: 1,
           reviews: 1,
+          user: {
+            name: 1,
+          },
         },
       },
     ]).then((products) => {
@@ -841,7 +855,15 @@ class AdminController {
           },
         },
       };
-
+      if (warranty.status == "paid") {
+        warranty.status = "Đã Trả Hàng";
+      } else if (warranty.status == "success") {
+        warranty.status = "Đã Sửa";
+      } else if (warranty.status == "fixing") {
+        warranty.status = "Đang Sửa";
+      } else {
+        warranty.status = "Chờ Xác Nhận";
+      }
       // return res.send(warranty);
       let data = {
         id: warranty._id,
@@ -850,7 +872,9 @@ class AdminController {
         phone: warranty.phone,
         email: warranty.email,
         note: warranty.note,
+        status: warranty.status,
         details: warranty.details,
+        total: warranty.total,
       };
       Object.keys(data).forEach((key) => {
         if (typeof data[key] == "number") {
