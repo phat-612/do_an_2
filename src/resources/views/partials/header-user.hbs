@@ -1,4 +1,4 @@
-<header class="p-3 custom-bg-red text-white sticky-top">
+{{!-- <header class="p-3 custom-bg-red text-white sticky-top">
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
       <a href="/" class="d-flex align-items-center fs-3 mb-2 mb-lg-0 text-white text-decoration-none">
@@ -44,17 +44,44 @@
 
   </div>
 
-</header>
-{{! <div class="container">
-  <ul class="nav">
-    <li><a class="" href="">Trang chủ</a></li>
-    <li class="mx-3">&gt;</li>
-    <li><a class="" href="">Điện thoại</a></li>
-    <li class="mx-3">&gt;</li>
-    <li><a class="" href="">Xiaomi</a></li>
-    <li class="mx-3">&gt;</li>
-    <li><a class="" href="">Redmi Note 12</a></li>
-  </ul>
-</div> }}
+</header> --}}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="#">CellPhoneZ</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="tel:0382909902">Chăm sóc khách hàng</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/me/cart">Giỏ hàng</a>
+        </li>
 
-{{! overlay danh mục }}
+      </ul>
+      <form class="d-flex me-2">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+      {{#if name}}
+      <a class="navbar-brand fs-5 d-flex align-items-center" href="/me">
+        <span class="">{{name}}</span>
+        <img src="https://www.w3schools.com/bootstrap5/img_avatar1.png" alt="Avatar Logo" style="width:40px;"
+          class="rounded-pill" />
+      </a>
+
+      {{else}}
+      <div class="text-end">
+        <a href="/login" class="btn btn-outline-light me-2">Login</a>
+        <a href="/signUp" class="btn btn-warning">Sign-up</a>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</nav>
