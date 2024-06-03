@@ -350,6 +350,10 @@ class ApiController {
       });
     });
   }
+  searchCategory(req, res) {
+    return console.log(req.query);
+  }
+  // warranty
   storeWarranty(req, res, next) {
     const formData = req.body;
     const warranty = new Warranty(formData);
@@ -1145,100 +1149,96 @@ class ApiController {
   }
   // trang order
   changeStatus(req, res) {
-    Order.findOne({ _id: req.params.id }).then((order) => {
-      order.status = req.body.status;
-      if (req.body.status == "failed") {
-        order.details.forEach((detail) => {
-          Product.updateOne(
-            { "variations._id": detail.idVariation },
-            {
-              $inc: {
-                "variations.$.quantity": detail.quantity,
-                "variations.$.sold": -detail.quantity, // không tăng, mà giảm số lượng đã bán
-              },
-            }
-          ).then((result) => {
-            if (result.nModified == 0) {
-              console.log("Product not found");
-            }
-          });
-        });
-      } else if (req.body.status == "success") {
-        order.details.forEach((detail) => {
-          Product.updateOne(
-            { "variations._id": detail.idVariation },
-            { $inc: { "variations.$.sold": detail.quantity } }
-          ).then((result) => {
-            if (result.nModified == 0) {
-              console.log("Product not found");
-            }
-          });
-        });
-      }
+    const statusOrder = ["pending", "shipping", "success", "failed"];
 
-      if (order.paymentDetail.method != "cod") {
-        order.save();
-        return res.redirect("back");
-      }
-      if (
-        req.body.status == "pending" &&
-        order.paymentDetail.status == "pending"
-      ) {
-        order.paymentDetail.status = "pending";
-      }
-      if (
-        req.body.status == "shipping" &&
-        order.paymentDetail.status == "pending"
-      ) {
-        order.paymentDetail.status = "pending";
-      }
-      if (
-        req.body.status == "success" &&
-        order.paymentDetail.status != "failed"
-      ) {
-        order.paymentDetail.status = "success";
-      }
-      if (
-        req.body.status == "failed" &&
-        order.paymentDetail.status != "success"
-      ) {
-        order.paymentDetail.status = "failed";
-      }
-      order.save().then(() => {
-        return res.redirect("back");
+    Order.findOne({ _id: req.params.id })
+      .then((order) => {
+        if (
+          statusOrder.indexOf(req.body.status) <=
+          statusOrder.indexOf(order.status)
+        ) {
+          return res
+            .status(400)
+            .send(
+              "Invalid status change. Returning to previous status is not permitted"
+            );
+        }
+
+        order.status = req.body.status;
+
+        if (req.body.status === "failed") {
+          order.details.forEach((detail) => {
+            Product.updateOne(
+              { "variations._id": detail.idVariation },
+              {
+                $inc: {
+                  "variations.$.quantity": detail.quantity,
+                  "variations.$.sold": -detail.quantity,
+                },
+              }
+            ).then((result) => {
+              if (result.nModified === 0) {
+                console.log("Product not found");
+              }
+            });
+          });
+        } else if (req.body.status === "success") {
+          order.details.forEach((detail) => {
+            Product.updateOne(
+              { "variations._id": detail.idVariation },
+              { $inc: { "variations.$.sold": detail.quantity } }
+            ).then((result) => {
+              if (result.nModified === 0) {
+                console.log("Product not found");
+              }
+            });
+          });
+        }
+
+        if (order.paymentDetail.method !== "cod") {
+          return order.save().then(() => {
+            return res.redirect("back");
+          });
+        }
+
+        if (
+          req.body.status === "pending" &&
+          order.paymentDetail.status === "pending"
+        ) {
+          order.paymentDetail.status = "pending";
+        }
+
+        if (
+          req.body.status === "shipping" &&
+          order.paymentDetail.status === "pending"
+        ) {
+          order.paymentDetail.status = "pending";
+        }
+
+        if (
+          req.body.status === "success" &&
+          order.paymentDetail.status !== "failed"
+        ) {
+          order.paymentDetail.status = "success";
+        }
+
+        if (
+          req.body.status === "failed" &&
+          order.paymentDetail.status !== "success"
+        ) {
+          order.paymentDetail.status = "failed";
+        }
+
+        order.save().then(() => {
+          return res.redirect("back");
+        });
+      })
+      .catch((error) => {
+        res.status(500).send("An error occurred." + error);
       });
-    });
   }
   // order admin
 
-  searchOrder(req, res) {
-    // const inputName = req.query.name;
-    // console.log(inputName);
-    // if (!inputName) {
-    //   return res
-    //     .status(400)
-    //     .send(
-    //       "Yêu cầu không hợp lệ. Không có ID người dùng hoặc tên người dùng."
-    //     );
-    // }
-    // User.findOne({ name: inputName }).then((user) => {
-    //   if (!user) {
-    //     return res
-    //       .status(404)
-    //       .send(`Không có người dùng với tên: ${inputName}`);
-    //   }
-    //   Order.find({ idUser: user.id })
-    //     .populate("idUser", "name")
-    //     .then((orders) => {
-    //       if (!orders || orders.length === 0) {
-    //         return res
-    //           .status(404)
-    //           .send(`Không có đơn hàng liên quan đến người dùng: ${inputName}`);
-    //       }
-    //     })
-    //     .then(res.redirect("back"));
-    // });
-  }
   // phân quyền
   changeHierarchy(req, res) {
     // return res.send(req.body);

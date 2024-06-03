@@ -196,6 +196,7 @@ class MeController {
             ],
           },
           countProduct: { $size: "$details" },
+          total: 1,
         },
       },
     ]).then((warranties) => {
@@ -255,6 +256,22 @@ class MeController {
         warranty: warranty,
       });
     });
+  }
+  historyView(req, res, next) {
+    let idUser = req.session.idUser;
+    User.findOne({ _id: idUser })
+      .populate("historyViews")
+      .then((user) => {
+        let products = user.historyViews.map((product) => ({
+          ...product.toObject(),
+          variations: product.variations[0],
+        }));
+        res.render("user/profiles/historyView", {
+          layout: "userProfile",
+          title: "Sản phẩm đã xem",
+          products,
+        });
+      });
   }
   changePassword(req, res, next) {
     res.render("user/profiles/changePassword", {

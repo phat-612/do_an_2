@@ -1,6 +1,7 @@
 const Category = require("../models/Category");
 const Product = require("../models/Product");
 const Banner = require("../models/Banner");
+const User = require("../models/User");
 const {
   getDiscount,
   getDataPagination,
@@ -261,6 +262,26 @@ class SiteController {
       .then((product) => {
         if (!product || product == null) {
           return next();
+        }
+        // kiểm tra đăng nhập, thêm lịch sử xem sản phẩm
+        if (req.session.idUser) {
+          User.findOne({ _id: req.session.idUser }).then((user) => {
+            if (!user.historyViews) {
+              user.historyViews = [];
+            }
+            if (!user.historyViews.includes(product._id)) {
+              user.historyViews.unshift(product._id);
+            } else {
+              user.historyViews = user.historyViews.pull(product._id);
+              user.historyViews.unshift(product._id);
+            }
+            if (user.historyViews.length > 20) {
+              user.historyViews.pop();
+            }
+            user.save();
+          });
+        } else {
+          console.log("chưa đăng nhập");
         }
         Product.updateOne({ slug: slugProduct }, { $inc: { view: 1 } }).exec();
         let curVariationSlug = slugVariation

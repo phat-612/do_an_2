@@ -1,11 +1,11 @@
 <div class="container mt-4">
   {{! sắp xếp }}
-  <div class="sort d-flex justify-content-between">
+  <div class="sort d-flex justify-content-between row row-cols-1 row-cols-lg-2">
     <div class="title fs-4 fw-bold text-uppercase">Đã tìm thấy
       <span class="text-danger">{{countProduct}}</span>
       với từ khóa "{{keySearch}}"
     </div>
-    <ul class="nav">
+    <ul class="nav gap-2">
       <li><a class="btn rounded border ms-2" href="{{getSortUrl url}}&column=price&type=asc">Giá thấp đến cao</a></li>
       <li><a class="btn rounded border ms-2" href="{{getSortUrl url}}&column=price&type=desc">Giá cao đến thấp</a></li>
       <li><a class="btn rounded border ms-2" href="{{getSortUrl url}}&column=createdAt&type=desc">Mới nhất</a></li>

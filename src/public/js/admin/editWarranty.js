@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
-  function removeProduct(id) {
-    var product = document.getElementById(id);
-    product.parentNode.removeChild(product);
-  }
+  // function removeProduct(id) {
+  //   var product = document.getElementById(id);
+  //   product.parentNode.removeChild(product);
+  // }
 
   let addButtons = document.querySelectorAll(".addButton");
-  let deleteButtons = document.querySelectorAll(".deleteButton");
+  // let deleteButtons = document.querySelectorAll(".deleteButton");
   let tempProduct = $(".areaDetailProducts>div").length;
 
   addButtons.forEach((addButton, outerIndex) => {
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
       listItemContainer.insertBefore(newLi, addButton.parentElement);
     });
   });
-
+  // xóa chi tiết và giá sản phẩm có sẵn
   document.querySelectorAll(".deleteButton").forEach(function (button) {
     button.addEventListener("click", function () {
       const productContainer = this.closest(".productContainer");
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  var inputSanPham = document.getElementById("detail");
+  // var inputSanPham = document.getElementById("detail");
   var addInput = document.getElementById("addInput");
   var addProductButton = document.getElementById("addProduct");
   var productCounter = 0;
@@ -210,12 +210,6 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementsByClassName("product-container")
     );
 
-    if (productContainers.length === 0) {
-      alert("Vui lòng chọn thêm sản phẩm");
-      event.preventDefault();
-      return;
-    }
-
     productContainers.forEach((productContainer, i) => {
       const reasonsProvided = Array.from(
         productContainer.querySelectorAll('input[type="text"]')
@@ -227,6 +221,22 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!reasonsProvided || !pricesProvided) {
         alert(`Hãy nhập ít nhất một lý do và giá trị cho sản phẩm ${i + 1}.`);
         event.preventDefault();
+      }
+    });
+  });
+  document.querySelectorAll(".deleteButtonProduct").forEach(function (button) {
+    button.addEventListener("click", function () {
+      const allProductContainers =
+        document.querySelectorAll(".productContainer");
+      if (allProductContainers.length <= 1) {
+        alert("Không thể xóa: Cần ít nhất 1 sản phẩm.");
+      } else {
+        const productContainer = this.closest(".productContainer");
+        if (productContainer) {
+          productContainer.remove();
+        } else {
+          alert("Không tìm thấy sản phẩm để xóa.");
+        }
       }
     });
   });

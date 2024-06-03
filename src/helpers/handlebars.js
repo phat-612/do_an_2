@@ -16,6 +16,7 @@ module.exports = {
   compareLess: (a, b) => a < b,
   or: (...args) => args.some((arg) => arg),
   and: (...args) => args.every((arg) => arg),
+  concat: (...args) => args.slice(0, -1).join(""),
   objectToLi: (object) => {
     let outputString = "";
     Object.keys(object).forEach((key, index) => {
@@ -66,6 +67,8 @@ module.exports = {
         return "Đang vận chuyển";
       case "fixing":
         return "Đang sửa chữa";
+      case "paid":
+        return "Đã trả";
       case "failed":
         return "Thất bại";
       default:

@@ -3,13 +3,14 @@
   {{! bộ lọc }}
   <div class="filter nav my-4 align-items-center">
     <div class="title fs-5 me-4">Bộ lọc</div>
-    <div class="filter-item">
+    <div class="filter-item overflow-x-auto custom-none-scroll">
       <div class="title dropdown-toggle border fs-5 px-2 py-1 rounded me-2" role="button" data-bs-toggle="dropdown"
         data-bs-auto-close="outside" aria-expanded="false">Hãng</div>
       <div class="body dropdown-menu">
-        <ul class="list nav">
+        <ul class="list nav gap-2">
           {{#each (getBrands categories rootCategory)}}
-          <li> <a class="bg-light p-1 m-2 rounded" href="/{{../rootCategory.slug}}/{{this.slug}}">{{this.name}}</a></li>
+          <li> <a class="bg-light p-1 m-2 rounded fs-4" href="/{{../rootCategory.slug}}/{{this.slug}}">{{this.name}}</a>
+          </li>
           {{/each}}
         </ul>
       </div>
@@ -36,18 +37,18 @@
       </div>
     </div>
   </div>
-  <ul class="nav my-3">
+  <ul class="nav my-3 overflow-x-auto custom-none-scroll flex-nowrap">
     {{#each subCategories}}
     <li class=""><a class="bg-light py-1 px-3 me-2 rounded" href="{{../pathName}}/{{this.slug}}">{{this.name}}</a></li>
     {{/each}}
   </ul>
 
   {{! sắp xếp }}
-  <div class="sort d-flex justify-content-between">
+  <div class="sort d-flex justify-content-between row row-cols-lg-2 row-cols-1">
     <div class="title fs-4 fw-bold text-uppercase"><a href="/{{rootCategory.slug}}">{{rootCategory.name}}
         {{#if (compareNot rootCategory.slug curCategory.slug)}} {{curCategory.name}} {{/if}}có
         {{countProduct}} sản phẩm</a></div>
-    <ul class="nav">
+    <ul class="nav gap-2">
       <li><a class="btn rounded border ms-2" href="{{getSortUrl url}}&column=price&type=asc">Giá thấp đến cao</a></li>
       <li><a class="btn rounded border ms-2" href="{{getSortUrl url}}&column=price&type=desc">Giá cao đến thấp</a></li>
       <li><a class="btn rounded border ms-2" href="{{getSortUrl url}}&column=createdAt&type=desc">Mới nhất</a></li>
@@ -87,7 +88,7 @@
 
 
 <script>
-  let maxPrice = {{maxPrice}};
-  let startPrice = {{startPrice}} ||0;
-  let endPrice = {{endPrice}} || maxPrice;
+  let maxPrice = {{ maxPrice }};
+  let startPrice = {{ startPrice }} || 0;
+  let endPrice = {{ endPrice }} || maxPrice;
 </script>

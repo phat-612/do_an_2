@@ -1,28 +1,33 @@
 <div class="tag_product mb-2">
-    <div class="row card mt-3 d-flex flex-row py-2">
-        <div class="col-2 py-1">
+    <div class="row card mt-3 d-flex flex-row py-2 row-cols-1 row-cols-lg-3">
+        <div class="col-lg-2 py-1">
             <img class="w-100" src="{{showImgUpload image}}" alt="{{image}}" />
         </div>
-        <div class="col-8">
-            <a class="fs-5" href="{{link}}/{{_id}}">{{name}}</a>
+        <div class="col-lg-8">
+            <a class="fs-5 text-ellipsis" href="{{link}}">{{name}}</a>
             {{#if (compareMore countProduct 1)}}
             <div class="fs-6 text-black-50">và
                 {{minus countProduct 1}}
                 sản phẩm khác</div>
             {{/if}}
+            {{#if status}}
             <div class="p-2 mt-3 text-success bg-success bg-opacity-25 custom-w-fitcontent custom-fs-12px">
                 {{showStatusOrder
                 status}}</div>
+            {{/if}}
+            {{#if total}}
             <div class="mt-5 fs-5 text-danger fw-bold">{{showPrice
                 total
                 }}</div>
+            {{/if}}
         </div>
-        <div class="col d-flex flex-column align-items-end justify-content-between">
-            <p class="opacity-75">
+        <div
+            class="col-lg-auto row row-cols-2 row-cols-lg-1 flex-lg-column d-flex align-items-end justify-content-between">
+            <span class="opacity-75 w-auto">
                 {{formatDate createdAt "DD/MM/YYYY HH:mm"}}
-            </p>
+            </span>
             <a class="border border- border-danger rounded-2 px-3 bg-white text-danger custom-w-fitcontent"
-                href="{{link}}/{{_id}}">Xem chi tiết</a>
+                href="{{link}}">Xem chi tiết</a>
         </div>
     </div>
 </div>

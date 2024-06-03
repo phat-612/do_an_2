@@ -22,27 +22,21 @@
         </button>
       </div>
     </div>
-    <div class="col-3 bg-dark rounded">sdfsd</div>
   </div>
   {{! sản phẩm nổi bậc cho từng danh mục, mỗi mục 10 sản phẩm được xem nhiều nhất }}
   {{#each categories}}
   {{#if this.products}}
   <div class="mt-3">
-    <div class="row d-flex align-items-center">
+    <div class="row d-flex align-items-center flex-nowrap">
       <a href="/{{this.slug}}" class="col-auto fs-4 text-uppercase text-black">{{this.name}}</a>
-      <div class="col">
-        <ul class="nav">
-          {{#each this.children}}
-          <li>
-            <a href="/{{../this.slug}}/{{this.slug}}"
-              class="btn btn-outline-light px-2 ms-2 custom-bg-gray text-black">{{this.name}}</a>
-          </li>
-          {{/each}}
-          <li>
-            <a href="/{{this.slug}}" class="btn btn-outline-light px-2 ms-2 custom-bg-gray text-black">Xem tất cả</a>
-          </li>
-        </ul>
-      </div>
+      <ul class="col nav overflow-x-scroll custom-none-scroll flex-row flex-nowrap">
+        {{#each this.children}}
+        <li>
+          <a href="/{{../this.slug}}/{{this.slug}}"
+            class="btn btn-outline-light px-2 ms-2 custom-bg-gray text-black">{{this.name}}</a>
+        </li>
+        {{/each}}
+      </ul>
     </div>
     <div class="owl-carousel owl-theme">
       {{#each this.products}}

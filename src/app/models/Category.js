@@ -54,4 +54,17 @@ Category.pre("validate", function (next) {
     });
   }
 });
+// tìm theo tên danh mục
+Category.statics.findByName = function (name) {
+  return this.find({ name: new RegExp(name, "i") });
+};
+// page navigation
+Category.query.paginate = function (req) {
+  let page = parseInt(req.query.page) || 1;
+  page = page <= 0 ? 1 : page;
+
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+  return this.skip(skip).limit(limit);
+};
 module.exports = mongoose.model("Category", Category);

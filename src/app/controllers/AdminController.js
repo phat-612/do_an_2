@@ -39,6 +39,10 @@ class AdminController {
               },
             ]),
             Product.aggregate([
+              { $sort: { view: -1 } }, // Sắp xếp theo lượt view giảm dần
+              { $limit: 4 }, // Lấy ra 4 sản phẩm
+            ]),
+            Product.aggregate([
               {
                 $set: {
                   totalReviews: { $size: "$reviews" },
@@ -70,19 +74,61 @@ class AdminController {
               { $sort: { totalSold: -1 } }, // Sort by total sold in descending order
               { $limit: 4 }, // Limit to top 4 products
             ]),
-          ]).then(([doanhThu, topReviewProduct, topProducts]) => {
-            doanhThu = doanhThu[0] ? doanhThu[0].totalAmount : 0;
-            res.render("admin/sites/home", {
-              layout: "admin",
-              js: "admin/home",
-              css: "admin/home",
-              orders: multipleMongooseToObject(orders),
-              products: multipleMongooseToObject(products),
-              topProducts: topProducts,
-              topReviewProduct: topReviewProduct,
-              doanhThu: doanhThu,
-            });
-          });
+            Product.aggregate([
+              {
+                $unwind: "$reviews",
+              },
+              {
+                $match: {
+                  "reviews.status": false,
+                },
+              },
+              {
+                $lookup: {
+                  from: "users",
+                  localField: "reviews.idUser",
+                  foreignField: "_id",
+                  as: "user",
+                },
+              },
+              {
+                $unwind: "$user",
+              },
+              {
+                $project: {
+                  name: 1,
+                  images: 1,
+                  reviews: 1,
+                  user: {
+                    name: 1,
+                  },
+                },
+              },
+              { $limit: 6 },
+            ]),
+          ]).then(
+            ([
+              doanhThu,
+              topSeenProduct,
+              topReviewProduct,
+              topProducts,
+              assessReview,
+            ]) => {
+              doanhThu = doanhThu[0] ? doanhThu[0].totalAmount : 0;
+              res.render("admin/sites/home", {
+                layout: "admin",
+                js: "admin/home",
+                css: "admin/home",
+                orders: multipleMongooseToObject(orders),
+                products: multipleMongooseToObject(products),
+                topProducts: topProducts,
+                topReviewProduct: topReviewProduct,
+                doanhThu: doanhThu,
+                topSeenProduct: topSeenProduct,
+                assessReview: assessReview,
+              });
+            }
+          );
         });
       })
       .catch(next);
@@ -329,7 +375,7 @@ class AdminController {
     const status = req.query.status;
     const url = req.originalUrl;
     let match = {};
-
+    // trạng thái tìm kiếm
     if (
       status === "success" ||
       status === "pending" ||
@@ -339,18 +385,20 @@ class AdminController {
     ) {
       match.status = status;
     }
+    // console.log(match);
 
-    // grab the page if it exists (default is 1)
+    // trạng hiện tại mặc định là 1
     let page = parseInt(req.query.page) || 1;
 
-    // set the number of items per page
+    // 10 đơn hàng
     let perPage = 10;
 
-    // calculate the skip value
+    // skip
     let skipValue = page * perPage - perPage;
-
+    // tìm tên trên url
     const findUsers = async () => {
       if (name) {
+        //RegExp xác định chuỗi
         let users = await User.find({ name: new RegExp(name, "i") });
         let userIds = users.map((user) => user._id);
         match.idUser = { $in: userIds };
@@ -366,14 +414,14 @@ class AdminController {
             .populate("idUser", "name")
             .skip(skipValue)
             .limit(perPage),
-          Order.countDocuments(), // Already exists
+          Order.countDocuments(), // tổng số đơn hàng
           Order.find({ status: "pending" }).countDocuments(),
           Order.find({ status: "success" }).countDocuments(),
           Order.find({ status: "failed" }).countDocuments(),
           Order.find({ status: "shipping" }).countDocuments(),
           Order.find({ status: "cancel" }).countDocuments(),
 
-          Order.countDocuments(), // Added just now
+          Order.countDocuments(), // số lượng sản phẩm không thay đổi
         ]);
       })
       .then(
@@ -435,12 +483,15 @@ class AdminController {
               let variationAttributes = variation ? variation.attributes : {};
 
               let detailObject = detail.toObject();
+              // tên sản phẩm
               detailObject.productName = productName;
+              // thuộc tính sản phẩm của đơn hàng (ram , màu,....)
               detailObject.variationAttributes = variationAttributes;
-
               let discountedPrice =
                 detail.price - detail.price * (detail.discount / 100);
+              // tổng tiền đã giảm
               detailObject.totalPrice = discountedPrice * detail.quantity;
+              // giá chưa giảm
               detailObject.originalTotalPrice = detail.price * detail.quantity;
               return detailObject;
             }
@@ -448,6 +499,7 @@ class AdminController {
         });
 
         Promise.all(promises).then((result) => {
+          // result mảng chứa tên , thuộc tính,giá chưa giảm , giá đã giảm, giá sản phẩm ,só lượng
           res.render("admin/orders/orderDetail", {
             layout: "admin",
             js: "admin/orderDetail",
@@ -456,56 +508,85 @@ class AdminController {
             order: order,
             totalNotSale: totalNotSale, //gia chua giam
           });
-          // console.log(totalNotSale, totalOrder);
+          // console.log(result);
         });
       });
   }
 
   //get /category
   category(req, res, next) {
-    Category.find({})
+    const searchName = req.query.search;
+    const url = req.originalUrl;
+    Category.find({ name: new RegExp(searchName, "i") })
       .populate("idParent", "name")
+      .paginate(req)
       .then((categories) => {
-        // Sắp xếp danh mục
-        const categoryIdParent = [];
-        const categoryNotIdParent = [];
+        Category.countDocuments({ name: new RegExp(searchName, "i") }).then(
+          (count) => {
+            const categoryIdParent = [];
+            const categoryNotIdParent = [];
 
-        categories.forEach((category) => {
-          if (category.idParent) {
-            categoryIdParent.push(category);
-          } else {
-            categoryNotIdParent.push(category);
+            categories.forEach((category) => {
+              if (category.idParent) {
+                categoryIdParent.push(category);
+              } else {
+                categoryNotIdParent.push(category);
+              }
+            });
+
+            const perPage = parseInt(req.query.limit) || 10;
+            let page = parseInt(req.query.page) || 1;
+            page = page <= 0 ? 1 : page;
+            let totalPage = Math.ceil(count / perPage);
+            const storeCategory = categoryNotIdParent.concat(categoryIdParent);
+            res.render("admin/sites/category", {
+              layout: "admin",
+              js: "admin/category",
+              css: "admin/category",
+              category: multipleMongooseToObject(storeCategory),
+              currentPage: page,
+              totalPage: totalPage,
+              url,
+            });
           }
-        });
-
-        const storeCategory = categoryNotIdParent.concat(categoryIdParent);
-        res.render("admin/sites/category", {
-          layout: "admin",
-          js: "admin/category",
-          css: "admin/category",
-          category: multipleMongooseToObject(storeCategory),
-        });
+        );
       });
   }
   //get /assessProviders
   accessProviders(req, res, next) {
-    User.find({})
-      .then((users) => {
+    let searchQuery = req.query.searchQuery || "";
+    const url = req.originalUrl;
+    User.paginate(
+      // regex trả về 1 chuổi ,$regex tìm kiếm chỉ quy , i bất kể hoa thường
+      { email: { $regex: searchQuery, $options: "i" } },
+      { page: req.query.page, limit: req.query.limit }
+    ).then((users) => {
+      // tinh tổng số lượng user đang có
+      User.countDocuments({
+        email: { $regex: searchQuery, $options: "i" },
+      }).then((count) => {
         const usersData = users.map((user) => {
           return {
-            id: user._id, // Hoặc dùng "_id" hoặc thuộc tính tương ứng, tùy vào đặc điểm của đối tượng 'user'
+            id: user._id,
             role: user.role,
           };
         });
-        // console.log(usersData);
+        const perPage = parseInt(req.query.limit) || 10;
+        let page = parseInt(req.query.page) || 1;
+        page = page <= 0 ? 1 : page;
+        let totalPage = Math.ceil(count / perPage);
+
         res.render("admin/sites/accessProviders", {
           layout: "admin",
           js: "admin/accessProviders",
-          users: multipleMongooseToObject(users),
-          usersData: usersData,
+          user: usersData,
+          users: multipleMongooseToObject(users), // Adjusted here
+          currentPage: page,
+          totalPage: totalPage,
+          url,
         });
-      })
-      .catch(next);
+      });
+    });
   }
   accessReview(req, res, next) {
     Product.aggregate([

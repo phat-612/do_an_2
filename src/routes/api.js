@@ -27,7 +27,6 @@ router.put("/order/:id", isLoggedIn, apiController.changeStatus);
 router.get("/createPaymentUrl", apiController.creatPaymentUrl);
 router.get("/returnPayment", apiController.returnPayment);
 router.post("/rePayment", isLoggedIn, apiController.rePayment);
-router.get("/searchOrder", apiController.searchOrder);
 
 // product
 router.post("/product", upload.array("images"), apiController.createProduct);
@@ -61,6 +60,7 @@ router.delete("/deleteBanner/:id", apiController.deleteBanner);
 router.delete("/category/:slugCategory", apiController.deleteCategory);
 router.post("/storeCategory", apiController.storeCategory);
 router.put("/category/:id", apiController.updateCategory);
+router.get("/searchCategory", apiController.searchCategory);
 
 // dành cho test
 router.post("/testAddProduct", apiController.testAddProduct);
