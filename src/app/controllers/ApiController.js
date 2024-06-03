@@ -1149,21 +1149,20 @@ class ApiController {
   }
   // trang order
   changeStatus(req, res) {
-    const statusOrder = ["pending", "shipping", "success", "failed"];
-
     Order.findOne({ _id: req.params.id })
       .then((order) => {
-        if (
-          statusOrder.indexOf(req.body.status) <=
-          statusOrder.indexOf(order.status)
-        ) {
+        if (order.status === "shipping" && req.body.status === "pending") {
+          return res.status(400).send("Không thể đổi trạng thái");
+        }
+        if (order.status === "success" || order.status === "failed") {
           return res
             .status(400)
             .send(
-              "Invalid status change. Returning to previous status is not permitted"
+              "Invalid status change: Cannot change status when current status is 'success' or 'failed'"
             );
         }
 
+        // Cập nhật trạng thái
         order.status = req.body.status;
 
         if (req.body.status === "failed") {
