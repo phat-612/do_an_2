@@ -1172,7 +1172,7 @@ class ApiController {
               {
                 $inc: {
                   "variations.$.quantity": detail.quantity,
-                  "variations.$.sold": -detail.quantity,
+                  // "variations.$.sold": -detail.quantity,
                 },
               }
             ).then((result) => {
