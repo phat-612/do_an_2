@@ -7,24 +7,27 @@ function countStatus() {
   let countCancel = $(".cancel").length;
   let countPending = $(".pending").length;
   let countSuccess = $(".success").length;
+  let shipping = $(".shipping").length;
   const data = {
     labels: [
       "Đơn Đã Giao Hàng",
       "Đơn Chờ Xác Nhận",
       "Đơn Hàng Thất Bại",
       "Đã Hủy",
+      "Đang Giao Hàng",
     ],
     datasets: [
       {
         label: "My First Dataset",
-        data: [countSuccess, countPending, countFailed, countCancel],
+        data: [countSuccess, countPending, countFailed, countCancel, shipping],
         backgroundColor: [
           "rgb(25, 135, 84)",
           "rgb(255, 193, 7)",
           "rgb(220, 53, 69)",
           "rgb(90, 10, 200)",
+          "rgb(50, 60, 100)",
         ],
-        hoverOffset: 4,
+        hoverOffset: 5,
       },
     ],
   };
