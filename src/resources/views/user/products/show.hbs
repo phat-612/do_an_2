@@ -37,9 +37,10 @@
       </div>
     </div>
   </div>
-  <ul class="nav my-3 overflow-x-auto custom-none-scroll flex-nowrap">
+  <ul class="nav my-3 overflow-x-auto custom-none-scroll flex-nowrap flex-row">
     {{#each subCategories}}
-    <li class=""><a class="bg-light py-1 px-3 me-2 rounded" href="{{../pathName}}/{{this.slug}}">{{this.name}}</a></li>
+    <li class=""><a class="bg-light py-1 px-3 me-2 rounded text-nowrap"
+        href="{{../pathName}}/{{this.slug}}">{{this.name}}</a></li>
     {{/each}}
   </ul>
 
@@ -55,7 +56,7 @@
       <li><a class="btn rounded border ms-2" href="{{getSortUrl url}}&column=createdAt&type=asc">Cũ nhất</a></li>
     </ul>
   </div>
-  <div class="align-items-stretch my-3 row row-cols-1 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
+  <div class="align-items-stretch my-3 row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
     {{#each products}}
     {{> cardProductShow}}
     {{/each}}

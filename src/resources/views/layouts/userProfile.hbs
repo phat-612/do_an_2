@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="/css/bootstrap.css">
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
   <link rel="stylesheet" href="/css/style.css">
-
   {{#if css}}
   <link rel="stylesheet" href="/css/{{css}}.css">
   {{/if}}
@@ -21,10 +20,10 @@
   <div class="container mh-100">
 
     <div class="row mt-3">
-      <div class="col-auto">
+      <div class="col-lg-auto">
         {{> userSidebar}}
       </div>
-      <div class="col">
+      <div class="col-lg">
         {{{body}}}
       </div>
     </div>
@@ -50,6 +49,10 @@
     {{#if js}}
     <script src="/js/{{js}}.js"></script>
     {{/if}}
+    <button class="btn position-fixed btn-primary" type="button" data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" style="bottom: 10px; right:10px">
+      <i class="bi bi-grid-3x3-gap fs-4"></i>
+    </button>
 </body>
 
 </html>

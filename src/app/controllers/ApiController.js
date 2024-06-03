@@ -277,7 +277,6 @@ class ApiController {
     const formData = req.body;
     const idParent = formData.idParent || null; // Xử lý giá trị trống và đặt giá trị mặc định là null
     formData.idParent = idParent;
-
     const category = new Category(formData);
     category.save().then(() => {
       req.flash("message", {
@@ -291,7 +290,7 @@ class ApiController {
     // return res.send(req.body);
     const idParent = req.body.idParent || null;
     req.body.idParent = idParent;
-
+    console.log(idParent);
     Category.updateOne({ _id: req.params.id }, { $set: req.body })
       .exec()
       .then(() => {
@@ -300,20 +299,19 @@ class ApiController {
           message: "Danh mục đã được cập nhật thành công!",
         });
         res.redirect("back");
-      })
-      .catch(next);
+      });
   }
 
   deleteCategory(req, res, next) {
     const hasChildCategory = async (categoryId) => {
+      // tìm có danh mục con hay không
       const subCategories = await Category.find({ idParent: categoryId });
       if (subCategories.length > 0) {
         return true;
       }
       return false;
     };
-
-    // Logic xóa danh mục
+    // id danh mục
     const categoryId = req.params.slugCategory;
 
     // Kiểm tra xem có sản phẩm nào thuộc danh mục này không
@@ -356,6 +354,12 @@ class ApiController {
   // warranty
   storeWarranty(req, res, next) {
     const formData = req.body;
+    if (!formData) {
+      res.json({
+        status: "Thất bại",
+        message: "Lỗi khi tạo đơn bảo hành",
+      });
+    }
     const warranty = new Warranty(formData);
     warranty.save().then(res.redirect("/admin/warranty/show"));
   }
@@ -363,38 +367,25 @@ class ApiController {
     let id = req.body.id;
     let status = req.body.status;
     const statusOrder = ["pending", "fixing", "success", "paid"];
-
-    Warranty.findById(id)
-      .then((warranty) => {
-        if (
-          statusOrder.indexOf(status) <= statusOrder.indexOf(warranty.status)
-        ) {
-          res.json({
-            status: "Thất bại",
-            message:
-              "Cập nhật không thành công. Thứ tự trạng thái không hợp lệ.",
-          });
-        } else {
-          return Warranty.updateOne({ _id: id }, { status: status }).then(
-            () => {
-              res.json({
-                status: "Thành công",
-                message: "Cập nhật thành công",
-              });
-            }
-          );
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        const status = err.status || 500;
-        res.status(status).json({
+    //statusOrder.indexOf(status) vị trí của status , statusOrder.indexOf(warranty.status) vị trí hiện tại
+    Warranty.findById(id).then((warranty) => {
+      if (statusOrder.indexOf(status) <= statusOrder.indexOf(warranty.status)) {
+        res.json({
           status: "Thất bại",
-          message: "Có lỗi xảy ra khi cập nhật trạng thái",
+          message: "Cập nhật không thành công. Thứ tự trạng thái không hợp lệ.",
         });
-      });
+      } else {
+        return Warranty.updateOne({ _id: id }, { status: status }).then(() => {
+          res.json({
+            status: "Thành công",
+            message: "Cập nhật thành công",
+          });
+        });
+      }
+    });
   }
   updateWarranty(req, res, next) {
+    // return res.send(req.body);
     Warranty.findOne({ _id: req.params.id }).then((warranty) => {
       warranty.email = req.body.email;
       warranty.name = req.body.name;
@@ -404,24 +395,22 @@ class ApiController {
       if (req.body.details) {
         // Kiểm tra xem req.body.details có tồn tại hay không
         let updatedWarrantyDetails = [];
+        // detailReq sản phẩm đã có phải giống với trong modal sản phẩm
         req.body.details.forEach((detailReq) => {
           let detail = warranty.details.find(
             (detail) => detail._id.toString() === detailReq.detailId
           );
+          // có sản phẩm
           if (detail) {
             detail.idProduct = detailReq.idProduct;
             detail.reasonAndPrice = detailReq.reasonAndPrice;
             updatedWarrantyDetails.push(detail);
           } else {
+            // sản phẩm mới thêm vào
             updatedWarrantyDetails.push(detailReq);
           }
         });
         warranty.details = updatedWarrantyDetails;
-      } else {
-        req.flash("message", {
-          type: "danger",
-          message: "Phải có ít nhất 1 sản phẩm trong đơn bảo hành",
-        });
       }
       warranty.save().then(() => {
         req.flash("message", {
@@ -1172,7 +1161,6 @@ class ApiController {
               {
                 $inc: {
                   "variations.$.quantity": detail.quantity,
-                  // "variations.$.sold": -detail.quantity,
                 },
               }
             ).then((result) => {

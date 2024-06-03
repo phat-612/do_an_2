@@ -201,7 +201,7 @@ module.exports = {
           <div class="chose-color">
             <div class="title fs-4 my-3 text-capitalize">${variation[key]}</div>
             <div class="body">
-              <ul class="nav text-center">
+              <ul class="nav text-center gap-1">
           `;
         } else {
           let price = variation[key].price
@@ -259,7 +259,7 @@ module.exports = {
       details += `
               <div class="row px-0 align-items-center">
                 <span class="col-2">${key}<span class="fa fa-star text-warning"></span></span>
-                <div class="progress col px-0">
+                <div class="progress col-6 px-0">
                   <div class="progress-bar" role="progressbar" style="width: ${
                     (starReivews[key] / reviews.length) * 100
                   }%" aria-valuenow="" aria-valuemin="0"
@@ -272,7 +272,7 @@ module.exports = {
       `;
     });
     return `
-      <div class="col-4 justify-content-center align-items-center d-flex flex-column">
+      <div class="col-lg-4 col justify-content-center align-items-center d-flex flex-column">
               <p class="fw-bold fs-4">
                 ${avageRating}/5
               </p>
@@ -285,7 +285,7 @@ module.exports = {
               </div>
               <p>${reviews.length} đánh giá</p>
             </div>
-            <div class="col-8 ">
+            <div class="col-lg-8 col">
               ${details}
             </div>
     `;
@@ -320,6 +320,7 @@ module.exports = {
     return outputHtml;
   },
   showRatingStar: (reviews) => {
+    reviews = reviews.filter((review) => review.status == true);
     let aveRating =
       reviews.reduce((acc, cur) => {
         return acc + cur.rating;

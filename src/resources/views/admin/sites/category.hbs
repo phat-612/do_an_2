@@ -67,7 +67,7 @@
             <label for="form-select" class="form-label">Danh mục cha</label>
             <select name="idParent" id="idParent" class="form-select" aria-label="Default select example">
               <option value>--Không chọn danh mục cha--</option>
-              {{#each category}}
+              {{#each categories}}
               <option value="{{this._id}}">{{this.idParent.name}}
                 &gt
                 {{this.name}}</option>

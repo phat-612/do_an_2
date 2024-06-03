@@ -9,8 +9,9 @@ $(document).ready(function () {
       $(".btnSubmit").text("Đặt hàng");
       $("#paymentMethod").val("cod");
     }
-    button.addClass("border border-danger");
-    button.siblings().removeClass("border border-danger");
+    button.addClass("border border-2 border-danger");
+    button.removeClass("border-0");
+    button.siblings().addClass("border-0");
   });
   // handle default address
   $("input[name=listAddress]").change((event) => {

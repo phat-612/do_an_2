@@ -1,8 +1,8 @@
 {{#if cart}}
-<div class="container">
+<div class="">
   {{!-- {{consoleHbs cart}} --}}
-  <h1 class="fs-3 fw-bold">Cart </h1>
-  <div class="row">
+  <h1 class="fs-3 fw-bold text-center">Giỏ hàng</h1>
+  <div class="p-1">
     {{!-- <div class="col">
       <table class="table table-responsive text-center align-middle">
         <thead>
@@ -55,20 +55,40 @@
         </tbody>
       </table>
     </div> --}}
-    <div class="row">
-      <input class="col-auto" type="checkbox" name="" id="">
-      <div class="col-3">
-        <img class="card-img-top" src="/img/uploads/1716909817311-s24-ultra-den.webp" alt="">
+    <div class="showProduct">
+      {{#each cart}}
+      <div class="row mb-3 border rounded" style="">
+        <input type="checkbox" class="checkItem col-1 my-auto" {{disabledQuantityZero this.storageQuantity}} />
+        <div class="col-2 my-auto">
+          <img class="card-img-top" src="{{showImgUpload this.image}}" alt="">
+        </div>
+        <div class="col-lg-5 col d-flex flex-column justify-content-around">
+          <a href="/product/{{this.slug}}" class="text-ellipsis">{{this.name}}</a>
+
+          <ul>
+            {{{objectToLi this.attributes}}}
+          </ul>
+          <div class="fw-bold">{{showPrice this.price}}</div>
+        </div>
+        <div class="col-lg col-2 my-auto">
+          <div class="d-flex justify-content-between align-items-center flex-lg-row flex-column">
+            <button class="btn border bg-black bg-opacity-25 btnMinus w-lg-25 w-100"
+              data-bs-idVariation="{{this.idVariation}}" data-bs-storageQuantity="{{this.storageQuantity}}"
+              data-bs-cartQuantity="{{this.cartQuantity}}" data-bs-price="{{this.price}}">-</button><input type="text"
+              class="inpQauntity w-lg-50 text-center border-0 inpQuantity" value="{{this.cartQuantity}}" />
+            <button class="btn border bg-black bg-opacity-25 btnPlus w-lg-25 w-100"
+              data-bs-idVariation="{{this.idVariation}}" data-bs-storageQuantity="{{this.storageQuantity}}"
+              data-bs-cartQuantity="{{this.cartQuantity}}" data-bs-price="{{this.price}}">+</button>
+          </div>
+        </div>
+        <div class="col-auto"><i class="btnDelete bi bi-trash3 fs-4 text-danger"
+            data-bs-idVariation="{{this.idVariation}}"></i></div>
+        <div class="totalItem col fw-bold" hidden>{{showPrice
+          this.price
+          this.cartQuantity
+          }}</div>
       </div>
-      <div class="col-5">
-        <div>Samsung Galaxy S24 Ultra</div>
-        <div>Phân loại: vàng</div>
-        <div>1.900.000</div>
-      </div>
-      <div class="col-3">
-        <p>thùng rác</p>
-        <p>- 9 +</p>
-      </div>
+      {{/each}}
     </div>
     <div class="row">
       <div class="col">

@@ -56,7 +56,7 @@
               <div class="text-ellipsis">{{this.name}}</div>
             </td>
             <td>{{this.user.name}}</td>
-            <td class="col text-center">{{this.reviews.rating}}</td>
+            <td class="col text-center">{{this.reviews.rating}}⭐</td>
             <td class="text-end">
               <form class="d-inline-block" action="/api/accessReview" method="post">
                 <input type="text" name="idReview" value="{{this.reviews._id}}" hidden>

@@ -2,10 +2,10 @@
   <h1>{{product.name}}</h1>
   <hr />
   <div class="row">
-    <div class="col-6">
+    <div class="col-lg-6">
       {{!-- ảnh --}}
       <div id="carouselExampleControls" class="carousel slide border rounded d-flex align-items-center"
-        data-bs-ride="carousel" style="height: 35vw;">
+        data-bs-ride="carousel">
         <div class="carousel-inner">
           {{#each product.images}}
           <div class="carousel-item {{#if (compare @index 0)}}active{{/if}}">
@@ -26,21 +26,8 @@
           <span class="visually-hidden">Next</span>
         </button>
       </div>
-      {{!-- mô tả --}}
-      <div class="description mt-4 border-1 shadow rounded p-3">
-        <div class="title fs-5 fw-bold ">Mô tả</div>
-        <div class="body p-3 overflow-y-auto custom-none-scroll" style="max-height: 50vh;">
-          <p>
-            {{product.description}}
-          </p>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="col-6">
+      {{!-- phân loại và mua --}}
       <div>
-
         {{#if (compareMore product.discount 0)}}
         <div class="text-decoration-line-through">{{showPrice
           product.price
@@ -60,15 +47,16 @@
         }}}
 
         {{#if (and product.isBusiness (compareMore product.curVariation.quantity 0))}}
-        <div class="action my-3 row">
-          <div class="col-8"><a href="/me/order"
+        <div class="action my-3 row row-cols-1 row-cols-lg-2 gap-1">
+          <div class="col-lg-7"><a href="/me/order"
               class="btn w-100 py-3 rounded border bg-danger fs-4 text-white fw-bold">Mua
               Ngay</a></div>
-          <div class="col-4">
+          <div class="col-lg-4">
             <form action="/api/cart" method="post">
               <input type="hidden" name="idVariation" value="{{product.curVariation._id}}" hidden />
               <input type="hidden" name="quantity" value="1" hidden />
-              <button type="submit" class="w-100 py-3 rounded border bg-light fs-5 fw-bold">Thêm vào giỏ hàng</button>
+              <button type="submit" class="w-100 py-3 px-1 rounded border bg-light fs-6 fw-bold">Thêm vào giỏ
+                hàng</button>
             </form>
           </div>
         </div>
@@ -78,11 +66,23 @@
         </p>
         {{/if}}
       </div>
+
+    </div>
+    <div class="col-lg-6">
+      {{!-- mô tả --}}
+      <div class="description border-1 shadow rounded p-3">
+        <div class="title fs-5 fw-bold">Mô tả</div>
+        <div class="body p-3 overflow-y-auto custom-none-scroll" style="max-height: 50vh;">
+          <p>
+            {{product.description}}
+          </p>
+        </div>
+      </div>
       {{!-- đánh giá --}}
       <div class="mt-5 p-2 border-1 shadow rounded">
         <h3 class="text-center mb-2">Đánh giá & nhận xét {{product.name}}</h3>
-        <div class="row align-content-center w-100">
-          <div class="col-12 row">
+        <div class="">
+          <div class=" row row-cols-lg-2 row-cols-1">
             {{{showOverviewReivews product.reviews}}}
           </div>
 
@@ -163,7 +163,7 @@
     stageClass: "owl-stage d-flex my-3",
     responsive: {
       0: {
-        items: 1,
+        items: 2,
       },
       600: {
         items: 3,

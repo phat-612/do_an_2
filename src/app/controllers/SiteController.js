@@ -18,7 +18,7 @@ class SiteController {
               $in: ids,
             },
           })
-            .sort({ view: -1 })
+            .sort({ isBusiness: -1, view: -1 })
             .limit(10)
             .then((products) => {
               products = products.map((product) => {
@@ -36,16 +36,37 @@ class SiteController {
       });
       Promise.all(promises)
         .then((data) => {
-          Banner.find({ status: true }).then((banners) => {
-            // return res.send({
-            //   categories: data,
-            //   banners: banners.map((banner) => banner.toObject()),
-            // });
+          Promise.all([
+            Product.find(
+              {
+                isBusiness: true,
+                "discount.endDay": { $gte: new Date() },
+                "discount.startDay": { $lte: new Date() },
+                "discount.percent": { $gt: 0 },
+              },
+              {
+                name: 1,
+                slug: 1,
+                images: 1,
+                variations: 1,
+                reviews: 1,
+                isBusiness: 1,
+                discount: 1,
+              }
+            ).limit(10),
+            Banner.find({ status: true }),
+          ]).then(([saleProducts, banners]) => {
+            saleProducts = saleProducts.map((product) => ({
+              ...product.toObject(),
+              variation: product.variations[0],
+            }));
+
             res.render("user/sites/home", {
               title: "Trang chủ",
               js: "user/home",
               categories: data,
-              banners: banners.map((banner) => banner.toObject()),
+              saleProducts: saleProducts,
+              banners: banners,
             });
           });
         })
@@ -96,7 +117,13 @@ class SiteController {
           : parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 15;
       const skip = (page - 1) * limit;
-      let sortAndFilter = [];
+      let sortAndFilter = [
+        {
+          $sort: {
+            isBusiness: -1,
+          },
+        },
+      ];
       if (
         req.query.hasOwnProperty("startPrice") &&
         req.query.hasOwnProperty("endPrice")
@@ -413,7 +440,13 @@ class SiteController {
       (parseInt(req.query.page) || 1) <= 0 ? 1 : parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 15;
     const skip = (page - 1) * limit;
-    let sortAndFilter = [];
+    let sortAndFilter = [
+      {
+        $sort: {
+          isBusiness: -1,
+        },
+      },
+    ];
     if (req.query.hasOwnProperty("_find")) {
       let searchQuery = req.query.q;
       let words = searchQuery.split(" ");

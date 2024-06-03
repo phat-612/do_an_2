@@ -10,6 +10,22 @@
   <li class="fs-5 nav-item"><a class="nav-link text-start" href="/logout">Đăng xuất</a></li>
 </ul>
 
+<ul class="nav  nav-pills offcanvas offcanvas-top" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel"
+  style="height:fit-content">
+  <li class="fs-5 nav-item "><a class="nav-link text-start" href="/me">Thông tin cá
+      nhân</a></li>
+  <li class="fs-5 nav-item"><a class="nav-link text-start" href="/me/address">Địa chỉ
+      nhận hàng</a></li>
+  <li class="fs-5 nav-item"><a class="nav-link text-start" href="/me/changePassword">Đổi mật khẩu</a></li>
+  <li class="fs-5 nav-item"><a class="nav-link text-start" href="/me/historyView">Sản phẩm đã xem</a></li>
+  <li class="fs-5 nav-item"><a class="nav-link text-start" href="/me/historyOrder">Lịch sử đơn hàng</a></li>
+  <li class="fs-5 nav-item"><a class="nav-link text-start" href="/me/historyWarranty">Lịch sử bảo hành</a></li>
+  <li class="fs-5 nav-item"><a class="nav-link text-start" href="/logout">Đăng xuất</a></li>
+</ul>
+
+
+
+
 <script>
   let curHref = window.location.pathname;
   let host = window.location.host;
@@ -19,4 +35,5 @@
       $(ele).addClass('active');
     }
   })
+
 </script>

@@ -56,3 +56,11 @@ input::-webkit-inner-spin-button {
   height: 3em; /* Chiều cao cần thiết để hiển thị 2 dòng, phụ thuộc vào line-height */
   line-height: 1.5em; /* Điều chỉnh line-height để phù hợp với font-size */
 }
+div.floaty {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  background-color: pink;
+  top: 50%;
+  left: 0;
+}

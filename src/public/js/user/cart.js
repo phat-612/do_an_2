@@ -2,13 +2,17 @@ $(document).ready(function () {
   updateSummary();
   $(".btnMinus").click((e) => {
     const button = e.target;
+    const row = $(button.closest(".row"));
     const idVariation = button.getAttribute("data-bs-idVariation");
     const storageQuantity = button.getAttribute("data-bs-storageQuantity");
     const cartQuantity = button.getAttribute("data-bs-cartQuantity");
     const price = button.getAttribute("data-bs-price");
     const tempQuantity = parseInt(cartQuantity) - 1;
     if (tempQuantity <= 0) {
-      deleteItem(button);
+      const btnDelete = $(row.find(".btnDelete"));
+      if (!deleteItem(btnDelete)) {
+        input.value = cartQuantity;
+      }
       return;
     }
     // api trừ
@@ -34,7 +38,7 @@ $(document).ready(function () {
   });
   $(".inpQuantity").change((e) => {
     const input = e.target;
-    const row = $(input.closest("tr"));
+    const row = $(input.closest(".row"));
     const idVariation = row.find(".btnMinus").attr("data-bs-idVariation");
     const storageQuantity = row
       .find(".btnMinus")
@@ -71,7 +75,7 @@ $(document).ready(function () {
     $(".checkItem").each((index, item) => {
       if ($(item).is(":disabled")) return;
       item.checked = isChecked;
-      const row = $(item.closest("tr"));
+      const row = $(item.closest(".row"));
       if (isChecked) {
         row.find(".totalItem").addClass("isCheck");
       } else {
@@ -81,10 +85,11 @@ $(document).ready(function () {
     updateSummary();
   });
   $(".checkItem").change((e) => {
+    console.log("change");
     const isChecked = $(".checkItem:checked:not(:disabled)").length;
     const totalCheck = $(".checkItem:not(:disabled)").length;
     $(".checkAll").prop("checked", isChecked === totalCheck);
-    const row = $(e.target.closest("tr"));
+    const row = $(e.target.closest(".row"));
     if (e.target.checked) {
       row.find(".totalItem").addClass("isCheck");
     } else {
@@ -121,7 +126,7 @@ $(document).ready(function () {
       }),
     }).then((res) => {
       if (res.ok) {
-        const row = $(element.closest("tr"));
+        const row = $(element.closest(".row"));
         $(row.find(".btnMinus")).attr("data-bs-cartQuantity", tempQuantity);
         $(row.find(".btnPlus")).attr("data-bs-cartQuantity", tempQuantity);
         $(row.find("input")).val(tempQuantity);
@@ -148,7 +153,7 @@ $(document).ready(function () {
       }),
     }).then((res) => {
       if (res.ok) {
-        const row = $(button.closest("tr"));
+        const row = $(button.closest(".row"));
         row.remove();
         updateSummary();
       } else {
@@ -159,7 +164,7 @@ $(document).ready(function () {
   $(".btnOrder").click((e) => {
     e.preventDefault();
     let output = [];
-    const rows = $("tr");
+    const rows = $(".showProduct .row");
     rows.toArray().forEach((row) => {
       const isCheck = $(row).find(".checkItem").prop("checked");
       if (!isCheck) return;

@@ -117,6 +117,7 @@ class AdminController {
               doanhThu = doanhThu[0] ? doanhThu[0].totalAmount : 0;
               res.render("admin/sites/home", {
                 layout: "admin",
+                title: "Trang chủ",
                 js: "admin/home",
                 css: "admin/home",
                 orders: multipleMongooseToObject(orders),
@@ -154,6 +155,7 @@ class AdminController {
       let [currentPage, totalPage] = getDataPagination(datapagi, req, 10);
       // return res.send({ products, datapagi });
       res.render("admin/products/showProduct", {
+        title: "Danh Sách Sản Phẩm",
         layout: "admin",
         js: "admin/showProduct",
         css: "admin/showProduct",
@@ -182,6 +184,7 @@ class AdminController {
 
         const storeCategory = categoryNotIdParent.concat(categoryIdParent);
         res.render("admin/products/addProduct", {
+          title: "Thêm Sản Phẩm",
           layout: "admin",
           js: "admin/addProduct",
           css: "admin/addProduct",
@@ -254,6 +257,7 @@ class AdminController {
         }
 
         res.render("admin/products/editProduct", {
+          title: "Sửa Sản Phẩm",
           product: mongooseToObject(product),
           layout: "admin",
           js: "admin/editProduct",
@@ -346,6 +350,7 @@ class AdminController {
             }
           });
           res.render("admin/products/detailProduct", {
+            title: "Chi Tiết Sản Phẩm",
             product,
             layout: "admin",
             js: "admin/detailProduct",
@@ -501,6 +506,7 @@ class AdminController {
         Promise.all(promises).then((result) => {
           // result mảng chứa tên , thuộc tính,giá chưa giảm , giá đã giảm, giá sản phẩm ,só lượng
           res.render("admin/orders/orderDetail", {
+            title: "Chi Tiết Đơn Hàng",
             layout: "admin",
             js: "admin/orderDetail",
             css: "admin/orderDetail",
@@ -514,16 +520,21 @@ class AdminController {
   }
 
   //get /category
+
   category(req, res, next) {
     const searchName = req.query.search;
     const url = req.originalUrl;
+
     Category.find({ name: new RegExp(searchName, "i") })
       .populate("idParent", "name")
       .paginate(req)
       .then((categories) => {
         Category.countDocuments({ name: new RegExp(searchName, "i") }).then(
           (count) => {
+            // console.log(count);
+            // danh mục có con
             const categoryIdParent = [];
+            // danh mục gốc
             const categoryNotIdParent = [];
 
             categories.forEach((category) => {
@@ -539,15 +550,24 @@ class AdminController {
             page = page <= 0 ? 1 : page;
             let totalPage = Math.ceil(count / perPage);
             const storeCategory = categoryNotIdParent.concat(categoryIdParent);
-            res.render("admin/sites/category", {
-              layout: "admin",
-              js: "admin/category",
-              css: "admin/category",
-              category: multipleMongooseToObject(storeCategory),
-              currentPage: page,
-              totalPage: totalPage,
-              url,
-            });
+            Category.find()
+              .populate("idParent", "name")
+              .then((category) => {
+                res.render("admin/sites/category", {
+                  title: "Quản Lý Danh Mục",
+                  layout: "admin",
+                  js: "admin/category",
+                  css: "admin/category",
+                  // danh mục phân trang
+                  category: multipleMongooseToObject(storeCategory),
+                  // toàn bộ danh mục
+                  categories: multipleMongooseToObject(category),
+                  currentPage: page,
+                  totalPage: totalPage,
+                  url,
+                });
+                // console.log(category);
+              });
           }
         );
       });
@@ -577,6 +597,7 @@ class AdminController {
         let totalPage = Math.ceil(count / perPage);
 
         res.render("admin/sites/accessProviders", {
+          title: "Quản Lý Phân Quyền",
           layout: "admin",
           js: "admin/accessProviders",
           user: usersData,
@@ -621,23 +642,27 @@ class AdminController {
       },
     ]).then((products) => {
       return res.render("admin/sites/accessReview", {
+        title: "Quản Lý Đánh Giá",
         layout: "admin",
         products,
       });
     });
   }
   //minh luan
-  async createWarranty(req, res, next) {
-    const products = await Product.find({});
-    res.render("admin/warrantys/create-warranty", {
-      layout: "admin",
-      js: "admin/createWarranty",
-      products: multipleMongooseToObject(products),
+  createWarranty(req, res, next) {
+    Product.find().then((products) => {
+      res.render("admin/warrantys/create-warranty", {
+        title: "Tạo đơn bảo hành",
+        layout: "admin",
+        js: "admin/createWarranty",
+        products: multipleMongooseToObject(products),
+      });
     });
   }
   async showWarranty(req, res, next) {
     const warrantys = await Warranty.find({});
     res.render("admin/warrantys/show-warranty", {
+      title: "Quản lý đơn bảo hành",
       layout: "admin",
       js: "admin/showWarranty",
       warrantys: multipleMongooseToObject(warrantys),
@@ -669,6 +694,7 @@ class AdminController {
         });
 
         res.render("admin/warrantys/detail-warranty", {
+          title: "Chi Tiết Bảo Hành",
           layout: "admin",
           js: "admin/detailWarranty",
           warranty: mongooseToObject(warranty),
@@ -704,6 +730,7 @@ class AdminController {
         });
         Product.find({}).then((products) => {
           res.render("admin/warrantys/edit-warranty", {
+            title: "Chỉnh Sửa Bảo Hành",
             layout: "admin",
             js: "admin/editWarranty",
             warranty: mongooseToObject(warranty),
