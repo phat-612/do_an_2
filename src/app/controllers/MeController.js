@@ -308,6 +308,9 @@ class MeController {
         item.idVariation.toString()
       );
       Promise.all(cartItems).then((products) => {
+        // console.log(products);
+        // return res.send(products);
+        products = products.filter((product) => product != null);
         let isChangeQuantity = false;
         const resCart = products.map((product) => {
           let cartItem;

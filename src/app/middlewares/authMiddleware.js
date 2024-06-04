@@ -1,5 +1,8 @@
 function userLogin(req, res, next) {
-  if (req.session.idUser && req.session.role == "user") {
+  if (
+    req.session.idUser &&
+    (req.session.role == "user" || req.session.role == "admin")
+  ) {
     return next();
   } else {
     res.redirect("/login");

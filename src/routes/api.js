@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const upload = require("../app/middlewares/uploadMiddleware");
+const { upload, remove } = require("../app/middlewares/uploadMiddleware");
 
 const apiController = require("../app/controllers/ApiController");
 const {
@@ -8,7 +8,6 @@ const {
   userLogin,
   isLoggedIn,
 } = require("../app/middlewares/authMiddleware");
-const multer = require("multer");
 // account
 router.post("/signUp", apiController.signUp);
 router.post("/login", apiController.login);

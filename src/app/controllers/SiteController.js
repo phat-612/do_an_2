@@ -449,8 +449,10 @@ class SiteController {
     ];
     if (req.query.hasOwnProperty("_find")) {
       let searchQuery = req.query.q;
-      let words = searchQuery.split(" ");
-
+      let words = [" "];
+      if (searchQuery != "" && searchQuery != null) {
+        words = searchQuery.split(" ");
+      }
       let regexWords = words.map((word) => ({
         name: { $regex: word, $options: "i" },
       }));
@@ -535,6 +537,9 @@ class SiteController {
         url,
       });
     });
+  }
+  testSeeBody(req, res, next) {
+    res.render("test");
   }
 }
 module.exports = new SiteController();

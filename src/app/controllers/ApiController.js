@@ -23,6 +23,7 @@ var fs = require("fs");
 require("dotenv").config();
 const { sortObject } = require("../../util/function");
 const { response } = require("express");
+const { removeImgCloudinary } = require("../middlewares/uploadMiddleware");
 
 class ApiController {
   // api user,admin
@@ -55,7 +56,8 @@ class ApiController {
     let images = [];
     if (req.files && Array.isArray(req.files)) {
       images = req.files.map((file) => {
-        return file.filename;
+        let arrPath = file.path.split("/");
+        return arrPath[arrPath.length - 1];
       });
     }
     formData.images = images;
@@ -138,7 +140,12 @@ class ApiController {
         const oldImgsArray = Array.isArray(oldImgs)
           ? oldImgs
           : Object.values(oldImgs);
-        const newImgs = req.files ? req.files.map((file) => file.filename) : [];
+        const newImgs = req.files
+          ? req.files.map((file) => {
+              let arrPath = file.path.split("/");
+              return arrPath[arrPath.length - 1];
+            })
+          : [];
 
         const imagesToRemove = arrDatabaseImgList.filter(
           (image) => !oldImgsArray.includes(image)
@@ -153,13 +160,14 @@ class ApiController {
           "uploads"
         );
         const deletePromises = imagesToRemove.map((image) => {
-          const fullPath = path.join(filePath, image);
-          return new Promise((resolve, reject) => {
-            fs.unlink(fullPath, (err) => {
-              if (err) reject(err);
-              else resolve();
-            });
-          });
+          removeImgCloudinary(image);
+          // const fullPath = path.join(filePath, image);
+          // return new Promise((resolve, reject) => {
+          //   fs.unlink(fullPath, (err) => {
+          //     if (err) reject(err);
+          //     else resolve();
+          //   });
+          // });
         });
 
         return Promise.all(deletePromises).then(() => {
@@ -234,9 +242,12 @@ class ApiController {
           "img",
           "uploads"
         );
+
+        // xóa ảnh
         product.images.forEach((image) => {
-          const fullPath = path.join(filePath, image);
-          fs.unlinkSync(fullPath);
+          // const fullPath = path.join(filePath, image);
+          // fs.unlinkSync(fullPath);
+          removeImgCloudinary(image);
         });
 
         let arrIdvar = [];
@@ -1030,7 +1041,9 @@ class ApiController {
     if (!req.files) {
       res.send("Không tìm thấy ảnh");
     } else {
-      image = req.files[0].filename;
+      // image = req.files[0].filename;
+      let arrPath = req.files[0].path.split("/");
+      image = arrPath[arrPath.length - 1];
     }
     // console.log(image);
     formData.image = image;
@@ -1070,23 +1083,26 @@ class ApiController {
       if (req.files && req.files.length > 0) {
         // Xóa ảnh cũ nếu có
         if (oldImageFilename) {
-          let oldImagePath = path.join(
-            __dirname,
-            "..",
-            "..",
-            "public",
-            "img",
-            "uploads",
-            oldImageFilename
-          );
-          //kiểm tra có hay không
-          if (fs.existsSync(oldImagePath)) {
-            fs.unlinkSync(oldImagePath);
-          }
+          // let oldImagePath = path.join(
+          //   __dirname,
+          //   "..",
+          //   "..",
+          //   "public",
+          //   "img",
+          //   "uploads",
+          //   oldImageFilename
+          // );
+          // //kiểm tra có hay không
+          // if (fs.existsSync(oldImagePath)) {
+          //   fs.unlinkSync(oldImagePath);
+          // }
+          removeImgCloudinary(oldImageFilename);
         }
 
         // Cập nhật đường dẫn ảnh mới
-        req.body.image = req.files[0].filename;
+        // req.body.image = req.files[0].filename;
+        let arrPath = req.files[0].path.split("/");
+        req.body.image = arrPath[arrPath.length - 1];
       } else {
         // Nếu không có ảnh mới, giữ nguyên ảnh cũ
         req.body.image = oldImageFilename;
@@ -1120,11 +1136,13 @@ class ApiController {
       if (!banner) {
         res.send("không tìm thấy");
       } else {
-        const fullPath = path.join(filePath, banner.image);
-
-        if (fs.existsSync(fullPath)) {
-          fs.unlinkSync(fullPath); // delete the file
-        }
+        // //tên hình
+        // const fullPath = path.join(filePath, banner.image);
+        // // console.log(fullPath);
+        // if (fs.existsSync(fullPath)) {
+        //   fs.unlinkSync(fullPath); // delete the file
+        // }
+        removeImgCloudinary(banner.image);
 
         Banner.deleteOne({ _id: Id }).then(() => {
           req.flash("message", {

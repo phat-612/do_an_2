@@ -54,7 +54,7 @@
       {{#each products}}
       <tr>
         <td>{{this.name}}</td>
-        <td><img src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}" /></td>
+        <td><img src="{{showImgUpload this.images}}" /></td>
         <td>{{this.idCategory.name}}</td>
         <td>
           <div class="row">
@@ -69,9 +69,9 @@
               </a>
             </div>
             <div class="col-4">
-              <form action="/api/removeProduct" method="post">
+              <form action="/api/removeProduct" method="post" class="form-removeProduct">
                 <input type="text" name="_id" value="{{this._id}}" hidden>
-                <Button type="submit" class="btn btn-danger "><i class="bi bi-trash"></i></Button>
+                <Button type="submit" class="btn btn-danger btn-removeProduct"><i class="bi bi-trash"></i></Button>
               </form>
             </div>
           </div>

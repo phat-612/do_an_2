@@ -85,7 +85,7 @@
     {{#each topProducts}}
     <div class="col-3">
       <div class="card" style="width: 300px; height: 470px;">
-        <img class="card-img-top w-100" src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}">
+        <img class="card-img-top w-100" src="{{showImgUpload this.images}}">
         <div class="card-body row d-flex align-content-end flex-wrap">
           <div class="col-12">
             <a href="/admin/product/{{this._id}}/detail">
@@ -105,7 +105,7 @@
     {{#each topReviewProduct}}
     <div class="col-3">
       <div class="card" style="width: 300px; height: 470px;">
-        <img class="card-img-top w-100" src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}">
+        <img class="card-img-top w-100" src="{{showImgUpload this.images}}">
         <div class="card-body row d-flex align-content-end flex-wrap">
           <div class="col-12">
             <a href="/admin/product/{{this._id}}/detail">
@@ -125,7 +125,7 @@
     {{#each topSeenProduct}}
     <div class="col-3">
       <div class="card" style="width: 300px; height: 470px;">
-        <img class="card-img-top w-100" src="/img/uploads/{{#each this.images}}{{#if @first}}{{this}}{{/if}}{{/each}}">
+        <img class="card-img-top w-100" src="{{showImgUpload this.images}}">
         <div class="card-body row d-flex align-content-end flex-wrap">
           <div class="col-12">
             <a href="/admin/product/{{this._id}}/detail">

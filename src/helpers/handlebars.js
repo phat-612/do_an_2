@@ -40,7 +40,7 @@ module.exports = {
       img = img[0];
     }
     if (img) {
-      return `/${process.env.PATH_IMG_UPLOAD}/${img}`;
+      return `https://res.cloudinary.com/dzagdwvrg/image/upload/v1717484298/uploads/${img}`;
     }
     return "";
   },

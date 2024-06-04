@@ -13,7 +13,7 @@ const {
 function route(app) {
   // app.use("/product", productRouter);
   app.use("/api", apiRouter);
-  app.use("/admin", adminRouter);
+  app.use("/admin", adminLogin, adminRouter);
   app.use("/me", isLoggedIn, meRouter);
   app.use("/", siteRouter);
   app.use(function (req, res, next) {

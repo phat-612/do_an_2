@@ -31,7 +31,7 @@ a {
 }
 /* color */
 .custom-bg-red {
-  background-color: var(--primary-color);
+  background-color: var(--primary-color) !important;
 }
 .custom-bg-gray {
   background-color: #f3f4f6;
