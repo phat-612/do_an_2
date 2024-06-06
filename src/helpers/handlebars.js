@@ -587,6 +587,19 @@ module.exports = {
     let urlSort = url.format(parseUrl);
     return urlSort;
   },
+  getFilterUrl: (tempUrl) => {
+    let parseUrl = url.parse(tempUrl, true);
+    delete parseUrl.query._sort;
+    delete parseUrl.query._limit;
+    delete parseUrl.query._page;
+    delete parseUrl.query.match;
+    if (parseUrl.query._filter == undefined) {
+      parseUrl.query._filter = "";
+    }
+    parseUrl.search = querystring.stringify(parseUrl.query);
+    let urlFilter = url.format(parseUrl);
+    return urlFilter;
+  },
 
   createHiddenInput: (attributes, index) => {
     let htmlinputHidden = ``;

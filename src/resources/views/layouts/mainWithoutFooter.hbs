@@ -1,43 +1,41 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="/img/static/icon.jpg">
   <title>{{title}}</title>
   <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
   <link rel="stylesheet" href="/css/nouislider.css">
-  <link rel="stylesheet" href="/css/dataTables.dataTables.css" />
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+    integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="/css/style.css">
 
   {{#if css}}
-  <link rel="stylesheet" href="/css/{{css}}.css" />
+  <link rel="stylesheet" href="/css/{{css}}.css">
   {{/if}}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+    integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
-  <header class="sticky-top">
-    {{>header-admin}}
-  </header>
-  <div class="admin-container">
-    {{{body}}}
-  </div>
+  {{> header-user}}
+  {{{body}}}
   <script src="https://kit.fontawesome.com/3505ae4a94.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  {{!--
-  <script src="/js/bootstrap.bundle.js"></script> --}}
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
   <script src="/js/bootstrap.js"></script>
   <script src="/js/nouislider.js"></script>
-  <script src="/js/dataTables.dataTables.js"></script>
 
-
-
-  <div id="liveToast" class="toast align-items-center position-fixed top-0 end-0 p-3
+  {{#if js}}
+  <script src="/js/{{js}}.js"></script>
+  {{/if}}
+  {{#if message}}
+  <div id="liveToast" class="toast align-items-center position-fixed top-0 end-0 p-3 z-3
           {{statusToast message.type}}" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
       <div class="toast-body text-white">
@@ -46,14 +44,9 @@
       <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
-  {{#if message}}
   <script>
     $('document').ready(function () { $('#liveToast').toast('show'); })
   </script>
-  {{/if}}
-  {{!-- card scroll --}}
-  {{#if js}}
-  <script src="/js/{{js}}.js"></script>
   {{/if}}
 </body>
 

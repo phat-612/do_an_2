@@ -25,6 +25,36 @@
       </div>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 rightul">
         <li class="nav-item">
+          <form style="display: block;" id="formFilter" action="{{getFilterUrl url}}" method="get">
+            <ul class="navbar-nav">
+              <li class="d-flex align-items-center">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" value="soldOut" id="flexCheckDefault" name="match"
+                    {{isRadio match "soldOut" }}>
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Hết Hàng
+                  </label>
+                </div>
+              </li>
+              <li class="d-flex align-items-center">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" value="discount" id="flexCheckDefault" name="match"
+                    {{isRadio match "discount" }}>
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Giảm Giá
+                  </label>
+                </div>
+              </li>
+              <li>
+                <button type="submit" class="btn btn-primary">Lọc</button>
+              </li>
+            </ul>
+          </form>
+        </li>
+        <li style="margin-left: 10px;" class="nav-item">
+          <a href="/admin/product" class="btn btn-warning">Bỏ Lọc</a>
+        </li>
+        <li class="nav-item">
           <form class="d-flex">
             <input class="form-control me-2" name="q" required type="search" placeholder="TÌM KIẾM"
               aria-label="Search" />
@@ -46,7 +76,7 @@
       <tr>
         <th scope="col" class="col-3">TEN</th>
         <th scope="col" class="col-2">HINH ANH</th>
-        <th scope="col" class="col-3">DANH MUC</th>
+        <th scope="col" class="col-2">DANH MUC</th>
         <th scope="col" class="col-1">HANH DONG</th>
       </tr>
     </thead>
@@ -69,13 +99,13 @@
               </a>
             </div>
             <div class="col-4">
-              <form action="/api/removeProduct" method="post" class="form-removeProduct">
+              <form style="display: block;" action="/api/removeProduct" method="post" class="form-removeProduct">
                 <input type="text" name="_id" value="{{this._id}}" hidden>
                 <Button type="submit" class="btn btn-danger btn-removeProduct"><i class="bi bi-trash"></i></Button>
               </form>
             </div>
           </div>
-        </td> 
+        </td>
       </tr>
       {{/each}}
     </tbody>

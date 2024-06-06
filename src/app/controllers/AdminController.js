@@ -138,18 +138,36 @@ class AdminController {
   product(req, res, next) {
     const url = req.originalUrl;
     const find = req.query.q;
-    let match = {};
+    let match = "";
+    let arrMatch = [];
+    // lọc theo discout
+    if (req.query.hasOwnProperty("_filter")) {
+      match = req.query.match || "discount";
+      if (match === "discount") {
+        arrMatch.push({
+          "discount.percent": { $gt: 0 },
+          "discount.startDay": { $lte: new Date() },
+          "discount.endDay": { $gte: new Date() },
+        });
+      } else if (match == "soldOut") {
+        arrMatch.push({ "variations.quantity": 0 });
+      }
+    }
     if (find && find.trim() != "") {
       let words = find.split(" ");
 
       let regexWords = words.map((word) => ({
         name: { $regex: word, $options: "i" },
       }));
-      match = { $and: regexWords };
+      arrMatch.push({ $and: regexWords });
+    }
+    let conditionMatch = {};
+    if (arrMatch.length != 0) {
+      conditionMatch = { $and: arrMatch };
     }
     Promise.all([
-      Product.find(match).populate("idCategory", "name").paginate(req),
-      Product.find(match),
+      Product.find(conditionMatch).populate("idCategory", "name").paginate(req),
+      Product.find(conditionMatch),
     ]).then(([products, datapagi]) => {
       // return res.send(products);
       let [currentPage, totalPage] = getDataPagination(datapagi, req, 10);
@@ -160,6 +178,7 @@ class AdminController {
         js: "admin/showProduct",
         css: "admin/showProduct",
         products: multipleMongooseToObject(products),
+        match,
         currentPage,
         totalPage,
         url,

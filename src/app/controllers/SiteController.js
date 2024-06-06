@@ -78,11 +78,13 @@ class SiteController {
   }
   login(req, res, next) {
     res.render("user/sites/login", {
+      layout: "mainWithoutFooter",
       title: "Đăng nhập",
     });
   }
   signUp(req, res, next) {
     res.render("user/sites/signUp", {
+      layout: "mainWithoutFooter",
       title: "Đăng ký",
       js: "user/signUp",
     });
@@ -307,8 +309,6 @@ class SiteController {
             }
             user.save();
           });
-        } else {
-          console.log("chưa đăng nhập");
         }
         Product.updateOne({ slug: slugProduct }, { $inc: { view: 1 } }).exec();
         let curVariationSlug = slugVariation

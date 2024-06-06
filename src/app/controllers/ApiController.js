@@ -18,6 +18,7 @@ const diacritics = require("diacritics");
 const slugify = require("slugify");
 var pdf = require("pdf-creator-node");
 var fs = require("fs");
+const nodemailer = require("nodemailer");
 
 // ------------------------
 require("dotenv").config();
@@ -537,6 +538,107 @@ class ApiController {
       });
     });
   }
+  forgotPassword(req, res, next) {
+    const email = req.body.email;
+    // nếu email không hợp lệ thì return về trang login kèm thông báo
+    // nếu email hợp lệ thì gửi email mật khẩu mới cho người dùng
+    if (!validator.validate(email)) {
+      req.flash("message", {
+        type: "danger",
+        message: "Email không hợp lệ",
+      });
+      return res.redirect("/login");
+    }
+    UserLogin.findOne({ email }).then((userLogin) => {
+      if (!userLogin) {
+        req.flash("message", {
+          type: "danger",
+          message: "Email không tồn tại",
+        });
+        return res.redirect("/login");
+      }
+      const newPassword = crypto.randomBytes(4).toString("hex");
+
+      const hashPassword = bcrypt.hashSync(
+        newPassword,
+        parseInt(process.env.SALT_OR_ROUNDS)
+      );
+      const activationToken = crypto.randomBytes(20).toString("hex");
+      const activationLink = `http://${process.env.HOST}:${process.env.PORT}/api/activatePassword?token=${activationToken}&email=${email}`;
+      // ---------------
+      // Tạo transporter
+      let transporter = nodemailer.createTransport({
+        service: "gmail",
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false,
+        auth: {
+          user: process.env.EMAIL,
+          pass: process.env.PASSWORD,
+        },
+      });
+
+      // Tạo email
+      const mailOptions = {
+        from: process.env.EMAIL,
+        to: email,
+        subject: "Mật khẩu mới",
+        text: `Mật khẩu mới của bạn là: ${newPassword}. ${activationLink}`,
+      };
+
+      // Gửi email
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        }
+      });
+      // ---------------
+      UserLogin.updateOne(
+        { email },
+        { tempPassword: hashPassword, activationToken }
+      ).then(() => {
+        req.flash("message", {
+          type: "success",
+          message: "Mật khẩu mới đã được gửi vào email của bạn",
+        });
+        res.redirect("/login");
+      });
+    });
+  }
+  activatePassword(req, res, next) {
+    const { token, email } = req.query;
+    UserLogin.findOne({ email }).then((userLogin) => {
+      if (!userLogin) {
+        res.flash("message", {
+          type: "danger",
+          message: "Email không tồn tại",
+        });
+        return res.redirect("/login");
+      }
+      if (userLogin.activationToken !== token) {
+        res.flash("message", {
+          type: "danger",
+          message: "Link không hợp lệ",
+        });
+        return res.redirect("/login");
+      }
+      UserLogin.updateOne(
+        { email },
+        {
+          password: userLogin.tempPassword,
+          tempPassword: "",
+          activationToken: "",
+        }
+      ).then(() => {
+        req.flash("message", {
+          type: "success",
+          message: "Kích hoạt mật khẩu thành công",
+        });
+        return res.redirect("/login");
+      });
+    });
+  }
+
   updateProfile(req, res, next) {
     const formData = req.body;
     User.updateOne(
@@ -686,6 +788,10 @@ class ApiController {
               ],
             });
             return newCart.save().then(() => {
+              req.flash("message", {
+                type: "success",
+                message: "Thêm vào giỏ hàng thành công",
+              });
               return res.redirect("back");
             });
           }

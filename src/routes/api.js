@@ -11,6 +11,8 @@ const {
 // account
 router.post("/signUp", apiController.signUp);
 router.post("/login", apiController.login);
+router.post("/forgotPassword", apiController.forgotPassword);
+router.get("/activatePassword", apiController.activatePassword);
 router.post("/address", isLoggedIn, apiController.storeAddress);
 router.post("/cart", isLoggedIn, apiController.addItemToCart);
 router.post("/order", isLoggedIn, apiController.createOrder);
