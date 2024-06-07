@@ -4,7 +4,7 @@
       <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner h-25">
           {{#each banners}}
-          <div class="carousel-item {{#if (compare @index 0)}}active{{/if}}">
+          <div class="carousel-item {{#if (compare @index 0)}}active{{/if}}" data-bs-interval="4000">
             <a href="{{this.link}}"><img src="{{showImgUpload this.image}}"
                 class="d-block w-100 owl-lazy custom-fit-img-400px" alt="{{this.img}}"></a>
           </div>
@@ -23,6 +23,7 @@
       </div>
     </div>
   </div>
+  {{#if saleProducts}}
   <div class="mt-3">
     <a href="/search" class="col-auto fs-4 text-uppercase text-black">Sản phẩm đang giảm giá</a>
     <div class="owl-carousel owl-theme">
@@ -31,6 +32,7 @@
       {{/each}}
     </div>
   </div>
+  {{/if}}
 
   {{! sản phẩm nổi bậc cho từng danh mục, mỗi mục 10 sản phẩm được xem nhiều nhất }}
   {{#each categories}}

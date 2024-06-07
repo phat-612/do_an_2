@@ -46,7 +46,8 @@
       </div>
       <div class="col-lg-6">
         <input id="inpDateBirth" class="w-100 fs-4 border-top-0 border-start-0 border-end-0 border-bottom-1 border-2"
-          name="birthday" type="date" value='{{formatDate user.birthday "YYYY-MM-DD"}}' disabled />
+          name="birthday" type="date" value='{{formatDate user.birthday "YYYY-MM-DD"}}'
+          max="{{formatDate nowDate 'YYYY-MM-DD'}}" disabled />
       </div>
     </div>
     <div class="row mb-lg-1 mb-3">

@@ -30,6 +30,7 @@ class MeController {
           birthday: user.birthday,
           createdAt: user.createdAt,
         },
+        nowDate: new Date(),
       });
     });
   }
@@ -301,7 +302,7 @@ class MeController {
       }
       const cartItems = cart.items.map((item) => {
         return Product.findOne({ "variations._id": item.idVariation }).select(
-          "name variations discount images"
+          "name variations discount images slug"
         );
       });
       let arrIdVariation = cart.items.map((item) =>
@@ -340,6 +341,7 @@ class MeController {
             name: product.name,
             image: product.images[0],
             idVariation: variation._id,
+            slug: product.slug,
           };
         });
         cart.save();

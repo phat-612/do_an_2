@@ -18,7 +18,8 @@
       <select class="form-control" name="idCategory" id="">
          <option value="">Chọn Danh Mục</option>
          {{#each categorys}}
-         <option value="{{this._id}}" {{isSelectedObejctId ../product.idCategory this._id}}>{{this.name}}</option>
+         <option value="{{this._id}}" {{isSelectedObejctId ../product.idCategory this._id}}>
+            {{this.idParent.name}}&gt{{this.name}}</option>
          {{/each}}
       </select>
       {{!-- -------------------------------- --}}
@@ -134,12 +135,12 @@
          <div class="col">
             <label for="discountStart" class="form-label fs-5">Ngày bắt đầu :</label>
             <input type="date" name="discount[startDay]" id="discountStart" class="form-control"
-               value="{{formatDate product.discount.startDay " YYYY-MM-DD"}}" disabled>
+               value="{{formatDate product.discount.startDay 'YYYY-MM-DD'}}" disabled>
          </div>
          <div class="col">
             <label for="discountEnd" class="form-label fs-5">Ngày kết thúc :</label>
             <input type="date" name="discount[endDay]" id="discountEnd" class="form-control"
-               value="{{formatDate product.discount.endDay " YYYY-MM-DD"}}" disabled>
+               value="{{formatDate product.discount.endDay 'YYYY-MM-DD'}}" disabled>
          </div>
       </div>
       {{!-- ------------------------- --}}

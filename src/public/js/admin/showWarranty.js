@@ -31,11 +31,13 @@ $(document).ready(function () {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        if (data.status == "error") {
+          $("#liveToast").addClass("bg-danger");
+        } else {
+          $("#liveToast").addClass("bg-success");
+        }
         $(".toast-body").text(data.message);
-        $("#liveToast").addClass("bg-success");
         $("#liveToast").toast("show");
-        console.log("Yêu cầu đã được gửi thành công");
       })
       .catch((error) => console.error("Lỗi:", error));
   });

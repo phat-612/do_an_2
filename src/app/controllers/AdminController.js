@@ -213,81 +213,95 @@ class AdminController {
   }
   //get /product/edit/:id
   editProduct(req, res, next) {
-    Category.find().then((categorys) => {
-      Product.findById(req.params.id).then((product) => {
-        const productVariations = product.variations;
-        const productAttrs = product.variations.map((detail) => {
-          return detail.attributes;
-        });
-        let attributes1 = {};
-        let attributes2 = {};
-
-        productAttrs.forEach((attr) => {
-          for (let key in attr) {
-            let target =
-              key === Object.keys(attr)[0] ? attributes1 : attributes2;
-            if (!target[key]) {
-              target[key] = [attr[key]];
-            } else if (!target[key].includes(attr[key])) {
-              target[key].push(attr[key]);
-            }
-          }
-        });
-        const attributes1Val = Object.values(attributes1).flat();
-        const attributes2Val = Object.values(attributes2).flat();
-
-        let dataVariation = {
-          dataTable: [],
-        };
-        let arrKey = Object.keys(productVariations[0].attributes);
-        arrKey.forEach((key) => {
-          let arrValue = [
-            ...new Set(productVariations.map((item) => item.attributes[key])),
-          ];
-          dataVariation[key] = arrValue;
-        });
-        if (arrKey.length === 1) {
-          dataVariation.dataTable = productVariations;
-        } else {
-          dataVariation[arrKey[0]].forEach((value1) => {
-            dataVariation[arrKey[1]].forEach((value2) => {
-              let temp = productVariations.find(
-                (item) =>
-                  JSON.stringify(item.attributes) ==
-                  JSON.stringify({
-                    [arrKey[0]]: value1,
-                    [arrKey[1]]: value2,
-                  })
-              );
-              if (!temp) {
-                dataVariation.dataTable.push({
-                  price: 0,
-                  quantity: 0,
-                  attributes: { [arrKey[0]]: value1, [arrKey[1]]: value2 },
-                  sold: 0,
-                  _id: "",
-                  slug: "",
-                });
-              } else {
-                dataVariation.dataTable.push(temp);
-              }
-            });
+    Category.find()
+      .populate("idParent", "name")
+      .then((categorys) => {
+        Product.findById(req.params.id).then((product) => {
+          const productVariations = product.variations;
+          const productAttrs = product.variations.map((detail) => {
+            return detail.attributes;
           });
-        }
+          let attributes1 = {};
+          let attributes2 = {};
 
-        res.render("admin/products/editProduct", {
-          title: "Sửa Sản Phẩm",
-          product: mongooseToObject(product),
-          layout: "admin",
-          js: "admin/editProduct",
-          css: "admin/editProduct",
-          categorys: multipleMongooseToObject(categorys),
-          dataVariation: dataVariation,
-          attributes1: attributes1Val.reverse(),
-          attributes2: attributes2Val.reverse(),
+          productAttrs.forEach((attr) => {
+            for (let key in attr) {
+              let target =
+                key === Object.keys(attr)[0] ? attributes1 : attributes2;
+              if (!target[key]) {
+                target[key] = [attr[key]];
+              } else if (!target[key].includes(attr[key])) {
+                target[key].push(attr[key]);
+              }
+            }
+          });
+          const attributes1Val = Object.values(attributes1).flat();
+          const attributes2Val = Object.values(attributes2).flat();
+
+          let dataVariation = {
+            dataTable: [],
+          };
+          let arrKey = Object.keys(productVariations[0].attributes);
+          arrKey.forEach((key) => {
+            let arrValue = [
+              ...new Set(productVariations.map((item) => item.attributes[key])),
+            ];
+            dataVariation[key] = arrValue;
+          });
+          if (arrKey.length === 1) {
+            dataVariation.dataTable = productVariations;
+          } else {
+            dataVariation[arrKey[0]].forEach((value1) => {
+              dataVariation[arrKey[1]].forEach((value2) => {
+                let temp = productVariations.find(
+                  (item) =>
+                    JSON.stringify(item.attributes) ==
+                    JSON.stringify({
+                      [arrKey[0]]: value1,
+                      [arrKey[1]]: value2,
+                    })
+                );
+                if (!temp) {
+                  dataVariation.dataTable.push({
+                    price: 0,
+                    quantity: 0,
+                    attributes: { [arrKey[0]]: value1, [arrKey[1]]: value2 },
+                    sold: 0,
+                    _id: "",
+                    slug: "",
+                  });
+                } else {
+                  dataVariation.dataTable.push(temp);
+                }
+              });
+            });
+          }
+          const categoryIdParent = [];
+          const categoryNotIdParent = [];
+
+          categorys.forEach((category) => {
+            if (category.idParent) {
+              categoryIdParent.push(category);
+            } else {
+              categoryNotIdParent.push(category);
+            }
+          });
+
+          const storeCategory = categoryNotIdParent.concat(categoryIdParent);
+          // return res.json(storeCategory);
+          res.render("admin/products/editProduct", {
+            title: "Sửa Sản Phẩm",
+            product: mongooseToObject(product),
+            layout: "admin",
+            js: "admin/editProduct",
+            css: "admin/editProduct",
+            categorys: multipleMongooseToObject(storeCategory),
+            dataVariation: dataVariation,
+            attributes1: attributes1Val.reverse(),
+            attributes2: attributes2Val.reverse(),
+          });
         });
       });
-    });
   }
   // fat pan phước
   // return res.json({
@@ -545,6 +559,7 @@ class AdminController {
     const url = req.originalUrl;
 
     Category.find({ name: new RegExp(searchName, "i") })
+      .sort({ idParent: 1 })
       .populate("idParent", "name")
       .paginate(req)
       .then((categories) => {
@@ -572,6 +587,8 @@ class AdminController {
             Category.find()
               .populate("idParent", "name")
               .then((category) => {
+                // console.log(category);
+
                 res.render("admin/sites/category", {
                   title: "Quản Lý Danh Mục",
                   layout: "admin",
@@ -585,7 +602,6 @@ class AdminController {
                   totalPage: totalPage,
                   url,
                 });
-                // console.log(category);
               });
           }
         );

@@ -22,7 +22,7 @@ const nodemailer = require("nodemailer");
 
 // ------------------------
 require("dotenv").config();
-const { sortObject } = require("../../util/function");
+const { sortObject, getDiscount } = require("../../util/function");
 const { response } = require("express");
 const { removeImgCloudinary } = require("../middlewares/uploadMiddleware");
 
@@ -289,29 +289,52 @@ class ApiController {
     const formData = req.body;
     const idParent = formData.idParent || null; // Xử lý giá trị trống và đặt giá trị mặc định là null
     formData.idParent = idParent;
-    const category = new Category(formData);
-    category.save().then(() => {
-      req.flash("message", {
-        type: "success",
-        message: "Danh mục đã được thêm thành công!",
-      });
-      res.redirect("back");
+
+    Category.findOne({ name: formData.name }).then((existingCategory) => {
+      if (existingCategory) {
+        req.flash("message", {
+          type: "danger",
+          message: "Danh mục với tên này đã tồn tại!",
+        });
+        res.redirect("back");
+      } else {
+        const category = new Category(formData);
+        category.save().then(() => {
+          req.flash("message", {
+            type: "success",
+            message: "Danh mục đã được thêm thành công!",
+          });
+          res.redirect("back");
+        });
+      }
     });
   }
   updateCategory(req, res, next) {
-    // return res.send(req.body);
     const idParent = req.body.idParent || null;
     req.body.idParent = idParent;
     console.log(idParent);
-    Category.updateOne({ _id: req.params.id }, { $set: req.body })
-      .exec()
-      .then(() => {
-        req.flash("message", {
-          type: "success",
-          message: "Danh mục đã được cập nhật thành công!",
-        });
-        res.redirect("back");
-      });
+
+    Category.findOne({ name: req.body.name, _id: { $ne: req.params.id } }).then(
+      (existingCategory) => {
+        if (existingCategory) {
+          req.flash("message", {
+            type: "danger",
+            message: "Danh mục với tên này đã tồn tại!",
+          });
+          res.redirect("back");
+        } else {
+          Category.updateOne({ _id: req.params.id }, { $set: req.body }).then(
+            () => {
+              req.flash("message", {
+                type: "success",
+                message: "Danh mục đã được cập nhật thành công!",
+              });
+              res.redirect("back");
+            }
+          );
+        }
+      }
+    );
   }
 
   deleteCategory(req, res, next) {
@@ -383,13 +406,13 @@ class ApiController {
     Warranty.findById(id).then((warranty) => {
       if (statusOrder.indexOf(status) <= statusOrder.indexOf(warranty.status)) {
         res.json({
-          status: "Thất bại",
+          status: "error",
           message: "Cập nhật không thành công. Thứ tự trạng thái không hợp lệ.",
         });
       } else {
         return Warranty.updateOne({ _id: id }, { status: status }).then(() => {
           res.json({
-            status: "Thành công",
+            status: "Success",
             message: "Cập nhật thành công",
           });
         });
@@ -890,17 +913,12 @@ class ApiController {
             console.log("sản phẩm " + product.name + " không đủ số lượng");
             throw new Error("Sản phẩm " + product.name + " không đủ số lượng");
           }
-          let discount;
-          if (
-            Date.now() > product.discount.startDay &&
-            Date.now() < product.discount.endDay
-          ) {
-            discount = product.discount.percent;
-          } else {
-            discount = 0;
-          }
+          let discount = getDiscount(product.discount);
           // kiểm tra giá sản phẩm
-          if (detail.price != (variation.price * (100 - discount)) / 100) {
+          if (
+            Math.ceil(detail.price) !=
+            Math.ceil((variation.price * (100 - discount)) / 100)
+          ) {
             console.log("sản phẩm " + product.name + " đã thay đổi giá bán");
             throw new Error(
               "Sản phẩm " + product.name + " đã thay đổi giá bán"
@@ -910,7 +928,7 @@ class ApiController {
           return {
             idVariation: detail.idVariation,
             quantity: detail.quantity,
-            price: detail.price,
+            price: variation.price,
             discount,
           };
         }
@@ -918,6 +936,7 @@ class ApiController {
     });
     Promise.all(promise)
       .then((details) => {
+        console.log(details);
         // cập nhật số lượng sản phẩm và xóa sản phẩm khỏi giỏ hàng
         details.forEach((detail) => {
           Product.updateOne(
@@ -1262,91 +1281,95 @@ class ApiController {
   }
   // trang order
   changeStatus(req, res) {
-    Order.findOne({ _id: req.params.id })
-      .then((order) => {
-        if (order.status === "shipping" && req.body.status === "pending") {
-          return res.status(400).send("Không thể đổi trạng thái");
-        }
-        if (order.status === "success" || order.status === "failed") {
-          return res
-            .status(400)
-            .send(
-              "Invalid status change: Cannot change status when current status is 'success' or 'failed'"
-            );
-        }
+    Order.findOne({ _id: req.params.id }).then((order) => {
+      if (order.status === "shipping" && req.body.status === "pending") {
+        req.flash("message", {
+          type: "danger",
+          message: "Thay đổi trạng thái không thành công",
+        });
+        return res.redirect("back");
+      }
+      if (order.status === "success" || order.status === "failed") {
+        req.flash("message", {
+          type: "danger",
+          message: "Thay đổi trạng thái không thành công",
+        });
+        return res.redirect("back");
+      }
 
-        // Cập nhật trạng thái
-        order.status = req.body.status;
+      // Cập nhật trạng thái
+      order.status = req.body.status;
 
-        if (req.body.status === "failed") {
-          order.details.forEach((detail) => {
-            Product.updateOne(
-              { "variations._id": detail.idVariation },
-              {
-                $inc: {
-                  "variations.$.quantity": detail.quantity,
-                },
-              }
-            ).then((result) => {
-              if (result.nModified === 0) {
-                console.log("Product not found");
-              }
-            });
+      if (req.body.status === "failed") {
+        order.details.forEach((detail) => {
+          Product.updateOne(
+            { "variations._id": detail.idVariation },
+            {
+              $inc: {
+                "variations.$.quantity": detail.quantity,
+              },
+            }
+          ).then((result) => {
+            if (result.nModified === 0) {
+              console.log("Product not found");
+            }
           });
-        } else if (req.body.status === "success") {
-          order.details.forEach((detail) => {
-            Product.updateOne(
-              { "variations._id": detail.idVariation },
-              { $inc: { "variations.$.sold": detail.quantity } }
-            ).then((result) => {
-              if (result.nModified === 0) {
-                console.log("Product not found");
-              }
-            });
+        });
+      } else if (req.body.status === "success") {
+        order.details.forEach((detail) => {
+          Product.updateOne(
+            { "variations._id": detail.idVariation },
+            { $inc: { "variations.$.sold": detail.quantity } }
+          ).then((result) => {
+            if (result.nModified === 0) {
+              console.log("Product not found");
+            }
           });
-        }
+        });
+      }
 
-        if (order.paymentDetail.method !== "cod") {
-          return order.save().then(() => {
-            return res.redirect("back");
-          });
-        }
-
-        if (
-          req.body.status === "pending" &&
-          order.paymentDetail.status === "pending"
-        ) {
-          order.paymentDetail.status = "pending";
-        }
-
-        if (
-          req.body.status === "shipping" &&
-          order.paymentDetail.status === "pending"
-        ) {
-          order.paymentDetail.status = "pending";
-        }
-
-        if (
-          req.body.status === "success" &&
-          order.paymentDetail.status !== "failed"
-        ) {
-          order.paymentDetail.status = "success";
-        }
-
-        if (
-          req.body.status === "failed" &&
-          order.paymentDetail.status !== "success"
-        ) {
-          order.paymentDetail.status = "failed";
-        }
-
-        order.save().then(() => {
+      if (order.paymentDetail.method !== "cod") {
+        return order.save().then(() => {
           return res.redirect("back");
         });
-      })
-      .catch((error) => {
-        res.status(500).send("An error occurred." + error);
+      }
+
+      if (
+        req.body.status === "pending" &&
+        order.paymentDetail.status === "pending"
+      ) {
+        order.paymentDetail.status = "pending";
+      }
+
+      if (
+        req.body.status === "shipping" &&
+        order.paymentDetail.status === "pending"
+      ) {
+        order.paymentDetail.status = "pending";
+      }
+
+      if (
+        req.body.status === "success" &&
+        order.paymentDetail.status !== "failed"
+      ) {
+        order.paymentDetail.status = "success";
+      }
+
+      if (
+        req.body.status === "failed" &&
+        order.paymentDetail.status !== "success"
+      ) {
+        order.paymentDetail.status = "failed";
+      }
+
+      order.save().then(() => {
+        req.flash("message", {
+          type: "success",
+          message: "Thay đổi trạng thái thành công",
+        });
+        return res.redirect("back");
       });
+    });
   }
   // order admin
 
