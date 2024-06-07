@@ -11,8 +11,8 @@
           <a class="nav-link text-white " aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item dropdown">
-          <p style="margin-bottom: 0;" class="nav-link text-white" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-            aria-expanded="false">Danh
+          <p style="margin-bottom: 0;" class="nav-link text-white pe-auto" role="button" id="dropdownMenuButton1"
+            data-bs-toggle="dropdown" aria-expanded="false">Danh
             mục
           </p>
 
@@ -30,29 +30,31 @@
         </li>
 
       </ul>
-      <form action="/search" class="d-flex me-2">
-        <input type="text" name="_find" hidden>
-        {{!-- <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">
-        <button class="btn btn-outline-light text-danger bg-white" type="submit">Tìm</button> --}}
-        <div class="input-group">
-          <input type="text" class="form-control border-0" placeholder="Từ khóa tìm kiếm..." name="q">
-          <button class="btn btn-outline-secondary bg-white border-0 text-secondary" type="submit"><i
-              class="bi bi-search"></i></button>
-        </div>
-      </form>
-      {{#if name}}
-      <a class="navbar-brand fs-5 d-flex align-items-center" href="/me">
-        <span class="text-white">{{name}}</span>
-        <img src="https://www.w3schools.com/bootstrap5/img_avatar1.png" alt="Avatar Logo"
-          style="width:40px; margin-left:5px;" class="rounded-pill" />
-      </a>
+      <div class="gap-3 nav justify-content-center">
+        <form action="/search" class="d-flex me-2">
+          <input type="text" name="_find" hidden>
+          {{!-- <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">
+          <button class="btn btn-outline-light text-danger bg-white" type="submit">Tìm</button> --}}
+          <div class="input-group">
+            <input type="text" class="form-control border-0" placeholder="Từ khóa tìm kiếm..." name="q">
+            <button class="btn btn-outline-secondary bg-white border-0 text-secondary" type="submit"><i
+                class="bi bi-search"></i></button>
+          </div>
+        </form>
+        {{#if name}}
+        <a class="navbar-brand fs-5 d-flex align-items-center" href="/me">
+          <span class="text-white">{{name}}</span>
+          <img src="https://www.w3schools.com/bootstrap5/img_avatar1.png" alt="Avatar Logo"
+            style="width:40px; margin-left:5px;" class="rounded-pill" />
+        </a>
 
-      {{else}}
-      <div class="text-end">
-        <a href="/login" class="btn btn-outline-light me-2">Login</a>
-        <a href="/signUp" class="btn btn-warning">Sign-up</a>
+        {{else}}
+        <div class="text-center">
+          <a href="/login" class="btn btn-outline-light me-2">Login</a>
+          <a href="/signUp" class="btn btn-warning">Sign-up</a>
+        </div>
+        {{/if}}
       </div>
-      {{/if}}
     </div>
   </div>
 </nav>
