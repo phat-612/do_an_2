@@ -43,8 +43,19 @@ btnDelete.forEach(function (button) {
     categoryId = this.getAttribute("data-id");
     var confirmed = confirm("Bạn có chắc chắn muốn xóa danh mục này?");
     if (confirmed) {
-      deleteForm.action = "/api/category/" + categoryId + "?_method=DELETE";
+      deleteForm.action =
+        "/api/admin/category/" + categoryId + "?_method=DELETE";
       deleteForm.submit();
     }
+  });
+});
+$(document).ready(function () {
+  $(".edit-category-btn").click(function () {
+    $("#addCategory").text("Sửa danh mục");
+    $(".modal-title").text("Sửa danh mục");
+  });
+  $("#addCategoryButton").click(function () {
+    $("#addCategory").text("Thêm danh mục mới");
+    $(".modal-title").text("Thêm danh mục mới");
   });
 });

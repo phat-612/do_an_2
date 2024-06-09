@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     warrantyId = button.data("id");
   });
   btnDelete.onclick = function () {
-    deleteForm.action = "/api/warranty/" + warrantyId + "?_method=DELETE";
+    deleteForm.action = "/api/admin/warranty/" + warrantyId + "?_method=DELETE";
     deleteForm.submit();
   };
 });
@@ -17,7 +17,7 @@ $(document).ready(function () {
     var selectedOption = $(this).children("option:selected");
     var id = selectedOption.data("id");
 
-    fetch("/api/statusWarranty/" + id, {
+    fetch("/api/admin/statusWarranty/" + id, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

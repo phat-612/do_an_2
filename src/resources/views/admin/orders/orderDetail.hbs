@@ -114,7 +114,7 @@
               Thanh toán khi nhận hàng (COD)
             </label>
           </div>
-          <form id="chaneStatus" method="POST" action="/api/order/{{order._id}}?_method=PUT">
+          <form id="chaneStatus" method="POST" action="/api/admin/order/{{order._id}}?_method=PUT">
             <div class="card-body">
               <h5>Trạng thái thanh toán </h5>
               <select id="paymentDetail" class="form-select" name="paymentDetail[status]"

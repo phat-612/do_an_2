@@ -38,22 +38,7 @@ Category.statics.getArrayChidrendIds = async function (categoryId = null) {
   await findChildren(categoryId);
   return categoryIds.filter((id) => id !== null);
 };
-// tạo slug
-Category.pre("validate", function (next) {
-  if (this.name) {
-    const nameWithoutAccent = diacritics.remove(this.name);
-    let slug = nameWithoutAccent.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    const slugRegEx = new RegExp(`^(${slug})((-[0-9]*$)?)$`, "i");
-    this.constructor.find({ slug: slugRegEx }).then((categoriesWithSlug) => {
-      if (categoriesWithSlug.length) {
-        this.slug = `${slug}-${categoriesWithSlug.length + 1}`;
-      } else {
-        this.slug = slug;
-      }
-      next();
-    });
-  }
-});
+
 // tìm theo tên danh mục
 Category.statics.findByName = function (name) {
   return this.find({ name: new RegExp(name, "i") });

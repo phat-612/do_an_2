@@ -284,59 +284,75 @@ class ApiController {
       }
     });
   }
-
+  // thêm danh mục
   storeCategory(req, res, next) {
     const formData = req.body;
     const idParent = formData.idParent || null; // Xử lý giá trị trống và đặt giá trị mặc định là null
     formData.idParent = idParent;
-
-    Category.findOne({ name: formData.name }).then((existingCategory) => {
+    const lowerCaseName = req.body.name.toLowerCase();
+    // Kiểm tra tên trùng lặp cho danh mục con trong cùng một danh mục cha
+    const condition = { name: lowerCaseName, idParent: idParent };
+    console.log(lowerCaseName);
+    // console.log(condition);
+    Category.findOne(condition).then((existingCategory) => {
       if (existingCategory) {
         req.flash("message", {
           type: "danger",
-          message: "Danh mục với tên này đã tồn tại!",
+          message: "Danh mục này đã tồn tại!",
         });
         res.redirect("back");
       } else {
+        const nameWithoutAccent = diacritics.remove(formData.name);
+        let slug = nameWithoutAccent.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+        formData.slug = slug;
         const category = new Category(formData);
         category.save().then(() => {
           req.flash("message", {
             type: "success",
-            message: "Danh mục đã được thêm thành công!",
+            message: "Danh mục con đã được thêm thành công!",
           });
           res.redirect("back");
         });
       }
     });
   }
+  // sửa danh mục
   updateCategory(req, res, next) {
-    const idParent = req.body.idParent || null;
-    req.body.idParent = idParent;
-    console.log(idParent);
+    const formData = req.body;
+    const idParent = formData.idParent || null;
+    formData.idParent = idParent;
+    const lowerCaseName = formData.name.toLowerCase();
+    const condition = {
+      name: lowerCaseName,
+      idParent: idParent,
+      _id: { $ne: req.params.id },
+    };
 
-    Category.findOne({ name: req.body.name, _id: { $ne: req.params.id } }).then(
-      (existingCategory) => {
-        if (existingCategory) {
-          req.flash("message", {
-            type: "danger",
-            message: "Danh mục với tên này đã tồn tại!",
-          });
-          res.redirect("back");
-        } else {
-          Category.updateOne({ _id: req.params.id }, { $set: req.body }).then(
-            () => {
-              req.flash("message", {
-                type: "success",
-                message: "Danh mục đã được cập nhật thành công!",
-              });
-              res.redirect("back");
-            }
-          );
-        }
+    Category.findOne(condition).then((existingCategory) => {
+      if (existingCategory) {
+        req.flash("message", {
+          type: "danger",
+          message: "Danh mục này đã tồn tại!",
+        });
+        res.redirect("back");
+      } else {
+        const nameWithoutAccent = diacritics.remove(formData.name);
+        let slug = nameWithoutAccent.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+        formData.slug = slug;
+        console.log(formData.slug);
+        Category.updateOne({ _id: req.params.id }, { $set: formData }).then(
+          () => {
+            req.flash("message", {
+              type: "success",
+              message: "Danh mục đã được cập nhật thành công!",
+            });
+            res.redirect("back");
+          }
+        );
       }
-    );
+    });
   }
-
+  // xóa danh mục
   deleteCategory(req, res, next) {
     const hasChildCategory = async (categoryId) => {
       // tìm có danh mục con hay không
@@ -386,7 +402,7 @@ class ApiController {
   searchCategory(req, res) {
     return console.log(req.query);
   }
-  // warranty
+  // thêm warranty
   storeWarranty(req, res, next) {
     const formData = req.body;
     if (!formData) {
@@ -398,6 +414,7 @@ class ApiController {
     const warranty = new Warranty(formData);
     warranty.save().then(res.redirect("/admin/warranty/show"));
   }
+  // đổi trạng thái
   statusWarranty(req, res) {
     let id = req.body.id;
     let status = req.body.status;
@@ -419,6 +436,7 @@ class ApiController {
       }
     });
   }
+  // sửa bảo hành
   updateWarranty(req, res, next) {
     // return res.send(req.body);
     Warranty.findOne({ _id: req.params.id }).then((warranty) => {
@@ -456,6 +474,7 @@ class ApiController {
       });
     });
   }
+  // xóa bảo hành
   deleteWarranty(req, res) {
     const warrantyId = req.params.slugWarranty;
     Warranty.findOne({ _id: warrantyId }).then((warranty) => {
@@ -1124,13 +1143,20 @@ class ApiController {
     const formData = req.body;
     const idUser = req.session.idUser;
     const idProduct = formData.idProduct;
+    if (formData.rating < 1 || formData.rating > 5) {
+      req.flash("message", {
+        type: "danger",
+        message: "Đánh giá không hợp lệ",
+      });
+      return res.redirect("back");
+    }
     Product.findOne({ _id: idProduct }).then((product) => {
       if (!product) {
         return res.redirect("back");
       }
       product.reviews.push({
         idUser,
-        rating: formData.rating,
+        rating: Math.ceil(formData.rating),
         comment: formData.comment.substring(0, 250),
       });
       product.save().then(() => {
@@ -1181,6 +1207,7 @@ class ApiController {
       res.redirect("back");
     });
   }
+  // đổi trạng thái banner
   changeBanner(req, res) {
     let status;
     if (req.body.status) {
@@ -1199,7 +1226,7 @@ class ApiController {
       });
     });
   }
-
+  // sửa banner
   editBanner(req, res) {
     Banner.findById(req.params.id).then((banner) => {
       let oldImageFilename = banner.image;
@@ -1246,6 +1273,7 @@ class ApiController {
         });
     });
   }
+  // xóa banner
   deleteBanner(req, res) {
     const Id = req.params.id;
     const filePath = path.join(
@@ -1279,7 +1307,7 @@ class ApiController {
       }
     });
   }
-  // trang order
+  // đổi trạng thái trang order
   changeStatus(req, res) {
     Order.findOne({ _id: req.params.id }).then((order) => {
       if (order.status === "shipping" && req.body.status === "pending") {
@@ -1377,6 +1405,15 @@ class ApiController {
   changeHierarchy(req, res) {
     // return res.send(req.body);
     User.findById(req.params.id).then((user) => {
+      console.log(req.session.idUser);
+      console.log(req.params.id);
+      if (user.role === "admin" && req.params.id === req.session.idUser) {
+        req.flash("message", {
+          type: "danger",
+          message: "Không thể thay đổi vai trò từ admin sang user",
+        });
+        return res.redirect("back");
+      }
       user.role = req.body.role;
       user.save().then(() => {
         req.flash("message", {

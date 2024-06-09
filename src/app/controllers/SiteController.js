@@ -107,7 +107,7 @@ class SiteController {
     } else {
       slugCategory = req.params.slugCategory;
     }
-
+    console.log(req.params[0].split("/").filter((slug) => slug != ""));
     Category.findOne({ slug: slugCategory }).then((category) => {
       if (!category || category == null) {
         return next();

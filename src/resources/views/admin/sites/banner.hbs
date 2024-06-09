@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-sm-12">
       <h2 class="text-center my-4">Quản Lý Banner</h2>
-      <button data-linkAction="/api/storeBanner" type="button" class="btn btn-success m-4 float-end"
+      <button data-linkAction="/api/admin/storeBanner" type="button" class="btn btn-success m-4 float-end"
         data-bs-toggle="modal" data-bs-target="#addBannerModal" id="addBanner">Thêm Banner</button>
 
       <table class="table table-bordered table-striped mt-4">
@@ -18,7 +18,7 @@
         </thead>
         <tbody>
           {{#each banners}}
-          <form id="changeStatus-{{this._id}}" method="POST" action="/api/changeBanner/{{this._id}}?_method=PUT">
+          <form id="changeStatus-{{this._id}}" method="POST" action="/api/admin/changeBanner/{{this._id}}?_method=PUT">
             <tr>
               <th scope="row">{{sum @index 1}}</th>
               <td>{{this.name}}</td>
@@ -38,7 +38,7 @@
               <td>
                 <button data-id="{{this._id}}" data-image="{{showImgUpload this.image}}" type="button"
                   class="btn btn-primary btn-view" data-bs-toggle="modal" data-bs-target="#viewImageModal">Xem</button>
-                <button data-linkAction="/api/editBanner/{{this._id}}?_method=PUT" data-name="{{this.name}}"
+                <button data-linkAction="/api/admin/editBanner/{{this._id}}?_method=PUT" data-name="{{this.name}}"
                   data-id="{{this._id}}" id="editBanner" data-link="{{this.link}}" data-image="{{this.image}}"
                   data-linkImage="{{showImgUpload this.image}}" type="button" class="btn btn-success edit-banner-btn"
                   data-bs-toggle="modal" data-bs-target="#addBannerModal">Sửa</button>

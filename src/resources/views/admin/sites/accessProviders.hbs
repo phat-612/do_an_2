@@ -16,7 +16,7 @@
     </thead>
     <tbody>
       {{#each users}}
-      <form id="hierarchy-{{this._id}}" action="/api/accessProviders/{{this._id}}?_method=PUT" method="post">
+      <form id="hierarchy-{{this._id}}" action="/api/admin/accessProviders/{{this._id}}?_method=PUT" method="post">
         <tr>
           <td>{{this.email}}</td>
           <td>{{this.name}}</td>

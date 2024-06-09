@@ -114,7 +114,7 @@ $(document).ready(function () {
     price,
     element
   ) {
-    fetch("/api/cart?_method=PUT", {
+    fetch("/api/user/cart?_method=PUT", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -143,7 +143,7 @@ $(document).ready(function () {
     const idVariation = button.attr("data-bs-idVariation");
     let isDelete = confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?");
     if (!isDelete) return false;
-    fetch("/api/cart?_method=DELETE", {
+    fetch("/api/user/cart?_method=DELETE", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

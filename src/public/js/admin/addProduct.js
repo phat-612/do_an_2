@@ -297,4 +297,7 @@ function checkExistValue() {
     discountEnd.setAttribute("required", "true");
   }
 }
+$("#discountStart").on("change", function () {
+  discountEnd.min = discountStart.value;
+});
 percentInput.addEventListener("input", checkExistValue);

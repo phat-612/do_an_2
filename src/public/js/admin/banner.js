@@ -78,7 +78,7 @@ btnDelete.on("click", function (event) {
 $("#btn-delete").on("click", function () {
   deleteForm.attr(
     "action",
-    "/api/deleteBanner/" + toBeDeleted + "?_method=DELETE"
+    "/api/admin/deleteBanner/" + toBeDeleted + "?_method=DELETE"
   );
   deleteForm.submit();
   deleteModal.modal("hide");

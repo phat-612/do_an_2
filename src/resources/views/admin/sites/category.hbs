@@ -1,55 +1,54 @@
-<div class="container mt-4">
-  <div class="row">
-    <div class="col-md-12">
-      <h1>Quản lý danh mục</h1>
+<div class="container">
+  <h1 class="text-center">Quản lý danh mục</h1>
+  <div class="row justify-content-between">
+    <div class="col-4">
       <form action="/admin/category">
-
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" name="search" placeholder="Tìm kiếm danh mục" id="searchInput" />
-          <div class="input-group-append">
-            <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+        <div class="row justify-content-between">
+          <div class="col"><input type="text" class="form-control" name="search" placeholder="Tìm kiếm danh mục"
+              id="searchInput" />
           </div>
+          <div class="col-4"><button class="btn btn-primary" type="submit">Tìm kiếm</button></div>
+        </div>
       </form>
     </div>
-
-    <!-- Button trigger modal -->
-    <button type="button" data-linkAction="/api/storeCategory" class="btn btn-success" id="addCategoryButton"
-      data-bs-target="#addCategoryModal" data-bs-toggle="modal">
-      Thêm danh mục mới
-    </button>
-    <table class="table" id="categoriesTable">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Tên danh mục</th>
-          <th>Danh mục cha</th>
-          <th>Thao tác</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each category}}
-        <tr>
-          <th scope="row">{{sum @index 1}}</th>
-          <td>{{this.name}}</td>
-          <td>{{this.idParent.name}}</td>
-          <td>
-            <button data-linkAction="/api/category/{{this._id}}?_method=PUT" data-name="{{this.name}}"
-              data-idParent="{{this.idParent._id}}" data-id="{{this._id}}" data-bs-target="#addCategoryModal"
-              data-bs-toggle="modal" class="btn btn-primary edit-category-btn">Sửa</button>
-            <a href="" data-bs-toggle="modal" data-id="{{this._id}}" data-bs-target="#delete-category-modal"
-              class="btn btn-danger">Xóa</a>
-          </td>
-        </tr>
-        {{/each}}
-        <!-- Thêm các dòng danh mục khác tương tự -->
-      </tbody>
-    </table>
+    <div class="col-3">
+      <button type="button" data-linkAction="/api/admin/storeCategory" class="btn btn-success" id="addCategoryButton"
+        data-bs-target="#addCategoryModal" data-bs-toggle="modal">
+        Thêm danh mục mới
+      </button>
+    </div>
   </div>
-</div>
+  <!-- Button trigger modal -->
+  <table class="table mt-3" id="categoriesTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Tên danh mục</th>
+        <th>Danh mục cha</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each category}}
+      <tr>
+        <th scope="row">{{sum @index 1}}</th>
+        <td>{{this.name}}</td>
+        <td>{{this.idParent.name}}</td>
+        <td>
+          <button data-linkAction="/api/admin/category/{{this._id}}?_method=PUT" data-name="{{this.name}}"
+            data-idParent="{{this.idParent._id}}" data-id="{{this._id}}" data-bs-target="#addCategoryModal"
+            data-bs-toggle="modal" class="btn btn-primary edit-category-btn">Sửa</button>
+          <a href="" data-bs-toggle="modal" data-id="{{this._id}}" data-bs-target="#delete-category-modal"
+            class="btn btn-danger">Xóa</a>
+        </td>
+      </tr>
+      {{/each}}
+      <!-- Thêm các dòng danh mục khác tương tự -->
+    </tbody>
+  </table>
 </div>
 <form name="categoryDelete" method="POST" action=""></form>
 <!-- Modal -->
-
 <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -82,10 +81,8 @@
       </div>
     </div>
   </div>
-
 </div>
 <div>
-
   {{#pagination currentPage totalPage 5}}
   <nav aria-label="...">
     <ul class="pagination justify-content-center">

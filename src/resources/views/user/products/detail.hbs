@@ -52,7 +52,7 @@
               class="btn w-100 py-3 rounded border bg-danger fs-4 text-white fw-bold">Mua
               Ngay</a></div>
           <div class="col-lg-4">
-            <form action="/api/cart" method="post">
+            <form action="/api/user/cart" method="post">
               <input type="hidden" name="idVariation" value="{{product.curVariation._id}}" hidden />
               <input type="hidden" name="quantity" value="1" hidden />
               <button type="submit" class="w-100 py-3 px-1 rounded border bg-light fs-6 fw-bold">Thêm vào giỏ
@@ -117,7 +117,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="/api/ratingProduct" method="post">
+        <form action="/api/user/ratingProduct" method="post">
           <input type="text" name="idProduct" value="{{product._id}}" hidden>
           <div>
             <img src="{{showImgUpload product.images}}" style="width: 60px;" alt="">

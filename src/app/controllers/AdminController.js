@@ -187,27 +187,45 @@ class AdminController {
   }
   // get /product/addproduct
   addPro(req, res, next) {
-    Category.find()
+    Category.find({})
       .populate("idParent", "name")
-      .then((categorys) => {
-        const categoryIdParent = [];
-        const categoryNotIdParent = [];
-
-        categorys.forEach((category) => {
-          if (category.idParent) {
-            categoryIdParent.push(category);
-          } else {
-            categoryNotIdParent.push(category);
+      .then((categories) => {
+        const categoryWithLevels = categories.map((category) => {
+          let level = 0;
+          let parent = category.idParent;
+          while (parent) {
+            level++;
+            parent = categories.find((cat) =>
+              cat._id.equals(parent._id)
+            ).idParent;
           }
+          category.level = level;
+          return category;
         });
 
-        const storeCategory = categoryNotIdParent.concat(categoryIdParent);
+        const sortedCategories = categoryWithLevels.sort(
+          (a, b) => a.level - b.level
+        );
+        // .then((categorys) => {
+        //   const categoryIdParent = [];
+        //   const categoryNotIdParent = [];
+
+        //   categorys.forEach((category) => {
+        //     if (category.idParent) {
+        //       categoryIdParent.push(category);
+        //     } else {
+        //       categoryNotIdParent.push(category);
+        //     }
+        //   });
+
+        //   const storeCategory = categoryNotIdParent.concat(categoryIdParent);
+        // return res.send(sortedCategories);
         res.render("admin/products/addProduct", {
           title: "Thêm Sản Phẩm",
           layout: "admin",
           js: "admin/addProduct",
           css: "admin/addProduct",
-          categorys: multipleMongooseToObject(storeCategory),
+          categories: multipleMongooseToObject(sortedCategories),
         });
       });
   }
@@ -585,6 +603,8 @@ class AdminController {
             let totalPage = Math.ceil(count / perPage);
             const storeCategory = categoryNotIdParent.concat(categoryIdParent);
             Category.find()
+              .sort({ idParent: 1 })
+
               .populate("idParent", "name")
               .then((category) => {
                 // console.log(category);

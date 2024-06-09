@@ -406,6 +406,7 @@ class MeController {
           (detail) => (detail = detail.toObject())
         );
         res.render("user/profiles/order", {
+          layout: "mainWithoutFooter",
           title: "Đặt hàng",
           js: "user/order",
           cart,

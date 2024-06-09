@@ -346,6 +346,9 @@ function checkExistValue() {
     discountEnd.removeAttribute("disabled");
   }
 }
+$("#discountStart").on("change", function () {
+  discountEnd.min = discountStart.value;
+});
 percentInput.addEventListener("input", checkExistValue);
 // ==========================================================================
 window.onload = function () {
