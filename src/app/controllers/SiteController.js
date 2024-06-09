@@ -6,6 +6,7 @@ const {
   getDiscount,
   getDataPagination,
   findSimilarProduct,
+  findFinalIdCategory,
 } = require("../../util/function");
 
 class SiteController {
@@ -98,186 +99,197 @@ class SiteController {
     let slugRootCategory = req.params.slugCategory;
     let slugCategory;
     const url = req.url;
-
+    let promiseCategory;
     if (req.params[0]) {
-      slugCategory = req.params[0]
-        .split("/")
-        .filter((slug) => slug != "")
-        .pop();
+      slugCategory = req.params[0].split("/").filter((slug) => slug != "");
+      promiseCategory = findFinalIdCategory(
+        Category,
+        slugCategory,
+        slugRootCategory
+      );
     } else {
-      slugCategory = req.params.slugCategory;
+      promiseCategory = findFinalIdCategory(Category, [], slugRootCategory);
     }
-    console.log(req.params[0].split("/").filter((slug) => slug != ""));
-    Category.findOne({ slug: slugCategory }).then((category) => {
-      if (!category || category == null) {
-        return next();
-      }
-      const curCategory = category.toObject();
-      const page =
-        (parseInt(req.query.page) || 1) <= 0
-          ? 1
-          : parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 15;
-      const skip = (page - 1) * limit;
-      let sortAndFilter = [
-        {
-          $sort: {
-            isBusiness: -1,
-          },
-        },
-      ];
-      if (
-        req.query.hasOwnProperty("startPrice") &&
-        req.query.hasOwnProperty("endPrice")
-      ) {
-        let startPrice = parseInt(req.query.startPrice);
-        let endPrice = parseInt(req.query.endPrice);
-        sortAndFilter.push({
-          $match: {
-            "variations.price": {
-              $gte: startPrice,
-              $lte: endPrice,
+    promiseCategory
+      .then((idCategory) => {
+        if (!idCategory) {
+          throw new Error("Category not found");
+        }
+        return Category.findOne({ _id: idCategory });
+      })
+      .then((category) => {
+        if (!category || category == null) {
+          return next();
+        }
+        const curCategory = category.toObject();
+        const page =
+          (parseInt(req.query.page) || 1) <= 0
+            ? 1
+            : parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 15;
+        const skip = (page - 1) * limit;
+        let sortAndFilter = [
+          {
+            $sort: {
+              isBusiness: -1,
             },
           },
-        });
-      }
-      if (req.query.hasOwnProperty("_find")) {
-        let searchQuery = req.query.q;
-        let words = searchQuery.split(" ");
-
-        let regexWords = words.map((word) => ({
-          name: { $regex: word, $options: "i" },
-        }));
-        sortAndFilter.push({
-          $match: {
-            $and: regexWords,
-          },
-        });
-      }
-      if (req.query.hasOwnProperty("_sort")) {
-        let collum = req.query.column;
-        let type = req.query.type;
-        if (collum != "price") {
+        ];
+        if (
+          req.query.hasOwnProperty("startPrice") &&
+          req.query.hasOwnProperty("endPrice")
+        ) {
+          let startPrice = parseInt(req.query.startPrice);
+          let endPrice = parseInt(req.query.endPrice);
           sortAndFilter.push({
-            $sort: {
-              [collum]: type === "asc" ? 1 : -1,
-            },
-          });
-        } else {
-          sortAndFilter.push({
-            $sort: {
-              "variations.price": type === "asc" ? 1 : -1,
+            $match: {
+              "variations.price": {
+                $gte: startPrice,
+                $lte: endPrice,
+              },
             },
           });
         }
-      }
+        if (req.query.hasOwnProperty("_find")) {
+          let searchQuery = req.query.q;
+          let words = searchQuery.split(" ");
 
-      Category.getArrayChidrendIds(category._id).then((ids) => {
-        Promise.all([
-          Category.findOne({ slug: slugRootCategory }),
-          Category.getCategoryChildren(category._id),
-          Product.aggregate([
-            {
-              $match: {
-                idCategory: {
-                  $in: ids,
-                },
-              },
+          let regexWords = words.map((word) => ({
+            name: { $regex: word, $options: "i" },
+          }));
+          sortAndFilter.push({
+            $match: {
+              $and: regexWords,
             },
-            { $unwind: "$variations" },
-            {
-              $set: {
-                name: {
-                  $reduce: {
-                    input: { $objectToArray: "$variations.attributes" },
-                    initialValue: "$name",
-                    in: { $concat: ["$$value", " ", "$$this.v"] },
+          });
+        }
+        if (req.query.hasOwnProperty("_sort")) {
+          let collum = req.query.column;
+          let type = req.query.type;
+          if (collum != "price") {
+            sortAndFilter.push({
+              $sort: {
+                [collum]: type === "asc" ? 1 : -1,
+              },
+            });
+          } else {
+            sortAndFilter.push({
+              $sort: {
+                "variations.price": type === "asc" ? 1 : -1,
+              },
+            });
+          }
+        }
+
+        Category.getArrayChidrendIds(category._id).then((ids) => {
+          Promise.all([
+            Category.findOne({ slug: slugRootCategory }),
+            Category.getCategoryChildren(category._id),
+            Product.aggregate([
+              {
+                $match: {
+                  idCategory: {
+                    $in: ids,
                   },
                 },
               },
-            },
-            ...sortAndFilter,
-            {
-              $skip: skip,
-            },
-            {
-              $limit: limit,
-            },
-          ]),
-          Product.aggregate([
-            {
-              $match: {
-                idCategory: {
-                  $in: ids,
-                },
-              },
-            },
-            { $unwind: "$variations" },
-            {
-              $set: {
-                name: {
-                  $reduce: {
-                    input: { $objectToArray: "$variations.attributes" },
-                    initialValue: "$name",
-                    in: { $concat: ["$$value", " ", "$$this.v"] },
+              { $unwind: "$variations" },
+              {
+                $set: {
+                  name: {
+                    $reduce: {
+                      input: { $objectToArray: "$variations.attributes" },
+                      initialValue: "$name",
+                      in: { $concat: ["$$value", " ", "$$this.v"] },
+                    },
                   },
                 },
               },
-            },
-            ...sortAndFilter,
-          ]),
-        ]).then(([rootCategory, categories, products, dataPagi]) => {
-          // get max price and min price
-          let maxPrice = Math.max(
-            ...dataPagi.map((product) => product.variations.price)
-          );
-          let [currentPage, totalPage, countChild] = getDataPagination(
-            dataPagi,
-            req,
-            limit
-          );
-          const subCategories = categories.map((category) => ({
-            name: category.name,
-            slug: category.slug,
-          }));
-          products = products.map((product) => ({
-            ...product,
-            variation: product.variations[0],
-          }));
+              ...sortAndFilter,
+              {
+                $skip: skip,
+              },
+              {
+                $limit: limit,
+              },
+            ]),
+            Product.aggregate([
+              {
+                $match: {
+                  idCategory: {
+                    $in: ids,
+                  },
+                },
+              },
+              { $unwind: "$variations" },
+              {
+                $set: {
+                  name: {
+                    $reduce: {
+                      input: { $objectToArray: "$variations.attributes" },
+                      initialValue: "$name",
+                      in: { $concat: ["$$value", " ", "$$this.v"] },
+                    },
+                  },
+                },
+              },
+              ...sortAndFilter,
+            ]),
+          ]).then(([rootCategory, categories, products, dataPagi]) => {
+            // get max price and min price
+            let maxPrice = Math.max(
+              ...dataPagi.map((product) => product.variations.price)
+            );
+            let [currentPage, totalPage, countChild] = getDataPagination(
+              dataPagi,
+              req,
+              limit
+            );
+            const subCategories = categories.map((category) => ({
+              name: category.name,
+              slug: category.slug,
+            }));
+            products = products.map((product) => ({
+              ...product,
+              variation: product.variations[0],
+            }));
 
-          // return res.send({
-          //   countProduct: countChild,
-          //   rootCategory,
-          //   products,
-          //   subCategories,
-          //   rootCategory,
-          //   path: req.originalUrl,
-          //   pathName: req._parsedUrl.pathname,
-          //   currentPage,
-          //   totalPage,
-          //   url,
-          //   categories,
-          // });
-          res.render("user/products/show", {
-            title: `${curCategory.name}`,
-            js: "user/showProducts",
-            countProduct: countChild,
-            rootCategory: rootCategory,
-            curCategory: curCategory,
-            products,
-            subCategories,
-            path: req.originalUrl,
-            pathName: req._parsedUrl.pathname,
-            currentPage,
-            totalPage,
-            url,
-            maxPrice,
-            startPrice: req.query.startPrice || 0,
-            endPrice: req.query.endPrice || maxPrice,
+            // return res.send({
+            //   countProduct: countChild,
+            //   rootCategory,
+            //   products,
+            //   subCategories,
+            //   rootCategory,
+            //   path: req.originalUrl,
+            //   pathName: req._parsedUrl.pathname,
+            //   currentPage,
+            //   totalPage,
+            //   url,
+            //   categories,
+            // });
+            res.render("user/products/show", {
+              title: `${curCategory.name}`,
+              js: "user/showProducts",
+              countProduct: countChild,
+              rootCategory: rootCategory,
+              curCategory: curCategory,
+              products,
+              subCategories,
+              path: req.originalUrl,
+              pathName: req._parsedUrl.pathname,
+              currentPage,
+              totalPage,
+              url,
+              maxPrice,
+              startPrice: req.query.startPrice || 0,
+              endPrice: req.query.endPrice || maxPrice,
+            });
           });
         });
+      })
+      .catch((error) => {
+        next();
       });
-    });
   }
   product(req, res, next) {
     const slugProduct = req.params.slugProduct;

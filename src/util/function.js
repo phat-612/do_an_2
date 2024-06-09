@@ -78,4 +78,20 @@ module.exports = {
     }
     return [...similarProducts, ...similarProductsChildren];
   },
+  findFinalIdCategory: async (Category, arrSlug, rootCategory) => {
+    arrSlug.unshift(rootCategory);
+    let idCategory;
+    for (let i = 0; i < arrSlug.length; i++) {
+      let category = await Category.findOne({
+        slug: arrSlug[i],
+        idParent: idCategory,
+      });
+      if (category) {
+        idCategory = category._id;
+      } else {
+        return false;
+      }
+    }
+    return idCategory;
+  },
 };
