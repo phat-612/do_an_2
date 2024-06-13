@@ -992,7 +992,7 @@ class ApiController {
           // tạo url thanh toán
           const idOrder = order._id;
           const amount = order.total;
-          const urlPayment = `/api/createPaymentUrl?idOrder=${idOrder}&amount=${amount}`;
+          const urlPayment = `/api/user/createPaymentUrl?idOrder=${idOrder}&amount=${amount}`;
           return res.redirect(urlPayment);
         });
       })
@@ -1135,7 +1135,7 @@ class ApiController {
     const idOrder = req.body.idOrder;
     Order.findOne({ _id: idOrder }).then((order) => {
       const total = order.total;
-      const urlPayment = `/api/createPaymentUrl?idOrder=${idOrder}&amount=${total}`;
+      const urlPayment = `/api/user/createPaymentUrl?idOrder=${idOrder}&amount=${total}`;
       return res.redirect(urlPayment);
     });
   }
