@@ -1327,19 +1327,19 @@ class ApiController {
 
       // Cập nhật trạng thái
       order.status = req.body.status;
-
       if (req.body.status === "failed") {
         order.details.forEach((detail) => {
           Product.updateOne(
             { "variations._id": detail.idVariation },
             {
+              // trả lại số lượng sản phẩm
               $inc: {
                 "variations.$.quantity": detail.quantity,
               },
             }
           ).then((result) => {
             if (result.nModified === 0) {
-              console.log("Product not found");
+              console.log("Không có sản phẩm");
             }
           });
         });
@@ -1347,10 +1347,11 @@ class ApiController {
         order.details.forEach((detail) => {
           Product.updateOne(
             { "variations._id": detail.idVariation },
+            // tăng số lượt bán
             { $inc: { "variations.$.sold": detail.quantity } }
           ).then((result) => {
             if (result.nModified === 0) {
-              console.log("Product not found");
+              console.log("Không có sản phẩm");
             }
           });
         });
@@ -1361,7 +1362,6 @@ class ApiController {
           return res.redirect("back");
         });
       }
-
       if (
         req.body.status === "pending" &&
         order.paymentDetail.status === "pending"
@@ -1405,8 +1405,6 @@ class ApiController {
   changeHierarchy(req, res) {
     // return res.send(req.body);
     User.findById(req.params.id).then((user) => {
-      console.log(req.session.idUser);
-      console.log(req.params.id);
       if (user.role === "admin" && req.params.id === req.session.idUser) {
         req.flash("message", {
           type: "danger",

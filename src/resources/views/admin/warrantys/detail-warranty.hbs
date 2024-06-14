@@ -37,7 +37,9 @@
         <input type="text" class="form-control" name="total" id="total" value="{{warranty.total}}" readonly />
       </div>
       <div class="form-group col-md-4 my-4">
+        {{#unless (changeStatus warranty.status 'paid')}}
         <a href="/admin/warranty/{{warranty._id}}/edit" class="btn btn-primary">Chỉnh Sửa</a>
+        {{/unless}}
       </div>
     </div>
     <div class="col-md-6">
