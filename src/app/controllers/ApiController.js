@@ -651,14 +651,14 @@ class ApiController {
     const { token, email } = req.query;
     UserLogin.findOne({ email }).then((userLogin) => {
       if (!userLogin) {
-        res.flash("message", {
+        req.flash("message", {
           type: "danger",
           message: "Email không tồn tại",
         });
         return res.redirect("/login");
       }
       if (userLogin.activationToken !== token) {
-        res.flash("message", {
+        req.flash("message", {
           type: "danger",
           message: "Link không hợp lệ",
         });

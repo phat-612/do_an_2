@@ -1,9 +1,7 @@
 const siteRouter = require("./site");
-const apiRouter = require("./api");
 const apiUserRouter = require("./apiUser");
 const apiAdminRouter = require("./apiAdmin");
 const apiPublicRouter = require("./apiPublic");
-const productRouter = require("./product");
 const adminRouter = require("./admin");
 const meRouter = require("./me");
 

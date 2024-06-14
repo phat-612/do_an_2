@@ -230,8 +230,8 @@ function genRowTable(td1, td2) {
   
     <td>${td1}</td>
     <td>${td2}</td>
-    <td><input type="number" class="form-control" name="" /></td>
-    <td><input type="number" class="form-control" name="" /></td>
+    <td><input type="number" class="form-control" name="" required /></td>
+    <td><input type="number" class="form-control" name="" required /></td>
     <td>
       <div class="areaInpHidden"></div>
       <button

@@ -38,12 +38,12 @@
                 </td>
                 <td class="col-1 text-center">{{formatDate this.reviews.time "DD/MM/YYYY"}}</td>
                 <td class="text-center">
-                    <form class="d-inline-block" action="/api/accessReview" method="post">
+                    <form class="d-inline-block" action="/api/admin/accessReview" method="post">
                         <input type="text" name="idReview" value="{{this.reviews._id}}" hidden>
                         <input type="text" name="action" value="accept" hidden>
                         <button type="submit" class="btn btn-primary">Duyệt</button>
                     </form>
-                    <form class="d-inline-block" action="/api/accessReview" method="post">
+                    <form class="d-inline-block" action="/api/admin/accessReview" method="post">
                         <input type="text" name="idReview" value="{{this.reviews._id}}" hidden>
                         <input type="text" name="action" value="reject" hidden>
                         <button type="submit" class="btn btn-danger">Xóa</button>
