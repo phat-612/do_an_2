@@ -6,6 +6,9 @@ const adminController = require("../app/controllers/AdminController");
 //get aassess providers (quan ly quyen user, admin)
 router.get("/accessProviders", adminController.accessProviders);
 
+// get store
+router.get("/store", adminController.getStorePage);
+
 //get category
 router.get("/category", adminController.category);
 // banner
@@ -26,7 +29,7 @@ router.get("/exportWarranty", adminController.exportWarranty);
 // get product
 router.get("/product/:id/detail", adminController.detail);
 router.get("/product/:id/edit", adminController.editProduct);
-router.get("/product/addProduct/", adminController.addPro);
+router.get("/product/addProduct", adminController.addPro);
 router.get("/product", adminController.product);
 // home
 router.get("/", adminController.index);

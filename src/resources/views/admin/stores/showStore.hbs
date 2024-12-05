@@ -1,0 +1,47 @@
+<div class="container">
+    <h1 class="text-center">Quản lý danh mục</h1>
+    <div class="d-flex justify-content-end">
+        <button>Thêm địa chỉ</button>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Tên Cửa Hàng</th>
+                <th scope="col">Tỉnh Thành</th>
+                <th scope="col">Quận Huyện</th>
+                <th scope="col">Phường Xã</th>
+                <th scope="col">Địa Chỉ</th>
+                <th scope="col">Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Chi Nhánh 1</td>
+                <td>TP Hồ Chí Minh</td>
+                <td>Quận Bình Thạnh</td>
+                <td>Phường 25</td>
+                <td>104/1a Thoại Ngọc Hầu</td>
+                <td>
+                    <button>xem</button>
+                    <button>sửa</button>
+                    <button>xóa</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <select class="form-select form-select-sm mb-3" id="city" aria-label=".form-select-sm">
+        <option value="" selected>Chọn tỉnh thành</option>
+    </select>
+
+    <select class="form-select form-select-sm mb-3" id="district" aria-label=".form-select-sm">
+        <option value="" selected>Chọn quận huyện</option>
+    </select>
+
+    <select class="form-select form-select-sm" id="ward" aria-label=".form-select-sm">
+        <option value="" selected>Chọn phường xã</option>
+    </select>
+</div>

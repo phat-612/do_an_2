@@ -190,36 +190,37 @@ class AdminController {
     Category.find({})
       .populate("idParent", "name")
       .then((categories) => {
+        const categoryMap = new Map(
+          categories.map((cat) => [cat._id.toString(), cat])
+        );
+
+        // Tính cấp độ của từng danh mục
         const categoryWithLevels = categories.map((category) => {
           let level = 0;
           let parent = category.idParent;
+          const visited = new Set(); // Kiểm tra vòng lặp vòng tròn
+
           while (parent) {
+            if (visited.has(parent._id.toString())) {
+              level = -1; // Đánh dấu lỗi
+              break;
+            }
+            visited.add(parent._id.toString());
+
             level++;
-            parent = categories.find((cat) =>
-              cat._id.equals(parent._id)
-            ).idParent;
+            parent = categoryMap.get(parent._id.toString())?.idParent || null;
           }
-          category.level = level;
+
+          category.level = level; // Gán cấp độ
           return category;
         });
 
+        // Sắp xếp theo cấp độ
         const sortedCategories = categoryWithLevels.sort(
           (a, b) => a.level - b.level
         );
-        // .then((categorys) => {
-        //   const categoryIdParent = [];
-        //   const categoryNotIdParent = [];
 
-        //   categorys.forEach((category) => {
-        //     if (category.idParent) {
-        //       categoryIdParent.push(category);
-        //     } else {
-        //       categoryNotIdParent.push(category);
-        //     }
-        //   });
-
-        //   const storeCategory = categoryNotIdParent.concat(categoryIdParent);
-        // return res.send(sortedCategories);
+        // Render view
         res.render("admin/products/addProduct", {
           title: "Thêm Sản Phẩm",
           layout: "admin",
@@ -1066,6 +1067,16 @@ class AdminController {
         .catch((error) => {
           console.error(error);
         });
+    });
+  }
+
+  // store management
+
+  getStorePage(req, res, next) {
+    res.render("admin/stores/showStore", {
+      title: "Danh Sách Cửa Hàng",
+      layout: "admin",
+      js: "admin/store",
     });
   }
 
