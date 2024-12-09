@@ -17,123 +17,225 @@ const {
 } = require("../../util/mongoose");
 
 class AdminController {
-  // get /
+  // // get /
   index(req, res, next) {
-    Product.find({})
-      .then(function (products) {
-        Order.find({}).then(function (orders) {
-          Promise.all([
-            Order.aggregate([
-              {
-                $match: {
-                  "paymentDetail.status": "success",
-                },
-              },
-              {
-                $group: {
-                  _id: null,
-                  totalAmount: {
-                    $sum: "$total",
-                  },
-                },
-              },
-            ]),
-            Product.aggregate([
-              { $sort: { view: -1 } }, // Sắp xếp theo lượt view giảm dần
-              { $limit: 4 }, // Lấy ra 4 sản phẩm
-            ]),
-            Product.aggregate([
-              {
-                $set: {
-                  totalReviews: { $size: "$reviews" },
-                },
-              },
-              { $sort: { totalReviews: -1 } }, // Sấp xếp
-              { $limit: 4 }, // Limit to top 4 products
-              {
-                $project: {
-                  name: 1,
-                  images: 1,
-                  totalReviews: 1,
-                },
-              },
-            ]),
-            Product.aggregate([
-              { $unwind: "$variations" }, // Unwind the variations array
-              {
-                $group: {
-                  _id: "$_id",
-                  name: { $first: "$name" },
-                  images: { $first: "$images" },
-                  view: { $first: "$view" },
-                  slug: { $first: "$slug" },
-                  totalSold: { $sum: "$variations.sold" },
-                  variations: { $push: "$variations" },
-                },
-              },
-              { $sort: { totalSold: -1 } }, // Sort by total sold in descending order
-              { $limit: 4 }, // Limit to top 4 products
-            ]),
-            Product.aggregate([
-              {
-                $unwind: "$reviews",
-              },
-              {
-                $match: {
-                  "reviews.status": false,
-                },
-              },
-              {
-                $lookup: {
-                  from: "users",
-                  localField: "reviews.idUser",
-                  foreignField: "_id",
-                  as: "user",
-                },
-              },
-              {
-                $unwind: "$user",
-              },
-              {
-                $project: {
-                  name: 1,
-                  images: 1,
-                  reviews: 1,
-                  user: {
-                    name: 1,
-                  },
-                },
-              },
-              { $limit: 6 },
-            ]),
-          ]).then(
-            ([
-              doanhThu,
-              topSeenProduct,
-              topReviewProduct,
-              topProducts,
-              assessReview,
-            ]) => {
-              doanhThu = doanhThu[0] ? doanhThu[0].totalAmount : 0;
-              res.render("admin/sites/home", {
-                layout: "admin",
-                title: "Trang chủ",
-                js: "admin/home",
-                css: "admin/home",
-                orders: multipleMongooseToObject(orders),
-                products: multipleMongooseToObject(products),
-                topProducts: topProducts,
-                topReviewProduct: topReviewProduct,
-                doanhThu: doanhThu,
-                topSeenProduct: topSeenProduct,
-                assessReview: assessReview,
-              });
-            }
-          );
-        });
-      })
+    Promise.all([
+      Product.find({}), // Lấy tất cả sản phẩm
+      Order.find({}), // Lấy tất cả đơn hàng
+      Order.aggregate([
+        {
+          $match: {
+            "paymentDetail.status": "success",
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            totalAmount: { $sum: "$total" },
+          },
+        },
+      ]),
+      Product.aggregate([{ $sort: { view: -1 } }, { $limit: 4 }]),
+      Product.aggregate([
+        {
+          $set: { totalReviews: { $size: "$reviews" } },
+        },
+        { $sort: { totalReviews: -1 } },
+        { $limit: 4 },
+        {
+          $project: {
+            name: 1,
+            images: 1,
+            totalReviews: 1,
+          },
+        },
+      ]),
+      Product.aggregate([
+        { $unwind: "$variations" },
+        {
+          $group: {
+            _id: "$_id",
+            name: { $first: "$name" },
+            images: { $first: "$images" },
+            view: { $first: "$view" },
+            slug: { $first: "$slug" },
+            totalSold: { $sum: "$variations.sold" },
+            variations: { $push: "$variations" },
+          },
+        },
+        { $sort: { totalSold: -1 } },
+        { $limit: 4 },
+      ]),
+      Product.aggregate([
+        { $unwind: "$reviews" },
+        { $match: { "reviews.status": false } },
+        {
+          $lookup: {
+            from: "users",
+            localField: "reviews.idUser",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        {
+          $unwind: "$user",
+        },
+        {
+          $project: {
+            name: 1,
+            images: 1,
+            reviews: 1,
+            user: { name: 1 },
+          },
+        },
+        { $limit: 6 },
+      ]),
+    ])
+      .then(
+        ([
+          products,
+          orders,
+          doanhThu,
+          topSeenProduct,
+          topReviewProduct,
+          topProducts,
+          assessReview,
+        ]) => {
+          doanhThu = doanhThu[0] ? doanhThu[0].totalAmount : 0;
+          res.render("admin/sites/home", {
+            layout: "admin",
+            title: "Trang chủ",
+            js: "admin/home",
+            css: "admin/home",
+            orders: multipleMongooseToObject(orders),
+            products: multipleMongooseToObject(products),
+            topProducts: topProducts,
+            topReviewProduct: topReviewProduct,
+            doanhThu: doanhThu,
+            topSeenProduct: topSeenProduct,
+            assessReview: assessReview,
+          });
+        }
+      )
       .catch(next);
   }
+
+  // index(req, res, next) {
+  //   Product.find({})
+  //     .then(function (products) {
+  //       Order.find({}).then(function (orders) {
+  //         Promise.all([
+  //           Order.aggregate([
+  //             {
+  //               $match: {
+  //                 "paymentDetail.status": "success",
+  //               },
+  //             },
+  //             {
+  //               $group: {
+  //                 _id: null,
+  //                 totalAmount: {
+  //                   $sum: "$total",
+  //                 },
+  //               },
+  //             },
+  //           ]),
+  //           Product.aggregate([
+  //             { $sort: { view: -1 } }, // Sắp xếp theo lượt view giảm dần
+  //             { $limit: 4 }, // Lấy ra 4 sản phẩm
+  //           ]),
+  //           Product.aggregate([
+  //             {
+  //               $set: {
+  //                 totalReviews: { $size: "$reviews" },
+  //               },
+  //             },
+  //             { $sort: { totalReviews: -1 } }, // Sấp xếp
+  //             { $limit: 4 }, // Limit to top 4 products
+  //             {
+  //               $project: {
+  //                 name: 1,
+  //                 images: 1,
+  //                 totalReviews: 1,
+  //               },
+  //             },
+  //           ]),
+  //           Product.aggregate([
+  //             { $unwind: "$variations" }, // Unwind the variations array
+  //             {
+  //               $group: {
+  //                 _id: "$_id",
+  //                 name: { $first: "$name" },
+  //                 images: { $first: "$images" },
+  //                 view: { $first: "$view" },
+  //                 slug: { $first: "$slug" },
+  //                 totalSold: { $sum: "$variations.sold" },
+  //                 variations: { $push: "$variations" },
+  //               },
+  //             },
+  //             { $sort: { totalSold: -1 } }, // Sort by total sold in descending order
+  //             { $limit: 4 }, // Limit to top 4 products
+  //           ]),
+  //           Product.aggregate([
+  //             {
+  //               $unwind: "$reviews",
+  //             },
+  //             {
+  //               $match: {
+  //                 "reviews.status": false,
+  //               },
+  //             },
+  //             {
+  //               $lookup: {
+  //                 from: "users",
+  //                 localField: "reviews.idUser",
+  //                 foreignField: "_id",
+  //                 as: "user",
+  //               },
+  //             },
+  //             {
+  //               $unwind: "$user",
+  //             },
+  //             {
+  //               $project: {
+  //                 name: 1,
+  //                 images: 1,
+  //                 reviews: 1,
+  //                 user: {
+  //                   name: 1,
+  //                 },
+  //               },
+  //             },
+  //             { $limit: 6 },
+  //           ]),
+  //         ]).then(
+  //           ([
+  //             doanhThu,
+  //             topSeenProduct,
+  //             topReviewProduct,
+  //             topProducts,
+  //             assessReview,
+  //           ]) => {
+  //             doanhThu = doanhThu[0] ? doanhThu[0].totalAmount : 0;
+  //             res.render("admin/sites/home", {
+  //               layout: "admin",
+  //               title: "Trang chủ",
+  //               js: "admin/home",
+  //               css: "admin/home",
+  //               orders: multipleMongooseToObject(orders),
+  //               products: multipleMongooseToObject(products),
+  //               topProducts: topProducts,
+  //               topReviewProduct: topReviewProduct,
+  //               doanhThu: doanhThu,
+  //               topSeenProduct: topSeenProduct,
+  //               assessReview: assessReview,
+  //             });
+  //           }
+  //         );
+  //       });
+  //     })
+  //     .catch(next);
+  // }
   // get /product
   product(req, res, next) {
     const url = req.originalUrl;

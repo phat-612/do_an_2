@@ -85,4 +85,30 @@ $(document).ready(function () {
     }
     $("#countNote").text(count);
   });
+
+  const userPoint = parseInt(
+    $(".userPoint").data("bs-userPoint") || $(".userPoint").text().trim()
+  );
+
+  const totalPrice = parseInt(
+    $(".totalPrice").data("bs-totalprice") || $(".totalPrice").text().trim()
+  );
+  console.log(userPoint, totalPrice);
+  $(".pointCheckbox").change(function () {
+    if ($(this).is(":checked")) {
+      // Tính tổng điểm có thể áp dụng (10% của totalPrice)
+      const maxDiscountPoint = Math.min(userPoint, totalPrice * 0.1);
+
+      // Tính toán giá trị mới
+      const newTotalPrice = totalPrice - maxDiscountPoint;
+
+      // Hiển thị kết quả
+      console.log(`Giá trị sau khi trừ điểm: ${newTotalPrice}`);
+      alert(`Tổng tiền sau khi áp dụng điểm: ${newTotalPrice.toFixed(2)}`);
+    } else {
+      // Khi bỏ chọn, hiển thị lại giá trị gốc
+      console.log(`Giá trị gốc: ${totalPrice}`);
+      alert(`Tổng tiền: ${totalPrice.toFixed(2)}`);
+    }
+  });
 });

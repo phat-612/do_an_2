@@ -410,6 +410,7 @@ class MeController {
         return total + item.point * item.quantity;
       }, 0);
       User.findOne({ _id: req.session.idUser }).then((user) => {
+        const userPoint = user.point;
         const shipmentDetail = user.shipmentDetail.map(
           (detail) => (detail = detail.toObject())
         );
@@ -417,8 +418,10 @@ class MeController {
           layout: "mainWithoutFooter",
           title: "Đặt hàng",
           js: "user/order",
+          css: "user/me.order",
           cart,
           shipmentDetail,
+          userPoint,
         });
       });
     });

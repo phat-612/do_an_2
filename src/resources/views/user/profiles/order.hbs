@@ -28,7 +28,7 @@
       <div class="mt-3">
         <div>
           <h5 class="text-capitalize">thông tin nhận hàng
-            <button id="btnAddAddress" type="button" class="float-end">
+            <button id="btnAddAddress" type="button" class="float-end btn btn-success">
               Thêm địa chỉ mới
             </button>
           </h5>
@@ -64,12 +64,28 @@
             </div>
           </div>
         </div>
-        <div>
+        <div class="mb-3">
           <label for="note">
             <h5>Ghi chú <span id="countNote">0</span>/200</h5>
           </label>
           <textarea class="d-block w-100 form-control" name="note" id="note" cols="30" rows="3"
             style="resize: none;"></textarea>
+        </div>
+        <div class="bm-3 d-flex justify-content-end">
+          <div class="d-flex">
+            <p>Sử dụng điểm:</p>
+            <p class="userPoint" data-bs-userPoint="{{userPoint}}" >{{userPoint}}</p>
+          </div> 
+          <div>
+            <label class="container">
+              <input class="pointCheckbox" type="checkbox">
+              <svg viewBox="0 0 64 64" height="1em" width="1em">
+                <path
+                  d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                  pathLength="575.0541381835938" class="path"></path>
+              </svg>
+            </label>
+          </div>
         </div>
         <div class="mb-3">
           <h5>Phương thức thanh toán</h5>
@@ -94,7 +110,7 @@
           <div class="mt-3 border p-2">
             <div class="d-flex justify-content-between">
               <h3>Tổng tiền:</h3>
-              <p class="text-danger fs-3">{{showPrice cart.totalPrice}}</p>
+              <p class="totalPrice text-danger fs-3" data-bs-totalPrice="{{cart.totalPrice}}">{{showPrice cart.totalPrice}}</p>
             </div>
             <button type="submit" class="btnSubmit w-100 bg-danger text-white py-2 fs-4 rounded">Đặt hàng
             </button>
