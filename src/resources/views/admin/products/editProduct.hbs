@@ -1,4 +1,4 @@
-<form action="/api/admin/updateProduct" method="post" enctype="multipart/form-data">
+<form action="/api/admin/updateProduct" method="post" enctype="multipart/form-data" class="editProductform">
    <input type="text" value="{{product._id}}" name="id" hidden>
 
    <div class="container">
@@ -94,7 +94,8 @@
             <tr>
                {{{showThTableProduct dataVariation.dataTable}}}
                <th class="col-2">Giá</th>
-               <th class="col-2">Số lượng</th>
+               <th class="col-1">Số lượng</th>
+               <th class="col-2">Điểm</th>
                <th class="col-2">Action</th>
             </tr>
          </thead>
@@ -106,6 +107,8 @@
                      name="variations[{{@index}}][price]"></td>
                <td><input type="number" class="form-control tdQuantity" value="{{this.quantity}}"
                      name="variations[{{@index}}][quantity]"></td>
+               <td><input type="number" class="form-control tdPoint" value="{{this.point}}"
+                           name="variations[{{@index}}][point]"></td>
                <td>
                   <div class="areaInpHidden">
                      {{{createHiddenInput this.attributes @index}}}

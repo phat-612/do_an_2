@@ -17,7 +17,7 @@
       <h4>Danh mục</h4>
       <p>
         {{#each product.category}}
-        {{this}}/
+          {{this}}/
         {{/each}}
       </p>
 
@@ -43,20 +43,22 @@
             }}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
           <th>Giá</th>
           <th>Số lượng</th>
+          <th>Điểm</th>
         </tr>
       </thead>
       <tbody>
         {{#each product.variations}}
-        <tr>
-          <td class="td1">{{#each this.attributes}}{{#if
+          <tr>
+            <td class="td1">{{#each this.attributes}}{{#if
             @first
             }}{{this}}{{/if}}{{/each}}</td>
-          <td class="td2">{{#each this.attributes}}{{#if
+            <td class="td2">{{#each this.attributes}}{{#if
             @last
             }}{{this}}{{/if}}{{/each}}</td>
-          <td>{{this.price}}</td>
-          <td>{{this.quantity}}</td>
-        </tr>
+            <td>{{this.price}}</td>
+            <td>{{this.quantity}}</td>
+            <td>{{this.point}}</td>
+          </tr>
         {{/each}}
       </tbody>
     </table>
@@ -79,7 +81,7 @@
   <div class="row">
     <h4>Danh Sách Ảnh</h4>
     {{#each product.images}}
-    <img src="{{showImgUpload this}}" alt="" class="col-3" />
+      <img src="{{showImgUpload this}}" alt="" class="col-3" />
     {{/each}}
   </div>
 </div>

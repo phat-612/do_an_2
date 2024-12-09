@@ -20,6 +20,7 @@ const Order = new Schema(
       date: { type: Date },
       amount: { type: Number },
     },
+    point: { type: Number, default: 0 },
     details: [
       {
         price: { type: Number },

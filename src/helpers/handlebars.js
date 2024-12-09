@@ -240,6 +240,11 @@ module.exports = {
     const res = numbers.reduce((a, b) => a * b, 1);
     return res.toLocaleString("vi-VN");
   },
+  showPoint: (...args) => {
+    const numbers = args.filter((arg) => typeof arg === "number");
+    const res = numbers.reduce((a, b) => a * b, 1);
+    return res.toLocaleString("vi-VN");
+  },
   showOverviewReivews: (reviews) => {
     let avageRating =
       reviews.reduce((acc, review) => {

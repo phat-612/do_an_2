@@ -7,7 +7,7 @@ const adminController = require("../app/controllers/AdminController");
 router.get("/accessProviders", adminController.accessProviders);
 
 // get store
-router.get("/store", adminController.getStorePage);
+// router.get("/store", adminController.getStorePage);
 
 //get category
 router.get("/category", adminController.category);

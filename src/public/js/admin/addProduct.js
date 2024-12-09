@@ -126,8 +126,6 @@ function handleInpValue(valAttr, event) {
   let checkEnoughRow = countAttr1Value * countAttr2Value == countRowTable;
   let valueInp = event.target.value.trim();
   if (attr == 1) {
-    // input attrValue1
-    // if (valueInp == "") return;
     if ($("#inpNameAttributePro1").val() == "") {
       event.target.value = "";
       return;
@@ -232,6 +230,7 @@ function genRowTable(td1, td2) {
     <td>${td2}</td>
     <td><input type="number" class="form-control" name="" required /></td>
     <td><input type="number" class="form-control" name="" required /></td>
+    <td><input type="number" class="form-control" name="" required /></td>
     <td>
       <div class="areaInpHidden"></div>
       <button
@@ -267,17 +266,16 @@ function renameNameValueTable() {
         />
       `;
     }
-    $(tr)
-      .find("td")
-      .eq(2)
-      .find("input")
-      .attr("name", `variations[${ind}][price]`);
-    $(tr)
-      .find("td")
-      .eq(3)
-      .find("input")
-      .attr("name", `variations[${ind}][quantity]`);
-    $(tr).find("td .areaInpHidden").html(htmlInpHidden);
+    const cells = $(tr).find("td");
+    if (cells.length >= 5) {
+      cells.eq(2).find("input").attr("name", `variations[${ind}][price]`);
+      cells.eq(3).find("input").attr("name", `variations[${ind}][quantity]`);
+      cells.eq(4).find("input").attr("name", `variations[${ind}][point]`);
+    }
+    const hiddenArea = $(tr).find("td .areaInpHidden");
+    if (hiddenArea.length) {
+      hiddenArea.html(htmlInpHidden);
+    }
   });
 }
 

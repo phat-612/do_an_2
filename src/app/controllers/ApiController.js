@@ -923,6 +923,7 @@ class ApiController {
   createOrder(req, res, next) {
     const formData = req.body;
     const idUser = req.session.idUser;
+    const totalPoint = 0;
     const promise = formData.details.map((detail) => {
       return Product.findOne({ "variations._id": detail.idVariation }).then(
         (product) => {
@@ -949,13 +950,13 @@ class ApiController {
             quantity: detail.quantity,
             price: variation.price,
             discount,
+            point: detail.point,
           };
         }
       );
     });
     Promise.all(promise)
       .then((details) => {
-        console.log(details);
         // cập nhật số lượng sản phẩm và xóa sản phẩm khỏi giỏ hàng
         details.forEach((detail) => {
           Product.updateOne(
@@ -972,10 +973,14 @@ class ApiController {
             total + detail.price * (1 - detail.discount / 100) * detail.quantity
           );
         }, 0);
+        const totalPoint = details.reduce((sum, item) => {
+          return sum + parseInt(item.point);
+        }, 0);
         const newOrder = new Order({
           idUser,
           note: formData.note.substring(0, 200),
           total,
+          point: totalPoint,
           paymentDetail: {
             method: formData.paymentMethod,
             date: new Date(),
@@ -1344,16 +1349,25 @@ class ApiController {
           });
         });
       } else if (req.body.status === "success") {
-        order.details.forEach((detail) => {
-          Product.updateOne(
-            { "variations._id": detail.idVariation },
-            // tăng số lượt bán
-            { $inc: { "variations.$.sold": detail.quantity } }
-          ).then((result) => {
-            if (result.nModified === 0) {
-              console.log("Không có sản phẩm");
-            }
-          });
+        User.updateOne(
+          { _id: order.idUser },
+          { $inc: { point: order.point } }
+        ).then((result) => {
+          if (result.modifiedCount > 0) {
+            order.details.forEach((detail) => {
+              Product.updateOne(
+                { "variations._id": detail.idVariation },
+                // tăng số lượt bán
+                { $inc: { "variations.$.sold": detail.quantity } }
+              ).then((result) => {
+                if (result.nModified === 0) {
+                  console.log("Không có sản phẩm");
+                }
+              });
+            });
+          } else {
+            console.log("Không tìm thấy người dùng để cập nhật.");
+          }
         });
       }
 

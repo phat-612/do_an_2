@@ -8,6 +8,7 @@ const User = new Schema(
     role: { type: String, default: "user" },
     birthday: { type: Date, default: Date.now },
     gender: { type: Boolean, default: false },
+    point: { type: Number, default: 0 },
     shipmentDetail: [
       {
         alias: { type: String },

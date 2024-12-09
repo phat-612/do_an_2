@@ -1,3 +1,12 @@
+// chặn sự kiện enter submit mặc định của form
+document
+  .querySelector(".editProductform")
+  .addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault(); // Ngăn hành vi mặc định
+    }
+  });
+
 let tbody = document.querySelector("tbody");
 
 // =============================================

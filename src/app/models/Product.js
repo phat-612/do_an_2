@@ -16,6 +16,7 @@ const Product = new Schema(
         slug: { type: String },
         price: { type: Number, default: 0 },
         quantity: { type: Number, default: 0 },
+        point: { type: Number, default: 0 },
         attributes: { type: Object },
         sold: { type: Number, default: 0 },
       },

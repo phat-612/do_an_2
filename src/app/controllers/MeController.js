@@ -71,6 +71,7 @@ class MeController {
           total: 1,
           status: 1,
           createdAt: 1,
+          point: "$user.point",
           name: { $arrayElemAt: ["$product.name", 0] },
           image: {
             $arrayElemAt: [
@@ -108,12 +109,14 @@ class MeController {
           }
           return total;
         }, 0);
+        const userPoint = orders.length > 0 ? orders[0].point : 0;
         res.render("user/profiles/historyOrder", {
           layout: "userProfile",
           title: "Lịch sử đơn hàng",
           orders,
           countOrder,
           totalMoneyPaid,
+          userPoint,
         });
       });
     });
@@ -369,6 +372,7 @@ class MeController {
         Product.findOne({ "variations._id": cookieCart.idVariation }),
         Cart.findOne({ idUser: req.session.idUser }),
       ]).then(([product, cart]) => {
+        // console.log(product);
         let data = {};
         data.name = product.name;
         data.image = product.images[0];
@@ -391,6 +395,7 @@ class MeController {
         }
         data.variation = variation.attributes;
         data.idVariation = variation._id;
+        data.point = variation.point;
         return data;
       });
     });
@@ -400,6 +405,9 @@ class MeController {
       cart.items = resData;
       cart.totalPrice = resData.reduce((total, item) => {
         return total + item.price * item.quantity;
+      }, 0);
+      cart.totalPoint = resData.reduce((total, item) => {
+        return total + item.point * item.quantity;
       }, 0);
       User.findOne({ _id: req.session.idUser }).then((user) => {
         const shipmentDetail = user.shipmentDetail.map(
