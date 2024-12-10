@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="/css/nouislider.css">
   <link rel="stylesheet" href="/css/dataTables.dataTables.css" />
 
-
   {{#if css}}
   <link rel="stylesheet" href="/css/{{css}}.css" />
   {{/if}}
@@ -20,11 +19,20 @@
 </head>
 
 <body>
+  <script src="/socket.io/socket.io.js"></script> <!-- Tải thư viện Socket.IO -->
+  <script>
+    // Đảm bảo thư viện đã tải trước khi gọi io()
+    const socket = io(); // Kết nối đến server
+    socket.on("connect", () => {
+      console.log("Connected to server:", socket.id);
+    });
+  </script>
   <header class="sticky-top z-2">
     {{>header-admin}}
   </header>
   <div class="admin-container">
     {{{body}}}
+    <ul id="notifications"></ul>
   </div>
   <script src="https://kit.fontawesome.com/3505ae4a94.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

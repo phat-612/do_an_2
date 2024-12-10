@@ -1,4 +1,3 @@
-// import node
 const express = require("express");
 const session = require("express-session");
 const flash = require("express-flash");
@@ -9,6 +8,11 @@ const methodOverride = require("method-override");
 const path = require("path");
 const MongoStore = require("connect-mongo");
 const cookieParser = require("cookie-parser");
+
+// Cấu hình Socket.IO
+const http = require("http"); // Import http module
+const { Server } = require("socket.io"); // Import Socket.IO
+
 // import user
 const db = require("./config/db");
 const route = require("./routes");
@@ -19,6 +23,35 @@ require("dotenv").config();
 // main
 db.connect();
 const app = express();
+
+const server = http.createServer(app); // Tạo HTTP server
+const io = new Server(server); // Tạo WebSocket server
+
+// Socket.IO: Đăng ký sự kiện kết nối
+io.on("connection", (socket) => {
+  console.log("A user connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected:", socket.id);
+  });
+});
+
+io.on("connection", (socket) => {
+  console.log("A user connected:", socket.id);
+
+  // Nhận sự kiện `newOrder` từ phía client
+  socket.on("newOrder", (orderData) => {
+    console.log("Đơn hàng mới:", orderData);
+
+    // Gửi thông báo đến tất cả admin
+    io.emit("notifyAdmin", orderData);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected:", socket.id);
+  });
+});
+
 app.engine(
   ".hbs",
   engine({
@@ -33,15 +66,7 @@ app.engine(
   })
 );
 
-// Cấu hình multer
-// const storage = multer.diskStorage({
-//   destination: "./public/img/product",
-//   filename: (req, file, cb) => {
-//     cb(null, Date.now() + "-" + file.originalname);
-//   },
-// });
 app.set("view engine", ".hbs");
-app.set("views", "./views");
 app.set("views", path.join(__dirname, "resources", "views"));
 const port = process.env.PORT || 3000;
 app.use(
@@ -113,6 +138,7 @@ app.use(function (req, res, next) {
 // router
 route(app);
 
-app.listen(3000, () => {
+// Lắng nghe server qua HTTP server (có Socket.IO)
+server.listen(port, () => {
   console.log(`Server is running on port ${port}: http://localhost:${port}`);
 });

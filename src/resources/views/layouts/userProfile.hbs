@@ -16,6 +16,14 @@
 </head>
 
 <body>
+  <script src="/socket.io/socket.io.js"></script> <!-- Tải thư viện Socket.IO -->
+  <script>
+    // Đảm bảo thư viện đã tải trước khi gọi io()
+    const socket = io(); // Kết nối đến server
+    socket.on("connect", () => {
+      console.log("Connected to server:", socket.id);
+    });
+  </script>
   {{> header-user}}
   <div class="container mh-100">
 

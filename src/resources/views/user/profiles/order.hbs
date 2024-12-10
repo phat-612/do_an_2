@@ -1,3 +1,19 @@
+<button id="orderButton">Đặt hàng</button>
+
+<script>
+  document.getElementById("orderButton").addEventListener("click", () => {
+    const order = {
+      user: "Nguyễn Văn A",
+      product: "Sản phẩm 1",
+      quantity: 2,
+    };
+
+    // Gửi dữ liệu đặt hàng đến server
+    socket.emit("newOrder", order);
+    alert("Đã đặt hàng thành công!");
+  });
+</script>
+
 <div class="container">
   <form id="formOrder" action="/api/user/order" method="post">
     <div class="custom-mw-720px m-auto">

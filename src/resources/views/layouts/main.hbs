@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="/img/static/icon.jpg">
   <title>{{title}}</title>
+
   <link rel="stylesheet" href="/css/bootstrap.css">
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
   <link rel="stylesheet" href="/css/nouislider.css">
@@ -24,6 +25,14 @@
 </head>
 
 <body>
+  <script src="/socket.io/socket.io.js"></script> <!-- Tải thư viện Socket.IO -->
+  <script>
+    // Đảm bảo thư viện đã tải trước khi gọi io()
+    const socket = io(); // Kết nối đến server
+    socket.on("connect", () => {
+      console.log("Connected to server:", socket.id);
+    });
+  </script>
   {{> header-user}}
   {{{body}}}
   {{> footer-user}}

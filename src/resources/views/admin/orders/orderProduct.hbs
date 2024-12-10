@@ -1,3 +1,15 @@
+<ul id="notifications"></ul>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  // Nhận thông báo đơn hàng mới
+  socket.on("notifyAdmin", (orderData) => {
+    const notifications = document.getElementById("notifications");
+    const newNotification = document.createElement("li");
+    newNotification.textContent = `Người dùng: ${orderData.user}, Sản phẩm: ${orderData.product}, Số lượng: ${orderData.quantity}`;
+    notifications.appendChild(newNotification);
+  });
+</script>
 <div class="container">
   <ul class="nav">
     <li class="nav-item">
