@@ -238,12 +238,12 @@ module.exports = {
   showPrice: (...args) => {
     const numbers = args.filter((arg) => typeof arg === "number");
     const res = numbers.reduce((a, b) => a * b, 1);
-    return res.toLocaleString("vi-VN");
+    return res.toLocaleString("vi", { style: "currency", currency: "VND" });
   },
   showPoint: (...args) => {
     const numbers = args.filter((arg) => typeof arg === "number");
     const res = numbers.reduce((a, b) => a * b, 1);
-    return res.toLocaleString("vi-VN");
+    return res.toLocaleString();
   },
   showOverviewReivews: (reviews) => {
     let avageRating =

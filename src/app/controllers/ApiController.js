@@ -920,31 +920,38 @@ class ApiController {
       });
     });
   }
-  createOrder(req, res, next) {
-    const formData = req.body;
-    const idUser = req.session.idUser;
-    const totalPoint = 0;
-    const promise = formData.details.map((detail) => {
-      return Product.findOne({ "variations._id": detail.idVariation }).then(
-        (product) => {
+  createOrder = async (req, res, next) => {
+    try {
+      const formData = req.body;
+      const idUser = req.session.idUser;
+
+      // Lấy điểm hiện có của user từ cơ sở dữ liệu
+      const user = await User.findOne({ _id: idUser });
+      const userPoints = user.point || 0;
+
+      // Xử lý từng sản phẩm trong đơn hàng
+      const details = await Promise.all(
+        formData.details.map(async (detail) => {
+          const product = await Product.findOne({
+            "variations._id": detail.idVariation,
+          });
           const variation = product.variations.id(detail.idVariation);
-          // kiểm tra số lượng sản phẩm
+
+          // Kiểm tra số lượng sản phẩm
           if (variation.quantity < detail.quantity) {
-            console.log("sản phẩm " + product.name + " không đủ số lượng");
-            throw new Error("Sản phẩm " + product.name + " không đủ số lượng");
+            throw new Error(`Sản phẩm "${product.name}" không đủ số lượng`);
           }
-          let discount = getDiscount(product.discount);
-          // kiểm tra giá sản phẩm
-          if (
-            Math.ceil(detail.price) !=
-            Math.ceil((variation.price * (100 - discount)) / 100)
-          ) {
-            console.log("sản phẩm " + product.name + " đã thay đổi giá bán");
-            throw new Error(
-              "Sản phẩm " + product.name + " đã thay đổi giá bán"
-            );
+
+          // Kiểm tra giá sản phẩm
+          const discount = getDiscount(product.discount);
+          const expectedPrice = Math.ceil(
+            (variation.price * (100 - discount)) / 100
+          );
+          if (Math.ceil(detail.price) !== expectedPrice) {
+            throw new Error(`Sản phẩm "${product.name}" đã thay đổi giá bán`);
           }
-          // trả về thông tin chi tiết đơn hàng
+
+          // Trả về chi tiết sản phẩm
           return {
             idVariation: detail.idVariation,
             quantity: detail.quantity,
@@ -952,64 +959,85 @@ class ApiController {
             discount,
             point: detail.point,
           };
-        }
+        })
       );
-    });
-    Promise.all(promise)
-      .then((details) => {
-        // cập nhật số lượng sản phẩm và xóa sản phẩm khỏi giỏ hàng
-        details.forEach((detail) => {
-          Product.updateOne(
+
+      // Cập nhật số lượng sản phẩm và xóa sản phẩm khỏi giỏ hàng
+      await Promise.all(
+        details.map(async (detail) => {
+          await Product.updateOne(
             { "variations._id": detail.idVariation },
             { $inc: { "variations.$.quantity": -detail.quantity } }
-          ).exec();
-          Cart.updateOne(
+          );
+          await Cart.updateOne(
             { idUser },
             { $pull: { items: { idVariation: detail.idVariation } } }
-          ).exec();
-        });
-        const total = details.reduce((total, detail) => {
-          return (
-            total + detail.price * (1 - detail.discount / 100) * detail.quantity
           );
-        }, 0);
-        const totalPoint = details.reduce((sum, item) => {
-          return sum + parseInt(item.point);
-        }, 0);
-        const newOrder = new Order({
-          idUser,
-          note: formData.note.substring(0, 200),
-          total,
-          point: totalPoint,
-          paymentDetail: {
-            method: formData.paymentMethod,
-            date: new Date(),
-            amount: total,
-          },
-          details,
-          shipmentDetail: formData.shipmentDetail,
-        });
-        newOrder.save().then((order) => {
-          if (formData.paymentMethod == "cod") {
-            return res.redirect("/me/historyOrder");
-          }
-          // xử lý thanh toán online
-          // tạo url thanh toán
-          const idOrder = order._id;
-          const amount = order.total;
-          const urlPayment = `/api/user/createPaymentUrl?idOrder=${idOrder}&amount=${amount}`;
-          return res.redirect(urlPayment);
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        req.flash("message", {
-          type: "danger",
-          message: error.message,
-        });
-        return res.redirect("/me/cart");
+        })
+      );
+
+      // Tính tổng giá trị đơn hàng và tổng điểm
+      const total = details.reduce(
+        (sum, detail) =>
+          sum + detail.price * (1 - detail.discount / 100) * detail.quantity,
+        0
+      );
+
+      const totalPoint = details.reduce(
+        (sum, detail) => sum + parseInt(detail.point),
+        0
+      );
+
+      // Áp dụng giảm giá theo điểm nếu có
+      let finalTotal = total;
+      let pointsToUse = 0;
+      if (formData.useDiscountPoint === "true") {
+        const maxDiscount = total * 0.1; // Tối đa 10% giá trị đơn hàng
+        pointsToUse = Math.min(userPoints, maxDiscount);
+        finalTotal -= pointsToUse;
+
+        // Trừ điểm của user trong cơ sở dữ liệu
+        await User.updateOne(
+          { _id: idUser },
+          { $inc: { point: -pointsToUse } }
+        );
+      }
+
+      // Tạo đơn hàng mới
+      const newOrder = new Order({
+        idUser,
+        note: formData.note.substring(0, 200),
+        total: finalTotal,
+        point: totalPoint,
+        pointsToUse,
+        paymentDetail: {
+          method: formData.paymentMethod,
+          date: new Date(),
+          amount: finalTotal,
+        },
+        details,
+        shipmentDetail: formData.shipmentDetail,
       });
-  }
+
+      const order = await newOrder.save();
+
+      // Xử lý thanh toán
+      if (formData.paymentMethod === "cod") {
+        return res.redirect("/me/historyOrder");
+      } else {
+        // Tạo URL thanh toán online
+        const urlPayment = `/api/user/createPaymentUrl?idOrder=${order._id}&amount=${order.total}`;
+        return res.redirect(urlPayment);
+      }
+    } catch (error) {
+      console.error(error);
+      req.flash("message", {
+        type: "danger",
+        message: error.message,
+      });
+      return res.redirect("/me/cart");
+    }
+  };
   cancelOrder(req, res, next) {
     const idOrder = req.body.idOrder;
     Order.findOne({ _id: idOrder }).then((order) => {
@@ -1313,16 +1341,22 @@ class ApiController {
     });
   }
   // đổi trạng thái trang order
-  changeStatus(req, res) {
-    Order.findOne({ _id: req.params.id }).then((order) => {
-      if (order.status === "shipping" && req.body.status === "pending") {
+  async changeStatus(req, res) {
+    try {
+      const order = await Order.findOne({ _id: req.params.id });
+      if (!order) {
         req.flash("message", {
           type: "danger",
-          message: "Thay đổi trạng thái không thành công",
+          message: "Đơn hàng không tồn tại",
         });
         return res.redirect("back");
       }
-      if (order.status === "success" || order.status === "failed") {
+
+      // Kiểm tra trạng thái không hợp lệ
+      if (
+        (order.status === "shipping" && req.body.status === "pending") ||
+        ["success", "failed"].includes(order.status)
+      ) {
         req.flash("message", {
           type: "danger",
           message: "Thay đổi trạng thái không thành công",
@@ -1332,86 +1366,101 @@ class ApiController {
 
       // Cập nhật trạng thái
       order.status = req.body.status;
+
       if (req.body.status === "failed") {
-        order.details.forEach((detail) => {
-          Product.updateOne(
-            { "variations._id": detail.idVariation },
-            {
-              // trả lại số lượng sản phẩm
-              $inc: {
-                "variations.$.quantity": detail.quantity,
-              },
+        const updates = order.details.map(async (detail) => {
+          try {
+            // Tìm chi tiết đơn hàng
+            const detailOrder = await Order.findOne({ _id: detail._id });
+            if (!detailOrder) {
+              console.error(
+                `Không tìm thấy chi tiết đơn hàng với ID: ${detail._id}`
+              );
+              return;
             }
-          ).then((result) => {
-            if (result.nModified === 0) {
-              console.log("Không có sản phẩm");
-            }
-          });
-        });
-      } else if (req.body.status === "success") {
-        User.updateOne(
-          { _id: order.idUser },
-          { $inc: { point: order.point } }
-        ).then((result) => {
-          if (result.modifiedCount > 0) {
-            order.details.forEach((detail) => {
-              Product.updateOne(
-                { "variations._id": detail.idVariation },
-                // tăng số lượt bán
-                { $inc: { "variations.$.sold": detail.quantity } }
-              ).then((result) => {
-                if (result.nModified === 0) {
-                  console.log("Không có sản phẩm");
-                }
-              });
-            });
-          } else {
-            console.log("Không tìm thấy người dùng để cập nhật.");
+
+            const pointsToUse = detailOrder.pointsToUse || 0;
+
+            // Hoàn trả điểm cho người dùng
+            await User.updateOne(
+              { _id: order.idUser },
+              { $inc: { pointsToUse } }
+            );
+            console.log(
+              `Hoàn trả điểm cho user ${order.idUser}: +${pointsToUse}`
+            );
+
+            // Hoàn trả số lượng sản phẩm
+            await Product.updateOne(
+              { "variations._id": detail.idVariation },
+              { $inc: { "variations.$.quantity": detail.quantity } }
+            );
+            console.log(
+              `Hoàn trả số lượng sản phẩm ${detail.idVariation}: +${detail.quantity}`
+            );
+          } catch (error) {
+            console.error(`Lỗi xử lý chi tiết đơn hàng ${detail._id}:`, error);
           }
         });
+
+        // Chờ tất cả các thao tác cập nhật hoàn thành
+        await Promise.all(updates);
+      } else if (req.body.status === "success") {
+        const userUpdated = await User.updateOne(
+          { _id: order.idUser },
+          { $inc: { point: order.point || 0 } }
+        );
+
+        if (userUpdated.modifiedCount > 0) {
+          const updates = order.details.map(async (detail) => {
+            await Product.updateOne(
+              { "variations._id": detail.idVariation },
+              { $inc: { "variations.$.sold": detail.quantity } }
+            );
+          });
+
+          await Promise.all(updates);
+        }
       }
 
+      // Cập nhật trạng thái thanh toán
       if (order.paymentDetail.method !== "cod") {
-        return order.save().then(() => {
-          return res.redirect("back");
-        });
-      }
-      if (
-        req.body.status === "pending" &&
-        order.paymentDetail.status === "pending"
-      ) {
-        order.paymentDetail.status = "pending";
-      }
-
-      if (
-        req.body.status === "shipping" &&
-        order.paymentDetail.status === "pending"
-      ) {
-        order.paymentDetail.status = "pending";
-      }
-
-      if (
-        req.body.status === "success" &&
-        order.paymentDetail.status !== "failed"
-      ) {
-        order.paymentDetail.status = "success";
+        switch (req.body.status) {
+          case "pending":
+          case "shipping":
+            if (order.paymentDetail.status === "pending") {
+              order.paymentDetail.status = "pending";
+            }
+            break;
+          case "success":
+            if (order.paymentDetail.status !== "failed") {
+              order.paymentDetail.status = "success";
+            }
+            break;
+          case "failed":
+            if (order.paymentDetail.status !== "success") {
+              order.paymentDetail.status = "failed";
+            }
+            break;
+        }
       }
 
-      if (
-        req.body.status === "failed" &&
-        order.paymentDetail.status !== "success"
-      ) {
-        order.paymentDetail.status = "failed";
-      }
+      // Lưu thay đổi
+      await order.save();
 
-      order.save().then(() => {
-        req.flash("message", {
-          type: "success",
-          message: "Thay đổi trạng thái thành công",
-        });
-        return res.redirect("back");
+      req.flash("message", {
+        type: "success",
+        message: "Thay đổi trạng thái thành công",
       });
-    });
+      res.redirect("back");
+    } catch (error) {
+      console.error("Error changing order status:", error);
+      req.flash("message", {
+        type: "danger",
+        message: "Đã xảy ra lỗi, vui lòng thử lại",
+      });
+      res.redirect("back");
+    }
   }
   // order admin
 

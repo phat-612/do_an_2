@@ -74,17 +74,26 @@
         <div class="bm-3 d-flex justify-content-end">
           <div class="d-flex">
             <p>Sử dụng điểm:</p>
-            <p class="userPoint" data-bs-userPoint="{{userPoint}}" >{{userPoint}}</p>
+            <p class="userPoint" data-bs-userPoint="{{userPoint}}" >{{showPoint userPoint}}</p>
           </div> 
           <div>
             <label class="container">
               <input class="pointCheckbox" type="checkbox">
+              <input class="discountPointInput" type="hidden" name="useDiscountPoint" value="false">
+
               <svg viewBox="0 0 64 64" height="1em" width="1em">
                 <path
                   d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
                   pathLength="575.0541381835938" class="path"></path>
               </svg>
             </label>
+          </div>
+        </div>
+        <div class="remainPointDiv bm-3 d-flex justify-content-end visually-hidden-focusable">
+          <div class="d-flex">
+            <p class=" text-danger">(Điểm còn lại: </p>
+            <p class="remainPoint text-danger"></p>
+            <p>)</p>
           </div>
         </div>
         <div class="mb-3">
@@ -102,12 +111,15 @@
               tuyến</button>
           </div>
         </div>
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-end">
           <p>Tổng điểm được tích:</p>
           <p>{{showPoint cart.totalPoint}}</p>
         </div>
         <div>
           <div class="mt-3 border p-2">
+            <div class="d-flex justify-content-end discountPointDiv visually-hidden-focusable">
+              <p>-</p><p class="discountPoint"></p>
+            </div>
             <div class="d-flex justify-content-between">
               <h3>Tổng tiền:</h3>
               <p class="totalPrice text-danger fs-3" data-bs-totalPrice="{{cart.totalPrice}}">{{showPrice cart.totalPrice}}</p>

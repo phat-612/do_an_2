@@ -21,6 +21,7 @@ const Order = new Schema(
       amount: { type: Number },
     },
     point: { type: Number, default: 0 },
+    pointsToUse: { type: Number, default: 0 },
     details: [
       {
         price: { type: Number },
