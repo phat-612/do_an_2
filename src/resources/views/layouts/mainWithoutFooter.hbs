@@ -28,6 +28,11 @@
 </head>
 
 <body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // Đảm bảo thư viện đã tải trước khi gọi io()
+    const socket = io(); // Kết nối đến server
+  </script>
   {{> header-user}}
   {{{body}}}
   <script src="https://kit.fontawesome.com/3505ae4a94.js" crossorigin="anonymous"></script>

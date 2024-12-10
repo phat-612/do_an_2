@@ -1023,6 +1023,10 @@ class ApiController {
 
       // Xử lý thanh toán
       if (formData.paymentMethod === "cod") {
+        req.flash("message", {
+          type: "success",
+          message: "Đặt hàng thành công !!!",
+        });
         return res.redirect("/me/historyOrder");
       } else {
         // Tạo URL thanh toán online

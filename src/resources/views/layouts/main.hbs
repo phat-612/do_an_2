@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="/css/style.css">
 
   {{#if css}}
-  <link rel="stylesheet" href="/css/{{css}}.css">
+    <link rel="stylesheet" href="/css/{{css}}.css">
   {{/if}}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
@@ -24,6 +24,12 @@
 </head>
 
 <body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // Đảm bảo thư viện đã tải trước khi gọi io()
+    const socket = io(); // Kết nối đến server
+
+  </script>
   {{> header-user}}
   {{{body}}}
   {{> footer-user}}
@@ -33,21 +39,22 @@
   <script src="/js/nouislider.js"></script>
 
   {{#if js}}
-  <script src="/js/{{js}}.js"></script>
+    <script src="/js/{{js}}.js"></script>
   {{/if}}
   {{#if message}}
-  <div id="liveToast" class="toast align-items-center position-fixed top-0 end-0 p-3 z-3
+    <div id="liveToast" class="toast align-items-center position-fixed top-0 end-0 p-3 z-3
           {{statusToast message.type}}" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body text-white">
-        {{message.message}}
+      <div class="d-flex">
+        <div class="toast-body text-white">
+          {{message.message}}
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
-      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
-  </div>
-  <script>
-    $('document').ready(function () { $('#liveToast').toast('show'); })
-  </script>
+
+    <script>
+      $('document').ready(function () { $('#liveToast').toast('show'); })
+    </script>
   {{/if}}
 </body>
 

@@ -16,6 +16,11 @@
 </head>
 
 <body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // Đảm bảo thư viện đã tải trước khi gọi io()
+    const socket = io(); // Kết nối đến server
+  </script>
   {{> header-user}}
   <div class="container mh-100">
 
@@ -33,7 +38,7 @@
     <script src="/js/bootstrap.js"></script>
     {{#if message}}
     <div id="liveToast" class="toast align-items-center position-fixed top-0 end-0 p-3 z-3
-          {{statusToast message.type}}" role="alert" aria-live="assertive" aria-atomic="true">
+          {{statusToast message.type}}" data-bs-Message="{{message.type}}" role="alert" aria-live="assertive" aria-atomic="true">
       <div class="d-flex">
         <div class="toast-body text-white">
           {{message.message}}

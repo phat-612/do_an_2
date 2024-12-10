@@ -20,6 +20,11 @@
 </head>
 
 <body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // Đảm bảo thư viện đã tải trước khi gọi io()
+    const socket = io(); // Kết nối đến server
+  </script>
   <header class="sticky-top z-2">
     {{>header-admin}}
   </header>
@@ -37,7 +42,17 @@
   <script src="/js/dataTables.dataTables.js"></script>
 
 
-
+  {{!-- day la thong bao chung=================================================================================================== --}}
+  <div id="notifyAdmin" class="toast align-items-center position-fixed top-0 end-0 p-3 z-3 bg-success" role="alert"
+    aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body text-white textMessage">
+        Đặt hàng thành công
+      </div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+  {{!-- day la thong bao chung=================================================================================================== --}}
   <div id="liveToast" class="z-3 toast align-items-center position-fixed top-0 end-0 p-3
           {{statusToast message.type}}" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
@@ -56,6 +71,13 @@
   {{#if js}}
   <script src="/js/{{js}}.js"></script>
   {{/if}}
+  <script>
+    // Nhận thông báo đơn hàng mới
+    socket.on("notifyAdmin", (messageChung) => {
+      $('#notifyAdmin').toast('show');
+      $("#notifyAdmin").addClass("success");
+      $(".textMessage").text(messageChung);
+    });
+  </script>
 </body>
-
 </html>

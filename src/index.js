@@ -9,16 +9,28 @@ const methodOverride = require("method-override");
 const path = require("path");
 const MongoStore = require("connect-mongo");
 const cookieParser = require("cookie-parser");
+
+// Cấu hình Socket.IO
+const http = require("http"); // Import http module
+const { Server } = require("socket.io"); // Import Socket.IO
+
 // import user
 const db = require("./config/db");
 const route = require("./routes");
 const globalVariable = require("./app/middlewares/globalVariable");
+
 // config
 require("dotenv").config();
 
 // main
 db.connect();
 const app = express();
+
+const server = http.createServer(app); // Tạo HTTP server
+const io = new Server(server); // Tạo WebSocket server
+
+require("../src/util/socket")(io);
+
 app.engine(
   ".hbs",
   engine({
@@ -113,6 +125,6 @@ app.use(function (req, res, next) {
 // router
 route(app);
 
-app.listen(3000, () => {
+server.listen(3000, () => {
   console.log(`Server is running on port ${port}: http://localhost:${port}`);
 });

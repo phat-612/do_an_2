@@ -113,6 +113,7 @@ class MeController {
         res.render("user/profiles/historyOrder", {
           layout: "userProfile",
           title: "Lịch sử đơn hàng",
+          js: "user/historyOrder",
           orders,
           countOrder,
           totalMoneyPaid,
