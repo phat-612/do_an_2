@@ -159,7 +159,6 @@ class MeController {
           variationProduct: tempVariation,
         };
       });
-      console.log(order);
       // return res.json(order);
       res.render("user/profiles/detailOrder", {
         layout: "userProfile",

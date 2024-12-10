@@ -5,7 +5,7 @@ const adminController = require("../app/controllers/AdminController");
 
 //get aassess providers (quan ly quyen user, admin)
 router.get("/accessProviders", adminController.accessProviders);
-
+router.get("/orderFromUser/:id", adminController.orderFromUser);
 // get store
 // router.get("/store", adminController.getStorePage);
 

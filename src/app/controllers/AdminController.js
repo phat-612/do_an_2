@@ -767,6 +767,100 @@ class AdminController {
       });
     });
   }
+
+  orderFromUser(req, res, next) {
+    // tên, ảnh giá, của một sản phẩm đầu tiên, thời gian
+    const idUser = req.params.id;
+    let nameUser;
+    User.findOne({ _id: idUser }).then((user) => {
+      nameUser = user.name;
+    });
+
+    Order.aggregate([
+      {
+        $match: { idUser: new mongoose.Types.ObjectId(idUser) },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "idUser",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $unwind: "$user",
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "details.idVariation",
+          foreignField: "variations._id",
+          as: "product",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          nameUser: "$user.name",
+          total: 1,
+          status: 1,
+          createdAt: 1,
+          point: "$user.point",
+          name: { $arrayElemAt: ["$product.name", 0] },
+          image: {
+            $arrayElemAt: [
+              {
+                $arrayElemAt: ["$product.images", 0],
+              },
+              0,
+            ],
+          },
+          quantityProduct: { $size: "$details" },
+        },
+      },
+    ]).then((orders) => {
+      if (req.query.hasOwnProperty("_filter")) {
+        orders = orders.filter(
+          (order) => order[req.query.column] == req.query.value
+        );
+      }
+      Order.find(
+        { idUser },
+        {
+          _id: 1,
+          total: 1,
+          paymentDetail: 1,
+          status: 1,
+        }
+      ).then((tempOrders) => {
+        let countOrder = tempOrders.length;
+        let totalMoneyPaid = tempOrders.reduce((total, order) => {
+          if (
+            order.paymentDetail.status == "success" &&
+            order.status == "success"
+          ) {
+            return total + order.total;
+          }
+          return total;
+        }, 0);
+        const userPoint = orders.length > 0 ? orders[0].point : 0;
+        res.render("admin/sites/orderFromUser", {
+          title: "Đơn hàng Người Dùng",
+          layout: "admin",
+          js: "admin/orderFromUser",
+          orders,
+          countOrder,
+          totalMoneyPaid,
+          userPoint,
+          nameUser,
+        });
+      });
+    });
+  }
   accessReview(req, res, next) {
     Product.aggregate([
       {
