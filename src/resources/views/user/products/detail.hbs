@@ -89,8 +89,13 @@
           </div>
 
           <div class="text-center my-3">
+            {{#if name}}
             <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#sendReviewModal">Gửi đánh
               giá</button>
+            {{else}}
+            <p>Đăng nhập để có thể đánh giá</p>
+            <a href="/login" class="btn btn-primary me-2">Đăng nhập</a>
+            {{/if}}
           </div>
           {{!-- đánh giá --}}
           <div class="p-4 overflow-y-auto custom-none-scroll" style=" max-height: 50vh;">
@@ -118,13 +123,20 @@
   </div>
   <div class="row m-auto" style="max-width: 750px;background-color: #f9fafb;">
     <div class="fs-4 fw-bold mt-4" >Hỏi và đáp</div>
+    {{#if name}}
     <form class="send-qa row d-flex justify-content-between" method="post" action="/api/user/commentProduct">
       <input type="text" name="idProduct" value="{{product._id}}" hidden>
       <textarea class="p-2 rounded col-10" name="comment" id="" placeholder="Chúng tôi sẽ sớm phản hồi!"></textarea>
       <button type="submit" class="btn btn-primary col-2">Gửi</button>
     </form>
+    {{else}}
+    <div class="text-center">
+      <p>Đăng nhập để có thể bình luận</p>
+      <a href="/login" class="btn btn-primary me-2">Đăng nhập</a>
+    </div>
+    {{/if}}
     <div class="area-comment px-3 py-2">
-      {{{showComments product.comments product._id}}}
+      {{{showComments product.comments product._id name}}}
     </div>
   </div>
 </div>

@@ -351,13 +351,13 @@ module.exports = {
     outputHtml += `</div>`;
     return outputHtml;
   },
-  showComments: (comments, idProduct) => {
+  showComments: (comments, idProduct, name) => {
     let outputHtml = "";
     comments.forEach((comment) => {
       let idComment = comment._id;
       outputHtml += `
       <hr />
-        <div class="comment-item">
+        <div class="comment-item" id="${idComment}">
           <div class="top d-flex justify-content-between">
             <div class="d-flex align-content-center">
               <img
@@ -375,7 +375,11 @@ module.exports = {
           </div>
           <div class="content ms-5 row justify-content-end">
             <p class="bg-white mb-0 col-12">${comment.comment}</p>
-            <p class="text-decoration-underline col-2 btnAnswerComment" data-bs-idComment="${idComment}" data-bs-idProduct="${idProduct}">Trả lời</p>
+            ${
+              name
+                ? `<p class="text-decoration-underline col-2 btnAnswerComment" data-bs-idComment="${idComment}" data-bs-idProduct="${idProduct}">Trả lời</p>`
+                : ""
+            }
           </div>
           
           <div class="ms-5 reply-comment">`;
@@ -399,7 +403,11 @@ module.exports = {
           </div>
           <div class="content ms-5 row justify-content-end">
             <p class="bg-white mb-0 col-12">${answer.comment}</p>
-            <p class="text-decoration-underline col-2 btnAnswerComment" data-bs-idComment="${idComment}" data-bs-idProduct="${idProduct}">Trả lời</p>
+            ${
+              name
+                ? `<p class="text-decoration-underline col-2 btnAnswerComment" data-bs-idComment="${idComment}" data-bs-idProduct="${idProduct}">Trả lời</p>`
+                : ""
+            }
           </div>
         </div>
         `;
