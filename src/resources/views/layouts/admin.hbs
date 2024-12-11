@@ -72,7 +72,20 @@
     <script src="/js/{{js}}.js"></script>
   {{/if}}
 
+  <script>
+    const userSessionRole = "{{session.role}}";
 
+
+    if (userSessionRole === 'admin') {
+      const socket = io();
+
+      socket.on("newOrder", (orderData) => {
+        const toastElement = $('#notifyAdmin');
+        toastElement.toast('show'); // Hiển thị toast thông báo
+        $(".textMessage").text(`Đơn hàng mới từ ${orderData.user} - Tổng tiền: ${orderData.total}`);
+      });
+    }
+  </script>
 </body>
 
 </html>
