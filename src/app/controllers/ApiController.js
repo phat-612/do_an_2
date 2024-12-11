@@ -1372,35 +1372,20 @@ class ApiController {
       order.status = req.body.status;
 
       if (req.body.status === "failed") {
+        const pointsToUse = order.pointsToUse || 0;
+
+        // Hoàn trả điểm cho người dùng
+        await User.updateOne(
+          { _id: order.idUser },
+          { $inc: { point: pointsToUse } }
+        );
+
         const updates = order.details.map(async (detail) => {
           try {
-            // Tìm chi tiết đơn hàng
-            const detailOrder = await Order.findOne({ _id: detail._id });
-            if (!detailOrder) {
-              console.error(
-                `Không tìm thấy chi tiết đơn hàng với ID: ${detail._id}`
-              );
-              return;
-            }
-
-            const pointsToUse = detailOrder.pointsToUse || 0;
-
-            // Hoàn trả điểm cho người dùng
-            await User.updateOne(
-              { _id: order.idUser },
-              { $inc: { pointsToUse } }
-            );
-            console.log(
-              `Hoàn trả điểm cho user ${order.idUser}: +${pointsToUse}`
-            );
-
             // Hoàn trả số lượng sản phẩm
             await Product.updateOne(
               { "variations._id": detail.idVariation },
               { $inc: { "variations.$.quantity": detail.quantity } }
-            );
-            console.log(
-              `Hoàn trả số lượng sản phẩm ${detail.idVariation}: +${detail.quantity}`
             );
           } catch (error) {
             console.error(`Lỗi xử lý chi tiết đơn hàng ${detail._id}:`, error);
