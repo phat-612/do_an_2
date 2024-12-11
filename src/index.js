@@ -117,6 +117,12 @@ app.use(function (req, res, next) {
   res.locals.message = req.flash("message")[0];
   next();
 });
+
+app.use((req, res, next) => {
+  res.locals.session = req.session;
+  next();
+});
+
 const { init } = require("../src/util/socket");
 
 const server = http.createServer(app);
