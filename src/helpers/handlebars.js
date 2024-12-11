@@ -9,7 +9,12 @@ module.exports = {
   sum: (a, b) => a + b,
   minus: (a, b) => a - b,
   hiddenSentence: (sentence) => sentence.replace(/[^\s]/g, "-"),
-  notTrue: (a) => !a,
+  notTrue: (a) => {
+    if (a.length == 0) {
+      return true;
+    }
+    return !a;
+  },
   compare: (a, b) => a == b,
   compareNot: (a, b) => a != b,
   compareMore: (a, b) => a > b,

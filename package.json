@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
+    "start-rcmst":"python recommend-system/final_recomend_system.py",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

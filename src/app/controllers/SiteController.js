@@ -429,21 +429,35 @@ class SiteController {
           path: "/me",
         });
 
-        Product.findOne({ slug: slugProduct })
-          .then((product) => {
-            return findSimilarProduct(Product, product, Category);
+        Promise.all([
+          axios.get(
+            `${process.env.HOST_SYSTEM_RECOMMENDATION}/api/get_product_content_based?id_variation=${curVariation._id}`
+          ),
+          axios.get(
+            `${process.env.HOST_SYSTEM_RECOMMENDATION}/api/get_product_collaborative_user?product_id=${product._id}`
+          ),
+        ])
+          .then(([resCB, resCU]) => {
+            let idsVariation = resCB.data.variation_ids;
+            let idProducts = resCU.data.product_ids;
+            return Promise.all([
+              Product.find({ "variations._id": { $in: idsVariation } }),
+              Product.find({ _id: { $in: idProducts } }),
+            ]);
           })
-          .then((products) => {
-            // return res.send(resProduct);
+          .then(([relatedProducts, togrtherProducts]) => {
             res.render("user/products/detail", {
               title: resProduct.name,
               product: resProduct,
               js: "user/detailProduct",
-              // products: products.map((product) => ({
-              //   ...product.toObject(),
-              //   variation: product.variations[0],
-              // })),
-              products: [],
+              togrtherProducts: togrtherProducts.map((product) => ({
+                ...product.toObject(),
+                variation: product.variations[0],
+              })),
+              relatedProducts: relatedProducts.map((product) => ({
+                ...product.toObject(),
+                variation: product.variations[0],
+              })),
             });
           });
       });

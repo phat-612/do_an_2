@@ -10,7 +10,7 @@ import string
 
 '''------------------- gợi ý theo thuộc tính sản phẩm -------------------'''
 # Tạo danh sách stop word từ file
-with open('stop_word_vi.txt', 'r', encoding="utf-8") as f:
+with open('recommend-system/stop_word_vi.txt', 'r', encoding="utf-8") as f:
     stop_words = set(f.read().splitlines())
 # function
 def ensure_object_id(value):
@@ -99,9 +99,9 @@ def create_product_vector(dataProducts):
     tfidf_category = TfidfVectorizer().fit_transform(categories).toarray()
     tfidf_brand = TfidfVectorizer().fit_transform(brands).toarray()
 
-    # Tăng tỉ trọng cho danh mục
-    category_weight = 2.0
-    tfidf_category *= category_weight
+    # Tăng tỉ trọng
+    tfidf_category *= 2
+    tfidf_brand *= 2
 
     # Chuẩn hóa giá
     scaler = StandardScaler()
@@ -185,7 +185,7 @@ def get_product_collaborative_user(product_id, product_ids, similarity_matrix, t
     try:
         product_index = product_ids.get_loc(product_id)
     except KeyError:
-        return f"Product ID '{product_id}' không tồn tại trong dữ liệu."
+        return []
 
     # Truy xuất độ tương đồng của sản phẩm với tất cả sản phẩm khác
     similarities = similarity_matrix[product_index]
