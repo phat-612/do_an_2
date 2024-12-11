@@ -1,19 +1,36 @@
+<div class="ms-5 mt-3">
+  <a href="javascript:history.back()" class="btn btn-primary">
+    Quay Lại
+    <i class="bi bi-arrow-return-left"></i></a>
+</div>
 <form method="post" action="/api/admin/product" enctype="multipart/form-data">
 
   <div class="container">
     <label for="name-Product" class="form-label fs-4">Tên Sản phẩm</label>
-    <input type="text" class="form-control" id="name-Product" placeholder="Nhập tên Sản Phẩm" required name="name" />
+    <input
+      type="text"
+      class="form-control"
+      id="name-Product"
+      placeholder="Nhập tên Sản Phẩm"
+      required
+      name="name"
+    />
     <label for="description-Product" class="col-form-label fs-4">Mô Tả Sản Phẩm</label>
-    <textarea class="form-control" id="description-Product" placeholder="Nhập Mô Tả Sản Phẩm" required
-      name="description"></textarea>
+    <textarea
+      class="form-control"
+      id="description-Product"
+      placeholder="Nhập Mô Tả Sản Phẩm"
+      required
+      name="description"
+    ></textarea>
 
     <label for="categoryDataList" class="form-label fs-4">Danh Mục</label>
     <select class="form-control" name="idCategory" id="" required>
       <option value="">Chọn Danh Mục</option>
       {{#each categories}}
-      <option value="{{this._id}}">{{this.idParent.name}}
-        &gt
-        {{this.name}}</option>
+        <option value="{{this._id}}">{{this.idParent.name}}
+          &gt
+          {{this.name}}</option>
       {{/each}}
     </select>
     {{! -------------------------------- }}
@@ -31,19 +48,36 @@
           <label for="ipNameAttributePro1" class="form-label fs-5">Thuộc tính 1</label>
         </div>
         <div class="col-md-6">
-          <input type="text" id="inpNameAttributePro1" class="form-control variations" placeholder=" Tên Thuộc tính"
-            required />
+          <input
+            type="text"
+            id="inpNameAttributePro1"
+            class="form-control variations"
+            placeholder=" Tên Thuộc tính"
+            required
+          />
         </div>
         <div class="col-md-6 my-3">
           <label for="" class="form-label fs-5">Giá trị</label>
         </div>
         <div class="col-md-6 my-3" id="inputAttribute1Div">
-          <button type="button" class="btn btn-success form-control btnAddValue1">Thêm giá trị</button>
+          <button
+            type="button"
+            class="btn btn-success form-control btnAddValue1"
+          >Thêm giá trị</button>
           <div class="areaInpValue1">
             <div class="row my-2 attri1-box">
-              <input type="text" placeholder="Giá trị" class="valueAttr1 form-control col mx-2 variations"
-                oninput="handleInpValue(1,event)" />
-              <button type="button" class="btn btn-danger col-2" onclick="deleteValue(1,event)" disabled>Xóa</button>
+              <input
+                type="text"
+                placeholder="Giá trị"
+                class="valueAttr1 form-control col mx-2 variations"
+                oninput="handleInpValue(1,event)"
+              />
+              <button
+                type="button"
+                class="btn btn-danger col-2"
+                onclick="deleteValue(1,event)"
+                disabled
+              >Xóa</button>
             </div>
           </div>
         </div>
@@ -56,18 +90,35 @@
           <label for="inpNameAttributePro2" class="form-label fs-5">Thuộc tính 2</label>
         </div>
         <div class="col-md-6">
-          <input type="text" id="inpNameAttributePro2" class="form-control variations" placeholder="Thuộc tính" />
+          <input
+            type="text"
+            id="inpNameAttributePro2"
+            class="form-control variations"
+            placeholder="Thuộc tính"
+          />
         </div>
         <div class="col-md-6 my-3">
           <label for="" class="form-label fs-5">Giá trị</label>
         </div>
         <div class="col-md-6 my-3" id="inputAttribute2Div">
-          <button type="button" class="btn btn-success form-control btnAddValue2">Thêm giá trị</button>
+          <button
+            type="button"
+            class="btn btn-success form-control btnAddValue2"
+          >Thêm giá trị</button>
           <div class="areaInpValue2">
             <div class="row my-2">
-              <input type="text" placeholder="Giá trị" class="valueAttr2 form-control col mx-2 variations"
-                oninput="handleInpValue(2,event)" />
-              <button type="button" onclick="deleteValue(2,event)" class="btn btn-danger col-2" disabled>Xóa</button>
+              <input
+                type="text"
+                placeholder="Giá trị"
+                class="valueAttr2 form-control col mx-2 variations"
+                oninput="handleInpValue(2,event)"
+              />
+              <button
+                type="button"
+                onclick="deleteValue(2,event)"
+                class="btn btn-danger col-2"
+                disabled
+              >Xóa</button>
             </div>
           </div>
         </div>
@@ -94,18 +145,37 @@
       <div class="col">
         <label for="" class="form-label fs-5">Nhập số phần trăm giảm :</label>
         <div class="input-group">
-          <input type="number" class="form-control percentInput" max="100" min="0"
-            oninput="this.value = Math.abs(this.value)" name="discount[percent]" id="percentInput" />
+          <input
+            type="number"
+            class="form-control percentInput"
+            max="100"
+            min="0"
+            oninput="this.value = Math.abs(this.value)"
+            name="discount[percent]"
+            id="percentInput"
+          />
           <span class="input-group-text">%</span>
         </div>
       </div>
       <div class="col">
         <label for="" class="form-label fs-5">Ngày bắt đầu :</label>
-        <input type="date" name="discount[startDay]" id="discountStart" class="form-control" disabled="true" />
+        <input
+          type="date"
+          name="discount[startDay]"
+          id="discountStart"
+          class="form-control"
+          disabled="true"
+        />
       </div>
       <div class="col">
         <label for="" class="form-label fs-5">Ngày kết thúc :</label>
-        <input type="date" name="discount[endDay]" id="discountEnd" class="form-control" disabled="true" />
+        <input
+          type="date"
+          name="discount[endDay]"
+          id="discountEnd"
+          class="form-control"
+          disabled="true"
+        />
       </div>
     </div>
 
@@ -114,8 +184,15 @@
       <div class="mb-3">
         <label for="multiImageUpload" class="form-label fs-4">Tải Ảnh Lên (TỐI
           ĐA 8 ẢNH)</label>
-        <input type="file" class="form-control" id="multiImageUpload" accept="image/*" multiple name="images"
-          required />
+        <input
+          type="file"
+          class="form-control"
+          id="multiImageUpload"
+          accept="image/*"
+          multiple
+          name="images"
+          required
+        />
       </div>
       <div class="mb-3">
         <p>Danh sách Ảnh :</p>

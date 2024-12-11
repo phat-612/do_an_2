@@ -36,6 +36,24 @@ const Product = new Schema(
         status: { type: Boolean, default: false },
       },
     ],
+    comments: [
+      {
+        idUser: { type: Schema.Types.ObjectId, ref: "User" },
+        comment: { type: String },
+        isAdmin: { type: Boolean, default: false },
+        time: { type: Date, default: Date.now },
+        status: { type: Boolean, default: false },
+        answers: [
+          {
+            idUser: { type: Schema.Types.ObjectId, ref: "User" },
+            comment: { type: String },
+            isAdmin: { type: Boolean, default: false },
+            time: { type: Date, default: Date.now },
+            status: { type: Boolean, default: false },
+          },
+        ],
+      },
+    ],
   },
   { timestamps: true }
 );

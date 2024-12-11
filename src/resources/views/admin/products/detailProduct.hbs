@@ -1,8 +1,19 @@
-<div class="container">
+<div class="ms-5 mt-3">
+  <a href="javascript:history.back()" class="btn btn-primary">
+    Quay Lại
+    <i class="bi bi-arrow-return-left"></i></a>
+</div>
+<div class="container mt-3">
   <div class="d-flex justify-content-between my-3">
     <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" {{isRadio product.isBusiness true}}
-        disabled>
+      <input
+        class="form-check-input"
+        type="checkbox"
+        value=""
+        id="flexCheckChecked"
+        {{isRadio product.isBusiness true}}
+        disabled
+      />
       <label class="form-check-label" for="flexCheckChecked">
         Đang Kinh Doanh
       </label>
@@ -36,11 +47,11 @@
       <thead>
         <tr>
           <th class="th1">{{#each product.variations}}{{#if @first}}{{#each
-            this.attributes
-            }}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
+                  this.attributes
+                }}{{#if @first}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
           <th class="th2">{{#each product.variations}}{{#if @first}}{{#each
-            this.attributes
-            }}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
+                  this.attributes
+                }}{{#if @last}}{{@key}}{{/if}}{{/each}}{{/if}}{{/each}}</th>
           <th>Giá</th>
           <th>Số lượng</th>
           <th>Điểm</th>
@@ -50,11 +61,11 @@
         {{#each product.variations}}
           <tr>
             <td class="td1">{{#each this.attributes}}{{#if
-            @first
-            }}{{this}}{{/if}}{{/each}}</td>
+                  @first
+                }}{{this}}{{/if}}{{/each}}</td>
             <td class="td2">{{#each this.attributes}}{{#if
-            @last
-            }}{{this}}{{/if}}{{/each}}</td>
+                  @last
+                }}{{this}}{{/if}}{{/each}}</td>
             <td>{{this.price}}</td>
             <td>{{this.quantity}}</td>
             <td>{{this.point}}</td>

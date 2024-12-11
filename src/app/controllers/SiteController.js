@@ -301,6 +301,8 @@ class SiteController {
 
     Product.findOne({ slug: slugProduct })
       .populate("reviews.idUser", "name")
+      .populate("comments.idUser", "name")
+      .populate("comments.answers.idUser", "name")
       .then((product) => {
         if (!product || product == null) {
           return next();
@@ -343,7 +345,11 @@ class SiteController {
           description: product.description,
           images: product.images,
           discount,
-          reviews: product.reviews,
+          reviews: product.reviews || [],
+          comments:
+            product.comments.sort(
+              (a, b) => new Date(b.time) - new Date(a.time)
+            ) || [],
           isBusiness: product.isBusiness,
         };
         let arrVariation;

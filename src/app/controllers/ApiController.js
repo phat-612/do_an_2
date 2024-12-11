@@ -1228,6 +1228,47 @@ class ApiController {
       });
     });
   }
+  // bình luận sản phẩm
+  commentProduct(req, res, next) {
+    const formData = req.body;
+    const idUser = req.session.idUser;
+    const idProduct = formData.idProduct;
+    Product.findOne({ _id: idProduct }).then((product) => {
+      if (!product) {
+        return res.redirect("back");
+      }
+      product.comments.push({
+        idUser,
+        isAdmin: req.session.role === "admin",
+        comment: formData.comment.substring(0, 250),
+      });
+      product.save().then(() => {
+        return res.redirect("back");
+      });
+    });
+  }
+  // trả lời bình luận
+  answerComment(req, res, next) {
+    const formData = req.body;
+    const idUser = req.session.idUser;
+    const idProduct = formData.idProduct;
+    const idComment = formData.idComment;
+    Product.findOne({ _id: idProduct }).then((product) => {
+      if (!product) {
+        return res.redirect("back");
+      }
+      product.comments.id(idComment).answers.push({
+        idUser,
+        comment: formData.comment.substring(0, 250),
+        isAdmin: req.session.role === "admin",
+        status: req.session.role === "admin",
+      });
+      product.comments.id(idComment).status = req.session.role === "admin";
+      product.save().then(() => {
+        return res.redirect("back");
+      });
+    });
+  }
   //quan ly banner
   storeBanner(req, res) {
     const formData = req.body;

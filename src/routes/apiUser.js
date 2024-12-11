@@ -23,5 +23,8 @@ router.get("/returnPayment", apiController.returnPayment);
 router.post("/rePayment", apiController.rePayment);
 // rating
 router.post("/ratingProduct", apiController.ratingProduct);
+// comment
+router.post("/commentProduct", apiController.commentProduct);
+router.post("/answerComment", apiController.answerComment);
 
 module.exports = router;

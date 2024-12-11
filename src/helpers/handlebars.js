@@ -351,6 +351,65 @@ module.exports = {
     outputHtml += `</div>`;
     return outputHtml;
   },
+  showComments: (comments, idProduct) => {
+    let outputHtml = "";
+    comments.forEach((comment) => {
+      let idComment = comment._id;
+      outputHtml += `
+      <hr />
+        <div class="comment-item">
+          <div class="top d-flex justify-content-between">
+            <div class="d-flex align-content-center">
+              <img
+                src="https://cdn2.cellphones.com.vn/insecure/rs:fill:55:0/q:90/plain/https://cellphones.com.vn/media/wysiwyg/chibi2.png"
+                alt="" width="20px">
+              <p class="ms-3 fw-bold fs-5">${comment.idUser.name} ${
+        comment.isAdmin
+          ? `<span class="bg-danger text-white rounded fs-6 px-1">Quản trị viên</span> </p>`
+          : ""
+      }</p>
+            </div>
+            <div class="time">
+              <p class="opacity-50">${moment(comment.time).fromNow()}</p>
+            </div>
+          </div>
+          <div class="content ms-5 row justify-content-end">
+            <p class="bg-white mb-0 col-12">${comment.comment}</p>
+            <p class="text-decoration-underline col-2 btnAnswerComment" data-bs-idComment="${idComment}" data-bs-idProduct="${idProduct}">Trả lời</p>
+          </div>
+          
+          <div class="ms-5 reply-comment">`;
+      comment.answers.forEach((answer) => {
+        outputHtml += `
+        <div class="comment-item">
+          <div class="top d-flex justify-content-between">
+            <div class="d-flex align-content-center">
+              <img
+                src="https://cdn2.cellphones.com.vn/insecure/rs:fill:55:0/q:90/plain/https://cellphones.com.vn/media/wysiwyg/chibi2.png"
+                alt="" width="20px">
+              <p class="ms-3 fw-bold fs-5">${answer.idUser.name} ${
+          answer.isAdmin
+            ? `<span class="bg-danger text-white rounded fs-6 px-1">Quản trị viên</span> </p>`
+            : ""
+        }
+            </div>
+            <div class="time">
+              <p class="opacity-50">${moment(answer.time).fromNow()}</p>
+            </div>
+          </div>
+          <div class="content ms-5 row justify-content-end">
+            <p class="bg-white mb-0 col-12">${answer.comment}</p>
+            <p class="text-decoration-underline col-2 btnAnswerComment" data-bs-idComment="${idComment}" data-bs-idProduct="${idProduct}">Trả lời</p>
+          </div>
+        </div>
+        `;
+      });
+      outputHtml += ` </div>
+      </div>
+    `;
+    });
+    return outputHtml;
+  },
   discountPrice: (price, discount) => {
     return price * (1 - discount / 100);
   },

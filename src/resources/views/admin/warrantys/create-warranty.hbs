@@ -1,3 +1,8 @@
+<div class="ms-5 mt-3">
+  <a href="javascript:history.back()" class="btn btn-primary">
+    Quay Lại
+    <i class="bi bi-arrow-return-left"></i></a>
+</div>
 <div class="container mt-4">
   <h1 class="text-center mb-4">Tạo đơn bảo hành</h1>
   <div class="card shadow">
@@ -7,40 +12,79 @@
           <div class="col-6">
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
-              <input required type="email" class="form-control" id="email" name="email" />
+              <input
+                required
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+              />
             </div>
             <div class="mb-3">
               <label for="name" class="form-label">Họ và tên</label>
-              <input required type="text" name="name" class="form-control" id="name" />
+              <input
+                required
+                type="text"
+                name="name"
+                class="form-control"
+                id="name"
+              />
             </div>
           </div>
           <div class="col-6">
             <div class="mb-3">
               <label for="phone" class="form-label">Số điện thoại</label>
-              <input required type="tel" name="phone" class="form-control" id="phone" />
+              <input
+                required
+                type="tel"
+                name="phone"
+                class="form-control"
+                id="phone"
+              />
             </div>
             <div class="mb-3">
               <label for="address" class="form-label">Địa chỉ</label>
-              <input required type="text" name="address" class="form-control" id="address" />
+              <input
+                required
+                type="text"
+                name="address"
+                class="form-control"
+                id="address"
+              />
             </div>
           </div>
           <div class="mb-3">
             <label for="note" class="form-label">Ghi chú</label>
-            <input required type="text" name="note" class="form-control" id="note" />
+            <input
+              required
+              type="text"
+              name="note"
+              class="form-control"
+              id="note"
+            />
           </div>
           <div class="col w-100">
             <label for="detail" class="form-label">Sản phẩm</label>
             <div class="row">
               <div class="col">
-                <input class="form-control" list="datalistOptions" id="detail" required />
+                <input
+                  class="form-control"
+                  list="datalistOptions"
+                  id="detail"
+                  required
+                />
                 <datalist id="datalistOptions">
                   {{#each products}}
-                  <option id="{{this._id}}">{{this.name}}</option>
+                    <option id="{{this._id}}">{{this.name}}</option>
                   {{/each}}
                 </datalist>
               </div>
               <div class="col-1">
-                <button class="btn btn-success w-100" type="button" id="addProduct">Thêm</button>
+                <button
+                  class="btn btn-success w-100"
+                  type="button"
+                  id="addProduct"
+                >Thêm</button>
               </div>
             </div>
           </div>

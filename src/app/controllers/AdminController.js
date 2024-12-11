@@ -253,6 +253,8 @@ class AdminController {
         });
       } else if (match == "soldOut") {
         arrMatch.push({ "variations.quantity": 0 });
+      } else if (match == "unBusiness") {
+        arrMatch.push({ isBusiness: false });
       }
     }
     if (find && find.trim() != "") {
