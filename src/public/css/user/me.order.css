@@ -3,7 +3,7 @@
   cursor: pointer;
 }
 
-.container input {
+.container .input {
   display: none;
 }
 
