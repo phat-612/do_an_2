@@ -9,14 +9,15 @@
   <link rel="stylesheet" href="/css/bootstrap.css">
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
   <link rel="stylesheet" href="/css/nouislider.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/styled-components/6.1.13/styled-components.min.js">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/styled-components/6.1.13/styled-components.min.js">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
     integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="/css/style.css">
 
   {{#if css}}
-  <link rel="stylesheet" href="/css/{{css}}.css">
+    <link rel="stylesheet" href="/css/{{css}}.css">
   {{/if}}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/styled-components/6.1.13/styled-components.min.js"
     integrity="sha512-6w2BKgtvP40bf3IJ5OVQs5VG27PTc1DHAnsjg6BtL47czKaULVD9cJ/rly7jvxl0LGnVGXit3TzWRzbhL22xjA=="
@@ -41,22 +42,35 @@
   <script src="/js/nouislider.js"></script>
 
   {{#if js}}
-  <script src="/js/{{js}}.js"></script>
+    <script src="/js/{{js}}.js"></script>
   {{/if}}
-  {{#if message}}
-  <div id="liveToast" class="toast align-items-center position-fixed top-0 end-0 p-3 z-3
-          {{statusToast message.type}}" role="alert" aria-live="assertive" aria-atomic="true">
+  {{!-- day la thong bao chung=================================================================================================== --}}
+  <div id="notifyAdmin" class="toast align-items-center position-fixed top-0 end-0 p-3 z-3 bg-success" role="alert"
+    aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
-      <div class="toast-body text-white">
-        {{message.message}}
+      <div class="toast-body text-white textMessage">
+        Đặt hàng thành công
       </div>
       <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
-  <script>
-    $('document').ready(function () { $('#liveToast').toast('show'); })
-  </script>
+  {{!-- day la thong bao chung=================================================================================================== --}}
+  {{#if message}}
+    <div id="liveToast" class="toast align-items-center position-fixed top-0 end-0 p-3 z-3
+          {{statusToast message.type}}" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body text-white">
+          {{message.message}}
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+    <script>
+      $('document').ready(function () { $('#liveToast').toast('show'); })
+    </script>
   {{/if}}
+
+
 </body>
 
 </html>

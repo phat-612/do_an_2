@@ -2,6 +2,7 @@ const Category = require("../models/Category");
 const Product = require("../models/Product");
 const Banner = require("../models/Banner");
 const User = require("../models/User");
+const axios = require("axios");
 const {
   getDiscount,
   getDataPagination,
@@ -433,15 +434,23 @@ class SiteController {
             return findSimilarProduct(Product, product, Category);
           })
           .then((products) => {
+            axios
+              .get(
+                `${process.env.HOST_SYSTEM_RECOMMENDATION}/api/items?id_variation=6655f50d21263ba9ab2e6f98`
+              )
+              .then((response) => {
+                console.log(response.data);
+              });
             // return res.send(resProduct);
             res.render("user/products/detail", {
               title: resProduct.name,
               product: resProduct,
               js: "user/detailProduct",
-              products: products.map((product) => ({
-                ...product.toObject(),
-                variation: product.variations[0],
-              })),
+              // products: products.map((product) => ({
+              //   ...product.toObject(),
+              //   variation: product.variations[0],
+              // })),
+              products: [],
             });
           });
       });

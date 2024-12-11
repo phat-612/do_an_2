@@ -9,6 +9,7 @@ const methodOverride = require("method-override");
 const path = require("path");
 const MongoStore = require("connect-mongo");
 const cookieParser = require("cookie-parser");
+const sharedSession = require("express-socket.io-session");
 
 // Cấu hình Socket.IO
 const http = require("http"); // Import http module
@@ -25,11 +26,6 @@ require("dotenv").config();
 // main
 db.connect();
 const app = express();
-
-const server = http.createServer(app); // Tạo HTTP server
-const io = new Server(server); // Tạo WebSocket server
-
-require("../src/util/socket")(io);
 
 app.engine(
   ".hbs",
@@ -56,20 +52,20 @@ app.set("view engine", ".hbs");
 app.set("views", "./views");
 app.set("views", path.join(__dirname, "resources", "views"));
 const port = process.env.PORT || 3000;
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: true,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-      secure: false,
-    },
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URI,
-    }),
-  })
-);
+const sessions = session({
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    secure: false,
+  },
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+  }),
+});
+app.use(sessions);
+
 app.use(flash());
 app.use(cookieParser());
 app.use(methodOverride("_method"));
@@ -121,7 +117,11 @@ app.use(function (req, res, next) {
   res.locals.message = req.flash("message")[0];
   next();
 });
+const { init } = require("../src/util/socket");
 
+const server = http.createServer(app);
+const io = init(server);
+io.use(sharedSession(sessions, { autoSave: true }));
 // router
 route(app);
 

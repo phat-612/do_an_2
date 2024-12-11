@@ -19,6 +19,8 @@ const slugify = require("slugify");
 var pdf = require("pdf-creator-node");
 var fs = require("fs");
 const nodemailer = require("nodemailer");
+const { io } = require("../../util/socket"); // Đảm bảo export `io` từ `socket.js`
+const { getIo } = require("../../util/socket");
 
 // ------------------------
 require("dotenv").config();
@@ -1020,6 +1022,10 @@ class ApiController {
       });
 
       const order = await newOrder.save();
+
+      // **Phát sự kiện `newOrder`**
+      const io = getIo(); // Lấy đối tượng io
+      io.emit("newOrder", "Có đơn hàng mới !!!!");
 
       // Xử lý thanh toán
       if (formData.paymentMethod === "cod") {

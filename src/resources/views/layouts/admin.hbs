@@ -13,7 +13,7 @@
 
 
   {{#if css}}
-  <link rel="stylesheet" href="/css/{{css}}.css" />
+    <link rel="stylesheet" href="/css/{{css}}.css" />
   {{/if}}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -63,21 +63,16 @@
     </div>
   </div>
   {{#if message}}
-  <script>
-    $('document').ready(function () { $('#liveToast').toast('show'); })
-  </script>
+    <script>
+      $('document').ready(function () { $('#liveToast').toast('show'); })
+    </script>
   {{/if}}
   {{!-- card scroll --}}
   {{#if js}}
-  <script src="/js/{{js}}.js"></script>
+    <script src="/js/{{js}}.js"></script>
   {{/if}}
-  <script>
-    // Nhận thông báo đơn hàng mới
-    socket.on("notifyAdmin", (messageChung) => {
-      $('#notifyAdmin').toast('show');
-      $("#notifyAdmin").addClass("success");
-      $(".textMessage").text(messageChung);
-    });
-  </script>
+
+
 </body>
+
 </html>

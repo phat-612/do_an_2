@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
   <link rel="stylesheet" href="/css/style.css">
   {{#if css}}
-  <link rel="stylesheet" href="/css/{{css}}.css">
+    <link rel="stylesheet" href="/css/{{css}}.css">
   {{/if}}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
@@ -36,27 +36,40 @@
     <script src="https://kit.fontawesome.com/3505ae4a94.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="/js/bootstrap.js"></script>
-    {{#if message}}
-    <div id="liveToast" class="toast align-items-center position-fixed top-0 end-0 p-3 z-3
-          {{statusToast message.type}}" data-bs-Message="{{message.type}}" role="alert" aria-live="assertive" aria-atomic="true">
+    {{!-- day la thong bao chung=================================================================================================== --}}
+    <div id="notifyAdmin" class="toast align-items-center position-fixed top-0 end-0 p-3 z-3 bg-success" role="alert"
+      aria-live="assertive" aria-atomic="true">
       <div class="d-flex">
-        <div class="toast-body text-white">
-          {{message.message}}
+        <div class="toast-body text-white textMessage">
+          Đặt hàng thành công
         </div>
         <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
     </div>
-    <script>
-      $('document').ready(function () { $('#liveToast').toast('show'); })
-    </script>
+    {{!-- day la thong bao chung=================================================================================================== --}}
+    {{#if message}}
+      <div id="liveToast" class="toast align-items-center position-fixed top-0 end-0 p-3 z-3
+          {{statusToast message.type}}" data-bs-Message="{{message.type}}" role="alert" aria-live="assertive"
+        aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body text-white">
+            {{message.message}}
+          </div>
+          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+      <script>
+        $('document').ready(function () { $('#liveToast').toast('show'); })
+      </script>
     {{/if}}
     {{#if js}}
-    <script src="/js/{{js}}.js"></script>
+      <script src="/js/{{js}}.js"></script>
     {{/if}}
     <button class="btn position-fixed btn-primary d-lg-none" type="button" data-bs-toggle="offcanvas"
       data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" style="bottom: 70px; right:10px">
       <i class="bi bi-grid-3x3-gap fs-4"></i>
     </button>
+
 </body>
 
 </html>
