@@ -15,6 +15,7 @@ const {
   multipleMongooseToObject,
   mongooseToObject,
 } = require("../../util/mongoose");
+const { time } = require("console");
 
 class AdminController {
   // // get /
@@ -899,6 +900,24 @@ class AdminController {
         title: "Quản Lý Đánh Giá",
         layout: "admin",
         products,
+      });
+    });
+  }
+  // bình luận
+  comment(req, res, next) {
+    Product.find({
+      "comments.status": false,
+    }).then((products) => {
+      let comments = products.map((product) => {
+        return product.comments.map((comment) => {
+          return {
+            idProduct: product._id,
+            productName: product.name,
+            comment: comment,
+            idComment: comment._id,
+            time: comment.createdAt,
+          };
+        });
       });
     });
   }
