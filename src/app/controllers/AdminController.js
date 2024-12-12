@@ -907,19 +907,30 @@ class AdminController {
   comment(req, res, next) {
     Product.find({
       "comments.status": false,
-    }).then((products) => {
-      let comments = products.map((product) => {
-        return product.comments.map((comment) => {
-          return {
-            idProduct: product._id,
-            productName: product.name,
-            comment: comment,
-            idComment: comment._id,
-            time: comment.createdAt,
-          };
+    })
+      .populate("comments.idUser", "name")
+      .populate("comments.answers.idUser", "name")
+      .then((products) => {
+        let comments = products.map((product) => {
+          return product.comments.map((comment) => {
+            return {
+              idProduct: product._id,
+              idComment: comment._id,
+              productName: product.name,
+              userName: comment.idUser.name,
+              comment: comment,
+              time: comment.createdAt,
+              answers: comment.answers.map((answer) => {
+                return {
+                  userName: answer.idUser.name,
+                  answer: answer,
+                  time: answer.createdAt,
+                };
+              }),
+            };
+          });
         });
       });
-    });
   }
   //minh luan
   createWarranty(req, res, next) {
