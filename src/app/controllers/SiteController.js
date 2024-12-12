@@ -572,6 +572,13 @@ class SiteController {
       });
     });
   }
+  chatBoxUser(req, res) {
+    return res.render("user/chatbox/chatboxUser", {
+      layout: "main",
+      title: "Chatbox",
+      js: "user/chatBoxUser",
+    });
+  }
   testSeeBody(req, res, next) {
     res.render("test");
   }

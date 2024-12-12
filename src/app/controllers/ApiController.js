@@ -19,6 +19,7 @@ const slugify = require("slugify");
 var pdf = require("pdf-creator-node");
 var fs = require("fs");
 const nodemailer = require("nodemailer");
+const Message = require("../models/Messages");
 const { io } = require("../../util/socket"); // Đảm bảo export `io` từ `socket.js`
 const { getIo } = require("../../util/socket");
 
@@ -1520,6 +1521,35 @@ class ApiController {
         res.redirect("back");
       });
     });
+  }
+  meMessages(req, res) {
+    const id = req.session.userId;
+    // Định nghĩa hàm formatTime bên trong meMessages
+    const formatTime = (timestamp) => {
+      const date = new Date(timestamp || Date.now());
+      const hours = String(date.getHours()).padStart(2, "0"); // Lấy giờ và định dạng là 2 chữ số
+      const minutes = String(date.getMinutes()).padStart(2, "0"); // Lấy phút và định dạng là 2 chữ số
+      return `${hours}:${minutes}`;
+    };
+
+    Message.find({ sender: id })
+      .then((messages) => {
+        // Xử lý danh sách tin nhắn
+        const formattedMessages = messages.flatMap((msg) =>
+          msg.message.map((innerMsg) => ({
+            content: innerMsg.content, // Lấy nội dung tin nhắn
+            receiver: innerMsg.receiver || null, // Xác định người nhận
+            timestamp: formatTime(innerMsg.timestamp || msg.timestamp), // Định dạng lại timestamp
+          }))
+        );
+
+        // Trả về danh sách tin nhắn đã định dạng
+        res.json(formattedMessages);
+      })
+      .catch((error) => {
+        console.error("Error fetching messages:", error);
+        res.status(500).json({ error: "Unable to fetch messages." });
+      });
   }
   // end api user
 

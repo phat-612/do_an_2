@@ -10,11 +10,9 @@ const path = require("path");
 const MongoStore = require("connect-mongo");
 const cookieParser = require("cookie-parser");
 const sharedSession = require("express-socket.io-session");
-
 // Cấu hình Socket.IO
 const http = require("http"); // Import http module
 const { Server } = require("socket.io"); // Import Socket.IO
-
 // import user
 const db = require("./config/db");
 const route = require("./routes");
@@ -124,11 +122,13 @@ app.use((req, res, next) => {
 });
 
 const { init } = require("../src/util/socket");
+const chatWebSocket = require("./config/chatbox/websocket");
 
 const server = http.createServer(app);
 const io = init(server);
 io.use(sharedSession(sessions, { autoSave: true }));
 // router
+chatWebSocket(io);
 route(app);
 
 server.listen(3000, () => {

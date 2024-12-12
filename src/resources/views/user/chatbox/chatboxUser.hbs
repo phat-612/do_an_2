@@ -1,0 +1,50 @@
+<div
+  class="d-flex justify-content-center align-items-center"
+  style="min-height: 100vh; background-color: #f0f2f5;"
+>
+  <div id="chatbox" class="card" style="width: 300px; height: 500px;">
+    <!-- Thanh Header -->
+    <div
+      class="card-header d-flex justify-content-between align-items-center"
+      style="background-color: #007bff; color: white; border-radius: 8px 8px 0 0;"
+    >
+      <span>Chăm sóc khách hàng</span>
+    </div>
+
+    <!-- Nội dung chat -->
+    <div
+      id="chatboxBody"
+      class="card-body p-3"
+      style="overflow-y: auto; background-color: #f8f9fa; border-radius: 8px; max-height: 440px;"
+    >
+      <!-- Tin nhắn mặc định -->
+      <div class="mb-2 d-flex justify-content-start" id="defaultMessage">
+        <div class="d-flex align-items-center">
+          <img
+            src="https://via.placeholder.com/30"
+            class="rounded-circle me-2"
+            alt="Avatar"
+          />
+          <div class="p-2 rounded bg-light">
+            Tôi có thể giúp gì cho bạn?
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thanh Footer (nơi nhập tin nhắn) -->
+    <div
+      class="card-footer d-flex align-items-center bg-white p-2 rounded"
+      style="border-top: 1px solid #ddd;"
+    >
+      <input
+        type="text"
+        class="form-control rounded-3"
+        placeholder="Type a message..."
+        id="chatInput"
+        style="border: 1px solid #ccc; box-shadow: none; font-size: 14px;"
+      />
+      <button class="btn btn-primary ms-2" id="sendMessage">Gửi</button>
+    </div>
+  </div>
+</div>

@@ -17,5 +17,6 @@ router.get("/:slugCategory", siteController.category);
 router.get("/:slugCategory/*?", siteController.category);
 router.get("/test", siteController.testSeeBody);
 router.get("/", siteController.index);
+router.get("/chat", siteController.chatBoxUser);
 
 module.exports = router;
