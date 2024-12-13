@@ -1,4 +1,52 @@
-// const socket = io.connect("http://localhost:3000");
+<!-- Chatbox -->
+<div id="chatboxContainer" class=" p-4 position-fixed bottom-0 start-0" style="z-index: 1050;">
+  <!-- Nút mở chatbox -->
+  <div id="chatboxToggle" class="card shadow rounded-circle" >
+    <div class="card-header d-flex justify-content-center align-items-center"
+      style="background-color: #007bff; color: white; font-size: 1.5rem; border-radius: 50%;">
+      <i class="bi bi-chat-dots"></i>
+    </div>
+  </div>
+
+  <!-- Chatbox thực tế, ẩn khi chưa mở -->
+  <div id="chatbox" class="card" style="width: 300px; height: 500px; display: none; margin-top: 10px;">
+    <!-- Thanh Header -->
+    <div class="card-header d-flex justify-content-between align-items-center"
+      style="background-color: #007bff; color: white; border-radius: 8px 8px 0 0;">
+      <span>Chăm sóc khách hàng</span>
+      <button id="closeChat" class="btn-close" aria-label="Close"></button>
+    </div>
+
+    <!-- Nội dung chat -->
+    <div id="chatboxBody" class="card-body p-3"
+      style="overflow-y: auto; background-color: #f8f9fa; border-radius: 8px; height: 380px;">
+      <!-- Tin nhắn mặc định -->
+      <div class="mb-2 d-flex justify-content-start" id="defaultMessage">
+        <div class="d-flex align-items-center">
+          <img src="https://via.placeholder.com/30" class="rounded-circle me-2" alt="Avatar" />
+          <div class="p-2 rounded bg-light">
+            Tôi có thể giúp gì cho bạn?
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thanh Footer (nơi nhập tin nhắn) -->
+    <div class="card-footer d-flex align-items-center bg-white p-2 rounded"
+      style="border-top: 1px solid #ddd;">
+      <input type="text" class="form-control rounded-3" placeholder="Type a message..." id="chatInput"
+        style="border: 1px solid #ccc; box-shadow: none; font-size: 14px;" />
+      <button class="btn btn-primary ms-2" id="sendMessage">Gửi</button>
+    </div>
+  </div>
+</div>
+
+<script>
+    var room = "{{session.idUser}}";
+  document.getElementById("chatboxToggle").addEventListener("click", function () {
+    document.getElementById("chatbox").style.display = "block";
+    document.getElementById("chatboxToggle").style.display = "none";
+  });
 socket.on("connect", async function () {
   console.log(`Đã kết nối tới server với ID: ${room}`);
   socket.emit("joinRoom", { room });
@@ -32,7 +80,7 @@ socket.on("connect", async function () {
                 isSender ? "bg-primary text-white" : "bg-light"
               }">
                 ${msg.content}
-                <div class="text-muted small mt-1">${msg.timestamp}</div>
+                <div class="text-muted small mt-1">${ msg.timestamp}</div>
               </div>
             </div>
           </div>`;
@@ -46,27 +94,26 @@ socket.on("connect", async function () {
 
 socket.on("newMessage", function (data) {
   const isSender = !data.receiver || data.receiver === ""; // Kiểm tra receiver
+  const messageTime = new Date(data.timestamp);
+  const hours = messageTime.getHours().toString().padStart(2, '0'); // Lấy giờ
+  const minutes = messageTime.getMinutes().toString().padStart(2, '0'); // Lấy phút
+  const formattedTime = `${hours}:${minutes}`;
+
   const messageElement = `
-      <div class="mb-2 d-flex ${
-        isSender ? "justify-content-end" : "justify-content-start"
-      }">
+      <div class="mb-2 d-flex ${isSender ? "justify-content-end" : "justify-content-start"}">
         <div class="d-flex align-items-center">
-          ${
-            !isSender
-              ? `<img src="https://via.placeholder.com/30" class="rounded-circle me-2" alt="Avatar" />`
-              : ""
-          }
-          <div class="p-2 rounded ${
-            isSender ? "bg-primary text-white" : "bg-light"
-          }">
+          ${!isSender ? `<img src="https://via.placeholder.com/30" class="rounded-circle me-2" alt="Avatar" />` : ""}
+          <div class="p-2 rounded ${isSender ? "bg-primary text-white" : "bg-light"}">
             ${data.message}
-            <div class="text-muted small mt-1">${data.timestamp}</div>
+            <div class="text-muted small mt-1">${formattedTime}</div> <!-- Thay timestamp bằng giờ và phút -->
           </div>
         </div>
       </div>`;
+  
   $("#chatboxBody").append(messageElement);
   $("#chatboxBody").scrollTop($("#chatboxBody")[0].scrollHeight);
 });
+
 
 // Khi người dùng nhấn nút gửi tin nhắn
 $("#sendMessage").click(function () {
@@ -120,3 +167,10 @@ async function getMessagesForUser(room) {
     isLoadingMessages = false;
   }
 }
+
+  // Đóng chatbox khi nhấn nút đóng
+  document.getElementById("closeChat").addEventListener("click", function () {
+    document.getElementById("chatbox").style.display = "none";
+    document.getElementById("chatboxToggle").style.display = "block";
+  });
+</script>

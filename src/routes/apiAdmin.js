@@ -39,5 +39,7 @@ router.delete("/category/:slugCategory", apiController.deleteCategory);
 router.post("/storeCategory", apiController.storeCategory);
 router.put("/category/:id", apiController.updateCategory);
 router.get("/searchCategory", apiController.searchCategory);
+// chat
+router.get("/messages/:id", apiController.allMessages);
 
 module.exports = router;

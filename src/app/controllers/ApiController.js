@@ -1523,7 +1523,7 @@ class ApiController {
     });
   }
   meMessages(req, res) {
-    const id = req.session.userId;
+    const id = req.session.idUser;
     // Định nghĩa hàm formatTime bên trong meMessages
     const formatTime = (timestamp) => {
       const date = new Date(timestamp || Date.now());
@@ -1531,7 +1531,6 @@ class ApiController {
       const minutes = String(date.getMinutes()).padStart(2, "0"); // Lấy phút và định dạng là 2 chữ số
       return `${hours}:${minutes}`;
     };
-
     Message.find({ sender: id })
       .then((messages) => {
         // Xử lý danh sách tin nhắn
@@ -1549,6 +1548,35 @@ class ApiController {
       .catch((error) => {
         console.error("Error fetching messages:", error);
         res.status(500).json({ error: "Unable to fetch messages." });
+      });
+  }
+  allMessages(req, res) {
+    const id = req.params.id;
+    Message.find({ sender: id })
+      .populate({
+        path: "message.sender", // Populating người gửi trong mảng message
+        select: "name", // Chỉ lấy tên người gửi
+      }) // Populating tên người gửi
+      .then((messages) => {
+        const allMessages = messages.flatMap((msg) => {
+          // Lọc các tin nhắn hợp lệ từ phòng chat
+          const filteredMessages = msg.message.filter(
+            (message) => message.room.toString() === id
+          );
+
+          // Nếu có tin nhắn hợp lệ thì trả về thông tin
+          return filteredMessages.map((message) => ({
+            userName: message.sender,
+            content: message.content,
+            receiver: message.receiver || null,
+            timestamp: message.timestamp, // Thời gian
+          }));
+        });
+        res.json(allMessages); // Trả về tất cả tin nhắn đã xử lý
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).json({ error: "Có lỗi xảy ra khi lấy tin nhắn" });
       });
   }
   // end api user

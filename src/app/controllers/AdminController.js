@@ -6,6 +6,8 @@ const User = require("../models/User");
 const Order = require("../models/Order");
 const Category = require("../models/Category");
 const Banner = require("../models/Banner");
+const Message = require("../models/Messages");
+
 var pdf = require("pdf-creator-node");
 var fs = require("fs");
 const path = require("path");
@@ -1297,7 +1299,41 @@ class AdminController {
         });
     });
   }
-
+  listMessage(req, res) {
+    const id = req.session.idUser;
+    Message.find({})
+      .populate("sender", "name")
+      .then((messages) => {
+        const messagesWithLast = messages.map((msg) => {
+          const message = msg.message[msg.message.length - 1] || null;
+          return {
+            ...msg.toObject(),
+            message,
+            userName: msg.sender.name, // Lấy tên người gửi từ sender
+          };
+        });
+        const allMessages = messages.map((msg) => {
+          // Kiểm tra nếu msg.message là một mảng và lấy ra content từ mỗi phần tử
+          const messageContents = msg.message.map((message) => message.content);
+          return {
+            ...msg.toObject(),
+            messages: messageContents, // Lưu tất cả các contentUser vào một mảng
+          };
+        });
+        res.render("admin/Chatbox/listMessage", {
+          layout: "admin",
+          title: "List Message",
+          js: "admin/ChatboxAdmin",
+          messages: messagesWithLast,
+          allMessages: allMessages,
+          id,
+        });
+      })
+      .catch((err) => {
+        console.error("Lỗi khi lấy tin nhắn:", err);
+        res.status(500).send("Lỗi server");
+      });
+  }
   // store management
 
   getStorePage(req, res, next) {

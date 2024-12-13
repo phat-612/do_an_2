@@ -1,0 +1,71 @@
+<div class="container mt-5">
+  <div class="row">
+    <!-- Danh sách tin nhắn -->
+    <div class="col-md-4 border-end" style="height: 500px; overflow-y: auto;">
+      <h5 class="text-center">Danh sách Cuộc trò chuyện</h5>
+      <div class="chat-list p-3">
+        {{#each messages}}
+          <div
+            class="chat-item d-flex align-items-center p-2 border-bottom"
+            style="cursor: pointer;"
+            data-username="{{this.userName}}"
+            data-id="{{this.sender._id}}"
+          >
+            <div class="avatar me-3">
+              <img
+                src="https://via.placeholder.com/50"
+                alt="Avatar"
+                class="rounded-circle"
+              />
+            </div>
+            <div class="chat-details flex-grow-1">
+              <div class="d-flex justify-content-between">
+                <span class="fw-bold">{{this.userName}}</span>
+                <small class="text-muted">{{showTime this.timestamp}}</small>
+              </div>
+              {{#each this.message}}
+                <div class="text-truncate text-muted">
+                  {{this.content}}
+                </div>
+              {{/each}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+
+    <!-- Khung chatbox -->
+    <div class="col-md-8" id="chatboxContainer" style="display: none;">
+      <div class="chatbox border rounded shadow-sm" style="height: 500px;">
+        <!-- Header -->
+        <div
+          class="chatbox-header bg-primary text-white p-2 d-flex justify-content-between align-items-center"
+        >
+          <span>Chat với <span id="chatboxUserName"></span></span>
+        </div>
+
+        <!-- Body -->
+        <div
+          class="chatbox-body p-3"
+          style="height: 400px; overflow-y: auto;"
+          id="chatboxMessages"
+        >
+        </div>
+
+        <!-- Footer -->
+        <div class="chatbox-footer p-2 d-flex">
+          <input
+            type="text"
+            class="form-control me-2"
+            placeholder="Nhập tin nhắn..."
+            id="chatInput"
+          />
+          <button class="btn btn-primary">Gửi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  var idAdmin = "{{id}}";
+</script>

@@ -664,6 +664,15 @@ module.exports = {
     let urlSort = url.format(parseUrl);
     return urlSort;
   },
+  showTime: (date) => {
+    if (!(date instanceof Date) || !date) return "";
+    const hours =
+      date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
+    const minutes =
+      date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
+
+    return `${hours}:${minutes}`;
+  },
   getFilterUrl: (tempUrl) => {
     let parseUrl = url.parse(tempUrl, true);
     delete parseUrl.query._sort;

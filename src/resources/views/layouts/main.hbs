@@ -28,19 +28,22 @@
   <script>
     // Đảm bảo thư viện đã tải trước khi gọi io()
     const socket = io(); // Kết nối đến server
-
   </script>
+  {{> chatbox}}
+
   {{> header-user}}
   {{{body}}}
   {{> footer-user}}
+  {{#if js}}
+    <script src="/js/{{js}}.js"></script>
+  {{/if}}
+
   <script src="https://kit.fontawesome.com/3505ae4a94.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
   <script src="/js/bootstrap.js"></script>
   <script src="/js/nouislider.js"></script>
 
-  {{#if js}}
-    <script src="/js/{{js}}.js"></script>
-  {{/if}}
+      <!-- Nội dung chat -->
   {{!-- day la thong bao chung=================================================================================================== --}}
   <div id="notifyAdmin" class="toast align-items-center position-fixed top-0 end-0 p-3 z-3 bg-success" role="alert"
     aria-live="assertive" aria-atomic="true">
@@ -70,11 +73,8 @@
 
   <script>
     const userSessionRole = "{{session.role}}";
-
-
     if (userSessionRole === 'admin') {
-      const socket = io();
-
+    const socket = io();
       socket.on("newOrder", (orderData) => {
         const toastElement = $('#notifyAdmin');
         toastElement.toast('show'); // Hiển thị toast thông báo
@@ -82,6 +82,7 @@
       });
     }
   </script>
+
 </body>
 
 </html>

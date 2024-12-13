@@ -5,7 +5,6 @@ const messageSchema = new Schema({
   sender: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", // Liên kết tới schema User (người gửi)
-    required: true,
   },
   receiver: {
     type: mongoose.Schema.Types.ObjectId,
@@ -15,7 +14,6 @@ const messageSchema = new Schema({
     {
       room: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
       },
       sender: {
         type: mongoose.Schema.Types.ObjectId,
@@ -27,7 +25,6 @@ const messageSchema = new Schema({
       },
       content: {
         type: String,
-        required: true,
       },
       timestamp: {
         type: Date,
