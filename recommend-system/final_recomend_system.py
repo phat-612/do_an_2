@@ -5,6 +5,7 @@ required_libraries = [
     "pymongo",
     "scikit-learn",
     "numpy",
+    "flask",
     "pandas"
 ]
 
@@ -304,4 +305,4 @@ def api_get_product_collaborative_user():
     })
 # Chạy ứng dụng
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,port=5000)

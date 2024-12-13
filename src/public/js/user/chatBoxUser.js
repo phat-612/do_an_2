@@ -1,8 +1,8 @@
 var room = "{{idRoom}}";
-const socketUser = io.connect("http://localhost:3000");
-socketUser.on("connect", async function () {
+// const socket = io.connect("http://localhost:3000");
+socket.on("connect", async function () {
   console.log(`Đã kết nối tới server với ID: ${room}`);
-  socketUser.emit("joinRoom", { room });
+  socket.emit("joinRoom", { room });
 
   // Hiển thị thông báo tham gia phòng
   const joinMessageElement = `
@@ -45,7 +45,7 @@ socketUser.on("connect", async function () {
   }
 });
 
-socketUser.on("newMessage", function (data) {
+socket.on("newMessage", function (data) {
   const isSender = !data.receiver || data.receiver === ""; // Kiểm tra receiver
   const messageElement = `
       <div class="mb-2 d-flex ${
@@ -74,7 +74,7 @@ $("#sendMessage").click(function () {
   const message = $("#chatInput").val();
   if (message) {
     console.log("Gửi tin nhắn:", message);
-    socketUser.emit("sendMessage", {
+    socket.emit("sendMessage", {
       message: message,
       sender: room,
       receiver: "",
