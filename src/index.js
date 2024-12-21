@@ -123,7 +123,6 @@ app.use((req, res, next) => {
 
 const { init } = require("../src/util/socket");
 const chatWebSocket = require("./config/chatbox/websocket");
-
 const server = http.createServer(app);
 const io = init(server);
 io.use(sharedSession(sessions, { autoSave: true }));
