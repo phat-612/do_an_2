@@ -23,7 +23,6 @@
       <!-- Tin nhắn mặc định -->
       <div class="mb-2 d-flex justify-content-start" id="defaultMessage">
         <div class="d-flex align-items-center">
-          <img src="https://via.placeholder.com/30" class="rounded-circle me-2" alt="Avatar" />
           <div class="p-2 rounded bg-light">
             Tôi có thể giúp gì cho bạn?
           </div>
@@ -46,7 +45,11 @@
   document.getElementById("chatboxToggle").addEventListener("click", function () {
     document.getElementById("chatbox").style.display = "block";
     document.getElementById("chatboxToggle").style.display = "none";
+    setTimeout(() => {
+    chatboxBody.scrollTop = chatboxBody.scrollHeight;
+    }, 100);
   });
+
 socket.on("connect", async function () {
   console.log(`Đã kết nối tới server với ID: ${room}`);
   socket.emit("joinRoom", { room });
@@ -90,9 +93,11 @@ if (messages.length > 0) {
       const messageElement = `
           <div class="mb-2 d-flex ${isSender ? "justify-content-end" : "justify-content-start"}">
             <div class="d-flex align-items-center">
-              <div class="p-2 rounded ${isSender ? "bg-primary text-white" : "bg-light"}">
-                ${msg.content}
-                <div class="text-muted small mt-1">${formattedTime}</div>
+            <div class="p-2 rounded" style="${isSender ? 'background-color: rgb(219, 235, 255);' : ''}">
+            ${msg.content}
+            <div class="text-muted small mt-1">${formattedTime}</div>
+          </div>
+
               </div>
             </div>
           </div>`;
@@ -115,7 +120,7 @@ socket.on("newMessage", function (data) {
           ${!isSender ? `<img src="https://via.placeholder.com/30" class="rounded-circle me-2" alt="Avatar" />` : ""}
           <div class="p-2 rounded ${isSender ? "bg-primary text-white" : "bg-light"}">
             ${data.message}
-            <div class="text-muted small mt-1">${formattedTime}</div> <!-- Thay timestamp bằng giờ và phút -->
+            <div class="text-muted small mt-1">${formattedTime}</div>
           </div>
         </div>
       </div>`;
@@ -187,7 +192,7 @@ $("#sendMessage").click(async function () {
     messageElement += `
       <div class="mb-2 d-flex justify-content-end">
         <div class="d-flex align-items-center">
-          <div class="p-2 rounded bg-primary text-white">
+          <div class="p-2 rounded text-black"style="background-color: rgb(219, 235, 255)">
             ${message}
             <div class="text-muted small mt-1">${formattedTimeNotYear}</div>
           </div>

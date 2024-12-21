@@ -2,17 +2,20 @@ const Message = require("../models/Messages");
 class ChatController {
   async userMessageHandler(data) {
     const { message, sender, receiver, room } = data;
-    this.to(room).emit("newMessage", {
+      this.to(room).emit("newMessage", {
       message: message,
       sender: sender,
       receiver: receiver || null,
       timestamp: new Date(),
     });
-    this.broadcast.emit("thongbao", {
-      sender: sender,
-      receiver: receiver || null,
-      timestamp: new Date(),
-    });
+    if (!receiver) {
+      this.broadcast.emit("thongbao", {
+        sender: sender,
+        receiver: receiver || null,
+        timestamp: new Date(),
+      });
+    }
+
     // Kiểm tra nếu tin nhắn đã có trong cơ sở dữ liệu dựa trên room (mã sender)
     let existingMessage = await Message.findOne({ "message.room": room });
     if (existingMessage) {
