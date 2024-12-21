@@ -103,16 +103,12 @@ class ApiController {
   //cập nhật sản phẩm
   async updateProduct(req, res, next) {
     const formData = req.body;
-    console.log(formData.variations);
-    return res.redirect("back");
-
     let isBusiness;
     if (formData.isBusiness) {
       isBusiness = true;
     } else {
       isBusiness = false;
     }
-
     const nameWithoutAccent = diacritics.remove(req.body.name).trim();
     let slug = nameWithoutAccent.toLowerCase().replace(/[^a-z0-9]+/g, "-");
     const slugRegEx = new RegExp(`^(${slug})((-[0-9]*$)?)$`, "i");
@@ -1265,9 +1261,9 @@ class ApiController {
         idUser,
         comment: formData.comment.substring(0, 250),
         isAdmin: req.session.role === "admin",
-        status: req.session.role === "admin",
       });
       product.comments.id(idComment).status = req.session.role === "admin";
+      product.comments.id(idComment).timeUpdate = new Date();
       product.save().then(() => {
         return res.redirect("back");
       });

@@ -43,13 +43,13 @@ const Product = new Schema(
         isAdmin: { type: Boolean, default: false },
         time: { type: Date, default: Date.now },
         status: { type: Boolean, default: false },
+        timeUpdate: { type: Date, default: Date.now },
         answers: [
           {
             idUser: { type: Schema.Types.ObjectId, ref: "User" },
             comment: { type: String },
             isAdmin: { type: Boolean, default: false },
             time: { type: Date, default: Date.now },
-            status: { type: Boolean, default: false },
           },
         ],
       },

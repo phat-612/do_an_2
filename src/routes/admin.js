@@ -31,8 +31,10 @@ router.get("/product/:id/detail", adminController.detail);
 router.get("/product/:id/edit", adminController.editProduct);
 router.get("/product/addProduct", adminController.addPro);
 router.get("/product", adminController.product);
+// get message
 router.get("/listMessage", adminController.listMessage);
-
+// get Q&A
+router.get("/comment", adminController.getCommmentPage);
 // home
 router.get("/", adminController.index);
 

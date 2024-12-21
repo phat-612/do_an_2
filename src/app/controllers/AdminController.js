@@ -12,7 +12,10 @@ var pdf = require("pdf-creator-node");
 var fs = require("fs");
 const path = require("path");
 
-const { getDataPagination } = require("../../util/function");
+const {
+  getDataPagination,
+  mongooseTimeToDDMMYYYY,
+} = require("../../util/function");
 const {
   multipleMongooseToObject,
   mongooseToObject,
@@ -1299,6 +1302,7 @@ class AdminController {
         });
     });
   }
+
   listMessage(req, res) {
     const id = req.session.idUser;
     Message.find({})
@@ -1332,6 +1336,37 @@ class AdminController {
       .catch((err) => {
         console.error("Lỗi khi lấy tin nhắn:", err);
         res.status(500).send("Lỗi server");
+      });
+  }
+  // Q&A
+  getCommmentPage(req, res, next) {
+    Product.find({ "comments.status": false })
+      .select("comments name slug")
+      .populate("comments.idUser", "name")
+      .populate("comments.answers.idUser", "name")
+      .then((products) => {
+        let comments = [];
+        products.forEach((product) => {
+          product.comments.forEach((comment) => {
+            if (comment.status === false) {
+              comments.push({
+                idProduct: product._id,
+                idComment: comment._id,
+                productName: product.name,
+                fullname: comment.idUser.name,
+                comment: comment.comment,
+                timeUpdate: mongooseTimeToDDMMYYYY(comment.timeUpdate),
+                slug: product.slug,
+              });
+            }
+          });
+        });
+        // Xử lý kết quả
+        return res.render("admin/sites/comment", {
+          title: "Quản Lý Bình Luận",
+          layout: "admin",
+          comments,
+        });
       });
   }
   // store management

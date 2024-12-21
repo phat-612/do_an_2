@@ -12,17 +12,22 @@
       </tr>
     </thead>
     <tbody>
-      {{!-- {{#each comments}}
+      {{#each comments}}
         <tr>
-          <th scope="row">{{@index}}</th>
-          <td>{{this.name}}</td>
-          <td>{{this.content}}</td>
-          <td>{{this.time}}</td>
+          <th scope="row">{{sum @index 1}}</th>
+          <td>{{this.fullname}}</td>
+          <td>{{this.productName}}</td>
+          <td>{{this.comment}}</td>
+          <td>{{this.timeUpdate}}</td>
           <td>
-            <button class="btn btn-primary btn-sm">Trả lời</button>
+            <a
+              href="/product/{{this.slug}}#{{this.idComment}}"
+              class="btn btn-primary"
+              target="_blank"
+            >Trả lời</a>
           </td>
         </tr>
-      {{/each}} --}}
+      {{/each}}
 
     </tbody>
   </table>
