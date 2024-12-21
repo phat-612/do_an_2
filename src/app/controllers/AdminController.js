@@ -1299,6 +1299,7 @@ class AdminController {
         });
     });
   }
+
   listMessage(req, res) {
     const id = req.session.idUser;
     Message.find({})
@@ -1333,6 +1334,26 @@ class AdminController {
         console.error("Lỗi khi lấy tin nhắn:", err);
         res.status(500).send("Lỗi server");
       });
+  }
+  // Q&A
+  getCommmentPage(req, res, next) {
+    Product.find({ "comments.status": false })
+      .select("comments, name")
+      .populate("comments.idUser")
+      .populate("comments.answers.idUser")
+      .then((err, products) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        console.log(11);
+        // Xử lý kết quả
+        console.log(13121213);
+      });
+    res.render("admin/sites/comment", {
+      title: "Quản Lý Bình Luận",
+      layout: "admin",
+    });
   }
   // store management
 
