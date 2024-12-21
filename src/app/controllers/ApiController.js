@@ -103,14 +103,12 @@ class ApiController {
   //cập nhật sản phẩm
   async updateProduct(req, res, next) {
     const formData = req.body;
-    return console.log(req.body);
     let isBusiness;
     if (formData.isBusiness) {
       isBusiness = true;
     } else {
       isBusiness = false;
     }
-
     const nameWithoutAccent = diacritics.remove(req.body.name).trim();
     let slug = nameWithoutAccent.toLowerCase().replace(/[^a-z0-9]+/g, "-");
     const slugRegEx = new RegExp(`^(${slug})((-[0-9]*$)?)$`, "i");
