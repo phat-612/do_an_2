@@ -1,6 +1,8 @@
 const Category = require("../models/Category");
 const Product = require("../models/Product");
 const Banner = require("../models/Banner");
+const Message = require("../models/Messages");
+
 const User = require("../models/User");
 const axios = require("axios");
 const {
@@ -579,7 +581,10 @@ class SiteController {
 
   chatBoxUser(req, res) {
     const idRoom = req.session.idUser;
-    console.log(idRoom);
+    const timeChatUser = findOne({ sender: idRoom }).then(
+      (time) => time.timestamp
+    );
+    return console.log(timeChatUser);
     return res.render("user/chatbox/chatboxUser", {
       layout: "main",
       title: "Chatbox",

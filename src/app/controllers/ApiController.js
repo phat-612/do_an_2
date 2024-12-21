@@ -103,7 +103,9 @@ class ApiController {
   //cập nhật sản phẩm
   async updateProduct(req, res, next) {
     const formData = req.body;
-    return console.log(req.body);
+    console.log(formData.variations);
+    return res.redirect("back");
+
     let isBusiness;
     if (formData.isBusiness) {
       isBusiness = true;

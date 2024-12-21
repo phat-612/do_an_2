@@ -7,6 +7,7 @@ socket.on("connect", async function () {
   const joinMessageElement = `
       <div class="mb-2 d-flex justify-content-center">
         <div class="d-flex align-items-center">
+        <p></p>
           <div class="p-2 rounded bg-info text-white">Chúng tôi sẽ hỗ trợ bạn sớm nhất</div>
         </div>
       </div>`;

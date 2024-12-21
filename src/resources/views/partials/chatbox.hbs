@@ -42,7 +42,7 @@
 </div>
 
 <script>
-    var room = "{{session.idUser}}";
+  var room = "{{session.idUser}}";
   document.getElementById("chatboxToggle").addEventListener("click", function () {
     document.getElementById("chatbox").style.display = "block";
     document.getElementById("chatboxToggle").style.display = "none";
@@ -62,34 +62,37 @@ socket.on("connect", async function () {
   $("#chatboxBody").scrollTop($("#chatboxBody")[0].scrollHeight);
 
   // Lấy tin nhắn lịch sử
-  try {
-    const messages = await getMessagesForUser(room);
+try {
+  const messages = await getMessagesForUser(room);
+  if (messages.length > 0) {
+    // Kiểm tra timestamp của tin nhắn đầu tiên
+    const timeElement = `
+      <div class="text-center text-muted small mb-2">
+        ${messages[0].timestamp}
+      </div>`;
+    $("#chatboxBody").append(timeElement);
+
     messages.forEach((msg) => {
       const isSender = !msg.receiver || msg.receiver === ""; // Kiểm tra vị trí dựa vào receiver
       const messageElement = `
-          <div class="mb-2 d-flex ${
-            isSender ? "justify-content-end" : "justify-content-start"
-          }">
+          <div class="mb-2 d-flex ${isSender ? "justify-content-end" : "justify-content-start"}">
             <div class="d-flex align-items-center">
-              ${
-                !isSender
-                  ? `<img src="https://via.placeholder.com/30" class="rounded-circle me-2" alt="Avatar" />`
-                  : ""
-              }
-              <div class="p-2 rounded ${
-                isSender ? "bg-primary text-white" : "bg-light"
-              }">
+              <div class="p-2 rounded ${isSender ? "bg-primary text-white" : "bg-light"}">
                 ${msg.content}
-                <div class="text-muted small mt-1">${ msg.timestamp}</div>
+                <div class="text-muted small mt-1">${msg.timestamp}</div>
               </div>
             </div>
           </div>`;
       $("#chatboxBody").append(messageElement);
     });
+
     $("#chatboxBody").scrollTop($("#chatboxBody")[0].scrollHeight);
-  } catch (error) {
-    console.error("Không thể tải tin nhắn:", error);
   }
+} catch (error) {
+  console.error("Không thể tải tin nhắn:", error);
+}
+
+
 });
 
 socket.on("newMessage", function (data) {
@@ -116,17 +119,39 @@ socket.on("newMessage", function (data) {
 
 
 // Khi người dùng nhấn nút gửi tin nhắn
+let isFirstMessage = true; // Biến để kiểm tra tin nhắn đầu tiên
+
 $("#sendMessage").click(function () {
   const message = $("#chatInput").val();
+  const currentTime = new Date().toISOString(); 
   if (message) {
     console.log("Gửi tin nhắn:", message);
+    
+    // Gửi tin nhắn qua socket với thời gian
     socket.emit("sendMessage", {
       message: message,
       sender: room,
       receiver: "",
       room: room,
+      time: currentTime, 
     });
-    const messageElement = `
+
+    // Xử lý tin nhắn đầu tiên
+    let messageElement = '';
+    if (isFirstMessage) {
+      // Định dạng thời gian: chỉ lấy giờ và phút
+       const messageTime = new Date(currentTime);
+      const day = messageTime.getDate().toString().padStart(2, '0');
+      const month = (messageTime.getMonth() + 1).toString().padStart(2, '0'); 
+      const year = messageTime.getFullYear();
+      const hours = messageTime.getHours().toString().padStart(2, '0');
+      const minutes = messageTime.getMinutes().toString().padStart(2, '0');
+      const formattedTime = `${day}/${month}/${year} ${hours}:${minutes}`;
+
+      messageElement = `
+        <div class="text-center text-muted small mb-2">
+          ${formattedTime} <!-- Hiển thị giờ và phút -->
+        </div>
         <div class="mb-2 d-flex justify-content-end">
           <div class="d-flex align-items-center">
             <div class="p-2 rounded bg-primary text-white">
@@ -135,11 +160,28 @@ $("#sendMessage").click(function () {
             </div>
           </div>
         </div>`;
+      isFirstMessage = false; // Đánh dấu đã gửi tin nhắn đầu tiên
+    } else {
+      // Với các tin nhắn tiếp theo
+      messageElement = `
+        <div class="mb-2 d-flex justify-content-end">
+          <div class="d-flex align-items-center">
+            <div class="p-2 rounded bg-primary text-white">
+              ${message}
+              <div class="text-muted small mt-1">Now</div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    // Thêm tin nhắn vào giao diện
     $("#chatboxBody").append(messageElement);
-    $("#chatInput").val("");
-    $("#chatboxBody").scrollTop($("#chatboxBody")[0].scrollHeight);
+    $("#chatInput").val(""); // Xóa nội dung ô nhập
+    $("#chatboxBody").scrollTop($("#chatboxBody")[0].scrollHeight); // Cuộn xuống cuối cùng
   }
 });
+
+
 
 $("#chatInput").keypress(function (e) {
   if (e.which == 13) {
