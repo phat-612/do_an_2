@@ -12,7 +12,10 @@ var pdf = require("pdf-creator-node");
 var fs = require("fs");
 const path = require("path");
 
-const { getDataPagination } = require("../../util/function");
+const {
+  getDataPagination,
+  mongooseTimeToDDMMYYYY,
+} = require("../../util/function");
 const {
   multipleMongooseToObject,
   mongooseToObject,
@@ -1338,22 +1341,33 @@ class AdminController {
   // Q&A
   getCommmentPage(req, res, next) {
     Product.find({ "comments.status": false })
-      .select("comments, name")
-      .populate("comments.idUser")
-      .populate("comments.answers.idUser")
-      .then((err, products) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        console.log(11);
+      .select("comments name slug")
+      .populate("comments.idUser", "name")
+      .populate("comments.answers.idUser", "name")
+      .then((products) => {
+        let comments = [];
+        products.forEach((product) => {
+          product.comments.forEach((comment) => {
+            if (comment.status === false) {
+              comments.push({
+                idProduct: product._id,
+                idComment: comment._id,
+                productName: product.name,
+                fullname: comment.idUser.name,
+                comment: comment.comment,
+                timeUpdate: mongooseTimeToDDMMYYYY(comment.timeUpdate),
+                slug: product.slug,
+              });
+            }
+          });
+        });
         // Xử lý kết quả
-        console.log(13121213);
+        return res.render("admin/sites/comment", {
+          title: "Quản Lý Bình Luận",
+          layout: "admin",
+          comments,
+        });
       });
-    res.render("admin/sites/comment", {
-      title: "Quản Lý Bình Luận",
-      layout: "admin",
-    });
   }
   // store management
 

@@ -1261,9 +1261,9 @@ class ApiController {
         idUser,
         comment: formData.comment.substring(0, 250),
         isAdmin: req.session.role === "admin",
-        status: req.session.role === "admin",
       });
       product.comments.id(idComment).status = req.session.role === "admin";
+      product.comments.id(idComment).timeUpdate = new Date();
       product.save().then(() => {
         return res.redirect("back");
       });
