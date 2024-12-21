@@ -1,9 +1,9 @@
 <!-- Chatbox -->
-<div id="chatboxContainer" class=" p-4 position-fixed bottom-0 start-0" style="z-index: 1050;">
+<div id="chatboxContainer" class=" p-4 position-fixed end-0" style="z-index: 1050; bottom: 50px; cursor: pointer;">
   <!-- Nút mở chatbox -->
   <div id="chatboxToggle" class="card shadow rounded-circle" >
     <div class="card-header d-flex justify-content-center align-items-center"
-      style="background-color: #007bff; color: white; font-size: 1.5rem; border-radius: 50%;">
+      style="background-color: #007bff; color: white; border-radius: 50%; width: 45px; height: 45px;">
       <i class="bi bi-chat-dots"></i>
     </div>
   </div>
@@ -60,37 +60,45 @@ socket.on("connect", async function () {
       </div>`;
   $("#chatboxBody").append(joinMessageElement);
   $("#chatboxBody").scrollTop($("#chatboxBody")[0].scrollHeight);
-
   // Lấy tin nhắn lịch sử
-try {
-  const messages = await getMessagesForUser(room);
-  if (messages.length > 0) {
-    // Kiểm tra timestamp của tin nhắn đầu tiên
-    const timeElement = `
-      <div class="text-center text-muted small mb-2">
-        ${messages[0].timestamp}
-      </div>`;
-    $("#chatboxBody").append(timeElement);
+ const messages = await getMessagesForUser(room);
+if (messages.length > 0) {
+  // Chuyển đổi timestamp thành đối tượng Date
+  const messageTime = new Date(messages[0].timestamp.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:00'));
+  
+  // Lấy ngày, tháng, năm, giờ, phút
+  const day = messageTime.getDate().toString().padStart(2, "0");
+  const month = (messageTime.getMonth() + 1).toString().padStart(2, "0");
+  const year = messageTime.getFullYear();
+  const hours = messageTime.getHours().toString().padStart(2, "0");
+  const minutes = messageTime.getMinutes().toString().padStart(2, "0");
+  const formattedTime = `${day}/${month}/${year} ${hours}:${minutes}`;
 
-    messages.forEach((msg) => {
+  // Tạo phần tử thời gian cho tin nhắn đầu tiên
+  const timeElement = `
+    <div class="text-center text-muted small mb-2">
+      ${formattedTime}
+    </div>`;
+  $("#chatboxBody").append(timeElement);
+}
+  messages.forEach((msg) => {
+        const messageTime = new Date(msg.timestamp);
+        const hours = messageTime.getHours().toString().padStart(2, '0'); // Lấy giờ
+        const minutes = messageTime.getMinutes().toString().padStart(2, '0'); // Lấy phút
+        const formattedTime = `${hours}:${minutes}`;
       const isSender = !msg.receiver || msg.receiver === ""; // Kiểm tra vị trí dựa vào receiver
       const messageElement = `
           <div class="mb-2 d-flex ${isSender ? "justify-content-end" : "justify-content-start"}">
             <div class="d-flex align-items-center">
               <div class="p-2 rounded ${isSender ? "bg-primary text-white" : "bg-light"}">
                 ${msg.content}
-                <div class="text-muted small mt-1">${msg.timestamp}</div>
+                <div class="text-muted small mt-1">${formattedTime}</div>
               </div>
             </div>
           </div>`;
       $("#chatboxBody").append(messageElement);
     });
-
     $("#chatboxBody").scrollTop($("#chatboxBody")[0].scrollHeight);
-  }
-} catch (error) {
-  console.error("Không thể tải tin nhắn:", error);
-}
 
 
 });
@@ -101,7 +109,6 @@ socket.on("newMessage", function (data) {
   const hours = messageTime.getHours().toString().padStart(2, '0'); // Lấy giờ
   const minutes = messageTime.getMinutes().toString().padStart(2, '0'); // Lấy phút
   const formattedTime = `${hours}:${minutes}`;
-
   const messageElement = `
       <div class="mb-2 d-flex ${isSender ? "justify-content-end" : "justify-content-start"}">
         <div class="d-flex align-items-center">
@@ -118,70 +125,84 @@ socket.on("newMessage", function (data) {
 });
 
 
-// Khi người dùng nhấn nút gửi tin nhắn
-let isFirstMessage = true; // Biến để kiểm tra tin nhắn đầu tiên
+let isFirstMessage = true;
+let lastMessageTime = null; // Thêm biến để lưu thời gian tin nhắn cuối cùng
 
-$("#sendMessage").click(function () {
+async function getLastMessageTime() {
+  const timeMessages = await getMessagesForUser(room); // Đợi dữ liệu trả về
+  if (timeMessages.length === 0) {
+    console.log("Không có tin nhắn nào.");
+    return;
+  }
+  const lastMessage = timeMessages[timeMessages.length - 1];
+  lastMessageTime = new Date(lastMessage.timestamp); // Lưu thời gian tin nhắn cuối cùng
+}
+
+getLastMessageTime();
+
+$("#sendMessage").click(async function () {
   const message = $("#chatInput").val();
-  const currentTime = new Date().toISOString(); 
+  const currentTime = new Date();
   if (message) {
     console.log("Gửi tin nhắn:", message);
-    
     // Gửi tin nhắn qua socket với thời gian
     socket.emit("sendMessage", {
       message: message,
       sender: room,
       receiver: "",
       room: room,
-      time: currentTime, 
+      time: currentTime.toISOString(),
+      isFirstMessage: true
     });
 
-    // Xử lý tin nhắn đầu tiên
-    let messageElement = '';
-    if (isFirstMessage) {
-      // Định dạng thời gian: chỉ lấy giờ và phút
-       const messageTime = new Date(currentTime);
-      const day = messageTime.getDate().toString().padStart(2, '0');
-      const month = (messageTime.getMonth() + 1).toString().padStart(2, '0'); 
-      const year = messageTime.getFullYear();
-      const hours = messageTime.getHours().toString().padStart(2, '0');
-      const minutes = messageTime.getMinutes().toString().padStart(2, '0');
-      const formattedTime = `${day}/${month}/${year} ${hours}:${minutes}`;
+    // Định dạng ngày và giờ
+    const day = currentTime.getDate().toString().padStart(2, "0");
+    const month = (currentTime.getMonth() + 1).toString().padStart(2, "0");
+    const year = currentTime.getFullYear();
+    const hours = currentTime.getHours().toString().padStart(2, "0");
+    const minutes = currentTime.getMinutes().toString().padStart(2, "0");
+    const formattedTime = `${day}/${month}/${year} ${hours}:${minutes}`;
+    const formattedTimeNotYear = `${hours}:${minutes}`;
+    let messageElement = "";
 
-      messageElement = `
+    // Kiểm tra nếu thời gian giữa tin nhắn mới và tin nhắn cuối cùng lớn hơn 30 phút
+    if (lastMessageTime) {
+      const timeDifference = (currentTime - lastMessageTime) / (1000 * 60); // Tính chênh lệch thời gian theo phút
+      if (timeDifference > 30) {
+        // Hiển thị thời gian nếu chênh lệch lớn hơn 30 phút
+        messageElement += `
         <div class="text-center text-muted small mb-2">
-          ${formattedTime} <!-- Hiển thị giờ và phút -->
-        </div>
-        <div class="mb-2 d-flex justify-content-end">
-          <div class="d-flex align-items-center">
-            <div class="p-2 rounded bg-primary text-white">
-              ${message}
-              <div class="text-muted small mt-1">Now</div>
-            </div>
-          </div>
+          ${formattedTime}
         </div>`;
-      isFirstMessage = false; // Đánh dấu đã gửi tin nhắn đầu tiên
+      }
     } else {
-      // Với các tin nhắn tiếp theo
-      messageElement = `
-        <div class="mb-2 d-flex justify-content-end">
-          <div class="d-flex align-items-center">
-            <div class="p-2 rounded bg-primary text-white">
-              ${message}
-              <div class="text-muted small mt-1">Now</div>
-            </div>
-          </div>
+      // Nếu không có tin nhắn trước đó, hiển thị thời gian
+      messageElement += `
+        <div class="text-center text-muted small mb-2">
+          ${formattedTime}
         </div>`;
     }
+
+    // Hiển thị tin nhắn
+    messageElement += `
+      <div class="mb-2 d-flex justify-content-end">
+        <div class="d-flex align-items-center">
+          <div class="p-2 rounded bg-primary text-white">
+            ${message}
+            <div class="text-muted small mt-1">${formattedTimeNotYear}</div>
+          </div>
+        </div>
+      </div>`;
 
     // Thêm tin nhắn vào giao diện
     $("#chatboxBody").append(messageElement);
     $("#chatInput").val(""); // Xóa nội dung ô nhập
     $("#chatboxBody").scrollTop($("#chatboxBody")[0].scrollHeight); // Cuộn xuống cuối cùng
+
+    // Cập nhật lại thời gian tin nhắn cuối cùng
+    lastMessageTime = currentTime;
   }
 });
-
-
 
 $("#chatInput").keypress(function (e) {
   if (e.which == 13) {
@@ -189,12 +210,8 @@ $("#chatInput").keypress(function (e) {
   }
 });
 
-let isLoadingMessages = false;
 
 async function getMessagesForUser(room) {
-  if (isLoadingMessages) return;
-  isLoadingMessages = true;
-
   try {
     const response = await fetch(`/api/user/meMessages/${room}`);
     if (!response.ok) {

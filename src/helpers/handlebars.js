@@ -126,14 +126,14 @@ module.exports = {
     }
     if (discount > 0) {
       return `<p
-                class="position-absolute bg-danger p-1 text-white rounded-end-5 z-3  "
+                class="position-absolute bg-danger p-1 text-white rounded-end-5 " style="z-index: 3"
               >Giảm ${discount} %</p>`;
     }
   },
   showTagBusiness: (isBusiness) => {
     if (!isBusiness) {
       return `<p
-                class="position-absolute bg-danger p-1 text-white rounded-end-5 z-3"
+                class="position-absolute bg-danger p-1 text-white rounded-end-5" style="z-index: 3"
               >Ngừng kinh doanh</p>`;
     }
   },
@@ -239,6 +239,9 @@ module.exports = {
       outputHtml += `</ul></div></div>`;
     });
     return outputHtml;
+  },
+  showStt: (page, ind) => {
+    return (page - 1) * 10 + ind + 1;
   },
   showPrice: (...args) => {
     const numbers = args.filter((arg) => typeof arg === "number");
@@ -377,7 +380,7 @@ module.exports = {
             <p class="bg-white mb-0 col-12">${comment.comment}</p>
             ${
               name
-                ? `<p class="text-decoration-underline col-2 btnAnswerComment" data-bs-idComment="${idComment}" data-bs-idProduct="${idProduct}">Trả lời</p>`
+                ? `<p class="text-decoration-underline col-2 btnAnswerComment" data-bs-idComment="${idComment}" data-bs-idProduct="${idProduct}" style="cursor: pointer;">Trả lời</p>`
                 : ""
             }
           </div>
@@ -692,6 +695,7 @@ module.exports = {
     Object.keys(attributes).forEach((key, ind) => {
       htmlinputHidden += `
       <input type="text"
+      class="inpHiddenAttr${ind + 1}"
       name="variations[${index}][attributes][${key}]"
       value="${attributes[key]}" hidden>
       `;

@@ -115,6 +115,9 @@ document.addEventListener("DOMContentLoaded", function () {
 $("#inpNameAttributePro1").on("input", (e) => {
   let value = e.target.value.trim();
   $(".th1").text(value);
+  $(".inpHiddenAttr1").each((ind, inp) => {
+    inp.name = `variations[${ind}][attributes][${value}]`;
+  });
 });
 $("#inpNameAttributePro2").on("input", (e) => {
   if ($("#inpNameAttributePro1").val() == "") {
@@ -123,6 +126,9 @@ $("#inpNameAttributePro2").on("input", (e) => {
   }
   let value = e.target.value.trim();
   $(".th2").text(value);
+  $(".inpHiddenAttr2").each((ind, inp) => {
+    inp.name = `variations[${ind}][attributes][${value}]`;
+  });
 });
 
 // Nút thêm giá trị
@@ -312,6 +318,7 @@ function renameNameValueTable() {
     let htmlInpHidden = `
       <input
         type="text"
+        class="inpHiddenAttr1"
         name="variations[${ind}][attributes][${nameAttr1}]"
         value="${value1}"
         hidden
@@ -321,6 +328,7 @@ function renameNameValueTable() {
       htmlInpHidden += `
         <input
           type="text"
+          class="inpHiddenAttr2"
           name="variations[${ind}][attributes][${nameAttr2}]"
           value="${value2}"
           hidden

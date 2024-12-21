@@ -908,35 +908,6 @@ class AdminController {
       });
     });
   }
-  // bình luận
-  comment(req, res, next) {
-    Product.find({
-      "comments.status": false,
-    })
-      .populate("comments.idUser", "name")
-      .populate("comments.answers.idUser", "name")
-      .then((products) => {
-        let comments = products.map((product) => {
-          return product.comments.map((comment) => {
-            return {
-              idProduct: product._id,
-              idComment: comment._id,
-              productName: product.name,
-              userName: comment.idUser.name,
-              comment: comment,
-              time: comment.createdAt,
-              answers: comment.answers.map((answer) => {
-                return {
-                  userName: answer.idUser.name,
-                  answer: answer,
-                  time: answer.createdAt,
-                };
-              }),
-            };
-          });
-        });
-      });
-  }
   //minh luan
   createWarranty(req, res, next) {
     Product.find().then((products) => {
@@ -1313,11 +1284,11 @@ class AdminController {
           return {
             ...msg.toObject(),
             message,
-            userName: msg.sender.name, // Lấy tên người gửi từ sender
+            userName: msg.sender.name,
           };
         });
+        console.log(messagesWithLast);
         const allMessages = messages.map((msg) => {
-          // Kiểm tra nếu msg.message là một mảng và lấy ra content từ mỗi phần tử
           const messageContents = msg.message.map((message) => message.content);
           return {
             ...msg.toObject(),
@@ -1340,33 +1311,60 @@ class AdminController {
   }
   // Q&A
   getCommmentPage(req, res, next) {
-    Product.find({ "comments.status": false })
-      .select("comments name slug")
-      .populate("comments.idUser", "name")
-      .populate("comments.answers.idUser", "name")
-      .then((products) => {
-        let comments = [];
-        products.forEach((product) => {
-          product.comments.forEach((comment) => {
-            if (comment.status === false) {
-              comments.push({
-                idProduct: product._id,
-                idComment: comment._id,
-                productName: product.name,
-                fullname: comment.idUser.name,
-                comment: comment.comment,
-                timeUpdate: mongooseTimeToDDMMYYYY(comment.timeUpdate),
-                slug: product.slug,
-              });
-            }
+    const limit = 10;
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const skip = (page - 1) * limit;
+    Product.aggregate([
+      { $match: { "comments.status": false } },
+      { $unwind: "$comments" },
+      { $match: { "comments.status": false } },
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $lookup: {
+          from: "users",
+          localField: "comments.idUser",
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      { $unwind: "$userDetails" },
+      {
+        $project: {
+          idProduct: "$_id",
+          idComment: "$comments._id",
+          productName: "$name",
+          fullname: "$userDetails.name",
+          comment: "$comments.comment",
+          timeUpdate: {
+            $dateToString: { format: "%d/%m/%Y", date: "$comments.timeUpdate" },
+          },
+          slug: "$slug",
+        },
+      },
+    ])
+      .then((comments) => {
+        Product.aggregate([
+          { $match: { "comments.status": false } },
+          { $unwind: "$comments" },
+          { $match: { "comments.status": false } },
+          { $count: "totalComments" },
+        ]).then((countResult) => {
+          const totalComments =
+            countResult.length > 0 ? countResult[0].totalComments : 0;
+          const totalPage = Math.ceil(totalComments / limit);
+          return res.render("admin/sites/comment", {
+            title: "Quản Lý Bình Luận",
+            layout: "admin",
+            comments,
+            url: req.originalUrl,
+            currentPage: page,
+            totalPage,
           });
         });
-        // Xử lý kết quả
-        return res.render("admin/sites/comment", {
-          title: "Quản Lý Bình Luận",
-          layout: "admin",
-          comments,
-        });
+      })
+      .catch((error) => {
+        console.error("Error fetching comments:", error);
       });
   }
   // store management

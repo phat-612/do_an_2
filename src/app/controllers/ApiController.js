@@ -172,7 +172,6 @@ class ApiController {
           //   });
           // });
         });
-
         return Promise.all(deletePromises).then(() => {
           const updatedImages = oldImgsArray.concat(newImgs);
 
@@ -294,7 +293,6 @@ class ApiController {
     const lowerCaseName = req.body.name.toLowerCase();
     // Kiểm tra tên trùng lặp cho danh mục con trong cùng một danh mục cha
     const condition = { name: lowerCaseName, idParent: idParent };
-    console.log(lowerCaseName);
     // console.log(condition);
     Category.findOne(condition).then((existingCategory) => {
       if (existingCategory) {
@@ -341,7 +339,6 @@ class ApiController {
         const nameWithoutAccent = diacritics.remove(formData.name);
         let slug = nameWithoutAccent.toLowerCase().replace(/[^a-z0-9]+/g, "-");
         formData.slug = slug;
-        console.log(formData.slug);
         Category.updateOne({ _id: req.params.id }, { $set: formData }).then(
           () => {
             req.flash("message", {
@@ -1158,7 +1155,6 @@ class ApiController {
     const transactionStatus = vnp_Params["vnp_TransactionStatus"];
     let orderId = vnp_Params["vnp_TxnRef"].split("-")[0];
     if (!isTrust || transactionStatus != "00") {
-      console.log("Thanh toán thất bại");
       return Order.updateOne(
         { _id: orderId },
         { "paymentDetail.status": "failed" }
@@ -1166,7 +1162,6 @@ class ApiController {
         return res.redirect("/me/historyOrder");
       });
     }
-    console.log("Thanh toán thành công");
     Order.updateOne(
       { _id: orderId },
       { "paymentDetail.status": "success" }
@@ -1240,9 +1235,14 @@ class ApiController {
       product.comments.push({
         idUser,
         isAdmin: req.session.role === "admin",
+        status: req.session.role === "admin",
         comment: formData.comment.substring(0, 250),
       });
       product.save().then(() => {
+        req.flash("message", {
+          type: "success",
+          message: "Bình luận thành công !!!",
+        });
         return res.redirect("back");
       });
     });
@@ -1523,13 +1523,6 @@ class ApiController {
   }
   meMessages(req, res) {
     const id = req.session.idUser;
-    // Định nghĩa hàm formatTime bên trong meMessages
-    const formatTime = (timestamp) => {
-      const date = new Date(timestamp || Date.now());
-      const hours = String(date.getHours()).padStart(2, "0"); // Lấy giờ và định dạng là 2 chữ số
-      const minutes = String(date.getMinutes()).padStart(2, "0"); // Lấy phút và định dạng là 2 chữ số
-      return `${hours}:${minutes}`;
-    };
     Message.find({ sender: id })
       .then((messages) => {
         // Xử lý danh sách tin nhắn
@@ -1537,7 +1530,7 @@ class ApiController {
           msg.message.map((innerMsg) => ({
             content: innerMsg.content, // Lấy nội dung tin nhắn
             receiver: innerMsg.receiver || null, // Xác định người nhận
-            timestamp: formatTime(innerMsg.timestamp || msg.timestamp), // Định dạng lại timestamp
+            timestamp: innerMsg.timestamp, // Định dạng lại timestamp
           }))
         );
 

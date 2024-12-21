@@ -17,6 +17,7 @@ const { Server } = require("socket.io"); // Import Socket.IO
 const db = require("./config/db");
 const route = require("./routes");
 const globalVariable = require("./app/middlewares/globalVariable");
+const formValidationMiddleware = require("./app/middlewares/formValidationMiddleware");
 
 // config
 require("dotenv").config();
@@ -128,6 +129,7 @@ const io = init(server);
 io.use(sharedSession(sessions, { autoSave: true }));
 // router
 chatWebSocket(io);
+// app.use(formValidationMiddleware);
 route(app);
 
 server.listen(3000, () => {

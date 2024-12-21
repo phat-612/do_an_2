@@ -7,35 +7,40 @@ document.addEventListener("DOMContentLoaded", () => {
   const sendButton = document.querySelector(".btn-primary");
   let currentChatUser = null;
 
-  // Kết nối với WebSocket
-  //   var socket = io.connect("http://localhost:3000");
-
-  // Lắng nghe sự kiện click vào các chat item
   chatItems.forEach((item) => {
-    item.addEventListener("click", async () => {
+    item.addEventListener("click", async (e) => {
+      chatItems.forEach((ele) => ele.classList.remove("active-chat"));
+      const eleChat = $(e.target).closest(".chat-item");
+      eleChat.addClass("active-chat");
       const userName = item.getAttribute("data-username");
-      const id = item.getAttribute("data-id"); // Đây là ID người dùng, không phải tên
-      currentChatUser = id; // Đặt ID người dùng là ID phòng chat
+      const id = item.getAttribute("data-id");
+      currentChatUser = id;
       chatboxContainer.style.display = "block";
       chatboxUserName.textContent = userName;
 
       // Lấy danh sách tin nhắn từ server
       const allMessages = await getMessagesForUser(id);
 
-      // Hiển thị tin nhắn trong chatbox
+      // Hiển thị tin nhắn trong chatbox với thời gian nằm bên dưới
       chatboxMessages.innerHTML = allMessages
         .map(
           (message) => ` 
-          <div class="message pb-1" style="display: flex; justify-content: ${
-            message.receiver ? "flex-end" : "flex-start"
-          };">
-            <div class="message-text d-inline-block p-2 rounded ${
-              message.receiver ? "bg-primary text-white" : "bg-light text-dark"
-            }" style="padding: 8px 12px;">
-              ${message.content}
-            </div>
-          </div>
-        `
+   <div class="message" style="display: flex; flex-direction: column; align-items: ${
+     message.receiver ? "flex-end" : "flex-start"
+   }; margin-top: 5px;">
+     <div class="message-text d-inline-block p-2 rounded text-dark" style="padding: 8px 12px; display: flex; flex-direction: column; background-color: ${
+       message.receiver ? "rgb(219, 235, 255)" : "#fff"
+     }">
+       ${message.content}
+       <div class="message-time mt-2 text-muted small" style="color: #ccc">
+         ${new Date(message.timestamp).toLocaleTimeString([], {
+           hour: "2-digit",
+           minute: "2-digit",
+         })}
+       </div>
+     </div>
+   </div>
+ `
         )
         .join("");
 
@@ -46,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Khi gửi tin nhắn
-  sendButton.addEventListener("click", sendMessage); // Thêm sự kiện cho nút gửi
+  sendButton.addEventListener("click", sendMessage);
   chatInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       sendMessage();
@@ -62,13 +67,16 @@ document.addEventListener("DOMContentLoaded", () => {
         room: currentChatUser,
         sender: idAdmin,
         receiver: currentChatUser,
+        timestamp: new Date().toISOString(), // Thêm thời gian gửi tin nhắn
       };
       socket.emit("sendMessage", messageData); // Gửi tin nhắn qua WebSocket
 
-      // Hiển thị tin nhắn đã gửi trong chatbox
+      // Hiển thị tin nhắn đã gửi trong chatbox với thời gian dưới tin nhắn
       const messageElement = document.createElement("div");
       messageElement.classList.add("message", "text-end");
-      messageElement.style.marginBottom = "5px";
+      const messageContainer = document.createElement("div");
+      messageContainer.classList.add("message-container");
+      messageContainer.style.textAlign = "right";
       const messageText = document.createElement("div");
       messageText.classList.add(
         "message-text",
@@ -79,7 +87,13 @@ document.addEventListener("DOMContentLoaded", () => {
         "text-white"
       );
       messageText.textContent = message;
-      messageElement.appendChild(messageText);
+      const timeElement = document.createElement("div");
+      timeElement.classList.add("message-time", "text-muted", "small");
+      timeElement.style.marginTop = "5px";
+      timeElement.textContent = new Date().toLocaleTimeString(); // Hiển thị thời gian
+      messageContainer.appendChild(messageText);
+      messageContainer.appendChild(timeElement); // Thêm thời gian dưới tin nhắn
+      messageElement.appendChild(messageContainer);
       chatboxMessages.appendChild(messageElement);
       chatInput.value = ""; // Xóa input sau khi gửi
       chatboxMessages.scrollTop = chatboxMessages.scrollHeight; // Cuộn đến tin nhắn mới nhất
@@ -90,7 +104,8 @@ document.addEventListener("DOMContentLoaded", () => {
   socket.on("newMessage", (data) => {
     const receivedMessage = document.createElement("div");
     receivedMessage.classList.add("message", "text-start");
-    receivedMessage.style.marginBottom = "5px";
+    const messageContainer = document.createElement("div");
+    messageContainer.classList.add("message-container");
     const messageText = document.createElement("div");
     messageText.classList.add(
       "message-text",
@@ -101,26 +116,30 @@ document.addEventListener("DOMContentLoaded", () => {
       "text-dark"
     );
     messageText.textContent = data.message;
-    receivedMessage.appendChild(messageText);
+    const timeElement = document.createElement("div");
+    timeElement.classList.add("message-time", "text-muted", "small");
+    timeElement.style.marginTop = "5px";
+    timeElement.textContent = new Date(data.timestamp).toLocaleTimeString(); // Hiển thị thời gian của tin nhắn mới
+    messageContainer.appendChild(messageText);
+    messageContainer.appendChild(timeElement); // Thêm thời gian dưới tin nhắn
+    receivedMessage.appendChild(messageContainer);
     chatboxMessages.appendChild(receivedMessage);
     chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
   });
 
   socket.on("thongbao", async (data) => {
     // Lấy thông tin người gửi tin nhắn
-    const users = await getMessagesForUser(data.sender); // Lấy danh sách người dùng từ ID người gửi
+    const users = await getMessagesForUser(data.sender);
     const userName = users.length > 0 ? users[0].userName.name : data.sender;
     const lastMessage =
       users.length > 0
         ? users[users.length - 1].content
         : "Không có tin nhắn nào";
 
-    // Kiểm tra nếu người dùng đã có trong danh sách chat
     const existingChatItem = document.querySelector(
       `[data-id="${data.sender}"]`
     );
 
-    // Tạo thông báo tin nhắn mới
     const notification = document.createElement("div");
     notification.classList.add(
       "alert",
@@ -131,18 +150,13 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     notification.innerHTML = `Bạn có tin nhắn mới từ ${userName}`;
 
-    // Thêm thông báo vào danh sách chat
     const chatList = document.querySelector(".chat-list");
     chatList.prepend(notification);
 
-    // Thêm sự kiện click vào thông báo
     notification.addEventListener("click", async (event) => {
       event.preventDefault();
-
-      // Xóa thông báo sau khi click vào
       notification.remove();
 
-      // Tạo phần tử chat mới cho người dùng này nếu chưa có
       if (!existingChatItem) {
         const chatItem = document.createElement("div");
         chatItem.classList.add(
@@ -152,11 +166,9 @@ document.addEventListener("DOMContentLoaded", () => {
           "p-2",
           "border-bottom"
         );
-        chatItem.style.cursor = "pointer";
         chatItem.setAttribute("data-username", userName);
-        chatItem.setAttribute("data-id", data.sender); // Sử dụng ID người gửi làm ID
+        chatItem.setAttribute("data-id", data.sender);
 
-        // Tạo avatar và thông tin người gửi
         chatItem.innerHTML = `
         <div class="avatar me-3">
           <img src="https://via.placeholder.com/50" alt="Avatar" class="rounded-circle"/>
@@ -170,45 +182,41 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       `;
 
-        // Thêm phần tử chat vào danh sách
         chatList.prepend(chatItem);
-
-        // Gọi lại sự kiện click trên chatItem để hiển thị tin nhắn
         chatItem.addEventListener("click", async () => {
-          const userName = chatItem.getAttribute("data-username");
-          const id = chatItem.getAttribute("data-id");
-          currentChatUser = id; // Đặt ID người dùng là ID phòng chat
-          chatboxContainer.style.display = "block"; // Hiển thị khung chat
+          currentChatUser = data.sender;
+          chatboxContainer.style.display = "block";
           chatboxUserName.textContent = userName;
 
-          // Lấy danh sách tin nhắn từ server
-          const allMessages = await getMessagesForUser(id);
+          const allMessages = await getMessagesForUser(data.sender);
 
-          // Hiển thị tin nhắn trong chatbox
           chatboxMessages.innerHTML = allMessages
             .map(
               (message) => ` 
           <div class="message pb-1" style="display: flex; justify-content: ${
             message.receiver ? "flex-end" : "flex-start"
           };">
-            <div class="message-text d-inline-block p-2 rounded ${
-              message.receiver ? "bg-primary text-white" : "bg-light text-dark"
-            }" style="padding: 8px 12px;">
-              ${message.content}
+            <div class="message-container" style="display: inline-block; text-align: left;">
+              <div class="message-text d-inline-block p-2 rounded ${
+                message.receiver
+                  ? "bg-primary text-white"
+                  : "bg-light text-dark"
+              }" style="padding: 8px 12px;">
+                ${message.content}
+              </div>
+              <div class="message-time text-muted small" style="margin-top: 5px;">
+                ${new Date(message.timestamp).toLocaleTimeString()}
+              </div>
             </div>
           </div>
         `
             )
             .join("");
-
           chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
-          socket.emit("joinRoom", { room: id });
-          console.log(`Người dùng đã tham gia phòng: ${id}`);
         });
       } else {
-        // Nếu đã có mục chat trong danh sách, chỉ cần mở chatbox và hiển thị tin nhắn
         currentChatUser = data.sender;
-        chatboxContainer.style.display = "block"; // Hiển thị khung chat
+        chatboxContainer.style.display = "block";
         chatboxUserName.textContent = userName;
 
         const allMessages = await getMessagesForUser(data.sender);
@@ -219,18 +227,23 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="message pb-1" style="display: flex; justify-content: ${
           message.receiver ? "flex-end" : "flex-start"
         };">
-          <div class="message-text d-inline-block p-2 rounded ${
-            message.receiver ? "bg-primary text-white" : "bg-light text-dark"
-          }" style="padding: 8px 12px;">
-            ${message.content}
+            <div class="message-container" style="display: inline-block; text-align: left;">
+              <div class="message-text d-inline-block p-2 rounded ${
+                message.receiver
+                  ? "bg-primary text-white"
+                  : "bg-light text-dark"
+              }" style="padding: 8px 12px;">
+                ${message.content}
+              </div>
+              <div class="message-time text-muted small" style="margin-top: 5px;">
+                ${new Date(message.timestamp).toLocaleTimeString()}
+              </div>
+            </div>
           </div>
-        </div>
-      `
+        `
           )
           .join("");
-
         chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
-        socket.emit("joinRoom", { room: data.sender });
       }
     });
   });

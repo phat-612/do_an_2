@@ -36,10 +36,15 @@
       <div style="scale: 0.85;">
         <canvas id="chart"></canvas>
       </div>
-      {{#each orders}}<p hidden class="{{this.status}}">{{this.status}}</p>{{/each}}
+      {{#each orders}}
+        <p hidden class="{{this.status}}">{{this.status}}</p>
+      {{/each}}
     </div>
     <div class="col position-relative">
       <h3 class="text-center">Duyệt Nhanh Đánh Giá:</h3>
+      <div class="d-flex justify-content-end">
+        <a href="/admin/accessReview" class="btn btn-primary">Xem Tất Cả Đánh Giá</a>
+      </div>
       <table class="table">
         <thead>
           <tr>
@@ -51,30 +56,28 @@
         </thead>
         <tbody>
           {{#each assessReview}}
-          <tr>
-            <td class="col">
-              <div class="text-ellipsis">{{this.name}}</div>
-            </td>
-            <td>{{this.user.name}}</td>
-            <td class="col text-center">{{this.reviews.rating}}⭐</td>
-            <td class="text-end">
-              <form class="d-inline-block" action="/api/admin/accessReview" method="post">
-                <input type="text" name="idReview" value="{{this.reviews._id}}" hidden>
-                <input type="text" name="action" value="accept" hidden>
-                <button type="submit" class="btn btn-primary">Duyệt</button>
-              </form>
-              <form class="d-inline-block" action="/api/admin/accessReview" method="post">
-                <input type="text" name="idReview" value="{{this.reviews._id}}" hidden>
-                <input type="text" name="action" value="reject" hidden>
-                <button type="submit" class="btn btn-danger">Xóa</button>
-              </form>
-            </td>
-            {{/each}}
+            <tr>
+              <td class="col">
+                <div class="text-ellipsis">{{this.name}}</div>
+              </td>
+              <td>{{this.user.name}}</td>
+              <td class="col text-center">{{this.reviews.rating}}⭐</td>
+              <td class="text-end">
+                <form class="d-inline-block" action="/api/admin/accessReview" method="post">
+                  <input type="text" name="idReview" value="{{this.reviews._id}}" hidden>
+                  <input type="text" name="action" value="accept" hidden>
+                  <button type="submit" class="btn btn-primary">Duyệt</button>
+                </form>
+                <form class="d-inline-block" action="/api/admin/accessReview" method="post">
+                  <input type="text" name="idReview" value="{{this.reviews._id}}" hidden>
+                  <input type="text" name="action" value="reject" hidden>
+                  <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+              </td>
+          {{/each}}
         </tbody>
       </table>
-      <div class="d-flex justify-content-end position-absolute bottom-0 end-0">
-        <a href="/admin/accessReview" class="btn btn-primary">Xem Tất Cả Đánh Giá</a>
-      </div>
+
     </div>
   </div>
   <div class="mt-4">
@@ -83,61 +86,61 @@
   <div class="row mt-4">
     <h3 class="bg-dark text-light">Top Sản Phẩm Bán Chạy</h3>
     {{#each topProducts}}
-    <div class="col-3">
-      <div class="card" style="width: 300px; height: 470px;">
-        <img class="card-img-top w-100" src="{{showImgUpload this.images}}">
-        <div class="card-body row d-flex align-content-end flex-wrap">
-          <div class="col-12">
-            <a href="/admin/product/{{this._id}}/detail">
-              <h5>{{this.name}}</h5>
-            </a>
-          </div>
-          <div class="col-12">
-            <p class="card-text">Tổng Số lượt bán: {{this.totalSold}}</p>
+      <div class="col-3">
+        <div class="card" style="width: 300px; height: 470px;">
+          <img class="card-img-top w-100" src="{{showImgUpload this.images}}">
+          <div class="card-body row d-flex align-content-end flex-wrap">
+            <div class="col-12">
+              <a href="/admin/product/{{this._id}}/detail">
+                <h5>{{this.name}}</h5>
+              </a>
+            </div>
+            <div class="col-12">
+              <p class="card-text">Tổng Số lượt bán: {{this.totalSold}}</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     {{/each}}
   </div>
   <div class="row mt-4">
     <h3 class="bg-dark text-light">Top Sản Phẩm Có Nhiều Lượt Đánh Giá Nhất</h3>
     {{#each topReviewProduct}}
-    <div class="col-3">
-      <div class="card" style="width: 300px; height: 470px;">
-        <img class="card-img-top w-100" src="{{showImgUpload this.images}}">
-        <div class="card-body row d-flex align-content-end flex-wrap">
-          <div class="col-12">
-            <a href="/admin/product/{{this._id}}/detail">
-              <h5>{{this.name}}</h5>
-            </a>
-          </div>
-          <div class="col-12">
-            <p class="card-text">Tổng Số Lượt Đánh Giá: {{this.totalReviews}}</p>
+      <div class="col-3">
+        <div class="card" style="width: 300px; height: 470px;">
+          <img class="card-img-top w-100" src="{{showImgUpload this.images}}">
+          <div class="card-body row d-flex align-content-end flex-wrap">
+            <div class="col-12">
+              <a href="/admin/product/{{this._id}}/detail">
+                <h5>{{this.name}}</h5>
+              </a>
+            </div>
+            <div class="col-12">
+              <p class="card-text">Tổng Số Lượt Đánh Giá: {{this.totalReviews}}</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     {{/each}}
   </div>
   <div class="row mt-4">
     <h3 class="bg-dark text-light">Top Sản Phẩm Có Số Lượt Xem Nhiều nhất</h3>
     {{#each topSeenProduct}}
-    <div class="col-3">
-      <div class="card" style="width: 300px; height: 470px;">
-        <img class="card-img-top w-100" src="{{showImgUpload this.images}}">
-        <div class="card-body row d-flex align-content-end flex-wrap">
-          <div class="col-12">
-            <a href="/admin/product/{{this._id}}/detail">
-              <h5>{{this.name}}</h5>
-            </a>
-          </div>
-          <div class="col-12">
-            <p class="card-text">Tổng Số Lượt Xem: {{this.view}}</p>
+      <div class="col-3">
+        <div class="card" style="width: 300px; height: 470px;">
+          <img class="card-img-top w-100" src="{{showImgUpload this.images}}">
+          <div class="card-body row d-flex align-content-end flex-wrap">
+            <div class="col-12">
+              <a href="/admin/product/{{this._id}}/detail">
+                <h5>{{this.name}}</h5>
+              </a>
+            </div>
+            <div class="col-12">
+              <p class="card-text">Tổng Số Lượt Xem: {{this.view}}</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     {{/each}}
   </div>
 </div>
