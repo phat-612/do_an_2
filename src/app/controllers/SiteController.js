@@ -584,7 +584,6 @@ class SiteController {
     const timeChatUser = findOne({ sender: idRoom }).then(
       (time) => time.timestamp
     );
-    return console.log(timeChatUser);
     return res.render("user/chatbox/chatboxUser", {
       layout: "main",
       title: "Chatbox",

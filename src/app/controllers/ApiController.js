@@ -20,14 +20,14 @@ var pdf = require("pdf-creator-node");
 var fs = require("fs");
 const nodemailer = require("nodemailer");
 const Message = require("../models/Messages");
-const { io } = require("../../util/socket"); // Đảm bảo export `io` từ `socket.js`
-const { getIo } = require("../../util/socket");
 
 // ------------------------
 require("dotenv").config();
 const { sortObject, getDiscount } = require("../../util/function");
 const { response } = require("express");
 const { removeImgCloudinary } = require("../middlewares/uploadMiddleware");
+
+
 
 class ApiController {
   // api user,admin
@@ -1001,7 +1001,6 @@ class ApiController {
           { $inc: { point: -pointsToUse } }
         );
       }
-
       // Tạo đơn hàng mới
       const newOrder = new Order({
         idUser,
@@ -1019,11 +1018,12 @@ class ApiController {
       });
 
       const order = await newOrder.save();
-
-      // **Phát sự kiện `newOrder`**
-      const io = getIo(); // Lấy đối tượng io
-      io.emit("newOrder", "Có đơn hàng mới !!!!");
-
+      const adminNamespace = req.io.of('/admin');
+      adminNamespace.emit('notify', {
+        type: 'success',
+        color: '#28a745',
+        message: `Đơn hàng mới từ ${order.shipmentDetail.name}`,
+      });
       // Xử lý thanh toán
       if (formData.paymentMethod === "cod") {
         req.flash("message", {
@@ -1198,6 +1198,16 @@ class ApiController {
         comment: formData.comment.substring(0, 250),
       });
       product.save().then(() => {
+        const adminNamespace = req.io.of('/admin');
+        adminNamespace.emit("notify", {
+          type: "success",
+          color: '#ffc107',
+          message: `Có đánh giá mới từ ${req.session.name}`,
+        });
+        req.flash("message", {
+          type: "success",
+          message: "Đánh giá thành công !!!",
+        });
         return res.redirect("back");
       });
     });
@@ -1227,6 +1237,7 @@ class ApiController {
   commentProduct(req, res, next) {
     const formData = req.body;
     const idUser = req.session.idUser;
+    const role = req.session.role;
     const idProduct = formData.idProduct;
     Product.findOne({ _id: idProduct }).then((product) => {
       if (!product) {
@@ -1234,11 +1245,19 @@ class ApiController {
       }
       product.comments.push({
         idUser,
-        isAdmin: req.session.role === "admin",
-        status: req.session.role === "admin",
+        isAdmin: role === "admin",
+        status: role === "admin",
         comment: formData.comment.substring(0, 250),
       });
       product.save().then(() => {
+        if (role == "user"){
+          const adminNamespace = req.io.of('/admin');
+          adminNamespace.emit('notify', {
+            type: 'success',
+            color: '#fd7e14',
+            message: `Có bình luận mới từ ${req.session.name}`,
+          });
+        }
         req.flash("message", {
           type: "success",
           message: "Bình luận thành công !!!",
@@ -1250,6 +1269,7 @@ class ApiController {
   // trả lời bình luận
   answerComment(req, res, next) {
     const formData = req.body;
+    const role = req.session.role;
     const idUser = req.session.idUser;
     const idProduct = formData.idProduct;
     const idComment = formData.idComment;
@@ -1260,14 +1280,38 @@ class ApiController {
       product.comments.id(idComment).answers.push({
         idUser,
         comment: formData.comment.substring(0, 250),
-        isAdmin: req.session.role === "admin",
+        isAdmin: role === "admin",
       });
-      product.comments.id(idComment).status = req.session.role === "admin";
+      product.comments.id(idComment).status = role === "admin";
       product.comments.id(idComment).timeUpdate = new Date();
       product.save().then(() => {
+        if (role == "user"){
+          const adminNamespace = req.io.of('/admin');
+          adminNamespace.emit('notify', {
+            type: 'success',
+            color: '#fd7e14',
+            message: `Có bình luận mới từ ${req.session.name}`,
+          });
+        }
         return res.redirect("back");
       });
     });
+  }
+  nextComment(req, res, next) {
+    const role = req.session.role;
+    const formData = req.body;
+    const idProduct = formData.idProduct;
+    const idComment = formData.idComment;
+    if (role == "admin") {
+      Product.updateOne(
+        { _id: idProduct, "comments._id": idComment },
+        { $set: { "comments.$.status": true } }).then(() => {
+          return res.redirect("back");
+        }).catch((err) => {
+          console.error("Error updating comment status:", err);
+          return res.status(500).send("Error updating comment status");
+        });
+    }
   }
   //quan ly banner
   storeBanner(req, res) {

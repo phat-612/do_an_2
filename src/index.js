@@ -18,13 +18,15 @@ const db = require("./config/db");
 const route = require("./routes");
 const globalVariable = require("./app/middlewares/globalVariable");
 const formValidationMiddleware = require("./app/middlewares/formValidationMiddleware");
-
+const initWebSocket = require("./config/websocket/websocket");
 // config
 require("dotenv").config();
 
 // main
 db.connect();
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 
 app.engine(
   ".hbs",
@@ -118,20 +120,17 @@ app.use(function (req, res, next) {
 });
 
 app.use((req, res, next) => {
+  req.io = io;
   res.locals.session = req.session;
   next();
 });
 
-const { init } = require("../src/util/socket");
-const chatWebSocket = require("./config/chatbox/websocket");
-const server = http.createServer(app);
-const io = init(server);
 io.use(sharedSession(sessions, { autoSave: true }));
 // router
-chatWebSocket(io);
+initWebSocket(io);
 // app.use(formValidationMiddleware);
 route(app);
 
-server.listen(3000, () => {
+server.listen(port, () => {
   console.log(`Server is running on port ${port}: http://localhost:${port}`);
 });

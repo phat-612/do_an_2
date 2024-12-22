@@ -15,13 +15,14 @@
   {{/if}}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script>
+    const sessions = {{{json session}}}
+  </script>
 </head>
 <body>
   <script src="/socket.io/socket.io.js"></script>
-  <script>
-    // Đảm bảo thư viện đã tải trước khi gọi io()
-    const socket = io(); // Kết nối đến server
-  </script>
+  <script src="/js/initWebSocket.js"></script>
+  {{>liveToast}}
   <header class="sticky-top z-2">
     {{>header-admin}}
   </header>
@@ -38,15 +39,7 @@
   <script src="/js/dataTables.dataTables.js"></script>
   {{!-- day la thong bao
   chung=================================================================================================== --}}
-  <div id="notifyAdmin" class="toast align-items-center position-fixed top-0 end-0 p-3 z-3 bg-success" role="alert"
-    aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body text-white textMessage"></div>
-      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-  </div>
-  {{!-- day la thong bao
-  chung=================================================================================================== --}}
+  {{#if message}}
   <div id="liveToast" class="z-3 toast align-items-center position-fixed top-0 end-0 p-3
           {{statusToast message.type}}" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
@@ -56,7 +49,6 @@
       <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
-  {{#if message}}
   <script>
     $('document').ready(function () { $('#liveToast').toast('show'); })
   </script>
@@ -65,7 +57,8 @@
   {{#if js}}
   <script src="/js/{{js}}.js"></script>
   {{/if}}
-  <script src="/js/socket.js"></script>
+
+  {{!-- test --}}
 </body>
 
 </html>

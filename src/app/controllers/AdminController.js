@@ -1274,41 +1274,41 @@ class AdminController {
     });
   }
 
-  listMessage(req, res) {
-    const id = req.session.idUser;
-    Message.find({})
-      .populate("sender", "name")
-      .then((messages) => {
-        const messagesWithLast = messages.map((msg) => {
-          const message = msg.message[msg.message.length - 1] || null;
-          return {
-            ...msg.toObject(),
-            message,
-            userName: msg.sender.name,
-          };
-        });
-        console.log(messagesWithLast);
-        const allMessages = messages.map((msg) => {
-          const messageContents = msg.message.map((message) => message.content);
-          return {
-            ...msg.toObject(),
-            messages: messageContents, // Lưu tất cả các contentUser vào một mảng
-          };
-        });
-        res.render("admin/Chatbox/listMessage", {
-          layout: "admin",
-          title: "List Message",
-          js: "admin/ChatboxAdmin",
-          messages: messagesWithLast,
-          allMessages: allMessages,
-          id,
-        });
-      })
-      .catch((err) => {
-        console.error("Lỗi khi lấy tin nhắn:", err);
-        res.status(500).send("Lỗi server");
+listMessage(req, res) {
+  const id = req.session.idUser;
+  Message.find({})
+    .populate("sender", "name")
+    .then((messages) => {
+      const messagesWithLast = messages.map((msg) => {
+        const message = msg.message[msg.message.length - 1] || null;
+        return {
+          ...msg.toObject(),
+          message,
+          userName: msg.sender.name,
+        };
       });
-  }
+
+      // Sắp xếp messagesWithLast theo thời gian của tin nhắn mới nhất (message.timestamp)
+      messagesWithLast.sort((a, b) => {
+        const timeA = a.message ? new Date(a.message.timestamp) : 0; // Nếu không có tin nhắn, sử dụng thời gian 0
+        const timeB = b.message ? new Date(b.message.timestamp) : 0;
+        return timeB - timeA; // Sắp xếp theo thứ tự giảm dần (tin nhắn mới nhất lên đầu)
+      });
+
+      res.render("admin/Chatbox/listMessage", {
+        layout: "admin",
+        title: "List Message",
+        js: "admin/ChatboxAdmin",
+        messages: messagesWithLast,
+        id,
+      });
+    })
+    .catch((err) => {
+      console.error("Lỗi khi lấy tin nhắn:", err);
+      res.status(500).send("Lỗi server");
+    });
+}
+
   // Q&A
   getCommmentPage(req, res, next) {
     const limit = 10;

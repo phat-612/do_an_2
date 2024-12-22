@@ -1,0 +1,51 @@
+{{!-- <div id="liveToastWebSocket" class="toast align-items-center position-fixed end-0 p-3" role="alert" aria-live="assertive" style="z-index: 10;"
+    aria-atomic="true">
+    <div class="d-flex">
+        <div class="toast-body text-white">
+            <span class="textMessage"></span>
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div> --}}
+<style>
+    .notification {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: opacity 0.5s ease-in-out;
+  opacity: 1;
+  
+}
+.toastct {
+  border: none; /* Loại bỏ viền */
+  border-radius: 8px; /* Bo góc nhẹ nhàng */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Đổ bóng tinh tế */
+  color: #ffffff; /* Màu chữ trắng cho tương phản */
+  width: 300px; /* Chiều rộng cố định, dễ kiểm soát */
+  margin-bottom: 5px; /* Khoảng cách giữa các toast */
+  overflow: hidden; /* Ẩn nội dung tràn */
+  font-family: Arial, sans-serif; /* Font đơn giản và dễ đọc */
+}
+
+.toastct-header {
+  padding: 4px; /* Khoảng cách */
+  font-weight: bold; /* Làm đậm chữ */
+  font-size: 14px; /* Cỡ chữ nhỏ hơn body */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Đường phân cách */
+}
+
+.toastct-body {
+  padding: 8px; /* Khoảng cách bên trong body */
+  font-size: 16px; /* Cỡ chữ chính */
+  line-height: 1.5; /* Giãn dòng để dễ đọc */
+}
+
+.notification.hidden {
+  opacity: 0;
+}
+
+</style>
+<div id="notification-container" class="position-fixed end-0" style="z-index: 10;"></div>

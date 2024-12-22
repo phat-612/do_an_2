@@ -354,7 +354,7 @@ module.exports = {
     outputHtml += `</div>`;
     return outputHtml;
   },
-  showComments: (comments, idProduct, name) => {
+  showComments: (comments, idProduct, name, role) => {
     let outputHtml = "";
     comments.forEach((comment) => {
       let idComment = comment._id;
@@ -380,7 +380,11 @@ module.exports = {
             <p class="bg-white mb-0 col-12">${comment.comment}</p>
             ${
               name
-                ? `<p class="text-decoration-underline col-2 btnAnswerComment" data-bs-idComment="${idComment}" data-bs-idProduct="${idProduct}" style="cursor: pointer;">Trả lời</p>`
+                ? `<p class="text-decoration-underline col-2 btnAnswerComment" data-bs-idComment="${idComment}" data-bs-idProduct="${idProduct}" style="cursor: pointer;">Trả lời</p>` + (role == "admin" && !comment.status ?`<form action="/api/admin/nextComment" class="d-inline-block" method="post">
+                  <input type="hidden" name="idComment" value="${idComment}">
+                  <input type="hidden" name="idProduct" value="${idProduct}">
+                  <button type="submit" class="btn btn-danger">Bỏ qua</button>
+                </form>`:"")
                 : ""
             }
           </div>
@@ -515,6 +519,9 @@ module.exports = {
       return "disabled";
     }
     return "";
+  },
+  json: (context) => {
+    return JSON.stringify(context);
   },
   consoleHbs: (data) => {
     console.log(data);

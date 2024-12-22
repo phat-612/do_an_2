@@ -17,22 +17,21 @@
             data-username="{{this.userName}}"
             data-id="{{this.sender._id}}"
           >
-            <div class="avatar me-3">
-              <img
-                src="https://via.placeholder.com/50"
-                alt="Avatar"
-                class="rounded-circle"
-              />
-            </div>
+           
             <div class="chat-details flex-grow-1">
               <div class="d-flex justify-content-between">
-                <span class="fw-bold">{{this.userName}}</span>
+              <span class="fw-bold text-capitalize">{{this.userName}}</span>
                 <small class="text-muted">{{showTime this.timestamp}}</small>
               </div>
-             
+              {{#if this.receiver}}
                 <div class="text-truncate text-muted" style="width: 18vw;">
-                  {{this.message.content}}
+               {{this.message.content}}
                 </div>
+                {{else}}
+                 <div class="text-truncate text-muted" style="width: 18vw;">
+                   Bạn: {{this.message.content}}
+                </div>
+              {{/if}}
             </div>
           </div>  
         {{/each}}

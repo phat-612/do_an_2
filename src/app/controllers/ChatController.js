@@ -28,7 +28,6 @@ class ChatController {
         timestamp: new Date(),
       });
       await existingMessage.save();
-      console.log("Tin nhắn đã được lưu vào cơ sở dữ liệu phòng đã có1");
     } else {
       // Nếu chưa có tin nhắn cho room, tạo mới
       const newMessage = new Message({
@@ -47,7 +46,6 @@ class ChatController {
       });
 
       await newMessage.save();
-      console.log("Tin nhắn mới đã được lưu vào cơ sở dữ liệu2");
     }
   }
 }
