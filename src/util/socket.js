@@ -11,14 +11,11 @@ module.exports = {
       // Kiểm tra nếu người dùng có role là admin
       if (userSession && userSession.role === "admin") {
         // Lắng nghe sự kiện `newOrder` từ phía client (admin)
-        socket.on("newOrder", (orderData) => {
-          // Gửi thông báo đến tất cả admin
+        socket.on("newOrder", (data) => {
           io.sockets.sockets.forEach((client) => {
             const clientSession = client.handshake.session;
-
-            // Chỉ gửi đến các admin
             if (clientSession && clientSession.role === "admin") {
-              client.emit("notifyAdmin", orderData); // Gửi thông báo tới admin
+              client.emit("notifyAdmin", data);
             }
           });
         });

@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="/css/style.css">
 
   {{#if css}}
-    <link rel="stylesheet" href="/css/{{css}}.css">
+  <link rel="stylesheet" href="/css/{{css}}.css">
   {{/if}}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
@@ -34,7 +34,7 @@
   {{{body}}}
   {{> footer-user}}
   {{#if js}}
-    <script src="/js/{{js}}.js"></script>
+  <script src="/js/{{js}}.js"></script>
   {{/if}}
 
   <script src="https://kit.fontawesome.com/3505ae4a94.js" crossorigin="anonymous"></script>
@@ -42,10 +42,11 @@
   <script src="/js/bootstrap.js"></script>
   <script src="/js/nouislider.js"></script>
 
-      <!-- Nội dung chat -->
-  {{!-- day la thong bao chung=================================================================================================== --}}
-  <div id="notifyAdmin" class="toast align-items-center position-fixed top-0 end-0 p-3 bg-success" role="alert" style="z-index: 6;"
-    aria-live="assertive" aria-atomic="true">
+  <!-- Nội dung chat -->
+  {{!-- day la thong bao
+  chung=================================================================================================== --}}
+  <div id="notifyAdmin" class="toast align-items-center position-fixed top-0 end-0 p-3 bg-success" role="alert"
+    style="z-index: 6;" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
       <div class="toast-body text-white textMessage">
         Đặt hàng thành công
@@ -53,35 +54,22 @@
       <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
-  {{!-- day la thong bao chung=================================================================================================== --}}
+  {{!-- day la thong bao
+  chung=================================================================================================== --}}
   {{#if message}}
-    <div id="liveToast" data-bs-Message="{{message.type}}" class="toast align-items-center position-fixed top-0 end-0 p-3
+  <div id="liveToast" data-bs-Message="{{message.type}}" class="toast align-items-center position-fixed top-0 end-0 p-3
           {{statusToast message.type}}" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 6;">
-      <div class="d-flex">
-        <div class="toast-body text-white">
-          {{message.message}}
-        </div>
-        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    <div class="d-flex">
+      <div class="toast-body text-white">
+        {{message.message}}
       </div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
-
-    <script>
-      $('document').ready(function () { $('#liveToast').toast('show'); })
-    </script>
-  {{/if}}
-
+  </div>
   <script>
-    const userSessionRole = "{{session.role}}";
-    if (userSessionRole === 'admin') {
-    const socket = io();
-      socket.on("newOrder", (orderData) => {
-        const toastElement = $('#notifyAdmin');
-        toastElement.toast('show'); // Hiển thị toast thông báo
-        $(".textMessage").text(`Đơn hàng mới từ ${orderData.user} - Tổng tiền: ${orderData.total}`);
-      });
-    }
+    $('document').ready(function () { $('#liveToast').toast('show'); })
   </script>
-
+  {{/if}}
+  <script src="/js/socket.js"></script>
 </body>
-
 </html>

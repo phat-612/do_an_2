@@ -63,7 +63,7 @@ socket.on("connect", async function () {
       </div>`;
   $("#chatboxBody").append(joinMessageElement);
   $("#chatboxBody").scrollTop($("#chatboxBody")[0].scrollHeight);
-  // Lấy tin nhắn lịch sử
+  // Lấy tin nhắn lịch sử 
  const messages = await getMessagesForUser(room);
 if (messages.length > 0) {
   // Chuyển đổi timestamp thành đối tượng Date
@@ -91,21 +91,20 @@ if (messages.length > 0) {
         const formattedTime = `${hours}:${minutes}`;
       const isSender = !msg.receiver || msg.receiver === ""; // Kiểm tra vị trí dựa vào receiver
       const messageElement = `
-          <div class="mb-2 d-flex ${isSender ? "justify-content-end" : "justify-content-start"}">
-            <div class="d-flex align-items-center">
-            <div class="p-2 rounded" style="${isSender ? 'background-color: rgb(219, 235, 255);' : ''}">
-            ${msg.content}
-            <div class="text-muted small mt-1">${formattedTime}</div>
-          </div>
-
-              </div>
+        <div class="mb-2 d-flex ${isSender ? "justify-content-end" : "justify-content-start"}">
+          <div class="d-flex align-items-center">
+            <div 
+              class="p-2 rounded message-box" 
+              style="${isSender ? 'background-color: rgb(219, 235, 255);' : ''}; word-break: break-word; max-width: 200px;">
+              ${msg.content}
+              <div class="text-muted small mt-1">${formattedTime}</div>
             </div>
-          </div>`;
+          </div>
+        </div>
+      </div>`;
       $("#chatboxBody").append(messageElement);
     });
     $("#chatboxBody").scrollTop($("#chatboxBody")[0].scrollHeight);
-
-
 });
 
 socket.on("newMessage", function (data) {
@@ -115,15 +114,18 @@ socket.on("newMessage", function (data) {
   const minutes = messageTime.getMinutes().toString().padStart(2, '0'); // Lấy phút
   const formattedTime = `${hours}:${minutes}`;
   const messageElement = `
-      <div class="mb-2 d-flex ${isSender ? "justify-content-end" : "justify-content-start"}">
-        <div class="d-flex align-items-center">
-          ${!isSender ? `<img src="https://via.placeholder.com/30" class="rounded-circle me-2" alt="Avatar" />` : ""}
-          <div class="p-2 rounded ${isSender ? "bg-primary text-white" : "bg-light"}">
-            ${data.message}
-            <div class="text-muted small mt-1">${formattedTime}</div>
-          </div>
+    <div class="mb-2 d-flex ${isSender ? "justify-content-end" : "justify-content-start"}">
+      <div class="d-flex align-items-center">
+        <div 
+          class="p-2 rounded ${isSender ? "bg-primary text-white" : "bg-light"} message-box" 
+          style="word-break: break-word; max-width: 200px;">
+          ${data.message}
+          <div class="text-muted small mt-1">${formattedTime}</div>
         </div>
-      </div>`;
+      </div>
+    </div>
+  `;
+
   
   $("#chatboxBody").append(messageElement);
   $("#chatboxBody").scrollTop($("#chatboxBody")[0].scrollHeight);
@@ -190,15 +192,14 @@ $("#sendMessage").click(async function () {
 
     // Hiển thị tin nhắn
     messageElement += `
-      <div class="mb-2 d-flex justify-content-end">
-        <div class="d-flex align-items-center">
-          <div class="p-2 rounded text-black"style="background-color: rgb(219, 235, 255)">
-            ${message}
-            <div class="text-muted small mt-1">${formattedTimeNotYear}</div>
-          </div>
+    <div class="mb-2 d-flex justify-content-end">
+      <div class="d-flex align-items-center">
+        <div class="p-2 rounded text-black message-box" style="background-color: rgb(219, 235, 255); word-break: break-word; max-width: 200px;">
+          ${message}
+          <div class="text-muted small mt-1">${formattedTimeNotYear}</div>
         </div>
-      </div>`;
-
+      </div>
+    </div>`;
     // Thêm tin nhắn vào giao diện
     $("#chatboxBody").append(messageElement);
     $("#chatInput").val(""); // Xóa nội dung ô nhập

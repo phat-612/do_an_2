@@ -1,5 +1,4 @@
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,15 +10,12 @@
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
   <link rel="stylesheet" href="/css/nouislider.css">
   <link rel="stylesheet" href="/css/dataTables.dataTables.css" />
-
-
   {{#if css}}
-    <link rel="stylesheet" href="/css/{{css}}.css" />
+  <link rel="stylesheet" href="/css/{{css}}.css" />
   {{/if}}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
-
 <body>
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -34,16 +30,14 @@
   </div>
   <script src="https://kit.fontawesome.com/3505ae4a94.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   {{!--
   <script src="/js/bootstrap.bundle.js"></script> --}}
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
   <script src="/js/bootstrap.js"></script>
   <script src="/js/nouislider.js"></script>
   <script src="/js/dataTables.dataTables.js"></script>
-
-
-  {{!-- day la thong bao chung=================================================================================================== --}}
+  {{!-- day la thong bao
+  chung=================================================================================================== --}}
   <div id="notifyAdmin" class="toast align-items-center position-fixed top-0 end-0 p-3 z-3 bg-success" role="alert"
     aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
@@ -51,7 +45,8 @@
       <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
-  {{!-- day la thong bao chung=================================================================================================== --}}
+  {{!-- day la thong bao
+  chung=================================================================================================== --}}
   <div id="liveToast" class="z-3 toast align-items-center position-fixed top-0 end-0 p-3
           {{statusToast message.type}}" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
@@ -62,29 +57,15 @@
     </div>
   </div>
   {{#if message}}
-    <script>
-      $('document').ready(function () { $('#liveToast').toast('show'); })
-    </script>
+  <script>
+    $('document').ready(function () { $('#liveToast').toast('show'); })
+  </script>
   {{/if}}
   {{!-- card scroll --}}
   {{#if js}}
-    <script src="/js/{{js}}.js"></script>
+  <script src="/js/{{js}}.js"></script>
   {{/if}}
-
-  <script>
-    const userSessionRole = "{{session.role}}";
-
-
-    if (userSessionRole === 'admin') {
-      const socket = io();
-
-      socket.on("newOrder", (orderData) => {
-        const toastElement = $('#notifyAdmin');
-        toastElement.toast('show'); // Hiển thị toast thông báo
-        $(".textMessage").text();
-      });
-    }
-  </script>
+  <script src="/js/socket.js"></script>
 </body>
 
 </html>
