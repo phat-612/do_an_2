@@ -15,7 +15,6 @@ class ChatController {
         timestamp: new Date(),
       });
     }
-
     // Kiểm tra nếu tin nhắn đã có trong cơ sở dữ liệu dựa trên room (mã sender)
     let existingMessage = await Message.findOne({ "message.room": room });
     if (existingMessage) {

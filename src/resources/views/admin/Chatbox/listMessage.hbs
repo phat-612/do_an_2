@@ -24,11 +24,11 @@
                 <small class="text-muted">{{showTime this.timestamp}}</small>
               </div>
               {{#if this.receiver}}
-                <div class="text-truncate text-muted" style="width: 18vw;">
+                <div class="text-truncate last-message text-muted" style="width: 18vw;">
                {{this.message.content}}
                 </div>
                 {{else}}
-                 <div class="text-truncate text-muted" style="width: 18vw;">
+                 <div class="text-truncate last-message text-muted" style="width: 18vw;">
                    Bạn: {{this.message.content}}
                 </div>
               {{/if}}

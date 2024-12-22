@@ -15,6 +15,15 @@ function initWedSocket(io) {
     socket.on("joinRoom", (data) => {
       socket.join(data.room);
     });
+    socket.on("leaveRoom", (data) => {
+        socket.leave(data.room); // Xóa socket khỏi phòng
+        console.log(`Socket ${socket.id} đã rời phòng: ${data.room}`);
+        // Phản hồi về client nếu cần
+        socket.emit("roomLeft", { room: data.room });
+    });
+    socket.on("disconnect", () => {
+        console.log(`Người dùng đã ngắt kết nối: ${socket.id}`);
+    });
   });
 }
 
