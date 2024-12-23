@@ -1,9 +1,9 @@
 {{#if cart}}
-<div class="">
-  {{!-- {{consoleHbs cart}} --}}
-  <h1 class="fs-3 fw-bold text-center">Giỏ hàng</h1>
-  <div class="p-1">
-    {{!-- <div class="col">
+  <div class="">
+    {{!-- {{consoleHbs cart}} --}}
+    <h1 class="fs-3 fw-bold text-center">Giỏ hàng</h1>
+    <div class="p-1">
+      {{!-- <div class="col">
       <table class="table table-responsive text-center align-middle">
         <thead>
           <tr class="fw-bold fs-5">
@@ -55,68 +55,73 @@
         </tbody>
       </table>
     </div> --}}
-    <div class="showProduct">
-      {{#each cart}}
-      <div class="row mb-3 border rounded" style="">
-        <input type="checkbox" class="checkItem col-1 my-auto" {{disabledQuantityZero this.storageQuantity}} />
-        <div class="col-2 my-auto">
-          <img class="card-img-top" src="{{showImgUpload this.image}}" alt="">
-        </div>
-        <div class="col-lg-5 col d-flex flex-column justify-content-around">
-          <a href="/product/{{this.slug}}" class="text-ellipsis">{{this.name}}</a>
-          <ul>
-            {{{objectToLi this.attributes}}}
-          </ul>
-          <div class="fw-bold">{{showPrice this.price}}</div>
-        </div>
-        <div class="col-lg col-2 my-auto">
-          <div class="d-flex justify-content-between align-items-center flex-lg-row flex-column">
-            <button class="btn border bg-black bg-opacity-25 btnMinus w-lg-25 w-100"
-              data-bs-idVariation="{{this.idVariation}}" data-bs-storageQuantity="{{this.storageQuantity}}"
-              data-bs-cartQuantity="{{this.cartQuantity}}" data-bs-price="{{this.price}}">-</button><input type="text"
-              class="inpQauntity w-lg-50 text-center border-0 inpQuantity" value="{{this.cartQuantity}}" />
-            <button class="btn border bg-black bg-opacity-25 btnPlus w-lg-25 w-100"
-              data-bs-idVariation="{{this.idVariation}}" data-bs-storageQuantity="{{this.storageQuantity}}"
-              data-bs-cartQuantity="{{this.cartQuantity}}" data-bs-price="{{this.price}}">+</button>
-          </div>
-        </div>
-        <div class="col-auto"><i class="btnDelete bi bi-trash3 fs-4 text-danger"
-            data-bs-idVariation="{{this.idVariation}}"></i></div>
-        <div class="totalItem col fw-bold" hidden>{{showPrice
+      <div class="mb-3">
+        <input type="checkbox" id="checkAllInput" class="checkAll" style="margin-left: 2.5%;"/>
+        <label for="checkAllInput">Chọn tất cả</label>
+      </div>
+      <div class="showProduct">
+        {{#each cart}}
+          <div class="row mb-3 border rounded" style="">
+            <input type="checkbox" class="checkItem col-1 my-auto" {{disabledQuantityZero this.storageQuantity}} />
+            <div class="col-2 my-auto">
+              <img class="card-img-top" src="{{showImgUpload this.image}}" alt="">
+            </div>
+            <div class="col-lg-5 col d-flex flex-column justify-content-around">
+              <a href="/product/{{this.slug}}" class="text-ellipsis">{{this.name}}</a>
+              <ul>
+                {{{objectToLi this.attributes}}}
+              </ul>
+              <div class="fw-bold">{{showPrice this.price}}</div>
+            </div>
+            <div class="col-lg col-2 my-auto">
+              <div class="d-flex justify-content-between align-items-center flex-lg-row flex-column">
+                <button class="btn border bg-black bg-opacity-25 btnMinus w-lg-25 w-100"
+                  data-bs-idVariation="{{this.idVariation}}" data-bs-storageQuantity="{{this.storageQuantity}}"
+                  data-bs-cartQuantity="{{this.cartQuantity}}" data-bs-price="{{this.price}}">-</button><input
+                  type="text" class="inpQauntity w-lg-50 text-center border-0 inpQuantity"
+                  value="{{this.cartQuantity}}" />
+                <button class="btn border bg-black bg-opacity-25 btnPlus w-lg-25 w-100"
+                  data-bs-idVariation="{{this.idVariation}}" data-bs-storageQuantity="{{this.storageQuantity}}"
+                  data-bs-cartQuantity="{{this.cartQuantity}}" data-bs-price="{{this.price}}">+</button>
+              </div>
+            </div>
+            <div class="col-auto"><i class="btnDelete bi bi-trash3 fs-4 text-danger"
+                data-bs-idVariation="{{this.idVariation}}"></i></div>
+            <div class="totalItem col fw-bold" hidden>{{showPrice
           this.price
           this.cartQuantity
           }}</div>
+          </div>
+        {{/each}}
       </div>
-      {{/each}}
-    </div>
-    <div class="row">
-      <div class="col">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title fs-4">Tóm tắt</h5>
-            <div class="row">
-              <div class="col-6">Tổng tiền sản phẩm</div>
-              <div class="totalItems col-6 text-end">98.000.000 đ</div>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title fs-4">Tóm tắt</h5>
+              <div class="row">
+                <div class="col-6">Tổng tiền sản phẩm</div>
+                <div class="totalItems col-6 text-end">98.000.000 đ</div>
+              </div>
+              <div class="row">
+                <div class="col-6">Phí vận chuyển</div>
+                <div class="col-6 text-end">0 đ</div>
+              </div>
+              <div class="row fs-5 fw-bold">
+                <div class="col-6">Tổng cộng</div>
+                <div class="totalPayment col-6 text-end">98.030.000 đ</div>
+              </div>
+              <a href="/me/order" class="btnOrder btn btn-primary w-100 mt-3">Đặt hàng</a>
             </div>
-            <div class="row">
-              <div class="col-6">Phí vận chuyển</div>
-              <div class="col-6 text-end">0 đ</div>
-            </div>
-            <div class="row fs-5 fw-bold">
-              <div class="col-6">Tổng cộng</div>
-              <div class="totalPayment col-6 text-end">98.030.000 đ</div>
-            </div>
-            <a href="/me/order" class="btnOrder btn btn-primary w-100 mt-3">Đặt hàng</a>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 {{else}}
-<div class="text-center fs-5">
-  Giỏ hàng trống. Bắt đầu
-  <a href="/">mua sắm</a>
-  ngay!
-</div>
+  <div class="text-center fs-5">
+    Giỏ hàng trống. Bắt đầu
+    <a href="/">mua sắm</a>
+    ngay!
+  </div>
 {{/if}}
