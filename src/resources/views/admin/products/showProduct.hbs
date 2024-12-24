@@ -83,15 +83,17 @@
   <table class="table table-striped table-hover">
     <thead>
       <tr>
-        <th scope="col" class="col-3">TEN</th>
-        <th scope="col" class="col-2">HINH ANH</th>
-        <th scope="col" class="col-2">DANH MUC</th>
-        <th scope="col" class="col-1">HANH DONG</th>
+        <th scope="col" class="col-1 text-center">STT</th>
+        <th scope="col" class="col-3">Tên sản phẩm</th>
+        <th scope="col" class="col-2">Hình ảnh</th>
+        <th scope="col" class="col-2">Danh mục</th>
+        <th scope="col" class="col-1">Hành động</th>
       </tr>
     </thead>
     <tbody>
       {{#each products}}
       <tr>
+        <td class="text-center">{{showStt ../currentPage @index}}</td>
         <td>{{this.name}}</td>
         <td><img src="{{showImgUpload this.images}}" /></td>
         <td>{{this.idCategory.name}}</td>

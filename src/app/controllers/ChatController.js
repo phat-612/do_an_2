@@ -1,8 +1,8 @@
 const Message = require("../models/Messages");
 class ChatController {
   async userMessageHandler(data) {
-    const { message, sender, receiver, room } = data;
-      this.to(room).emit("newMessage", {
+    const { message, sender, inforProduct, receiver, room } = data;
+    this.to(room).emit("newMessage", {
       message: message,
       sender: sender,
       receiver: receiver || null,
@@ -23,6 +23,7 @@ class ChatController {
         room: room,
         sender: sender,
         receiver: receiver || null, // Đặt receiver nếu có
+        inforProduct: inforProduct || null,
         content: message,
         timestamp: new Date(),
       });
@@ -37,6 +38,7 @@ class ChatController {
             room: room,
             sender: sender,
             receiver: receiver || null,
+            inforProduct: inforProduct || null,
             content: message,
             timestamp: new Date(),
           },

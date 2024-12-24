@@ -1,3 +1,12 @@
+// xử lý xác nhận xóa
+$(".deleteForm").submit((event) => {
+  event.preventDefault();
+  const isDelete = confirm("Bạn có chắc chắn muốn xóa?");
+  if (isDelete) {
+    event.target.submit();
+  }
+});
+
 const addressModal = document.getElementById("addressModal");
 addressModal.addEventListener("show.bs.modal", function (event) {
   let button = event.relatedTarget;
@@ -17,6 +26,8 @@ addressModal.addEventListener("show.bs.modal", function (event) {
     addressModal.querySelector("#name").value = name;
     addressModal.querySelector("#phone").value = phone;
     addressModal.querySelector("#address").value = address;
+    addressModal.querySelector("#submitAddress").textContent =
+      "Cập nhật địa chỉ";
     if (defaultAddress == "true") {
       addressModal
         .querySelector("#defaultAddress")
@@ -32,6 +43,7 @@ addressModal.addEventListener("show.bs.modal", function (event) {
     addressModal.querySelector("#name").value = "";
     addressModal.querySelector("#phone").value = "";
     addressModal.querySelector("#address").value = "";
+    addressModal.querySelector("#submitAddress").textContent = "Thêm địa chỉ";
     addressModal.querySelector("#defaultAddress").closest("div").hidden = false;
   }
 });

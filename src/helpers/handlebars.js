@@ -49,6 +49,28 @@ module.exports = {
     }
     return "";
   },
+  showSortField: (textColumn, column, sortColumn, sortType) => {
+    const objectIcon = {
+      asc: "fa-solid fa-arrow-up-wide-short",
+      desc: "fa-solid fa-arrow-down-wide-short",
+      none: "fa-solid fa-sort",
+    };
+    // kiểm tra sortType
+    if (!Object.keys(objectIcon).includes(sortType)) {
+      sortType = "none";
+    }
+    let classIcon = objectIcon[sortType];
+    let linkSort;
+    if (column == sortColumn) {
+      linkSort = `?fieldSort=${column}&sort=${
+        sortType == "asc" ? "desc" : "asc"
+      }`;
+    } else {
+      linkSort = `?fieldSort=${column}&sort=asc`;
+      classIcon = objectIcon["none"];
+    }
+    return `<a href="${linkSort}" class="text-dark">${textColumn} <i class="${classIcon}" > </i></a>`;
+  },
   showDate: (date) => {
     if (date instanceof Date || date == undefined) return "";
     const year = date.getFullYear();
@@ -332,7 +354,8 @@ module.exports = {
     });
     return outputHtml;
   },
-  showRatingStar: (reviews) => {
+  showRatingStar: (reviews, variations) => {
+    const variationID = variations._id;
     reviews = reviews.filter((review) => review.status == true);
     let aveRating =
       reviews.reduce((acc, cur) => {
@@ -344,16 +367,22 @@ module.exports = {
     } else {
       aveRating = Math.round(aveRating);
     }
-    let outputHtml = `<div class="ratings">`;
+    let outputHtml = `<div style="padding:2%;" class="d-flex justify-content-between"><div class="ratings">`;
     for (let i = 0; i < 5; i++) {
       outputHtml +=
         i < aveRating
           ? `<i class="fa fa-star text-warning"></i>`
           : `<i class="fa fa-star"></i>`;
     }
-    outputHtml += `</div>`;
+    outputHtml += `</div><form action="/api/user/cart" method="post">
+                <input type="hidden" name="idVariation" value="${variationID}" hidden="">
+                <input type="hidden" name="quantity" value="1" hidden="">
+                <button type="submit" class="btn btn-danger"><i class="bi bi-cart-dash text-white"></i></button>
+                </div>
+              </form>`;
     return outputHtml;
   },
+
   showComments: (comments, idProduct, name, role) => {
     let outputHtml = "";
     comments.forEach((comment) => {
@@ -380,11 +409,14 @@ module.exports = {
             <p class="bg-white mb-0 col-12">${comment.comment}</p>
             ${
               name
-                ? `<p class="text-decoration-underline col-2 btnAnswerComment" data-bs-idComment="${idComment}" data-bs-idProduct="${idProduct}" style="cursor: pointer;">Trả lời</p>` + (role == "admin" && !comment.status ?`<form action="/api/admin/nextComment" class="d-inline-block" method="post">
+                ? `<p class="text-decoration-underline col-2 btnAnswerComment" data-bs-idComment="${idComment}" data-bs-idProduct="${idProduct}" style="cursor: pointer;">Trả lời</p>` +
+                  (role == "admin" && !comment.status
+                    ? `<form action="/api/admin/nextComment" class="d-inline-block" method="post">
                   <input type="hidden" name="idComment" value="${idComment}">
                   <input type="hidden" name="idProduct" value="${idProduct}">
                   <button type="submit" class="btn btn-danger">Bỏ qua</button>
-                </form>`:"")
+                </form>`
+                    : "")
                 : ""
             }
           </div>

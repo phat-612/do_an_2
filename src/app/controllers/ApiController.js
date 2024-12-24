@@ -27,8 +27,6 @@ const { sortObject, getDiscount } = require("../../util/function");
 const { response } = require("express");
 const { removeImgCloudinary } = require("../middlewares/uploadMiddleware");
 
-
-
 class ApiController {
   // api user,admin
   // api user
@@ -734,20 +732,35 @@ class ApiController {
   }
   storeAddress(req, res, next) {
     const formData = req.body;
-    if (formData.defaultAddress) {
-      User.updateOne(
-        { _id: req.session.idUser },
-        { $set: { "shipmentDetail.$[].defaultAddress": false } }
-      ).exec();
-      formData.defaultAddress = true;
-    } else {
-      formData.defaultAddress = false;
-    }
-    User.updateOne(
-      { _id: req.session.idUser },
-      { $push: { shipmentDetail: formData } }
-    ).then(() => {
-      res.redirect("/me/address");
+    User.countDocuments({
+      _id: req.session.idUser,
+      "shipmentDetail.address": { $exists: true },
+    }).then((count) => {
+      formData.defaultAddress = count === 0 ? true : formData.defaultAddress;
+      if (formData.defaultAddress) {
+        User.updateOne(
+          { _id: req.session.idUser },
+          { $set: { "shipmentDetail.$[].defaultAddress": false } }
+        )
+          .then(() => {
+            formData.defaultAddress = true;
+            return User.updateOne(
+              { _id: req.session.idUser },
+              { $push: { shipmentDetail: formData } }
+            );
+          })
+          .then(() => {
+            return res.redirect("/me/address");
+          });
+      } else {
+        formData.defaultAddress = false;
+        User.updateOne(
+          { _id: req.session.idUser },
+          { $push: { shipmentDetail: formData } }
+        ).then(() => {
+          return res.redirect("/me/address");
+        });
+      }
     });
   }
   updateAddress(req, res, next) {
@@ -1018,10 +1031,11 @@ class ApiController {
       });
 
       const order = await newOrder.save();
-      const adminNamespace = req.io.of('/admin');
-      adminNamespace.emit('notify', {
-        type: 'success',
-        color: '#28a745',
+      const adminNamespace = req.io.of("/admin");
+      adminNamespace.emit("notify", {
+        type: "success",
+        color: "#28a745",
+        link: `/admin/order`,
         message: `Đơn hàng mới từ ${order.shipmentDetail.name}`,
       });
       // Xử lý thanh toán
@@ -1079,8 +1093,7 @@ class ApiController {
   }
   creatPaymentUrl(req, res, next) {
     const idOrder = req.query.idOrder;
-    const amountOder = req.query.amount;
-    // return console.log(idOrder, amount);
+    const amountOder = Math.round(req.query.amount, 2);
     Order.findOne({ _id: idOrder }).then((order) => {
       if (!order) {
         return res.redirect("/me/historyOrder");
@@ -1198,10 +1211,11 @@ class ApiController {
         comment: formData.comment.substring(0, 250),
       });
       product.save().then(() => {
-        const adminNamespace = req.io.of('/admin');
+        const adminNamespace = req.io.of("/admin");
         adminNamespace.emit("notify", {
           type: "success",
-          color: '#ffc107',
+          color: "#ffc107",
+          link: `/admin/accessReview`,
           message: `Có đánh giá mới từ ${req.session.name}`,
         });
         req.flash("message", {
@@ -1250,11 +1264,12 @@ class ApiController {
         comment: formData.comment.substring(0, 250),
       });
       product.save().then(() => {
-        if (role == "user"){
-          const adminNamespace = req.io.of('/admin');
-          adminNamespace.emit('notify', {
-            type: 'success',
-            color: '#fd7e14',
+        if (role == "user") {
+          const adminNamespace = req.io.of("/admin");
+          adminNamespace.emit("notify", {
+            type: "success",
+            color: "#fd7e14",
+            link: `/admin/comment`,
             message: `Có bình luận mới từ ${req.session.name}`,
           });
         }
@@ -1285,11 +1300,12 @@ class ApiController {
       product.comments.id(idComment).status = role === "admin";
       product.comments.id(idComment).timeUpdate = new Date();
       product.save().then(() => {
-        if (role == "user"){
-          const adminNamespace = req.io.of('/admin');
-          adminNamespace.emit('notify', {
-            type: 'success',
-            color: '#fd7e14',
+        if (role == "user") {
+          const adminNamespace = req.io.of("/admin");
+          adminNamespace.emit("notify", {
+            type: "success",
+            color: "#fd7e14",
+            link: `/admin/comment`,
             message: `Có bình luận mới từ ${req.session.name}`,
           });
         }
@@ -1305,9 +1321,12 @@ class ApiController {
     if (role == "admin") {
       Product.updateOne(
         { _id: idProduct, "comments._id": idComment },
-        { $set: { "comments.$.status": true } }).then(() => {
+        { $set: { "comments.$.status": true } }
+      )
+        .then(() => {
           return res.redirect("back");
-        }).catch((err) => {
+        })
+        .catch((err) => {
           console.error("Error updating comment status:", err);
           return res.status(500).send("Error updating comment status");
         });
@@ -1615,6 +1634,8 @@ class ApiController {
         res.status(500).json({ error: "Có lỗi xảy ra khi lấy tin nhắn" });
       });
   }
+  // thong tin san pham
+  inforMessage(req, res) {}
   // end api user
 
   // test api

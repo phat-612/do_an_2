@@ -1,6 +1,4 @@
-<!-- Chatbox -->
 <div id="chatboxContainer" class=" p-4 position-fixed end-0" style="z-index: 1050; bottom: 50px; cursor: pointer;">
-  <!-- Nút mở chatbox -->
   <div id="chatboxToggle" class="card shadow rounded-circle" style="display: none;">
     <div class="card-header d-flex justify-content-center align-items-center"
       style="background-color: #007bff; color: white; border-radius: 50%; width: 45px; height: 45px;">
@@ -107,7 +105,6 @@
   });
 
   socket.on("connect", async function () {
-    console.log(`Đã kết nối tới server với ID: ${room}`);
     socket.emit("joinRoom", { room });
 
     // Hiển thị thông báo tham gia phòng
@@ -185,7 +182,6 @@
   async function getLastMessageTime() {
     const timeMessages = await getMessagesForUser(room);
     if (timeMessages.length === 0) {
-      console.log("Không có tin nhắn nào.");
       return;
     }
     const lastMessage = timeMessages[timeMessages.length - 1];
@@ -198,7 +194,6 @@ function sendMessage() {
   const message = $("#chatInput").val();
   const currentTime = new Date();
   if (message) {
-    console.log("Gửi tin nhắn:", message);
     socket.emit("sendMessage", {
       message: message,
       sender: room,

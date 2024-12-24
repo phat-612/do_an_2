@@ -1,5 +1,5 @@
 <div class="container">
-  <ul class="nav">
+  <ul class="nav mtt-2">
     <li class="nav-item">
       <a class="nav-link" href="?status=all">Tổng Đơn hàng ({{totalUnchangedOrders}})</a>
 
@@ -17,40 +17,49 @@
       <a class="nav-link" href="?status=failed">Thất bại ({{totalFailed}})</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="?status=cancel">Bị hủy ({{toltalCancel}})</a>
+      <a class="nav-link" href="?status=cancel">Bị hủy ({{totalCancel}})</a>
     </li>
-  </ul>
-  <form action="/admin/order" method="get">
+    <form action="/admin/order" class="
+  d-incline-block" method="get">
     <div class="d-flex w-25">
-      <input class="form-control me-2" type="search" placeholder="Tìm kiếm đơn hàng" aria-label="Search" name="name" />
+      <input class="form-control me-2" type="search" placeholder="Nhập tên khách hàng" aria-label="Search"
+        name="name" style="min-width: 200px;"/>
       <button class="btn btn-outline-success" type="submit">Tìm</button>
     </div>
   </form>
+  </ul>
+  
   <div>
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">Khách Hàng</th>
-          <th scope="col">Trạng Thái</th>
-          <th scope="col">Tổng</th>
-          <th scope="col">Ngày</th>
+          <th scope="col">
+            STT
+          </th>
+          <th scope="col">
+            Khách Hàng
+          </th>
+          <th scope="col">{{{showSortField "Trạng thái" "status" fieldSort sort}}}</th>
+          <th scope="col">{{{showSortField "Tổng tiền" "total" fieldSort sort}}}</th>
+          <th scope="col">{{{showSortField "Thời gian" "createdAt" fieldSort sort}}}</th>
           <th scope="col" class="col-2">Hành Động</th>
         </tr>
       </thead>
       <tbody>
         {{#each orders}}
-        <tr>
-          <td>{{this.idUser.name}}</td>
-          <td>{{formatStatus this.status}}</td>
-          <td>{{showPrice this.total}}</td>
-          <td>{{formatDate this.createdAt "DD/MM/YYYY"}}</td>
-          <td><a href="/admin/order/{{this._id}}/detail" class="btn btn-primary">Xem</a>
-          </td>
-        </tr>
+          <tr>
+            <td>{{showStt ../currentPage @index}}</td>
+            <td>{{this.user.name}}</td>
+            <td>{{formatStatus this.status}}</td>
+            <td>{{showPrice this.total}}</td>
+            <td>{{formatDate this.createdAt "DD/MM/YYYY"}}</td>
+            <td><a href="/admin/order/{{this._id}}/detail" class="btn btn-primary">Xem</a>
+            </td>
+          </tr>
         {{else}}
-        <tr>
-          <td colspan="5" class="text-center">Không có đơn hàng nào.</td>
-        </tr>
+          <tr>
+            <td colspan="5" class="text-center">Không có đơn hàng nào.</td>
+          </tr>
         {{/each}}
       </tbody>
     </table>
@@ -59,25 +68,25 @@
 <div>
 
   {{#pagination currentPage totalPage 5}}
-  <nav aria-label="...">
-    <ul class="pagination justify-content-center">
-      {{#if notFirstPage}}
-      <li class="page-item">
-        <a class="page-link fs-5" href="{{getPagiUrl ../url}}&page={{minus currentPage 1}}" tabindex="-1"
-          aria-disabled="true">Previous</a>
-      </li>
-      {{/if}}
-      {{#each pages}}
-      <li class="page-item {{#if this.isCurrent}}active{{/if}}">
-        <a class="page-link fs-5" href="{{getPagiUrl ../../url}}&page={{this.page}}">{{this.page}}</a>
-      </li>
-      {{/each}}
-      {{#if notLastPage}}
-      <li class="page-item">
-        <a class="page-link fs-5" href="{{getPagiUrl ../url}}&page={{sum currentPage 1}}">Next</a>
-      </li>
-      {{/if}}
-    </ul>
-  </nav>
+    <nav aria-label="...">
+      <ul class="pagination justify-content-center">
+        {{#if notFirstPage}}
+          <li class="page-item">
+            <a class="page-link fs-5" href="{{getPagiUrl ../url}}&page={{minus currentPage 1}}" tabindex="-1"
+              aria-disabled="true">Previous</a>
+          </li>
+        {{/if}}
+        {{#each pages}}
+          <li class="page-item {{#if this.isCurrent}}active{{/if}}">
+            <a class="page-link fs-5" href="{{getPagiUrl ../../url}}&page={{this.page}}">{{this.page}}</a>
+          </li>
+        {{/each}}
+        {{#if notLastPage}}
+          <li class="page-item">
+            <a class="page-link fs-5" href="{{getPagiUrl ../url}}&page={{sum currentPage 1}}">Next</a>
+          </li>
+        {{/if}}
+      </ul>
+    </nav>
   {{/pagination}}
 </div>

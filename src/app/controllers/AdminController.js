@@ -125,123 +125,6 @@ class AdminController {
       )
       .catch(next);
   }
-
-  // index(req, res, next) {
-  //   Product.find({})
-  //     .then(function (products) {
-  //       Order.find({}).then(function (orders) {
-  //         Promise.all([
-  //           Order.aggregate([
-  //             {
-  //               $match: {
-  //                 "paymentDetail.status": "success",
-  //               },
-  //             },
-  //             {
-  //               $group: {
-  //                 _id: null,
-  //                 totalAmount: {
-  //                   $sum: "$total",
-  //                 },
-  //               },
-  //             },
-  //           ]),
-  //           Product.aggregate([
-  //             { $sort: { view: -1 } }, // Sắp xếp theo lượt view giảm dần
-  //             { $limit: 4 }, // Lấy ra 4 sản phẩm
-  //           ]),
-  //           Product.aggregate([
-  //             {
-  //               $set: {
-  //                 totalReviews: { $size: "$reviews" },
-  //               },
-  //             },
-  //             { $sort: { totalReviews: -1 } }, // Sấp xếp
-  //             { $limit: 4 }, // Limit to top 4 products
-  //             {
-  //               $project: {
-  //                 name: 1,
-  //                 images: 1,
-  //                 totalReviews: 1,
-  //               },
-  //             },
-  //           ]),
-  //           Product.aggregate([
-  //             { $unwind: "$variations" }, // Unwind the variations array
-  //             {
-  //               $group: {
-  //                 _id: "$_id",
-  //                 name: { $first: "$name" },
-  //                 images: { $first: "$images" },
-  //                 view: { $first: "$view" },
-  //                 slug: { $first: "$slug" },
-  //                 totalSold: { $sum: "$variations.sold" },
-  //                 variations: { $push: "$variations" },
-  //               },
-  //             },
-  //             { $sort: { totalSold: -1 } }, // Sort by total sold in descending order
-  //             { $limit: 4 }, // Limit to top 4 products
-  //           ]),
-  //           Product.aggregate([
-  //             {
-  //               $unwind: "$reviews",
-  //             },
-  //             {
-  //               $match: {
-  //                 "reviews.status": false,
-  //               },
-  //             },
-  //             {
-  //               $lookup: {
-  //                 from: "users",
-  //                 localField: "reviews.idUser",
-  //                 foreignField: "_id",
-  //                 as: "user",
-  //               },
-  //             },
-  //             {
-  //               $unwind: "$user",
-  //             },
-  //             {
-  //               $project: {
-  //                 name: 1,
-  //                 images: 1,
-  //                 reviews: 1,
-  //                 user: {
-  //                   name: 1,
-  //                 },
-  //               },
-  //             },
-  //             { $limit: 6 },
-  //           ]),
-  //         ]).then(
-  //           ([
-  //             doanhThu,
-  //             topSeenProduct,
-  //             topReviewProduct,
-  //             topProducts,
-  //             assessReview,
-  //           ]) => {
-  //             doanhThu = doanhThu[0] ? doanhThu[0].totalAmount : 0;
-  //             res.render("admin/sites/home", {
-  //               layout: "admin",
-  //               title: "Trang chủ",
-  //               js: "admin/home",
-  //               css: "admin/home",
-  //               orders: multipleMongooseToObject(orders),
-  //               products: multipleMongooseToObject(products),
-  //               topProducts: topProducts,
-  //               topReviewProduct: topReviewProduct,
-  //               doanhThu: doanhThu,
-  //               topSeenProduct: topSeenProduct,
-  //               assessReview: assessReview,
-  //             });
-  //           }
-  //         );
-  //       });
-  //     })
-  //     .catch(next);
-  // }
   // get /product
   product(req, res, next) {
     const url = req.originalUrl;
@@ -537,12 +420,121 @@ class AdminController {
   }
 
   // get /orderproducts
+
+  // order(req, res, next) {
+  //   const status = req.query.status; // Lọc theo trạng thái
+  //   const sortOrder = req.query.sortOrder || "default"; // Thứ tự sắp xếp
+  //   const url = req.originalUrl; // Lưu URL hiện tại để giữ tham số khi phân trang
+  //   let match = {}; // Điều kiện lọc
+
+  //   // Lọc trạng thái nếu có
+  //   if (
+  //     status &&
+  //     ["success", "pending", "failed", "shipping", "cancel"].includes(status)
+  //   ) {
+  //     match.status = status;
+  //   }
+
+  //   // Trạng thái mặc định sẽ là 1
+  //   let page = parseInt(req.query.page) || 1;
+  //   let perPage = 10; // Mỗi trang hiển thị 10 đơn hàng
+  //   let skipValue = (page - 1) * perPage;
+
+  //   // Hàm để sắp xếp đơn hàng theo thứ tự trạng thái
+  //   const orderMap = {
+  //     pending: 0,
+  //     shipping: 1,
+  //     success: 2,
+  //     failed: 3,
+  //     cancel: 4,
+  //   };
+
+  //   // Hàm để sắp xếp theo thứ tự mặc định hoặc ngược lại
+  //   const sortStatuses = (order) => {
+  //     const reverseOrder = {
+  //       cancel: 0,
+  //       failed: 1,
+  //       success: 2,
+  //       shipping: 3,
+  //       pending: 4,
+  //     };
+  //     return order === "reverse" ? reverseOrder : orderMap;
+  //   };
+
+  //   // Sắp xếp theo trạng thái trong cơ sở dữ liệu
+  //   const statusesOrder = sortStatuses(sortOrder);
+
+  //   // Sử dụng aggregate để sắp xếp trong cơ sở dữ liệu
+  //   Order.aggregate([
+  //     { $match: match }, // Lọc các đơn hàng theo điều kiện
+  //     {
+  //       $addFields: {
+  //         statusOrder: {
+  //           $indexOfArray: [Object.values(statusesOrder), "$status"],
+  //         },
+  //       },
+  //     }, // Tạo trường statusOrder dựa trên thứ tự trạng thái
+  //     { $sort: { statusOrder: 1 } }, // Sắp xếp theo trường statusOrder
+  //     { $skip: skipValue }, // Phân trang
+  //     { $limit: perPage }, // Giới hạn số lượng đơn hàng mỗi trang
+  //   ])
+  //     .then((orders) => {
+  //       // Tính tổng số đơn hàng
+  //       Order.countDocuments(match).then((totalOrders) => {
+  //         let totalPage = Math.ceil(totalOrders / perPage); // Tổng số trang
+
+  //         // Tổng hợp số lượng đơn hàng theo trạng thái
+  //         Promise.all([
+  //           Order.find({ status: "pending" }).countDocuments(),
+  //           Order.find({ status: "shipping" }).countDocuments(),
+  //           Order.find({ status: "success" }).countDocuments(),
+  //           Order.find({ status: "failed" }).countDocuments(),
+  //           Order.find({ status: "cancel" }).countDocuments(),
+  //         ]).then(
+  //           ([
+  //             totalPending,
+  //             totalShipping,
+  //             totalSuccess,
+  //             totalFailed,
+  //             totalCancel,
+  //           ]) => {
+  //             res.render("admin/orders/orderProduct", {
+  //               title: "Quản lý đơn hàng",
+  //               layout: "admin",
+  //               js: "admin/orderProduct",
+  //               css: "admin/orderProduct",
+  //               orders: orders,
+  //               totalOrders,
+  //               totalPage,
+  //               totalPending,
+  //               totalShipping,
+  //               totalSuccess,
+  //               totalFailed,
+  //               totalCancel,
+  //               currentPage: page,
+  //               url,
+  //               sortOrder,
+  //               status,
+  //             });
+  //           }
+  //         );
+  //       });
+  //     })
+  //     .catch(next);
+  // }
+
   order(req, res, next) {
     const name = req.query.name;
     const status = req.query.status;
     const url = req.originalUrl;
     let match = {};
-    // trạng thái tìm kiếm
+    let sortOrder = req.query.sort === "desc" ? -1 : 1;
+    let fieldSort = req.query.fieldSort || "createdAt";
+    if (!req.query.sort || !req.query.fieldSort) {
+      sortOrder = -1;
+      fieldSort = "createdAt";
+    }
+    // Trạng thái tìm kiếm
     if (
       status === "success" ||
       status === "pending" ||
@@ -552,43 +544,96 @@ class AdminController {
     ) {
       match.status = status;
     }
-    // console.log(match);
 
-    // trạng hiện tại mặc định là 1
+    // Trạng hiện tại mặc định là 1
     let page = parseInt(req.query.page) || 1;
-
-    // 10 đơn hàng
     let perPage = 10;
-
-    // skip
     let skipValue = page * perPage - perPage;
-    // tìm tên trên url
+
+    // pending: 1,
+    // shipping: 2,
+    // success: 3,
+    // failed: 4,
+    // cancel: 5,
+
+    // Sử dụng aggregate để sắp xếp các đơn hàng
     const findUsers = async () => {
       if (name) {
-        //RegExp xác định chuỗi
         let users = await User.find({ name: new RegExp(name, "i") });
         let userIds = users.map((user) => user._id);
         match.idUser = { $in: userIds };
       }
       return match;
     };
-
+    function sortOrderField(fieldSort, type) {
+      // type: 1, -1
+      switch (fieldSort) {
+        case "status":
+          return Order.aggregate([
+            { $match: match },
+            {
+              $addFields: {
+                statusOrder: {
+                  $switch: {
+                    branches: [
+                      { case: { $eq: ["$status", "pending"] }, then: 1 },
+                      { case: { $eq: ["$status", "shipping"] }, then: 2 },
+                      { case: { $eq: ["$status", "success"] }, then: 3 },
+                      { case: { $eq: ["$status", "failed"] }, then: 4 },
+                      { case: { $eq: ["$status", "cancel"] }, then: 5 },
+                    ],
+                    default: 6,
+                  },
+                },
+              },
+            },
+            {
+              $lookup: {
+                from: "users", // Tên collection cần join
+                localField: "idUser", // Trường trong collection hiện tại
+                foreignField: "_id", // Trường trong collection cần join
+                as: "user",
+              },
+            },
+            {
+              $unwind: "$user",
+            },
+            { $sort: { statusOrder: type } }, // Sắp xếp theo thứ tự trạng thái
+            { $skip: skipValue },
+            { $limit: perPage },
+          ]);
+        default:
+          return Order.aggregate([
+            { $match: match },
+            {
+              $lookup: {
+                from: "users", // Tên collection cần join
+                localField: "idUser", // Trường trong collection hiện tại
+                foreignField: "_id", // Trường trong collection cần join
+                as: "user",
+              },
+            },
+            {
+              $unwind: "$user",
+            },
+            { $sort: { [fieldSort]: type } },
+            { $skip: skipValue },
+            { $limit: perPage },
+          ]);
+      }
+    }
     findUsers()
       .then((match) => {
         return Promise.all([
           Order.countDocuments(match),
-          Order.find(match)
-            .populate("idUser", "name")
-            .skip(skipValue)
-            .limit(perPage),
-          Order.countDocuments(), // tổng số đơn hàng
+          sortOrderField(fieldSort, sortOrder),
+          Order.countDocuments(),
           Order.find({ status: "pending" }).countDocuments(),
           Order.find({ status: "success" }).countDocuments(),
           Order.find({ status: "failed" }).countDocuments(),
           Order.find({ status: "shipping" }).countDocuments(),
           Order.find({ status: "cancel" }).countDocuments(),
-
-          Order.countDocuments(), // số lượng sản phẩm không thay đổi
+          Order.countDocuments(),
         ]);
       })
       .then(
@@ -601,7 +646,7 @@ class AdminController {
           totalFailed,
           totalShipping,
           toltalCancel,
-          totalUnchangedOrders, // The new variable
+          totalUnchangedOrders,
         ]) => {
           let totalPage = Math.ceil(totalOrders / perPage);
           res.render("admin/orders/orderProduct", {
@@ -609,7 +654,7 @@ class AdminController {
             layout: "admin",
             js: "admin/orderProduct",
             css: "admin/orderProduct",
-            orders: multipleMongooseToObject(orders),
+            orders: orders,
             allOrders: allOrders,
             currentPage: page,
             totalPage: totalPage,
@@ -618,14 +663,16 @@ class AdminController {
             totalSuccess: totalSuccess,
             totalFailed: totalFailed,
             totalShipping: totalShipping,
-            toltalCancel: toltalCancel,
-            totalUnchangedOrders: totalUnchangedOrders, // Include the new variable in the response
+            totalCancel: toltalCancel,
+            totalUnchangedOrders: totalUnchangedOrders,
             url,
+            fieldSort,
+            sort: sortOrder == -1 ? "desc" : "asc", // Trả về giá trị sort để giữ lại trạng thái sắp xếp
           });
-          // console.log(toltalCancel);
         }
       );
   }
+
   // get /order/detail
   orderDetail(req, res, next) {
     Order.findById(req.params.id)
@@ -1274,40 +1321,39 @@ class AdminController {
     });
   }
 
-listMessage(req, res) {
-  const id = req.session.idUser;
-  Message.find({})
-    .populate("sender", "name")
-    .then((messages) => {
-      const messagesWithLast = messages.map((msg) => {
-        const message = msg.message[msg.message.length - 1] || null;
-        return {
-          ...msg.toObject(),
-          message,
-          userName: msg.sender.name,
-        };
-      });
+  listMessage(req, res) {
+    const id = req.session.idUser;
+    Message.find({})
+      .populate("sender", "name")
+      .then((messages) => {
+        const messagesWithLast = messages.map((msg) => {
+          const message = msg.message[msg.message.length - 1] || null;
+          return {
+            ...msg.toObject(),
+            message,
+            userName: msg.sender.name,
+          };
+        });
+        // Sắp xếp messagesWithLast theo thời gian của tin nhắn mới nhất (message.timestamp)
+        messagesWithLast.sort((a, b) => {
+          const timeA = a.message ? new Date(a.message.timestamp) : 0; // Nếu không có tin nhắn, sử dụng thời gian 0
+          const timeB = b.message ? new Date(b.message.timestamp) : 0;
+          return timeB - timeA; // Sắp xếp theo thứ tự giảm dần (tin nhắn mới nhất lên đầu)
+        });
 
-      // Sắp xếp messagesWithLast theo thời gian của tin nhắn mới nhất (message.timestamp)
-      messagesWithLast.sort((a, b) => {
-        const timeA = a.message ? new Date(a.message.timestamp) : 0; // Nếu không có tin nhắn, sử dụng thời gian 0
-        const timeB = b.message ? new Date(b.message.timestamp) : 0;
-        return timeB - timeA; // Sắp xếp theo thứ tự giảm dần (tin nhắn mới nhất lên đầu)
+        res.render("admin/Chatbox/listMessage", {
+          layout: "admin",
+          title: "List Message",
+          js: "admin/ChatboxAdmin",
+          messages: messagesWithLast,
+          id,
+        });
+      })
+      .catch((err) => {
+        console.error("Lỗi khi lấy tin nhắn:", err);
+        res.status(500).send("Lỗi server");
       });
-
-      res.render("admin/Chatbox/listMessage", {
-        layout: "admin",
-        title: "List Message",
-        js: "admin/ChatboxAdmin",
-        messages: messagesWithLast,
-        id,
-      });
-    })
-    .catch((err) => {
-      console.error("Lỗi khi lấy tin nhắn:", err);
-      res.status(500).send("Lỗi server");
-    });
-}
+  }
 
   // Q&A
   getCommmentPage(req, res, next) {

@@ -27,5 +27,7 @@ router.post("/ratingProduct", apiController.ratingProduct);
 router.post("/commentProduct", apiController.commentProduct);
 router.post("/answerComment", apiController.answerComment);
 router.get("/meMessages/:id", apiController.meMessages);
+// chat
+router.get("/informessage/:id", apiController.inforMessage);
 
 module.exports = router;

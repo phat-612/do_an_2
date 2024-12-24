@@ -8,7 +8,8 @@ function initWedSocket(io) {
       if (!data.receiver)
         adminNamespace.emit("notify", {
           type: "success",
-          color: '#007bff',
+          color: "#007bff",
+          link: "/admin/listMessage",
           message: "Có tin nhắn mới",
         });
     });
@@ -16,14 +17,11 @@ function initWedSocket(io) {
       socket.join(data.room);
     });
     socket.on("leaveRoom", (data) => {
-        socket.leave(data.room); // Xóa socket khỏi phòng
-        console.log(`Socket ${socket.id} đã rời phòng: ${data.room}`);
-        // Phản hồi về client nếu cần
-        socket.emit("roomLeft", { room: data.room });
+      socket.leave(data.room); // Xóa socket khỏi phòng
+      // Phản hồi về client nếu cần
+      socket.emit("roomLeft", { room: data.room });
     });
-    socket.on("disconnect", () => {
-        console.log(`Người dùng đã ngắt kết nối: ${socket.id}`);
-    });
+    socket.on("disconnect", () => {});
   });
 }
 

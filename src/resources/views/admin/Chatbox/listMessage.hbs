@@ -17,19 +17,18 @@
             data-username="{{this.userName}}"
             data-id="{{this.sender._id}}"
           >
-           
             <div class="chat-details flex-grow-1">
               <div class="d-flex justify-content-between">
               <span class="fw-bold text-capitalize">{{this.userName}}</span>
-                <small class="text-muted">{{showTime this.timestamp}}</small>
+                <small>{{showTime this.message.timestamp}}</small>
               </div>
-              {{#if this.receiver}}
-                <div class="text-truncate last-message text-muted" style="width: 18vw;">
-               {{this.message.content}}
+              {{#if this.message.receiver}}
+                  <div class="text-truncate last-message" style="width: 18vw; color:#000">  
+                  Bạn: {{this.message.content}}
                 </div>
                 {{else}}
-                 <div class="text-truncate last-message text-muted" style="width: 18vw;">
-                   Bạn: {{this.message.content}}
+                 <div class="text-truncate last-message" style="width: 18vw;">
+               {{this.message.content}}
                 </div>
               {{/if}}
             </div>
