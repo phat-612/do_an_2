@@ -27,28 +27,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Lấy tất cả tin nhắn của người dùng này
       const allMessages = await getMessagesForUser(id);
-      chatboxMessages.innerHTML = allMessages
-        .map((message) => {
+      let arrChat = allMessages.map(async (message) => {
+        if (!message.isProduct) {
           return `
-          <div class="message" style="display: flex; flex-direction: column; align-items: ${
-            message.receiver ? "flex-end" : "flex-start"
-          }; margin-top: 5px;">
-            <div class="message-text d-inline-block p-2 rounded text-dark" style="padding: 8px 12px; display: flex; flex-direction: column; background-color: ${
-              message.receiver ? "rgb(219, 235, 255)" : "#f0f0f0"
-            }; word-break: break-word; overflow-wrap: break-word; max-width: 300px; white-space: normal;">
-              ${message.content}
-              <div class="message-time text-muted last-message small" style="color: #ccc; margin-top: 5px;">
-                ${new Date(message.timestamp).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: false,
-                })}
+            <div class="message" style="display: flex; flex-direction: column; align-items: ${
+              message.receiver ? "flex-end" : "flex-start"
+            }; margin-top: 5px;">
+              <div class="message-text d-inline-block p-2 rounded text-dark" style="padding: 8px 12px; display: flex; flex-direction: column; background-color: ${
+                message.receiver ? "rgb(219, 235, 255)" : "#f0f0f0"
+              }; word-break: break-word; overflow-wrap: break-word; max-width: 300px; white-space: normal;">
+                ${message.content}
+                <div class="message-time text-muted last-message small" style="color: #ccc; margin-top: 5px;">
+                  ${new Date(message.timestamp).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  })}
+                </div>
               </div>
             </div>
-          </div>
-        `;
-        })
-        .join("");
+            `;
+        }
+        const idVariation = message.content;
+        const response = await createProductMessage(idVariation);
+        return response;
+      });
+      arrChat = await Promise.all(arrChat);
+      console.log(arrChat);
+      chatboxMessages.innerHTML = arrChat.join("");
 
       // Cuộn xuống cuối cùng của khung chat
       chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
@@ -170,7 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   socket.on("thongbao", async (data) => {
-    console.log(data);
     const messages = await getMessagesForUser(data.sender);
     const userName =
       messages.length > 0 ? messages[0].userName.name : data.sender;
@@ -234,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const allMessages = await getMessagesForUser(data.sender);
         chatboxMessages.innerHTML = allMessages
           .map(
-            (message) => `  
+            async (message) => `  
             <div class="message" style="display: flex; flex-direction: column; align-items: ${
               message.receiver ? "flex-end" : "flex-start"
             }; margin-top: 5px;">
@@ -273,7 +278,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   // Lắng nghe sự kiện newMessage từ server
-  socket.on("newMessage", (data) => {
+  socket.on("newMessage", async (data) => {
+    /*
     const receivedMessage = document.createElement("div");
     receivedMessage.classList.add("message", "text-start");
     // Tạo một thẻ div chứa cả tin nhắn và thời gian
@@ -317,6 +323,33 @@ document.addEventListener("DOMContentLoaded", () => {
     // Thêm tin nhắn vào chatbox và cuộn xuống cuối
     chatboxMessages.appendChild(receivedMessage);
     chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
+*/
+    const isProduct = data.isProduct;
+    // Nếu tin nhắn không phải là sản phẩm
+    if (!isProduct) {
+      const outputHtml = `
+      <div class="message" style="display: flex; flex-direction: column; align-items: flex-start; margin-top: 5px;">
+        <div class="message-text d-inline-block p-2 rounded text-dark" style="padding: 8px 12px; display: flex; flex-direction: column; background-color: #f0f0f0; word-break: break-word; overflow-wrap: break-word; max-width: 300px; white-space: normal;">
+        ${data.message}
+            <div class="message-time text-muted last-message small" style="color: #ccc; margin-top: 5px;">
+              ${new Date(data.timestamp).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })}
+            </div>
+        </div>
+      </div>
+    `;
+      chatboxMessages.innerHTML += outputHtml;
+      chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
+      return;
+    }
+    // Nếu tin nhắn là sản phẩm
+    const idVariation = data.message;
+    const outputHtml = await createProductMessage(idVariation);
+    chatboxMessages.innerHTML += outputHtml;
+    chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
   });
 });
 // Hàm lấy tin nhắn cho người dùng từ server
@@ -328,3 +361,52 @@ async function getMessagesForUser(id) {
   const messages = await response.json();
   return messages;
 }
+async function createProductMessage(idVariation) {
+  const response = await fetch(`/api/getInfoProductChat/${idVariation}`);
+  let product = await response.json();
+  let outputHtml = "";
+
+  if (product.status == "error") {
+    outputHtml = `
+      <div class="d-flex justify-content-end w-100 text-danger border rounded">
+        <p>Lỗi không tìn thấy sản phẩm</p>
+      </div>
+      `;
+  } else {
+    product = product.product;
+    outputHtml = `
+    <div class="d-flex justify-content-center">
+      <a class="d-flex justify-content-around w-75 border rounded row" href="${
+        product.link
+      }" target="_blank">
+          <div class="col">
+              <img src="https://res.cloudinary.com/dzagdwvrg/image/upload/v1717484298/uploads/${
+                product.img
+              }" alt="" style="width: 100%;height: 100%;">
+          </div>
+          <div class="col-6">
+              <div class="text-ellipsis ">${product.name}</div>
+              ${
+                product.discount > 0
+                  ? `<div class="text-decoration-line-through">${formatVND(
+                      product.originalPrice
+                    )}</div>`
+                  : ""
+              }
+              <div class="fs-4 text-danger">${formatVND(
+                product.discountPrice
+              )}</div>
+          </div>
+      </a>
+    </div>
+    `;
+  }
+  return outputHtml;
+}
+const formatVND = (amount) => {
+  const returnValue = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(amount);
+  return returnValue;
+};

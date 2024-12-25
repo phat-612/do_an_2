@@ -47,6 +47,10 @@ input::-webkit-inner-spin-button {
   height: 400px;
   object-fit: cover;
 }
+.custom-fit-img-500px {
+  height: 100%;
+  object-fit: cover;
+}
 .text-ellipsis {
   display: -webkit-box;
   -webkit-box-orient: vertical;

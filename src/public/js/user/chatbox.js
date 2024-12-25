@@ -304,10 +304,15 @@ function appendMessageElement(messageElement) {
   scrollToBottom("chatboxBody");
 }
 
-function createMessageElement(msg, isSender) {
-  const messageTime = new Date(msg.timestamp);
-  const formattedTime = formatTimeWithoutYear(messageTime);
-  return `
+async function createMessageElement(msg, isSender) {
+  const isProduct = !!msg.isProduct;
+  if (!msg.content) {
+    msg.content = msg.message;
+  }
+  if (!isProduct) {
+    const messageTime = new Date(msg.timestamp);
+    const formattedTime = formatTimeWithoutYear(messageTime);
+    return `
     <div class="mb-2 d-flex ${
       isSender ? "justify-content-end" : "justify-content-start"
     }">
@@ -322,26 +327,19 @@ function createMessageElement(msg, isSender) {
         </div>
       </div>
     </div>`;
+  }
+  return await createProductMessage(msg.content);
 }
 
-function handleNewMessage(data) {
+async function handleNewMessage(data) {
   const isSender = !data.receiver || data.receiver === "";
-  const messageElement = createMessageElement(data, isSender);
+  const messageElement = await createMessageElement(data, isSender);
   appendMessageElement(messageElement);
 }
 
 async function handleSocketConnect() {
   socket.emit("joinRoom", { room });
-
-  const joinMessageElement = `
-    <div class="mb-2 d-flex justify-content-center">
-      <div class="d-flex align-items-center">
-        <div class="p-2 rounded bg-info text-white">Chúng tôi sẽ hỗ trợ bạn sớm nhất</div>
-      </div>
-    </div>`;
-  appendMessageElement(joinMessageElement);
-
-  const messages = await getMessagesForUser(room);
+  let messages = await getMessagesForUser(room);
   if (messages.length > 0) {
     const firstMessageTime = new Date(messages[0].timestamp);
     const formattedTime = formatTime(firstMessageTime);
@@ -349,41 +347,55 @@ async function handleSocketConnect() {
     appendMessageElement(timeElement);
   }
 
-  messages.forEach((msg) => {
+  messages = messages.map(async (msg) => {
     const isSender = !msg.receiver || msg.receiver === "";
     const messageElement = createMessageElement(msg, isSender);
-    appendMessageElement(messageElement);
+    return await messageElement;
+    // appendMessageElement(messageElement);
   });
+  messages = (await Promise.all(messages)).join("");
+  appendMessageElement(messages);
   //   tạo một element mới và thêm vào cuối chatbox (chứa hình ảnh, tên và giá sản phẩm)
-  const { productName, originalPrice, discountPrice, productImage } =
-    getProductInfo();
-  const productElement = `
-    <div class="d-flex justify-content-end w-100 border rounded">
-        <div>
-            <img src="${productImage}" alt="" style="width:80px;"/>
-        </div>
-        <div>
-            <div class="text-ellipsis ">${productName}</div>
-            <div class="text-decoration-line-through">${originalPrice}</div>
-            <div class="fs-4 text-danger">${discountPrice}</div>
-        </div>
+  if (isDetailPage) {
+    const { productName, originalPrice, discountPrice, productImage } =
+      getProductInfo();
+    const productElement = `
+    <div class="d-flex justify-content-center row">
+        <a class="d-flex justify-content-around w-75 border rounded row" target="_blank">
+            <div class="col">
+                <img src="${productImage}" alt="" style="width: 100%;height: 100%;">
+            </div>
+            <div class="col-6">
+                <div class="text-ellipsis ">${productName}</div>
+                ${
+                  originalPrice
+                    ? `<div class="text-decoration-line-through">${originalPrice}</div>`
+                    : ""
+                }
+                <div class="fs-4 text-danger">${discountPrice}</div>
+            </div>
+        </a>
+    <button id="btnQuestion" class="btn w-75 bg-danger text-white col-12" onclick="questionProduct()">Trao đổi về sản phẩm này</button>       
     </div>
-    <button class="" onClick="questionProduct()">Hỏi về sản phẩm này</button>
+    
     `;
-  $("#chatboxBody").append(productElement);
+    $("#chatboxBody").append(productElement);
+  }
 }
 function questionProduct() {
   const currentTime = new Date();
-  const message = "";
+  const message = idVariation;
   socket.emit("sendMessage", {
     message,
     sender: room,
     receiver: "",
-
+    isProduct: true,
     room,
     time: currentTime.toISOString(),
     isFirstMessage: true,
   });
+  //   ẩn nút hỏi
+  $("#btnQuestion").hide();
 }
 function sendMessage() {
   const message = $("#chatInput").val();
@@ -403,7 +415,6 @@ function sendMessage() {
     let messageElement = "";
 
     if (lastMessageTime) {
-      console.log(lastMessageTime);
       const timeDifference = (currentTime - lastMessageTime) / (1000 * 60);
       if (timeDifference > 30) {
         messageElement += `<div class="text-center text-muted small mb-2">${formattedTime}</div>`;
@@ -429,6 +440,55 @@ function getProductInfo() {
   const productImage = $(".productImage").attr("src");
   return { productName, originalPrice, discountPrice, productImage };
 }
+async function createProductMessage(idVariation) {
+  const response = await fetch(`/api/getInfoProductChat/${idVariation}`);
+  let product = await response.json();
+  let outputHtml = "";
+
+  if (product.status == "error") {
+    outputHtml = `
+        <div class="d-flex justify-content-end w-100 text-danger border rounded">
+          <p>Lỗi không tìn thấy sản phẩm</p>
+        </div>
+        `;
+  } else {
+    product = product.product;
+    outputHtml = `
+      <div class="d-flex justify-content-center">
+        <a class="d-flex justify-content-around w-75 border rounded row" href="${
+          product.link
+        }" target="_blank">
+            <div class="col">
+                <img src="https://res.cloudinary.com/dzagdwvrg/image/upload/v1717484298/uploads/${
+                  product.img
+                }" alt="" style="width: 100%;height: 100%;">
+            </div>
+            <div class="col-6">
+                <div class="text-ellipsis ">${product.name}</div>
+                ${
+                  product.discount > 0
+                    ? `<div class="text-decoration-line-through">${formatVND(
+                        product.originalPrice
+                      )}</div>`
+                    : ""
+                }
+                <div class="fs-4 text-danger">${formatVND(
+                  product.discountPrice
+                )}</div>
+            </div>
+        </a>
+      </div>
+      `;
+  }
+  return outputHtml;
+}
+const formatVND = (amount) => {
+  const returnValue = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(amount);
+  return returnValue;
+};
 // main
 let currentURL = window.location.href;
 let host = window.location.host + "/product";
@@ -449,10 +509,8 @@ async function getLastMessageTime() {
     return;
   }
   lastMessageTime = new Date(timeMessages[timeMessages.length - 1].timestamp);
-  console.log(lastMessageTime);
 }
 getLastMessageTime();
-console.log(lastMessageTime);
 $("#sendMessage").click(sendMessage);
 $("#chatInput").keypress((event) => {
   if (event.which === 13) {

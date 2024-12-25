@@ -345,6 +345,7 @@ class SiteController {
           _id: product._id,
           name: product.name,
           price: curVariation.price,
+          idVariation: curVariation._id,
           slug: product.slug,
           curVariation,
           attribute,

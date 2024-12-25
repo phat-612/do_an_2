@@ -7,5 +7,9 @@ router.post("/signUp", apiController.signUp);
 router.post("/login", apiController.login);
 router.post("/forgotPassword", apiController.forgotPassword);
 router.get("/activatePassword", apiController.activatePassword);
+router.get(
+  "/getInfoProductChat/:idVariation",
+  apiController.getInfoProductForChat
+);
 
 module.exports = router;

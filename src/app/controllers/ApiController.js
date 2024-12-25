@@ -283,6 +283,38 @@ class ApiController {
       }
     });
   }
+  getInfoProductForChat(req, res, next) {
+    const idVariation = req.params.idVariation;
+    Product.findOne({ "variations._id": idVariation }).then((product) => {
+      if (!product) {
+        return res.json({
+          status: "error",
+          message: "Sản phẩm không tồn tại",
+        });
+      }
+      const variation = product.variations.id(idVariation);
+      const linkVariation = `/product/${product.slug}/${variation.slug}`;
+      const discount = getDiscount(product.discount);
+      let originalPrice = variation.price;
+      let discountPrice = 0;
+      if (discount > 0) {
+        discountPrice = variation.price - (variation.price * discount) / 100;
+      }
+      discountPrice = discountPrice == 0 ? originalPrice : discountPrice;
+      res.json({
+        status: "success",
+        product: {
+          id: product._id,
+          name: product.name,
+          img: product.images[0],
+          link: linkVariation,
+          originalPrice: originalPrice,
+          discountPrice: discountPrice,
+          discount,
+        },
+      });
+    });
+  }
   // thêm danh mục
   storeCategory(req, res, next) {
     const formData = req.body;
@@ -1593,6 +1625,7 @@ class ApiController {
           msg.message.map((innerMsg) => ({
             content: innerMsg.content, // Lấy nội dung tin nhắn
             receiver: innerMsg.receiver || null, // Xác định người nhận
+            isProduct: innerMsg.isProduct, // Xác định tin nhắn có phải là sản phẩm
             timestamp: innerMsg.timestamp, // Định dạng lại timestamp
           }))
         );
@@ -1623,6 +1656,7 @@ class ApiController {
           return filteredMessages.map((message) => ({
             userName: message.sender,
             content: message.content,
+            isProduct: message.isProduct,
             receiver: message.receiver || null,
             timestamp: message.timestamp, // Thời gian
           }));
