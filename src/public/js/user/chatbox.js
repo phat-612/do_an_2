@@ -304,36 +304,34 @@ function appendMessageElement(messageElement) {
   scrollToBottom("chatboxBody");
 }
 
-async function createMessageElement(msg, isSender) {
+function createMessageElement(msg, isSender) {
   const isProduct = !!msg.isProduct;
   if (!msg.content) {
     msg.content = msg.message;
   }
-  if (!isProduct) {
-    const messageTime = new Date(msg.timestamp);
-    const formattedTime = formatTimeWithoutYear(messageTime);
-    return `
+
+  const messageTime = new Date(msg.timestamp);
+  const formattedTime = formatTimeWithoutYear(messageTime);
+  return `
     <div class="mb-2 d-flex ${
       isSender ? "justify-content-end" : "justify-content-start"
-    }">
+    }" data-idMessage="${msg._id}">
       <div class="d-flex align-items-center">
         <div class="p-2 rounded message-box" style="${
           isSender
             ? "background-color: rgb(219, 235, 255);"
             : "background-color: #f0f0f0"
         }; word-break: break-word; max-width: 200px;">
-          ${msg.content}
+          ${isProduct ? "Đang tải thông tin sản phẩm..." : msg.content}
           <div class="text-muted small mt-1">${formattedTime}</div>
         </div>
       </div>
     </div>`;
-  }
-  return await createProductMessage(msg.content);
 }
 
-async function handleNewMessage(data) {
+function handleNewMessage(data) {
   const isSender = !data.receiver || data.receiver === "";
-  const messageElement = await createMessageElement(data, isSender);
+  const messageElement = createMessageElement(data, isSender);
   appendMessageElement(messageElement);
 }
 
@@ -347,14 +345,23 @@ async function handleSocketConnect() {
     appendMessageElement(timeElement);
   }
 
-  messages = messages.map(async (msg) => {
+  let eleMessages = messages.map((msg) => {
     const isSender = !msg.receiver || msg.receiver === "";
     const messageElement = createMessageElement(msg, isSender);
-    return await messageElement;
-    // appendMessageElement(messageElement);
+    return messageElement;
   });
-  messages = (await Promise.all(messages)).join("");
-  appendMessageElement(messages);
+  eleMessages = eleMessages.join("");
+  appendMessageElement(eleMessages);
+  // lazy loading thông sản phẩm cần tư vấn thêm
+  messages.reverse().forEach(async (msg) => {
+    if (msg.isProduct) {
+      const productElement = await createProductMessage(msg.content);
+      const messageBox = document.querySelector(
+        `[data-idMessage="${msg._id}"]`
+      );
+      messageBox.outerHTML = productElement;
+    }
+  });
   //   tạo một element mới và thêm vào cuối chatbox (chứa hình ảnh, tên và giá sản phẩm)
   if (isDetailPage) {
     const { productName, originalPrice, discountPrice, productImage } =

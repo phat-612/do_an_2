@@ -1623,6 +1623,7 @@ class ApiController {
         // Xử lý danh sách tin nhắn
         const formattedMessages = messages.flatMap((msg) =>
           msg.message.map((innerMsg) => ({
+            _id: innerMsg._id, // ID của tin nhắn
             content: innerMsg.content, // Lấy nội dung tin nhắn
             receiver: innerMsg.receiver || null, // Xác định người nhận
             isProduct: innerMsg.isProduct, // Xác định tin nhắn có phải là sản phẩm
