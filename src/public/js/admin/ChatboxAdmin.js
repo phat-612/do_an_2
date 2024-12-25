@@ -24,10 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
       // Hiển thị giao diện chatbox
       chatboxContainer.style.display = "block";
       chatboxUserName.textContent = userName;
-
-      // Lấy tất cả tin nhắn của người dùng này
       const allMessages = await getMessagesForUser(id);
-      let arrChat = allMessages.map(async (message) => {
+      let arrChat = allMessages.map((message, ind) => {
         if (!message.isProduct) {
           return `
             <div class="message" style="display: flex; flex-direction: column; align-items: ${
@@ -46,18 +44,38 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
               </div>
             </div>
-            `;
+          `;
+        } else {
+          // Placeholder for product message
+          return `
+            <div class="message product-message" data-stt="${ind}" style="display: flex; flex-direction: column; align-items: flex-start; margin-top: 5px;">
+              <div class="message-text d-inline-block p-2 rounded text-dark" style="padding: 8px 12px; display: flex; flex-direction: column; background-color: #f0f0f0; word-break: break-word; overflow-wrap: break-word; max-width: 300px; white-space: normal;">
+                Đang tải thông tin sản phẩm...
+              </div>
+            </div>
+          `;
         }
-        const idVariation = message.content;
-        const response = await createProductMessage(idVariation);
-        return response;
       });
       arrChat = await Promise.all(arrChat);
-      console.log(arrChat);
       chatboxMessages.innerHTML = arrChat.join("");
 
       // Cuộn xuống cuối cùng của khung chat
       chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
+      // Lazy load product messages
+      let countMessage = allMessages.length;
+      allMessages.reverse().forEach(async (message, ind) => {
+        if (message.isProduct) {
+          const idVariation = message.content;
+          const response = await createProductMessage(idVariation);
+          const productMessageElement = chatboxMessages.querySelector(
+            `.product-message[data-stt="${countMessage - ind - 1}"]`
+          );
+          if (productMessageElement) {
+            productMessageElement.innerHTML = response;
+            chatboxMessages.scrollTop += 90;
+          }
+        }
+      });
       // Rời phòng hiện tại nếu đã tham gia
       if (currentRoom) {
         socket.emit("leaveRoom", { room: currentRoom });
@@ -279,51 +297,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   // Lắng nghe sự kiện newMessage từ server
   socket.on("newMessage", async (data) => {
-    /*
-    const receivedMessage = document.createElement("div");
-    receivedMessage.classList.add("message", "text-start");
-    // Tạo một thẻ div chứa cả tin nhắn và thời gian
-    const messageContainer = document.createElement("div");
-    messageContainer.classList.add("message-container");
-    // Tạo thẻ div cho nội dung tin nhắn
-    const messageText = document.createElement("div");
-    messageText.classList.add(
-      "message-text",
-      "d-inline-block",
-      "p-2",
-      "rounded",
-      "text-dark",
-      "mt-2"
-    );
-    messageText.style.padding = "8px 12px";
-    messageText.style.display = "flex";
-    messageText.style.flexDirection = "column";
-    messageText.style.backgroundColor = "#f0f0f0"; // Màu nền của cả phần tin nhắn
-    messageText.style.wordBreak = "break-word";
-    messageText.style.overflowWrap = "break-word";
-    messageText.style.maxWidth = "300px";
-    messageText.style.whiteSpace = "pre-wrap"; // Giữ nguyên khoảng trắng và xuống dòng khi cần
-    // Đưa tin nhắn vào messageText
-    messageText.innerHTML = `${data.message} <br>`;
-    // Tạo thẻ div cho thời gian và căn chỉnh nó sang trái
-    const timeElement = document.createElement("div");
-    timeElement.classList.add("message-time", "text-muted", "small");
-    timeElement.style.textAlign = "left"; // Căn trái cho thời gian
-    timeElement.style.marginTop = "5px";
-    timeElement.textContent = new Date(data.timestamp).toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-    messageText.appendChild(timeElement);
-    // Thêm messageText vào messageContainer
-    messageContainer.appendChild(messageText);
-    // Thêm thẻ messageContainer vào thẻ receivedMessage
-    receivedMessage.appendChild(messageContainer);
-    // Thêm tin nhắn vào chatbox và cuộn xuống cuối
-    chatboxMessages.appendChild(receivedMessage);
-    chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
-*/
     const isProduct = data.isProduct;
     // Nếu tin nhắn không phải là sản phẩm
     if (!isProduct) {
