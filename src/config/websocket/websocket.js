@@ -21,7 +21,7 @@ function initWedSocket(io) {
       // Phản hồi về client nếu cần
       socket.emit("roomLeft", { room: data.room });
     });
-    socket.on("disconnect", () => {});
+    // socket.on("disconnect");
   });
 }
 

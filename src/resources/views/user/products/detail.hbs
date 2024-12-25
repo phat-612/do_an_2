@@ -1,5 +1,5 @@
 <div class="container mt-3">
-  <h1>{{product.name}}</h1>
+  <h1 id="productName">{{product.name}}</h1>
   <hr />
   <div class="row">
     <div class="col-lg-6">
@@ -10,7 +10,7 @@
           {{#each product.images}}
             <div class="carousel-item {{#if (compare @index 0)}}active{{/if}} ">
               <div style="height: 75vh;" class="d-flex justify-content-center align-items-center">
-                <img style="height: fit-content;" src="{{showImgUpload this}}" class="d-block w-100" alt="..." />
+                <img style="height: fit-content;" src="{{showImgUpload this}}" class="d-block w-100 productImage" alt="..." />
               </div>
             </div>
           {{/each}}
@@ -31,14 +31,14 @@
       {{!-- phân loại và mua --}}
       <div>
         {{#if (compareMore product.discount 0)}}
-          <div class="text-decoration-line-through">{{showPrice
+          <div class="text-decoration-line-through" id="originalPrice">{{showPrice
           product.price
           }}</div>
-          <div class="fs-1 text-danger">
+          <div class="fs-1 text-danger" id="discountPrice">
             {{showPrice (discountPrice product.price product.discount)}}
           </div>
         {{else}}
-          <div class="fs-1 text-danger">
+          <div class="fs-1 text-danger" id="discountPrice">
             {{showPrice product.price}}
           </div>
         {{/if}}

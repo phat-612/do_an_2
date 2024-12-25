@@ -4,7 +4,8 @@
   }
 </style>
 
-<div class="container mt-5">
+<div class="container">
+  <h1 class="text-center text-capitalize">Chăm sóc khách hàng</h1>
   <div class="row">
     <!-- Danh sách tin nhắn -->
     <div class="col-md-4 border-end">
@@ -23,13 +24,13 @@
                 <small>{{showTime this.message.timestamp}}</small>
               </div>
               {{#if this.message.receiver}}
-                  <div class="text-truncate last-message" style="width: 18vw; color:#000">  
-                  Bạn: {{this.message.content}}
-                </div>
-                {{else}}
-                 <div class="text-truncate last-message" style="width: 18vw;">
-               {{this.message.content}}
-                </div>
+              <div class="text-truncate last-message" style="width: 18vw;">
+                Bạn: {{this.message.content}}
+              </div>
+              {{else}}
+              <div class="text-truncate last-message" style="width: 18vw; font-weight: bold;">
+                {{this.message.content}}
+              </div>
               {{/if}}
             </div>
           </div>  

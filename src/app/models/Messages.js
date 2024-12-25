@@ -23,6 +23,10 @@ const messageSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User", // Liên kết tới schema User (người nhận)
       },
+      isProduct:{
+        type:Boolean,
+        default:false
+      },
       content: {
         type: String,
       },
@@ -32,7 +36,6 @@ const messageSchema = new Schema({
       },
     },
   ],
-
   timestamp: {
     type: Date,
     default: Date.now,

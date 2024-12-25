@@ -1,4 +1,5 @@
 <div class="container">
+  <h1 class="text-center text-capitalize">Quản lý tài khoản</h1>
   <div class="nav d-flex justify-content-end my-3">
     <form class="d-flex" id="searchForm" action="/admin/accessProviders">
       <input class="form-control me-2" type="search" placeholder="Nhập Email" aria-label="Search" id="searchInput"
@@ -9,6 +10,7 @@
   <table class="table">
     <thead>
       <tr>
+        <th scope="col">STT</th>
         <th scope="col">Email</th>
         <th scope="col">Họ Tên</th>
         <th scope="col" class="col-4"><center>Hành Động</center></th>
@@ -18,6 +20,7 @@
       {{#each users}}
         <form id="hierarchy-{{this._id}}" action="/api/admin/accessProviders/{{this._id}}?_method=PUT" method="post">
           <tr>
+            <th scope="row">{{showStt ../currentPage @index}}</th>
             <td>{{this.email}}</td>
             <td>{{this.name}}</td>
             <td class="d-flex justify-content-around">

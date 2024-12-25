@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
         `[data-id="${currentChatUser}"] .last-message`
       );
       if (lastMessageElement) {
-        lastMessageElement.textContent = `bạn2: ${message}`;
+        lastMessageElement.textContent = `Bạn: ${message}`;
         lastMessageElement.style.fontWeight = "";
         lastMessageElement.style.color = "";
       }

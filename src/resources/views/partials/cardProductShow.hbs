@@ -8,12 +8,12 @@
                 style="background-image: url('{{showImgUpload this.images}}'); height: 260px; background-size: contain; background-position: center; background-repeat: no-repeat;">
             </div>
             <div class="card-body">
-                <p class="card-text fw-bold fs-6 text-capitalize ">
+                <p class="card-text fw-bold fs-6 text-capitalize text-ellipsis">
                     {{this.name}}
                 </p>
                 {{{showPriceInCard this.variations.price this.discount}}}
-                {{{showRatingStar this.reviews this.variations}}}
             </div>
         </a>
+        {{{showRatingStar this.reviews this.variations}}}
     </div>
 </div>

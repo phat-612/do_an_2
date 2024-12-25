@@ -1,22 +1,18 @@
 <div class="container">
-  <h1 class="text-center">Quản lý danh mục</h1>
-  <div class="row justify-content-between">
-    <div class="col-4">
+  <h1 class="text-center text-capitalize">Quản lý danh mục</h1>
+  <div class="d-flex justify-content-end gap-2">
       <form action="/admin/category">
-        <div class="row justify-content-between">
-          <div class="col"><input type="text" class="form-control" name="search" placeholder="Tìm kiếm danh mục"
+        <div class="d-flex justify-content-between">
+          <div ><input type="text" class="form-control" name="search" placeholder="Tìm kiếm danh mục"
               id="searchInput" />
           </div>
-          <div class="col-4"><button class="btn btn-primary" type="submit">Tìm kiếm</button></div>
+          <div ><button class="btn btn-primary" type="submit">Tìm kiếm</button></div>
         </div>
       </form>
-    </div>
-    <div class="col-3">
       <button type="button" data-linkAction="/api/admin/storeCategory" class="btn btn-success" id="addCategoryButton"
-        data-bs-target="#addCategoryModal" data-bs-toggle="modal">
+        data-bs-target="#addCategoryModal" data-bs-toggle="modal" >
         Thêm danh mục mới
       </button>
-    </div>
   </div>
   <!-- Button trigger modal -->
   <table class="table mt-3" id="categoriesTable">
