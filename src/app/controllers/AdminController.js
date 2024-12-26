@@ -823,47 +823,48 @@ class AdminController {
   //     });
   //   });
   // }
-  accessProviders(req, res, next) {
+ accessProviders(req, res, next) {
     let searchQuery = req.query.searchQuery || "";
     const url = req.originalUrl;
     let match = req.query.match || "";
     let filter = {};
 
     if (searchQuery) {
-      // regex trả về 1 chuổi ,$regex tìm kiếm chỉ quy , i bất kể hoa thường
-      filter.email = { $regex: searchQuery, $options: "i" };
+        filter.email = { $regex: searchQuery, $options: "i" };
     }
 
     if (match) {
-      filter.role = match;
+        filter.role = match;
     }
 
-    User.paginate(filter, {
-      page: req.query.page || 1,
-      limit: req.query.limit || 10,
-    })
-      .then((users) => {
-        User.countDocuments(filter).then((count) => {
-          const perPage = parseInt(req.query.limit) || 10;
-          let page = parseInt(req.query.page) || 1;
-          page = page <= 0 ? 1 : page;
-          let totalPage = Math.ceil(count / perPage);
-
-          res.render("admin/sites/accessProviders", {
-            title: "Quản Lý Phân Quyền",
-            layout: "admin",
-            js: "admin/accessProviders",
-            users: multipleMongooseToObject(users),
-            currentPage: page,
-            totalPage: totalPage,
-            url,
-            match,
-          });
-        });
-      })
-      .catch((error) => next(error));
-  }
-
+    User.find(filter)
+        .sort({}) // Không cần sort trong MongoDB
+        .then((users) => {
+            // Sắp xếp thủ công
+            users = users.sort((a, b) => {
+                if (a.role === "admin" && b.role === "user") return -1;
+                if (a.role === "user" && b.role === "admin") return 1;
+                return 0;
+            });
+            User.countDocuments(filter).then((count) => {
+                const perPage = parseInt(req.query.limit) || 10;
+                let page = parseInt(req.query.page) || 1;
+                page = page <= 0 ? 1 : page;
+                let totalPage = Math.ceil(count / perPage);
+                res.render("admin/sites/accessProviders", {
+                    title: "Quản Lý Phân Quyền",
+                    layout: "admin",
+                    js: "admin/accessProviders",
+                    users: multipleMongooseToObject(users.slice((page - 1) * perPage, page * perPage)),
+                    currentPage: page,
+                    totalPage: totalPage,
+                    url,
+                    match,
+                });
+            });
+        })
+        .catch((error) => next(error));
+}
   orderFromUser(req, res, next) {
     // tên, ảnh giá, của một sản phẩm đầu tiên, thời gian
     const idUser = req.params.id;
