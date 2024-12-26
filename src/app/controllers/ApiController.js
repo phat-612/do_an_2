@@ -1478,7 +1478,7 @@ class ApiController {
 
         Banner.deleteOne({ _id: Id }).then(() => {
           req.flash("message", {
-            type: "danger",
+            type: "success",
             message: "Xóa thành công",
           });
           res.redirect("back");
@@ -1578,7 +1578,6 @@ class ApiController {
 
       // Lưu thay đổi
       await order.save();
-
       req.flash("message", {
         type: "success",
         message: "Thay đổi trạng thái thành công",

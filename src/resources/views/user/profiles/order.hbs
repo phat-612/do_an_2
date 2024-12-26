@@ -72,6 +72,13 @@
             style="resize: none;"></textarea>
         </div>
         <div class="bm-3 d-flex justify-content-end">
+          <div class="remainPointDiv bm-3 d-flex justify-content-end visually-hidden-focusable">
+            <div class="d-flex me-3">
+              <p class=" text-danger">(Điểm còn lại: </p>
+              <p class="remainPoint text-danger"></p>
+              <p>)</p>
+            </div>
+          </div>
           <div class="d-flex">
             <p>Sử dụng điểm:</p>
             <p class="userPoint" data-bs-userPoint="{{userPoint}}" >{{showPoint userPoint}}</p>
@@ -87,13 +94,6 @@
                   pathLength="575.0541381835938" class="path"></path>
               </svg>
             </label>
-          </div>
-        </div>
-        <div class="remainPointDiv bm-3 d-flex justify-content-end visually-hidden-focusable">
-          <div class="d-flex">
-            <p class=" text-danger">(Điểm còn lại: </p>
-            <p class="remainPoint text-danger"></p>
-            <p>)</p>
           </div>
         </div>
         <div class="mb-3">

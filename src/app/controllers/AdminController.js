@@ -131,7 +131,6 @@ class AdminController {
     const find = req.query.q;
     let match = "";
     let arrMatch = [];
-    // lọc theo discout
     if (req.query.hasOwnProperty("_filter")) {
       match = req.query.match || "discount";
       if (match === "discount") {
@@ -785,42 +784,84 @@ class AdminController {
         );
       });
   }
-  //get /assessProviders
+  // //get /assessProviders
+  // accessProviders(req, res, next) {
+  //   let searchQuery = req.query.searchQuery || "";
+  //   const url = req.originalUrl;
+  //   let match = "";
+  //   let arrMatch = [];
+  //   User.paginate(
+  //     // regex trả về 1 chuổi ,$regex tìm kiếm chỉ quy , i bất kể hoa thường
+  //     { email: { $regex: searchQuery, $options: "i" } },
+  //     { page: req.query.page, limit: req.query.limit }
+  //   ).then((users) => {
+  //     // tinh tổng số lượng user đang có
+  //     User.countDocuments({
+  //       email: { $regex: searchQuery, $options: "i" },
+  //     }).then((count) => {
+  //       const usersData = users.map((user) => {
+  //         return {
+  //           id: user._id,
+  //           role: user.role,
+  //         };
+  //       });
+  //       const perPage = parseInt(req.query.limit) || 10;
+  //       let page = parseInt(req.query.page) || 1;
+  //       page = page <= 0 ? 1 : page;
+  //       let totalPage = Math.ceil(count / perPage);
+
+  //       res.render("admin/sites/accessProviders", {
+  //         title: "Quản Lý Phân Quyền",
+  //         layout: "admin",
+  //         js: "admin/accessProviders",
+  //         user: usersData,
+  //         users: multipleMongooseToObject(users), // Adjusted here
+  //         currentPage: page,
+  //         totalPage: totalPage,
+  //         url,
+  //       });
+  //     });
+  //   });
+  // }
   accessProviders(req, res, next) {
     let searchQuery = req.query.searchQuery || "";
     const url = req.originalUrl;
-    User.paginate(
-      // regex trả về 1 chuổi ,$regex tìm kiếm chỉ quy , i bất kể hoa thường
-      { email: { $regex: searchQuery, $options: "i" } },
-      { page: req.query.page, limit: req.query.limit }
-    ).then((users) => {
-      // tinh tổng số lượng user đang có
-      User.countDocuments({
-        email: { $regex: searchQuery, $options: "i" },
-      }).then((count) => {
-        const usersData = users.map((user) => {
-          return {
-            id: user._id,
-            role: user.role,
-          };
-        });
-        const perPage = parseInt(req.query.limit) || 10;
-        let page = parseInt(req.query.page) || 1;
-        page = page <= 0 ? 1 : page;
-        let totalPage = Math.ceil(count / perPage);
+    let match = req.query.match || "";
+    let filter = {};
 
-        res.render("admin/sites/accessProviders", {
-          title: "Quản Lý Phân Quyền",
-          layout: "admin",
-          js: "admin/accessProviders",
-          user: usersData,
-          users: multipleMongooseToObject(users), // Adjusted here
-          currentPage: page,
-          totalPage: totalPage,
-          url,
+    if (searchQuery) {
+      // regex trả về 1 chuổi ,$regex tìm kiếm chỉ quy , i bất kể hoa thường
+      filter.email = { $regex: searchQuery, $options: "i" };
+    }
+
+    if (match) {
+      filter.role = match;
+    }
+
+    User.paginate(filter, {
+      page: req.query.page || 1,
+      limit: req.query.limit || 10,
+    })
+      .then((users) => {
+        User.countDocuments(filter).then((count) => {
+          const perPage = parseInt(req.query.limit) || 10;
+          let page = parseInt(req.query.page) || 1;
+          page = page <= 0 ? 1 : page;
+          let totalPage = Math.ceil(count / perPage);
+
+          res.render("admin/sites/accessProviders", {
+            title: "Quản Lý Phân Quyền",
+            layout: "admin",
+            js: "admin/accessProviders",
+            users: multipleMongooseToObject(users),
+            currentPage: page,
+            totalPage: totalPage,
+            url,
+            match,
+          });
         });
-      });
-    });
+      })
+      .catch((error) => next(error));
   }
 
   orderFromUser(req, res, next) {
@@ -912,6 +953,7 @@ class AdminController {
           totalMoneyPaid,
           userPoint,
           nameUser,
+          idUser,
         });
       });
     });

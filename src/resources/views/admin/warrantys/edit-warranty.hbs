@@ -64,11 +64,13 @@
                 {{#each productsAndReasons}}
                 <div class="productContainer col-12" id="product-{{@index}}">
                   <input type="hidden" name="details[{{@index}}][detailId]" value="{{this.detailId}}">
-                  <strong>Chọn sản phẩm muốn thay đổi:</strong>
-                  <button type="button" class="deleteButtonProduct" onclick="removeProduct('product-{{@index}}')">Xóa
-                    sản phẩm</button>
+                  <div class="mb-3">
+                    <strong>Chọn sản phẩm muốn thay đổi:</strong>
+                    <button type="button" class="deleteButtonProduct btn btn-danger" onclick="removeProduct('product-{{@index}}')">Xóa
+                      sản phẩm</button>
+                  </div>
                   <div class="table-responsive">
-                    <select class="m-2" id="idProduct-{{@index}}" name="details[{{@index}}][idProduct]">
+                    <select class="form-control" id="idProduct-{{@index}}" name="details[{{@index}}][idProduct]">
                       <option value="{{this.id}}">{{this.productName}}</option>
                       {{#each ../products}}
                       <option value="{{this._id}}" {{#if this.selected}}selected{{/if}}>{{this.name}}</option>
@@ -79,7 +81,7 @@
                     <strong>Lý do bảo hành:</strong>
                     <ul>
                       {{#each this.reasonsAndPrices}}
-                      <li>
+                      <li cl>
                         <input type="text" id="reason-{{@../index}}-{{@index}}"
                           name="details[{{@../index}}][reasonAndPrice][{{@index}}][reason]" value="{{this.reason}}"
                           required />
@@ -89,8 +91,8 @@
                       </li>
                       {{/each}}
                       <li>
-                        <button type="button" class="addButton">Thêm</button>
-                        <button type="button" class="deleteButton">Xóa</button>
+                        <button type="button" class="addButton btn btn-success">Thêm</button>
+                        <button type="button" class="deleteButton btn btn-danger">Xóa</button>
                       </li>
                     </ul>
                   </div>
