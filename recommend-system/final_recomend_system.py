@@ -218,7 +218,7 @@ def get_product_collaborative_user(product_id, product_ids, similarity_matrix, t
     ]
 
     # Lấy top N sản phẩm tương đồng nhất có similarity > 0.5
-    similar_products = [product_id for product_id, similarity in similar_products if similarity > 0.5]
+    similar_products = [product_id for product_id, similarity in similar_products if similarity > 0.01]
     return similar_products[:top_n]
     
     # return similar_products[:top_n]

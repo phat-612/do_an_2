@@ -411,7 +411,7 @@ module.exports = {
               name
                 ? `<p class="text-decoration-underline col-2 btnAnswerComment" data-bs-idComment="${idComment}" data-bs-idProduct="${idProduct}" style="cursor: pointer;">Trả lời</p>` +
                   (role == "admin" && !comment.status
-                    ? `<form action="/api/admin/nextComment" class="d-inline-block" method="post">
+                    ? `<form action="/api/admin/nextComment" class="d-inline-block col-2" method="post">
                   <input type="hidden" name="idComment" value="${idComment}">
                   <input type="hidden" name="idProduct" value="${idProduct}">
                   <button type="submit" class="btn btn-danger">Bỏ qua</button>

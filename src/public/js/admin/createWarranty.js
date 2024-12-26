@@ -93,6 +93,8 @@ addProductButton.addEventListener("click", function () {
       newReasonInput.required = true;
 
       var newPriceInput = document.createElement("input");
+      newPriceInput.oninput="validity.valid||(value='');";
+      newPriceInput.min="0";
       newPriceInput.className = "form-control";
       newPriceInput.type = "number";
       newPriceInput.placeholder = "Giá";
