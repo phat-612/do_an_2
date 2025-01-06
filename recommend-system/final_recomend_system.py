@@ -1,24 +1,5 @@
 import subprocess
 import sys
-
-required_libraries = [
-    "pymongo",
-    "scikit-learn",
-    "numpy",
-    "flask",
-    "pandas"
-]
-
-def install_library(library):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", library])
-
-for library in required_libraries:
-    try:
-        __import__(library)
-    except ImportError:
-        print(f"Cài đặt thư viện {library}...")
-        install_library(library)
-
 from pymongo import MongoClient
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import StandardScaler
